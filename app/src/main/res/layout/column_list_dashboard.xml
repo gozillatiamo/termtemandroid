@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_column_list"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:id="@+id/ic_list"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_mt"
+                android:tint="#86c2b6"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/title_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transfer"
+                android:textColor="@android:color/white"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:gravity="bottom|right"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/text_coins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|right"
+                android:text="0.00"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:drawableRight="@drawable/ic_euro_symbol"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

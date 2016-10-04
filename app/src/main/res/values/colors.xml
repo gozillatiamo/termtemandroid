@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1f1f1f</color>
+    <color name="colorPrimaryDark">#1f1f1f</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorBackground">#626868</color>
+    <color name="colorSelector">#FFBF00</color>
+
+    <color name="color_bg_card">#009688</color>
+
+    <array name="color_list_dashboard">
+        <item>#BA78E2</item>
+        <item>#009688</item>
+        <item>#FFBF00</item>
+        <item>#E91E63</item>
+    </array>
+</resources>

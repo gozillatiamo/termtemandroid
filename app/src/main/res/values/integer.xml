@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="ic_list_dashboard">
+        <item>@drawable/ic_bill_payment</item>
+        <item>@drawable/ic_mt</item>
+        <item>@drawable/ic_topup</item>
+        <item>@drawable/ic_topup</item>
+    </integer-array>
+</resources>

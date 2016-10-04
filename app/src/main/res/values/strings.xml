@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">WealthWallet</string>
+    <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
+    <string name="name">ชื่อ</string>
+    <string name="phone_number">หมายเลขโทรศัพท์</string>
+    <string name="identity_number">เลขบัตรประชาชน</string>
+    <string name="next">ถัดไป</string>
+    <string name="email">อีเมลล์</string>
+    <string name="password">พาสเวิร์ด</string>
+    <string name="password_again">ยืนยันพาสเวิร์ด</string>
+    <string name="done">เสร็จสิ้น</string>
+    <string name="register_done">ได้รับคำขอสมัครเรียบร้อยแล้ว\nบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
+    <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
+    <string name="balance">ยอดเงิน</string>
+    <string name="home">หน้าหลัก</string>
+    <string name="help">ช่วยเหลือ</string>
+    <string name="report">รายงาน</string>
+    <string name="setting">ตั้งค่า</string>
+    <string name="bill_payment">Bill Payment</string>
+    <string name="transfer">Transfer</string>
+    <string name="topup_online">Topup Online</string>
+    <string name="topup_pin">Topup Pin</string>
+
+    <string-array name="str_list_dashboard">
+        <item>@string/bill_payment</item>
+        <item>@string/transfer</item>
+        <item>@string/topup_online</item>
+        <item>@string/topup_pin</item>
+    </string-array>
+</resources>
