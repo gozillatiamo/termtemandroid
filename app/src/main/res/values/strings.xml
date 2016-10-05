@@ -20,6 +20,9 @@
     <string name="transfer">Transfer</string>
     <string name="topup_online">Topup Online</string>
     <string name="topup_pin">Topup Pin</string>
+    <string name="notification">แจ้งเตือน</string>
+    <string name="title_dashboard">Credit Limit</string>
+    <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/bill_payment</item>

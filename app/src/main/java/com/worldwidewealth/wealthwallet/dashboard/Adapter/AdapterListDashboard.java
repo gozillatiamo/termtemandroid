@@ -41,12 +41,12 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.mIcon.setImageResource(mIconList.getResourceId(position, -1));
-//        holder.mIcon.setColorFilter(mColorList[position]);
+        holder.mIcon.setColorFilter(mColorList[position]);
 
         holder.mTitle.setText(mTextList[position]);
-//        holder.mTitle.setTextColor(mColorList[position]);
+        holder.mTitle.setTextColor(mColorList[position]);
 
-//        holder.mCoins.setTextColor(mColorList[position]);
+        holder.mCoins.setTextColor(mColorList[position]);
     }
 
     @Override

@@ -46,6 +46,7 @@ public class FragmentHome extends Fragment {
 
         mHolder.mRecycler.setLayoutManager(linearLayoutManager);
         mHolder.mRecycler.setAdapter(new AdapterListDashboard(this.getContext()));
+
     }
 
 
