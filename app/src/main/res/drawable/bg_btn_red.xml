@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/colorRed"/>
+    <corners android:radius="@dimen/activity_space"/>
+    <padding
+        android:bottom="@dimen/activity_space"
+        android:left="@dimen/activity_space"
+        android:right="@dimen/activity_space"
+        android:top="@dimen/activity_space"/>
+</shape>

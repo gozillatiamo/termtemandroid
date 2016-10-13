@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#92D050</color>
+    <color name="colorPrimaryDark">#AED581</color>
+    <color name="colorAccent">#F4ACB7</color>
     <color name="colorBackground">#626868</color>
-    <color name="colorSelector">#FFBF00</color>
+    <color name="colorSelector">#E65100</color>
+    <color name="colorSuccess">#4CAF50</color>
+    <color name="colorPrimaryLogin">#009688</color>
+    <color name="colorPrimaryDarkLogin">#00796B</color>
+    <color name="colorAccentLogin">#264653</color>
+    <color name="colorTab">#4F6D7A</color>
+    <color name="colorTextTitle">#38686A</color>
+    <color name="colorRed">#F44336</color>
+    <color name="colorGreen">#4CAF50</color>
+
 
     <color name="color_bg_card">#009688</color>
 
@@ -13,5 +22,14 @@
         <item>#009688</item>
         <item>#FFBF00</item>
         <item>#E91E63</item>
+    </array>
+
+    <array name="color_list_bank">
+        <item>#4e3280</item>
+        <item>#125199</item>
+        <item>#e80e8a</item>
+        <item>#34a84f</item>
+        <item>#69bde0</item>
+        <item>#f27c33</item>
     </array>
 </resources>

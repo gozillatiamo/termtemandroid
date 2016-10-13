@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
-    app:cardElevation="4dp"
+    app:cardElevation="@dimen/cardview_default_elevation"
     >
 
     <LinearLayout
@@ -56,7 +56,8 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:drawableRight="@drawable/ic_euro_symbol"
+                android:drawablePadding="@dimen/activity_space"
+                android:drawableRight="@drawable/coin"
                 android:layout_weight="1"/>
 
         </LinearLayout>

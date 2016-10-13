@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.SearchResult.Title"
+        android:text="@string/enter_reference"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_space"
+        android:inputType="number"
+        android:hint="@string/reference"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_space"
+            android:background="@drawable/ripple_green"
+            android:text="@string/confirm"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_space"
+            android:background="@drawable/ripple_red"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txt_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:text="Get luck from Laos telecom\nplease visit today click\nhttp://180.128.21.31/game.html"
+        android:autoLink="web"
+        android:autoText="true" />
+
+
+
+</LinearLayout>

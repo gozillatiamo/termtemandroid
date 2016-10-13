@@ -12,7 +12,9 @@
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:elevation="0dp"
+                >
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -21,31 +23,10 @@
                     android:background="?attr/colorPrimary"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:title="text"
+                    app:titleTextColor="#38686A"
                     >
-                        <!--<ImageView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:src="@drawable/ic_notifications"-->
-                            <!--/>-->
                 </android.support.v7.widget.Toolbar>
-                <FrameLayout
-                    android:id="@+id/btn_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple"
-                    >
-
-                    <ViewStub
-                        android:id="@+id/title_container"
-                        android:inflatedId="@+id/layout_title_container"
-                        android:layout="@layout/title_dashboard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="visible">
-                    </ViewStub>
-
-                </FrameLayout>
-
             </android.support.design.widget.AppBarLayout>
 
             <LinearLayout
@@ -64,36 +45,40 @@
                 </FrameLayout>
 
                 <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_main"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="wrap_content"
                     app:tabMode="fixed"
                     app:tabGravity="fill"
                     app:tabTextColor="@android:color/white"
+                    app:tabPadding="@dimen/activity_space"
                     app:tabSelectedTextColor="@color/colorSelector"
-                    app:tabIndicatorColor="@color/colorPrimary"
-                    android:background="@color/colorPrimary">
+                    app:tabIndicatorColor="@color/colorTab"
+                    android:background="@color/colorTab">
                     <android.support.design.widget.TabItem
+                        android:id="@+id/tab_home"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/home"
                         android:icon="@drawable/ic_home_selector"
 
                         />
                     <android.support.design.widget.TabItem
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/help"
                         android:icon="@drawable/ic_help_selector"
+
                         />
                     <android.support.design.widget.TabItem
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/report"
                         android:icon="@drawable/ic_assignment_selector"
                         />
                     <android.support.design.widget.TabItem
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:icon="@drawable/ic_settings_selector"
                         android:text="@string/setting"
                         />

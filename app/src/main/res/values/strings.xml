@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WealthWallet</string>
+    <string name="app_name">Wealth Counter</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -17,17 +17,67 @@
     <string name="report">รายงาน</string>
     <string name="setting">ตั้งค่า</string>
     <string name="bill_payment">Bill Payment</string>
-    <string name="transfer">Transfer</string>
+    <string name="transfer">Money Transfer</string>
     <string name="topup_online">Topup Online</string>
     <string name="topup_pin">Topup Pin</string>
     <string name="notification">แจ้งเตือน</string>
     <string name="title_dashboard">Credit Limit</string>
     <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
+    <string name="topup">เติมงิน</string>
+    <string name="bank_account">บัญชีธนาคาร</string>
+    <string name="credit_debit_card">บัตรเครดิต/เดบิต</string>
+    <string name="noti_payment">แจ้งชำระเงิน</string>
+    <string name="scb">ธนาคารไทยพาณิชย์</string>
+    <string name="tmb">ธนาคารทหารไทย</string>
+    <string name="gsb">ธนาคารออมสิน</string>
+    <string name="kbank">ธนาคารกสิกร</string>
+    <string name="ktb">ธนาคารกรุงไทย</string>
+    <string name="tnch">ธนาคารธนชาต</string>
+    <string name="exchange_rate">อัตราแลกเปลี่ยน</string>
+    <string name="select_currency">เลือกสกุลเงิน</string>
+    <string name="us">US</string>
+    <string name="enter_reference">ใส่หมายเลขอ้างอิง</string>
+    <string name="reference">หมายเลขอ้างอิง:</string>
+    <string name="confirm">ยืนยัน</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="send">Send:</string>
+    <string name="recipient">Recipient:</string>
+    <string name="mid_market_rate">Mid-Market rate:</string>
+    <string name="withdrawal_fees">Withdrawal Fees:</string>
+    <string name="total_withdrawal_fees">Total Withdrawal Fees:</string>
+    <string name="payment">ชำระเงิน</string>
+    <string name="recipient_sets">Recipient sets:</string>
+    <string name="fee">FEE:</string>
+    <string name="commission">Commission:</string>
+    <string name="total">Total:</string>
+    <string name="total_coin">Total Coin:</string>
+    <string name="btn_transfer">TRANSFER</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/bill_payment</item>
         <item>@string/transfer</item>
         <item>@string/topup_online</item>
         <item>@string/topup_pin</item>
+    </string-array>
+
+    <string-array name="str_list_credit_limit">
+        <item>@string/bank_account</item>
+        <item>@string/credit_debit_card</item>
+        <item>@string/noti_payment</item>
+    </string-array>
+
+    <string-array name="str_list_bank">
+        <item>@string/scb</item>
+        <item>@string/tmb</item>
+        <item>@string/gsb</item>
+        <item>@string/kbank</item>
+        <item>@string/ktb</item>
+        <item>@string/tnch</item>
+    </string-array>
+
+    <string-array name="currency">
+        <item>US</item>
+        <item>KIP</item>
+        <item>THB</item>
     </string-array>
 </resources>

@@ -6,4 +6,19 @@
         <item>@drawable/ic_topup</item>
         <item>@drawable/ic_topup</item>
     </integer-array>
+
+    <integer-array name="ic_list_credit_limit">
+        <item>@drawable/book_bank</item>
+        <item>@drawable/debit_card</item>
+        <item>@drawable/receipt</item>
+    </integer-array>
+
+    <integer-array name="ic_list_bank">
+        <item>@drawable/logo_scb</item>
+        <item>@drawable/logo_tmb</item>
+        <item>@drawable/logo_gsb</item>
+        <item>@drawable/logo_kbank</item>
+        <item>@drawable/logo_ktb</item>
+        <item>@drawable/logo_tnch</item>
+    </integer-array>
 </resources>

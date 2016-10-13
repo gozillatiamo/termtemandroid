@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -39,22 +40,39 @@
             android:inputType="number"
             android:maxEms="13"/>
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.Light.Button.Toggle"
+                android:textOn="บุคคล"
+                android:textOff="บุคคล"
+                android:clickable="true"
+                />
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.Light.Button.Toggle"
+                android:textOn="นิติบุคคล"
+                android:textOff="นิติบุคคล"
+                />
+
+        </RadioGroup>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom">
-
         <Button
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_space"
             android:text="@string/next"
             android:textColor="@android:color/white"
             android:background="@drawable/ripple_button" />
 
-
-    </LinearLayout>
 </LinearLayout>

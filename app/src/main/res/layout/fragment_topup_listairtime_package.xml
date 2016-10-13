@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textOn="10000"
+                        android:textOff="10000"
+                        />
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textOn="20000"
+                        android:textOff="20000"
+                        />
+
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textOn="25000"
+                        android:textOff="25000"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textOn="50000"
+                        android:textOff="50000"
+                        />
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textOn="100000"
+                        android:textOff="100000"
+                        />
+
+                    <ToggleButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:visibility="invisible"
+                        android:layout_weight="1"
+                        android:textOn="Letter"
+                        android:textOff="Letter"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:textOn="Letter"
+                android:textOff="Letter"
+                />
+            <ToggleButton
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:textOn="Letter"
+                android:textOff="Letter"
+                />
+
+            <ToggleButton
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:textOn="Letter"
+                android:textOff="Letter"
+                />
+
+        </LinearLayout>
+
+    </RadioGroup>
+
+</LinearLayout>

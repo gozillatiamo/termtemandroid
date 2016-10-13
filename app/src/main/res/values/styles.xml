@@ -6,20 +6,38 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+    </style>
+
+    <style name="AppThemeLogin" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryLogin</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
+        <item name="colorAccent">@color/colorAccentLogin</item>
 
     </style>
 
     <style name="SplashScreen" parent="@style/AppTheme">
         <item name="android:windowBackground">@drawable/splash_screen</item>
-    </style>
-    
-    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
-        <item name="android:titleTextStyle">@style/MyTitleTextStyle</item>
+        <item name="colorPrimary">@color/colorPrimaryLogin</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
+        <item name="colorAccent">@color/colorAccentLogin</item>
     </style>
 
-    <style name="MyTitleTextStyle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">#ffffff</item>
+    <style name="MyTextButton" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="BtnSubmit" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/ripple_green</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

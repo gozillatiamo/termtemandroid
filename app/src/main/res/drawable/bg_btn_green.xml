@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/colorGreen"/>
+    <corners android:radius="@dimen/activity_space"/>
+    <padding
+        android:bottom="@dimen/cardview_default_elevation"
+        android:left="@dimen/cardview_default_elevation"
+        android:right="@dimen/cardview_default_elevation"
+        android:top="@dimen/cardview_default_elevation"/>
+</shape>
