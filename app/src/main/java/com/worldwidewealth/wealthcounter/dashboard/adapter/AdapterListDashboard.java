@@ -2,6 +2,7 @@ package com.worldwidewealth.wealthcounter.dashboard.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillPayment;
+import com.worldwidewealth.wealthcounter.dashboard.moneytransfer.fragment.FragmentMT;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopup;
 
 /**
@@ -25,6 +27,10 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
     private String[] mTextList;
     private TypedArray mIconList;
     private int[] mColorList;
+    private static final int BP = 0;
+    private static final int MT = 1;
+    private static final int TO = 2;
+    private static final int TP = 3;
 
     public AdapterListDashboard(Context context) {
 
@@ -47,29 +53,17 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = null;
-
                 switch (pos){
-                    case 0:
-                        transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                                .replace(R.id.dashboard_container, FragmentBillPayment.newInstance())
-                                .addToBackStack(null);
-                        transaction.commit();
+                    case BP:
+                        startFragment(FragmentBillPayment.newInstance());
                         break;
-                    case 1:
+                    case MT:
+                        startFragment(FragmentMT.newInstance());
                         break;
                     default:
-                        if (pos == 2) Global.setPage(0);
-                        else if (pos == 3) Global.setPage(1);
-                        transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                                .replace(R.id.dashboard_container, FragmentTopup.newInstance())
-                                .addToBackStack(null);
-                        transaction.commit();
-
+                        if (pos == TO) Global.setPage(0);
+                        else if (pos == TP) Global.setPage(1);
+                        startFragment(FragmentTopup.newInstance());
                         break;
                 }
 
@@ -85,6 +79,17 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
         holder.mTitle.setTextColor(mColorList[position]);
 
         holder.mCoins.setTextColor(mColorList[position]);
+    }
+
+    private void startFragment(Fragment fragment){
+
+        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.dashboard_container, fragment)
+                .addToBackStack(null);
+        transaction.commit();
+
     }
 
     @Override

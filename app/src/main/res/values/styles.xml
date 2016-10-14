@@ -40,4 +40,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="StyleSlip" parent="Base.CardView">
+        <item name="cardCornerRadius">@dimen/cardview_default_radius</item>
+        <item name="cardElevation">@dimen/cardview_default_radius</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>
