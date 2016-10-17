@@ -44,7 +44,8 @@
 
         <activity android:name=".dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
 
         <activity android:name=".ActivityLuck"

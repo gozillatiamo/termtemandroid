@@ -38,13 +38,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <EditText
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="@android:drawable/editbox_background"
                         android:inputType="numberDecimal"/>
                     <Spinner
-                        android:layout_width="wrap_content"
+                        android:id="@+id/spinner_send"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:layout_marginLeft="@dimen/activity_space">
 
                     </Spinner>
@@ -64,20 +67,24 @@
                     android:layout_height="wrap_content"
                     android:text="@string/recipient_sets"
                     android:textStyle="bold"
-                    style="@style/TextAppearance.AppCompat.Medium"/>
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/textView11" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <EditText
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="@android:drawable/editbox_background"
                         android:inputType="numberDecimal"/>
                     <Spinner
-                        android:layout_width="wrap_content"
+                        android:id="@+id/spinner_recipient"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:layout_marginLeft="@dimen/activity_space">
 
                     </Spinner>
@@ -309,6 +316,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_transfer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_transfer"

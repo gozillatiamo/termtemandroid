@@ -53,7 +53,7 @@ public class FragmentPreview extends Fragment {
                 FragmentTransaction transaction = FragmentPreview.this.getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit)
-                        .replace(R.id.dashboard_container, FragmentSlip.newInstance())
+                        .replace(R.id.dashboard_container, FragmentSlipCreditLimit.newInstance())
                         .addToBackStack(null);
 
                 transaction.commit();

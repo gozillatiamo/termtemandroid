@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:text="@string/send"/>
             <TextView
@@ -35,7 +35,7 @@
                 android:drawablePadding="@dimen/activity_space"
                 android:drawableRight="@drawable/thai_baht_64"
                 android:layout_marginLeft="@dimen/activity_space"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:text="1.00"/>
         </LinearLayout>
 
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:text="@string/recipient"/>
             <TextView
@@ -59,7 +59,7 @@
                 android:drawablePadding="@dimen/activity_space"
                 android:drawableRight="@drawable/lao_kip_64"
                 android:layout_marginLeft="@dimen/activity_space"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:text="118.06"/>
         </LinearLayout>
 
@@ -72,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:text="@string/mid_market_rate"/>
             <TextView
@@ -81,7 +81,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:layout_marginLeft="@dimen/activity_space"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:text="118.06"/>
         </LinearLayout>
 
@@ -94,7 +94,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:text="@string/withdrawal_fees"/>
             <TextView
@@ -103,7 +103,7 @@
                 android:layout_weight="1"
 
                 android:layout_marginLeft="@dimen/activity_space"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:text="2.1%"
                 android:gravity="right"/>
         </LinearLayout>
@@ -117,7 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:text="@string/total_withdrawal_fees"/>
             <TextView
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_space"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:gravity="right"
                 android:drawableRight="@drawable/lao_kip_64"
                 android:drawablePadding="@dimen/activity_space"

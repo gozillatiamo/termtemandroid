@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillPreview;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillShow;
+import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
+import com.worldwidewealth.wealthcounter.dialog.DialogReference;
+import com.worldwidewealth.wealthcounter.dialog.DialogReferencePreview;
 
 /**
  * Created by MyNet on 14/10/2559.
@@ -46,17 +50,52 @@ public class FragmentMT extends Fragment {
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.title_mt));
 
-//        mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-//                        .replace(R.id.dashboard_container, FragmentBillPreview.newInstance())
-//                        .addToBackStack(null);
-//                transaction.commit();
-//            }
-//        });
+
+        mHolder.mBtnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                        .replace(R.id.dashboard_container, FragmentMtSend.newInstance())
+                        .addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        mHolder.mBtnReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final DialogReference dialogReference = new DialogReference(FragmentMT.this.getContext());
+                dialogReference.setOnSubmit(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final DialogReferencePreview dialogReferencePreview = new DialogReferencePreview(FragmentMT.this.getContext());
+                        dialogReferencePreview.setOnSubmit(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FragmentTransaction transaction = FragmentMT.this.getActivity()
+                                        .getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                        .replace(R.id.dashboard_container, FragmentSlip.newInstance(Configs.Slip.MT_RECEIVE))
+                                        .addToBackStack(null);
+
+                                transaction.commit();
+                                dialogReferencePreview.dismiss();
+                            }
+                        });
+                        dialogReferencePreview.show();
+                        dialogReference.dismiss();
+                    }
+
+                });
+                dialogReference.show();
+
+            }
+        });
 
         return rootView;
     }

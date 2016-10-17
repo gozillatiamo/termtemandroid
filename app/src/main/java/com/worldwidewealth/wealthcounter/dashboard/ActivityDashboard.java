@@ -4,25 +4,25 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentHome;
-import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlip;
+import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
+import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupSlip;
 
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityDashboard extends AppCompatActivity {
+public class ActivityDashboard extends AppCompatActivity{
 
     private ViewHolder mHolder;
     @Override
@@ -73,9 +73,10 @@ public class ActivityDashboard extends AppCompatActivity {
     public void onBackPressed() {
         int stackCount = getSupportFragmentManager().getBackStackEntryCount();
         Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount-1);
-        if (currentFragment instanceof FragmentSlip ||
+        if (currentFragment instanceof FragmentSlipCreditLimit ||
                 currentFragment instanceof FragmentBillSlip ||
-                currentFragment instanceof FragmentTopupSlip) return;
+                currentFragment instanceof FragmentTopupSlip ||
+                currentFragment instanceof FragmentSlip) return;
         if (stackCount == 1) finish();
         else  super.onBackPressed();
     }
