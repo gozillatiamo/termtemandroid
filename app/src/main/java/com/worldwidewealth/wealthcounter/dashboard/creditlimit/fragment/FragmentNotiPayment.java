@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.worldwidewealth.wealthcounter.R;
 
@@ -18,6 +20,19 @@ public class FragmentNotiPayment extends Fragment {
     public static Fragment newInstance(){
         FragmentNotiPayment fragment = new FragmentNotiPayment();
         return fragment;
+    }
+
+    public class ViewHolder{
+        private Spinner mSpinnerCurrency, mSpinnerBankStart, mSpinnerBankEnd;
+        private EditText mDate, mTime;
+        public ViewHolder(View itemview){
+            mSpinnerCurrency = (Spinner) itemview.findViewById(R.id.spinner_currency);
+            mSpinnerBankEnd = (Spinner) itemview.findViewById(R.id.spinner_bank_end);
+            mSpinnerBankStart = (Spinner) itemview.findViewById(R.id.spinner_bank_start);
+
+            mDate = (EditText) itemview.findViewById(R.id.edit_date);
+            mTime = (EditText) itemview.findViewById(R.id.edit_time);
+        }
     }
 
     @Nullable

@@ -53,6 +53,17 @@
     <string name="total_coin">Total Coin:</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
+    <string name="balance_transfer">ยอดเงินที่โอน:</string>
+    <string name="currency">สกุลเงิน:</string>
+    <string name="date_transfer">วันที่โอน:</string>
+    <string name="time">เวลา:</string>
+    <string name="branch">สาขา:</string>
+    <string name="evidance">หลักฐาน:</string>
+    <string name="bank_start">ธนาคารต้นทาง:</string>
+    <string name="bank_end">ธนาคารปลายทาง:</string>
+    <string name="browse_file">เลือกรูป</string>
+    <string name="change_image">เปลี่ยนรูป</string>
+    <string name="delete_image">ลบรูป</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/bill_payment</item>
