@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.worldwidewealth.wealthcounter">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
-        <activity android:name=".SplashScreen"
-            android:theme="@style/SplashScreen"
+        <activity
+            android:name=".SplashScreen"
             android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,29 +34,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeLogin"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
-        <activity android:name=".dashboard.ActivityDashboard"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            >
-        </activity>
-
-        <activity android:name=".ActivityLuck"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ActivityLuck"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
-        <activity android:name=".ActivityPin"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ActivityPin"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".dashboard.billpayment.ActivitySettingAlert" />
+        <activity android:name=".dashboard.billpayment.ActivityOneBill"></activity>
     </application>
 
 </manifest>

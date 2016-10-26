@@ -64,6 +64,9 @@
     <string name="browse_file">เลือกรูป</string>
     <string name="change_image">เปลี่ยนรูป</string>
     <string name="delete_image">ลบรูป</string>
+    <string name="wait_pay">รอการชำระ</string>
+    <string name="paid">ชำระแล้ว</string>
+    <string name="owe">ค้างชำระ</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/bill_payment</item>
@@ -92,6 +95,36 @@
         <item>KIP</item>
         <item>THB</item>
     </string-array>
+
+    <string-array name="list_type_bill">
+        <item>ค่าไฟฟ้า</item>
+        <item>ค่าน้ำ</item>
+        <item>ค่าอินเตอร์เน็ต</item>
+        <item>ค่าโทรศัพท์</item>
+    </string-array>
+
+    <string-array name="list_exp_bill">
+        <item>30/11/16</item>
+        <item>25/11/16</item>
+        <item>15/11/16</item>
+        <item>15/11/16</item>
+    </string-array>
+
+    <string-array name="list_status_bill">
+        <item>รอการชำระ</item>
+        <item>รอการชำระ</item>
+        <item>ชำระแล้ว</item>
+        <item>ค้างชำระ</item>
+    </string-array>
+
+    <string-array name="list_price_bill">
+        <item>2,500</item>
+        <item>500</item>
+        <item>690</item>
+        <item>1,456</item>
+    </string-array>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

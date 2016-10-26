@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="คุณมีใบแจ้งชำระใหม่ 1 รายการ"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="รายละเอียด"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@android:color/holo_green_dark"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="เตือนภายหลัง"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            style="@style/Widget.AppCompat.Button.Colored"/>
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="ยกเลิก"/>
+
+</LinearLayout>

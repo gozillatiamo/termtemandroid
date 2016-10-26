@@ -1,5 +1,7 @@
 package com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.dashboard.billpayment.ActivityOneBill;
 
 /**
  * Created by MyNet on 10/10/2559.
@@ -59,6 +62,14 @@ public class FragmentBillPayment extends Fragment {
                         .addToBackStack(null);
                 transaction.commit();
 
+            }
+        });
+
+        rootView.findViewById(R.id.btn_onebill).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FragmentBillPayment.this.getContext(), ActivityOneBill.class);
+                startActivity(intent);
             }
         });
         return rootView;
