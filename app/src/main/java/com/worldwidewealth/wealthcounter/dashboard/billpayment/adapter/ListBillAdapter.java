@@ -3,10 +3,13 @@ package com.worldwidewealth.wealthcounter.dashboard.billpayment.adapter;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.worldwidewealth.wealthcounter.R;
@@ -18,37 +21,24 @@ import java.util.List;
  * Created by gozillatiamo on 10/21/16.
  */
 
-public class ListBillAdapter extends BaseAdapter {
+public class ListBillAdapter extends ArrayAdapter<ContentValues> {
 
     private Context mContext;
-    private String[] mTypeBill, mExpBill, mStatusBill, mPriceBill;
     private List<ContentValues> mListData;
     private View rootview;
     private ViewHolder mHolder;
-    private static LayoutInflater inflater = null;
+    private LayoutInflater inflater;
 
-    public ListBillAdapter(Context context){
+    public ListBillAdapter(Context context, int resourceId,
+                           List<ContentValues> list){
+        super(context, resourceId, list);
         this.mContext = context;
-        inflater = ( LayoutInflater )mContext.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.mTypeBill = mContext.getResources().getStringArray(R.array.list_type_bill);
-        this.mExpBill = mContext.getResources().getStringArray(R.array.list_exp_bill);
-        this.mStatusBill = mContext.getResources().getStringArray(R.array.list_status_bill);
-        this.mPriceBill = mContext.getResources().getStringArray(R.array.list_price_bill);
-        mListData = new ArrayList<>();
-
-        for (int i = 0; i < mTypeBill.length; i++){
-            ContentValues values = new ContentValues();
-            values.put("type", mTypeBill[i]);
-            values.put("exp", mExpBill[i]);
-            values.put("status", mStatusBill[i]);
-            values.put("price", mPriceBill[i]);
-            mListData.add(values);
-        }
+        this.mListData = list;
+        inflater = LayoutInflater.from(context);
     }
     @Override
     public int getCount() {
-        return mTypeBill.length;
+        return mListData.size();
     }
 
     @Override
@@ -78,21 +68,29 @@ public class ListBillAdapter extends BaseAdapter {
         mHolder.mTextType.setText(getItem(position).getAsString("type"));
         mHolder.mTextExp.setText(getItem(position).getAsString("exp"));
         mHolder.mTextStatus.setText(getItem(position).getAsString("status"));
-        switch (getItem(position).getAsString("status")){
-            case mContext.getrgetString(R.string.wait_pay):
-                break;
+        mHolder.mIcBill.setImageResource(getItem(position).getAsInteger("icon"));
 
-        }
+        String status = getItem(position).getAsString("status");
+        if (status.equals(mContext.getString(R.string.wait_pay)))
+            mHolder.mTextStatus.setBackgroundResource(R.drawable.background_status_warning);
+        else if (status.equals(mContext.getString(R.string.paid)))
+            mHolder.mTextStatus.setBackgroundResource(R.drawable.background_status_success);
+        else if (status.equals(mContext.getString(R.string.owe)))
+            mHolder.mTextStatus.setBackgroundResource(R.drawable.background_status_danger);
+
+
         mHolder.mTextPrice.setText(getItem(position).getAsString("price"));
     }
 
     public class ViewHolder{
         private TextView mTextType, mTextExp, mTextStatus, mTextPrice;
+        private ImageView mIcBill;
         public ViewHolder(View itemview){
             mTextType = (TextView) itemview.findViewById(R.id.txt_type);
             mTextExp = (TextView) itemview.findViewById(R.id.txt_exp);
             mTextStatus = (TextView) itemview.findViewById(R.id.txt_status);
             mTextPrice = (TextView) itemview.findViewById(R.id.txt_price);
+            mIcBill = (ImageView) itemview.findViewById(R.id.ic_bill);
         }
     }
 }

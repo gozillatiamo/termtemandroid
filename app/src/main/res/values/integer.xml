@@ -21,4 +21,11 @@
         <item>@drawable/logo_ktb</item>
         <item>@drawable/logo_tnch</item>
     </integer-array>
+    
+    <integer-array name="ic_bill">
+        <item>@drawable/ic_light_128</item>
+        <item>@drawable/ic_water_128</item>
+        <item>@drawable/ic_internet_128</item>
+        <item>@drawable/ic_telephone_128</item>
+    </integer-array>
 </resources>

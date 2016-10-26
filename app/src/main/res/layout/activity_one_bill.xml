@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_one_bill"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,57 +12,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"></android.support.v7.widget.Toolbar>
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="@android:color/white"
+            app:theme="@style/ToolbarColored"
+            app:popupTheme="@style/AppTheme"
+            >
+
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent"
-            android:paddingLeft="@dimen/activity_space"
-            android:paddingRight="@dimen/activity_space"
-            android:elevation="4dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:text="ประเภทบิล"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:textColor="@android:color/white"
-                android:text="วันครบกำหนด"
-                android:gravity="center"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:text="สถานะ"
-                android:textColor="@android:color/white"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:text="จำนวน"
-                android:textColor="@android:color/white"
-                android:gravity="center"/>
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--android:paddingLeft="@dimen/activity_space"-->
+            <!--android:paddingRight="@dimen/activity_space"-->
+            <!--android:elevation="4dp"-->
+            <!--android:orientation="horizontal">-->
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:text="ประเภทบิล"-->
+                <!--android:gravity="center"/>-->
 
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:text="วันครบกำหนด"-->
+                <!--android:gravity="center"-->
+                <!--android:id="@+id/textView14" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="สถานะ"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:gravity="center"/>-->
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="จำนวน"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:gravity="center"/>-->
+
+        <!--</LinearLayout>-->
         <ListView
             android:id="@+id/list_bill"
             android:layout_width="match_parent"
