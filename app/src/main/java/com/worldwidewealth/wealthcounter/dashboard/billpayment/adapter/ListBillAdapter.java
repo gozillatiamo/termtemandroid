@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,20 +23,21 @@ import java.util.List;
  * Created by gozillatiamo on 10/21/16.
  */
 
-public class ListBillAdapter extends ArrayAdapter<ContentValues> {
+public class ListBillAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<ContentValues> mListData;
     private View rootview;
     private ViewHolder mHolder;
     private LayoutInflater inflater;
+    private SparseBooleanArray mSelectItemIds;
+    private boolean mActionMode = false;
 
-    public ListBillAdapter(Context context, int resourceId,
-                           List<ContentValues> list){
-        super(context, resourceId, list);
+    public ListBillAdapter(Context context ,List<ContentValues> list){
         this.mContext = context;
         this.mListData = list;
         inflater = LayoutInflater.from(context);
+        mSelectItemIds = new SparseBooleanArray();
     }
     @Override
     public int getCount() {
@@ -61,6 +64,7 @@ public class ListBillAdapter extends ArrayAdapter<ContentValues> {
         }else  mHolder = (ViewHolder) rootview.getTag();
 
         initList(i);
+        initCheckMode(i);
         return rootview;
     }
 
@@ -82,15 +86,58 @@ public class ListBillAdapter extends ArrayAdapter<ContentValues> {
         mHolder.mTextPrice.setText(getItem(position).getAsString("price"));
     }
 
+    private void initCheckMode(int position){
+        if (mActionMode)
+            mHolder.mCheckbox.setVisibility(View.VISIBLE);
+        else
+            mHolder.mCheckbox.setVisibility(View.GONE);
+
+        mHolder.mCheckbox.setChecked(mSelectItemIds.get(position));
+    }
+
+    public void toggleMode(){
+        this.mActionMode = !mActionMode;
+    }
+
+    public void toggleSelection(int position){
+        selectView(position, !mSelectItemIds.get(position));
+    }
+
+    public void removeSelection(){
+        mSelectItemIds = new SparseBooleanArray();
+        toggleMode();
+        notifyDataSetChanged();
+    }
+
+    public void selectView(int position, boolean value){
+        if (value)
+            mSelectItemIds.put(position, value);
+        else
+            mSelectItemIds.delete(position);
+
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount(){
+        return mSelectItemIds.size();
+    }
+
+    public SparseBooleanArray getSelectedIds(){
+        return mSelectItemIds;
+    }
+
+
     public class ViewHolder{
         private TextView mTextType, mTextExp, mTextStatus, mTextPrice;
         private ImageView mIcBill;
+        private CheckBox mCheckbox;
         public ViewHolder(View itemview){
             mTextType = (TextView) itemview.findViewById(R.id.txt_type);
             mTextExp = (TextView) itemview.findViewById(R.id.txt_exp);
             mTextStatus = (TextView) itemview.findViewById(R.id.txt_status);
             mTextPrice = (TextView) itemview.findViewById(R.id.txt_price);
             mIcBill = (ImageView) itemview.findViewById(R.id.ic_bill);
+            mCheckbox = (CheckBox) itemview.findViewById(R.id.checkbox);
         }
     }
 }

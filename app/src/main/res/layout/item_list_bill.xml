@@ -4,7 +4,13 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/activity_space"
     >
-
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:clickable="false"
+        />
     <ImageView
         android:id="@+id/ic_bill"
         android:layout_width="wrap_content"
