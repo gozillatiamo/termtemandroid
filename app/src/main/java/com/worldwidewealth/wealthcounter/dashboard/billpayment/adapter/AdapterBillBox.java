@@ -23,7 +23,7 @@ import java.util.List;
  * Created by gozillatiamo on 10/21/16.
  */
 
-public class ListBillAdapter extends BaseAdapter {
+public class AdapterBillBox extends BaseAdapter {
 
     private Context mContext;
     private List<ContentValues> mListData;
@@ -33,7 +33,7 @@ public class ListBillAdapter extends BaseAdapter {
     private SparseBooleanArray mSelectItemIds;
     private boolean mActionMode = false;
 
-    public ListBillAdapter(Context context ,List<ContentValues> list){
+    public AdapterBillBox(Context context , List<ContentValues> list){
         this.mContext = context;
         this.mListData = list;
         inflater = LayoutInflater.from(context);
