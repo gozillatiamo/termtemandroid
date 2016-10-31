@@ -4,10 +4,11 @@
     <item
         android:id="@+id/checkall"
         android:actionViewClass="android.widget.CheckBox"
-        android:title="CheckAll"
+        android:title="เลือกทั้งหมด"
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/delete"
-        android:title="ชำระ"/>
+        android:id="@+id/pay"
+        android:title="ชำระ"
+        app:showAsAction="always"/>
 </menu>

@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.dashboard.billpayment.adapter.ListBillAdapter;
+import com.worldwidewealth.wealthcounter.dashboard.billpayment.adapter.AdapterBillBox;
 import com.worldwidewealth.wealthcounter.until.ToolbarActionModeCallback;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ActivityOneBill extends AppCompatActivity {
     private List<ContentValues> mListData;
     private String[] mTypeBill, mExpBill, mStatusBill, mPriceBill;
     private TypedArray mIcon;
-    private ListBillAdapter mAdapter;
+    private AdapterBillBox mAdapter;
     private ActionMode mActionMode;
 
     @Override
@@ -34,6 +34,13 @@ public class ActivityOneBill extends AppCompatActivity {
         initDataValue();
         initToolbar();
         initListBill();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mActionMode != null)
+            mActionMode.finish();
     }
 
     private void initDataValue(){
@@ -58,7 +65,7 @@ public class ActivityOneBill extends AppCompatActivity {
 
     private void initListBill(){
         final ListView list_bill = (ListView) findViewById(R.id.list_bill);
-        mAdapter = new ListBillAdapter(this, mListData);
+        mAdapter = new AdapterBillBox(this, mListData);
         list_bill.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -70,6 +77,7 @@ public class ActivityOneBill extends AppCompatActivity {
                     onListItemSelect(position);
                 } else {
                     Intent intent = new Intent(ActivityOneBill.this, ActivityBillDetail.class);
+                    intent.putExtra("type", "detail");
                     startActivity(intent);
                 }
             }
@@ -90,11 +98,11 @@ public class ActivityOneBill extends AppCompatActivity {
         mAdapter.toggleSelection(position);
         boolean hasCheckedItem = mAdapter.getSelectedCount() > 0;
         if (hasCheckedItem && mActionMode == null){
-            mActionMode = startSupportActionMode(new ToolbarActionModeCallback(this, mAdapter));
             mAdapter.toggleMode();
+            mActionMode = startSupportActionMode(new ToolbarActionModeCallback(this, mAdapter));
         } else if (!hasCheckedItem && mActionMode != null){
             mActionMode.finish();
-            mAdapter.toggleMode();
+
         }
 
         if (mActionMode != null)

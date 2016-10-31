@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.worldwidewealth.wealthcounter.R;
 
@@ -13,22 +14,24 @@ import com.worldwidewealth.wealthcounter.R;
  * Created by MyNet on 10/10/2559.
  */
 
-public class DialogBillDetail {
+public class DialogBillScan {
 
     private Context mContext;
     private Button mBtnClose;
+    private ImageView mImageCode;
     private Dialog dialog;
+    private String mType;
 
-    public DialogBillDetail(Context context){
+    public DialogBillScan(Context context,String type){
         this.mContext = context;
-
+        this.mType = type;
         initDialog();
     }
 
     private void initDialog(){
         dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.fragment_bill);
+        dialog.setContentView(R.layout.dialog_bill_scan);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
@@ -36,7 +39,7 @@ public class DialogBillDetail {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialog.getWindow().setAttributes(lp);
 
-        mBtnClose = (Button) dialog.findViewById(R.id.btn_close);
+        mBtnClose = (Button) dialog.findViewById(R.id.btn_cancel);
         mBtnClose.setVisibility(View.VISIBLE);
         mBtnClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +47,16 @@ public class DialogBillDetail {
                 dialog.dismiss();
             }
         });
+
+        mImageCode = (ImageView) dialog.findViewById(R.id.img_code);
+        switch (mType){
+            case "barcode":
+                mImageCode.setImageResource(R.drawable.barcodebill);
+                break;
+            case "qrcode":
+                mImageCode.setImageResource(R.drawable.qr_code);
+                break;
+        }
     }
 
     public void show(){

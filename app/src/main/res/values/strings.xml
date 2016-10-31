@@ -124,6 +124,21 @@
         <item>1,456</item>
     </string-array>
 
+    <string-array name="bill_alert_dropdown">
+        <item>กรุณาเลือก</item>
+        <item>จำนวนชั่วโมง</item>
+        <item>จำนวนวัน</item>
+        <item>กำหนดวันที่</item>
+    </string-array>
+
+    <string-array name="bill_history_dropdown">
+        <item>ทั้งหมด</item>
+        <item>8/59</item>
+        <item>9/59</item>
+        <item>10/59</item>
+        <item>11/59</item>
+    </string-array>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -6,12 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -20,6 +26,7 @@ public class FragmentLogin extends Fragment {
 
     private View rootView;
     private ViewHolder mHolder;
+    private API services;
     public static Fragment newInstance(){
         FragmentLogin fragment = new FragmentLogin();
         return fragment;
@@ -35,7 +42,7 @@ public class FragmentLogin extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-
+        services = API.retrofit.create(API.class);
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +51,20 @@ public class FragmentLogin extends Fragment {
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 activity.finish();
+/*
+                Call<ResponseBody> call = services.testpost("1234", "got");
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.e("respone", response.raw().toString());
+                    }
 
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+*/
             }
         });
 

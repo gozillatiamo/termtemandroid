@@ -28,6 +28,7 @@
                 android:background="@drawable/line_divider"/>
 
             <LinearLayout
+                android:id="@+id/btn_setting_alert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_vertical_margin"
@@ -65,10 +66,12 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/btn_barcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_barcode_64"/>
                     <ImageButton
+                        android:id="@+id/btn_qrcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_qr_code_64"/>
@@ -132,12 +135,13 @@
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 >
                 <Button
+                    android:id="@+id/btn_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/holo_orange_dark"
                     android:text="ดูประวัติการชำระย้อนหลัง"
                     android:padding="@dimen/activity_vertical_margin"
-                    android:textSize="24dp"
+                    android:textSize="16dp"
                     style="@style/Base.Widget.AppCompat.Button.Colored"/>
                 <Button
                     android:layout_width="match_parent"
@@ -145,7 +149,7 @@
                     android:backgroundTint="@android:color/holo_red_dark"
                     android:text="@string/cancel"
                     android:padding="@dimen/activity_vertical_margin"
-                    android:textSize="24dp"
+                    android:textSize="16dp"
                     style="@style/Base.Widget.AppCompat.Button.Colored"/>
             </LinearLayout>
 

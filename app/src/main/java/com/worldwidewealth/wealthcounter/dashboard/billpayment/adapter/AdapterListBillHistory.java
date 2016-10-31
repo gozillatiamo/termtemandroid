@@ -12,17 +12,17 @@ import com.worldwidewealth.wealthcounter.R;
  * Created by MyNet on 28/10/2559.
  */
 
-public class AdapterListBillPreview extends BaseAdapter{
+public class AdapterListBillHistory extends BaseAdapter{
 
     private Context mContext;
     private View rootview;
-    public AdapterListBillPreview(Context context){
+    public AdapterListBillHistory(Context context){
         this.mContext = context;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 5;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class AdapterListBillPreview extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null){
-            rootview = LayoutInflater.from(mContext).inflate(R.layout.item_list_onebill, null);
+            rootview = LayoutInflater.from(mContext).inflate(R.layout.item_list_bill_history, null);
         }
         return rootview;
     }

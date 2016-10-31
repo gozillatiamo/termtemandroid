@@ -53,7 +53,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".dashboard.billpayment.ActivitySettingAlert" />
         <activity android:name=".dashboard.billpayment.ActivityOneBill" />
-        <activity android:name=".dashboard.billpayment.ActivityBillDetail"></activity>
+        <activity android:name=".dashboard.billpayment.ActivityBillDetail" />
+        <activity android:name=".dashboard.billpayment.ActivityBillHistory"></activity>
     </application>
 
 </manifest>

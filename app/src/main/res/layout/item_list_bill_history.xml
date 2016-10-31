@@ -8,18 +8,30 @@
         android:layout_weight="1.5"
         android:gravity="center"
         android:padding="@dimen/activity_space"
+        android:textSize="8sp"
         android:text="10001"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:textSize="8sp"
         android:padding="@dimen/activity_space"
         android:layout_weight="1"
         android:text="ค่าไฟฟ้า"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.5"
+        android:gravity="center"
+        android:textSize="8sp"
+        android:padding="@dimen/activity_space"
+        android:layout_weight="1.4"
+        android:text="15/11/59"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.4"
+        android:textSize="8sp"
         android:gravity="center_vertical|right"
         android:padding="@dimen/activity_space"
         android:text="2,500"/>

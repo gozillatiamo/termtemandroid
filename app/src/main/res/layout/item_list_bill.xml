@@ -30,7 +30,7 @@
 
             <TextView
                 android:id="@+id/txt_type"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="@style/TextAppearance.AppCompat.Title"
@@ -38,8 +38,9 @@
                 android:text="ค่าไฟฟ้า"/>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:padding="@dimen/activity_space"
                 >
                 <TextView
