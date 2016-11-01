@@ -1,6 +1,8 @@
 package com.worldwidewealth.wealthcounter.until;
 
 import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -9,6 +11,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.worldwidewealth.wealthcounter.R;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.Buffer;
+import okio.BufferedSink;
 
 /**
  * Created by MyNet on 17/10/2559.
@@ -24,6 +33,25 @@ public class Until {
 
     }
 
+    public static RequestBody encode(final RequestBody body){
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return body.contentType();
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                Buffer buffer = new Buffer();
+                body.writeTo(buffer);
+                byte[] encoded = Base64.encode(buffer.readByteArray(), Base64.DEFAULT);
+                sink.write(encoded);
+                Log.e("encoded", encoded.toString());
+                buffer.close();
+                sink.close();
+            }
+        };
+    }
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
         ListAdapter listAdapter = listView.getAdapter();

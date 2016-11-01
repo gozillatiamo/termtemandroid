@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
+import com.worldwidewealth.wealthcounter.model.TestModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -51,20 +55,21 @@ public class FragmentLogin extends Fragment {
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 activity.finish();
-/*
-                Call<ResponseBody> call = services.testpost("1234", "got");
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.e("respone", response.raw().toString());
-                    }
+                TestModel test = new TestModel("1234", "got");
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-*/
+                    Call<ResponseBody> call = services.testpost(new TestModel("1234", "got"));
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Log.e("respone", response.raw().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+
             }
         });
 
@@ -79,6 +84,11 @@ public class FragmentLogin extends Fragment {
                         .addToBackStack(null);
 
                 transaction.commit();
+
+                String encrypt = EncryptionData.EncryptData("1234567890", "got");
+                Log.e("encrypt", encrypt);
+                String decrypt = EncryptionData.DecryptData("1234567890", encrypt);
+                Log.e("decrypt", decrypt);
             }
         });
 

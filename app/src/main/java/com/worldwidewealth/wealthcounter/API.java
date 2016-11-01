@@ -1,11 +1,24 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.util.Log;
+
+import com.worldwidewealth.wealthcounter.model.TestModel;
+import com.worldwidewealth.wealthcounter.until.Until;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -15,26 +28,48 @@ import retrofit2.http.POST;
 
 public interface API{
 
-    @GET("online.aspx")
+    @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
 
 
-    @GET("pin.aspx")
+    @GET("apifcm/pin.aspx")
     Call<ResponseBody> pin();
 
 
 
-    @GET("getluck.aspx")
+    @GET("apifcm/getluck.aspx")
     Call<ResponseBody> getluck();
 
-    @FormUrlEncoded
-    @POST("SyncOut.ashx")
-    Call<ResponseBody> testpost(@Field("id")String id, @Field("name")String name);
+    @POST("wealthservice/syncout.ashx")
+    Call<ResponseBody> testpost(@Body TestModel test);
 
-public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://180.128.21.31/apifcm/")
+
+    final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    final OkHttpClient client = new OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request originalRequest = chain.request();
+                    Request.Builder builder = originalRequest.newBuilder();
+                    Log.e("method", originalRequest.method());
+                    if (originalRequest.method().equalsIgnoreCase("POST")){
+                        Log.e("isPOST", "true");
+                        builder = originalRequest.newBuilder()
+                                .method(originalRequest.method(), Until.encode(originalRequest.body()));
+
+                    }
+                    return chain.proceed(builder.build());
+                }
+            }).build();
+
+    public static final Retrofit retrofit = new Retrofit.Builder()
+        .baseUrl("http://180.128.21.31/")
+            .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build();
 }
 //http://180.128.21.31/apifcm/
-//http://192.168.200.70:52029/SyncOut.ashx
+//http://180.128.21.31/wealthservice/syncout.ashx

@@ -43,16 +43,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:textColor="@android:color/white"
-            android:background="@drawable/ripple_button" />
+            android:backgroundTint="#FFBF00"
+            style="@style/MyButton" />
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_space"
-            android:text="Register"
-            android:textColor="@android:color/white"
-            android:background="@drawable/ripple_button_second" />
+            style="@style/MyButton"
+            android:backgroundTint="#E83F6F"
+            android:text="Register" />
 
     </LinearLayout>
 
