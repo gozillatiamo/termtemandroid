@@ -1,6 +1,5 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,17 +14,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.worldwidewealth.wealthcounter.API;
+import com.worldwidewealth.wealthcounter.APIservices;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,7 +30,7 @@ import retrofit2.Response;
 public class FragmentTopupPreview extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
-    private API service;
+    private APIservices service;
     private String mPage;
     public static Fragment newInstance(String page){
         Bundle bundle = new Bundle();
@@ -66,7 +57,7 @@ public class FragmentTopupPreview extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mPage = getArguments().getString("page");
-        service = API.retrofit.create(API.class);
+        service = APIservices.retrofit.create(APIservices.class);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_preview, container, false);
             mHolder = new ViewHolder(rootView);
@@ -76,10 +67,10 @@ public class FragmentTopupPreview extends Fragment {
         initSpinnerCurrency();
         switch (mPage){
             case "airtime":
-                mHolder.mTitle.setText("เติมเงิน AIRTIME 10,000 KIP");
+                mHolder.mTitle.setText("เติมเงิน AIS 100 THB");
                 break;
             case "vas":
-                mHolder.mTitle.setText("เติมเงิน VAS 3GB/10,000 KIP/30 day");
+                mHolder.mTitle.setText("เติมเงิน VAS 3GB/100 THB/30 day");
                 break;
         }
 

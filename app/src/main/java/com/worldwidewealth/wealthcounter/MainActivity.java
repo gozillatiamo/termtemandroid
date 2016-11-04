@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initFCM();
         mHolder = new ViewHolder(this);
         FragmentTransaction transaction = this.getSupportFragmentManager()
                 .beginTransaction()
@@ -40,55 +39,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private void initFCM(){
-        if (getIntent().getExtras() != null) {
-            for (String key : getIntent().getExtras().keySet()) {
-                String value = getIntent().getExtras().getString(key);
-                Log.d(TAG, "Key: " + key + " Value: " + value);
-            }
-        }
-
-        Log.d(TAG, "InstanceID token: " + FirebaseInstanceId.getInstance().getToken());
-        writeToFile(FirebaseInstanceId.getInstance().getToken());
-    }
-
-    public void writeToFile(String data)
-    {
-        // Get the directory for the user's public pictures directory.
-        final File path =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-        // Make sure the path directory exists.
-        if(!path.exists())
-        {
-            // Make it, if it doesn't exit
-            path.mkdirs();
-        }
-
-        final File file = new File(path, "token.txt");
-
-        // Save your stream, don't forget to flush() it before closing it.
-
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(data);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-            Toast.makeText(this, "SAVE", Toast.LENGTH_SHORT).show();
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 
 
     @Override

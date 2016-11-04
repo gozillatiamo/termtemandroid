@@ -1,16 +1,16 @@
 package com.worldwidewealth.wealthcounter.model;
 
+import com.worldwidewealth.wealthcounter.EncryptionData;
+
 /**
  * Created by MyNet on 1/11/2559.
  */
 
 public class TestModel {
 
-    private String id;
-    private String name;
+    private String data;
 
-    public TestModel(String id, String name){
-        this.id = id;
-        this.name = name;
+    public TestModel(String data){
+        this.data = EncryptionData.EncryptData(data);
     }
 }

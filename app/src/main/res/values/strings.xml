@@ -67,6 +67,13 @@
     <string name="wait_pay">รอการชำระ</string>
     <string name="paid">ชำระแล้ว</string>
     <string name="owe">ค้างชำระ</string>
+    <string name="setting_gps_title">ตั้งค่าตำแหน่ง</string>
+    <string name="setting_gps_message">ตำแหน่งถูกปิดอยู่ คุณจำเป็นต้องเปิดใช้งานตำแหน่งก่อนใช้งาน แอพพลิเคชั่น</string>
+    <string name="network_error_title">การเชื่อมต่อล้มเหลว</string>
+    <string name="network_error_message">การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง</string>
+    <string name="try_again">ลองใหม่</string>
+
+
 
     <string-array name="str_list_dashboard">
         <item>@string/bill_payment</item>
@@ -137,6 +144,12 @@
         <item>9/59</item>
         <item>10/59</item>
         <item>11/59</item>
+    </string-array>
+
+    <string-array name="type_people_dropdown">
+        <item>กรุณาเลือก</item>
+        <item>บุคคล</item>
+        <item>นิติบุคคล</item>
     </string-array>
 
 

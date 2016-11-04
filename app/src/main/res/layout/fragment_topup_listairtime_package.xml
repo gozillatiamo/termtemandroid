@@ -21,23 +21,23 @@
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:textOn="10000"
-                        android:textOff="10000"
+                        android:textOn="100"
+                        android:textOff="100"
                         />
                     <ToggleButton
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:textOn="20000"
-                        android:textOff="20000"
+                        android:textOn="200"
+                        android:textOff="200"
                         />
 
                     <ToggleButton
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:textOn="25000"
-                        android:textOff="25000"
+                        android:textOn="250"
+                        android:textOff="250"
                         />
 
                 </LinearLayout>
@@ -50,15 +50,15 @@
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:textOn="50000"
-                        android:textOff="50000"
+                        android:textOn="500"
+                        android:textOff="500"
                         />
                     <ToggleButton
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:textOn="100000"
-                        android:textOff="100000"
+                        android:textOn="1000"
+                        android:textOff="1000"
                         />
 
                     <ToggleButton

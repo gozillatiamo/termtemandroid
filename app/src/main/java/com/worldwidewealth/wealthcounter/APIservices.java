@@ -2,6 +2,8 @@ package com.worldwidewealth.wealthcounter;
 
 import android.util.Log;
 
+import com.worldwidewealth.wealthcounter.model.IdenModel;
+import com.worldwidewealth.wealthcounter.model.InAppModel;
 import com.worldwidewealth.wealthcounter.model.TestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
@@ -19,6 +21,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -26,7 +29,7 @@ import retrofit2.http.POST;
  * Created by MyNet on 11/10/2559.
  */
 
-public interface API{
+public interface APIservices {
 
     @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
@@ -43,8 +46,14 @@ public interface API{
     @POST("wealthservice/syncout.ashx")
     Call<ResponseBody> testpost(@Body TestModel test);
 
+    @POST("wealthservice/service.ashx")
+    Call<ResponseBody> PRE(@Body InAppModel inAppModel);
+
+    @POST("checktinpinservice.asmx?wsdl")
+    Call<ResponseBody> checkIden(@Body IdenModel idenModel);
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+
     final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -66,10 +75,11 @@ public interface API{
             }).build();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://180.128.21.31/")
-            .client(client)
+        .baseUrl("http://180.128.21.31/").client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build();
+
 }
+
 //http://180.128.21.31/apifcm/
 //http://180.128.21.31/wealthservice/syncout.ashx

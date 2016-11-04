@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
+import com.worldwidewealth.wealthcounter.game.ActivityGame;
 
 import org.w3c.dom.Text;
 
@@ -36,11 +38,12 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     public class ViewHolder{
-        private Button mBtnBack;
+        private Button mBtnBack, mBtnGame;
         private TextView mTextTopup;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
             mTextTopup = (TextView) itemview.findViewById(R.id.txt_topup);
+            mBtnGame = (Button) itemview.findViewById(R.id.btn_play_game);
         }
     }
 
@@ -61,12 +64,12 @@ public class FragmentTopupSlip extends Fragment {
 
         switch (mPage){
             case "airtime":
-                mHolder.mTextTopup.setText("10,000 KIP");
-                mHolder.mTextTopup.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.lao_kip_64), null);
+//                mHolder.mTextTopup.setText("10,000 KIP");
+//                mHolder.mTextTopup.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.lao_kip_64), null);
                 break;
             case "vas":
-                mHolder.mTextTopup.setText("3GB/10,000KIP/30day");
-                mHolder.mTextTopup.setCompoundDrawables(null, null, null, null);
+//                mHolder.mTextTopup.setText("3GB/10,000KIP/30day");
+//                mHolder.mTextTopup.setCompoundDrawables(null, null, null, null);
 
                 break;
 
@@ -74,6 +77,15 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTopupSlip.this.getFragmentManager().popBackStack(0, 0);
+            }
+        });
+
+        mHolder.mBtnGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FragmentTopupSlip.this.getContext(), ActivityGame.class);
+                startActivity(intent);
                 FragmentTopupSlip.this.getFragmentManager().popBackStack(0, 0);
             }
         });

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardUseCompatPadding="true"
-    android:layout_margin="@dimen/activity_vertical_margin">
+    android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardUseCompatPadding="true"
+        android:layout_margin="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +55,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="100,000"
+                    android:text="9,905"
                     android:textSize="@dimen/icon_size"
                     android:gravity="right|center"
                     android:textStyle="bold"
@@ -99,7 +104,29 @@
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
-                    android:text="Topup:"/>
+                    android:text="เครือข่าย:"/>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:layout_marginLeft="@dimen/activity_space"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:text="AIS" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold"
+                    android:text="เติมเงิน:"/>
                 <TextView
                     android:id="@+id/txt_topup"
                     android:layout_width="wrap_content"
@@ -108,8 +135,8 @@
                     android:gravity="right"
                     android:layout_marginLeft="@dimen/activity_space"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="10,000"
-                    android:drawableRight="@drawable/lao_kip_64"
+                    android:text="100"
+                    android:drawableRight="@drawable/thai_baht_64"
                     android:drawablePadding="@dimen/activity_space"/>
             </LinearLayout>
 
@@ -123,7 +150,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
-                    android:text="Telephone:"/>
+                    android:text="เบอร์โทรศัพทื:"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -138,6 +165,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView
@@ -232,6 +260,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
@@ -246,8 +275,8 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="1.23"
-                    android:drawableRight="@drawable/american_dollar_64"
+                    android:text="95"
+                    android:drawableRight="@drawable/thai_baht_64"
                     android:drawablePadding="@dimen/activity_space"/>
             </LinearLayout>
 
@@ -255,6 +284,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
@@ -271,7 +301,7 @@
                     android:gravity="right"
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:text="0.1843"
-                    android:drawableRight="@drawable/american_dollar_64"
+                    android:drawableRight="@drawable/thai_baht_64"
                     android:drawablePadding="@dimen/activity_space"
                     android:id="@+id/textView9" />
             </LinearLayout>
@@ -281,6 +311,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
@@ -295,8 +326,8 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="1.4145"
-                    android:drawableRight="@drawable/american_dollar_64"
+                    android:text="100"
+                    android:drawableRight="@drawable/thai_baht_64"
                     android:drawablePadding="@dimen/activity_space"/>
             </LinearLayout>
 
@@ -341,18 +372,39 @@
                     android:text="สำเร็จ"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_back_to_dashboard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_button"
-                android:layout_margin="@dimen/activity_space"
-                android:text="กลับสู่หน้าหลัก"
-                style="@style/MyTextButton"
-                />
 
         </LinearLayout>
 
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_back_to_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_space"
+            android:text="กลับสู่หน้าหลัก"
+            style="@style/MyButton"
+            />
+
+        <Button
+            android:id="@+id/btn_play_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_space"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:text="เสี่ยงโชค"
+            style="@style/MyButton"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

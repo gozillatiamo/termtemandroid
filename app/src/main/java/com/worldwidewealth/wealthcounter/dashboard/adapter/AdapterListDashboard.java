@@ -50,15 +50,18 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final int pos = position;
+        if (pos != 2){
+
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (pos){
                     case BP:
-                        startFragment(FragmentBillPayment.newInstance());
+                        //startFragment(FragmentBillPayment.newInstance());
                         break;
                     case MT:
-                        startFragment(FragmentMT.newInstance());
+                       // startFragment(FragmentMT.newInstance());
                         break;
                     default:
                         if (pos == TO) Global.setPage(0);
@@ -94,7 +97,7 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
 
     @Override
     public int getItemCount() {
-        return mTextList.length;
+        return mTextList.length-1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

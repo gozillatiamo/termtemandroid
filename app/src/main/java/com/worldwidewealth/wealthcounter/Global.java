@@ -6,6 +6,24 @@ package com.worldwidewealth.wealthcounter;
 
 public class Global {
     private static int page;
+    private static String DEVICEID;
+    private static String TOKEN;
+
+    public static String getDEVICEID() {
+        return DEVICEID;
+    }
+
+    public static void setDEVICEID(String DEVICEID) {
+        Global.DEVICEID = DEVICEID;
+    }
+
+    public static String getTOKEN() {
+        return TOKEN;
+    }
+
+    public static void setTOKEN(String TOKEN) {
+        Global.TOKEN = TOKEN;
+    }
 
     public static int getPage() {
         return page;

@@ -2,26 +2,21 @@ package com.worldwidewealth.wealthcounter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
 
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
-import com.worldwidewealth.wealthcounter.model.TestModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -30,7 +25,8 @@ public class FragmentLogin extends Fragment {
 
     private View rootView;
     private ViewHolder mHolder;
-    private API services;
+    private APIservices services;
+    private String mPhone, mPassword;
     public static Fragment newInstance(){
         FragmentLogin fragment = new FragmentLogin();
         return fragment;
@@ -46,29 +42,32 @@ public class FragmentLogin extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        services = API.retrofit.create(API.class);
+        services = APIservices.retrofit.create(APIservices.class);
+
+        initBtn();
+        return rootView;
+    }
+
+    private void initBtn(){
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPhone = mHolder.mPhone.getText().toString();
+                mPassword = mHolder.mPassword.getText().toString();
+                if (mPhone.equals("") || mPassword.equals("")) {
+                    Toast.makeText(FragmentLogin.this.getContext(), getString(R.string.please_enter_data), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.e("LoginData:", "Phone:" + mPhone + "\n"+
+                        "Password:" + mPassword);
+
                 Activity activity = FragmentLogin.this.getActivity();
                 Intent intent = new Intent(activity, ActivityDashboard.class);
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 activity.finish();
-                TestModel test = new TestModel("1234", "got");
 
-                    Call<ResponseBody> call = services.testpost(new TestModel("1234", "got"));
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Log.e("respone", response.raw().toString());
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            t.printStackTrace();
-                        }
-                    });
 
             }
         });
@@ -80,29 +79,29 @@ public class FragmentLogin extends Fragment {
                         .getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.main_container, FragmentRegister1.newInstance())
+                        .replace(R.id.main_container, FragmentRegister.newInstance())
                         .addToBackStack(null);
 
                 transaction.commit();
-
-                String encrypt = EncryptionData.EncryptData("1234567890", "got");
-                Log.e("encrypt", encrypt);
-                String decrypt = EncryptionData.DecryptData("1234567890", encrypt);
-                Log.e("decrypt", decrypt);
             }
         });
 
-        return rootView;
     }
 
     public class ViewHolder{
 
-        private Button mBtnRegister;
-        private Button mBtnLogin;
+        private AppCompatButton mBtnRegister;
+        private AppCompatButton mBtnLogin;
+        private AppCompatEditText mPhone, mPassword;
         public ViewHolder(View view){
 
-            mBtnRegister = (Button) view.findViewById(R.id.btn_register);
-            mBtnLogin = (Button) view.findViewById(R.id.btn_login);
+            mBtnRegister = (AppCompatButton) view.findViewById(R.id.btn_register);
+            mBtnRegister.setSupportBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E83F6F")));
+            mBtnLogin = (AppCompatButton) view.findViewById(R.id.btn_login);
+            mBtnLogin.setSupportBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFBF00")));
+            mPhone = (AppCompatEditText) view.findViewById(R.id.edit_phone);
+
+            mPassword = (AppCompatEditText) view.findViewById(R.id.edit_password);
         }
     }
 }

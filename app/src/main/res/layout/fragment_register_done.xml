@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:text="@string/register_done"
             android:gravity="center"
+            android:textColor="@android:color/white"
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_marginTop="@dimen/activity_space"
             android:textStyle="bold"/>

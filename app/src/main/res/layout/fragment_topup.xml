@@ -49,15 +49,15 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
                     android:padding="@dimen/activity_space"
-                    android:src="@drawable/lao_tel" />
+                    android:src="@drawable/ais_logo" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="Lao Tel"
+                    android:text="AIS"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textColor="@android:color/darker_gray"/>
