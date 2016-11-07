@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -20,15 +21,27 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                    android:background="@color/colorBackground"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:title="text"
+                    android:elevation="10dp"
                     app:titleTextColor="#38686A"
                     >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wealth Counter"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -39,51 +52,60 @@
                 <FrameLayout
                     android:id="@+id/dashboard_container"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     >
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_dashborad"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+
+                    </android.support.v7.widget.RecyclerView>
+
                 </FrameLayout>
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tab_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:tabMode="fixed"
-                    app:tabGravity="fill"
-                    app:tabTextColor="@android:color/white"
-                    app:tabPadding="@dimen/activity_space"
-                    app:tabSelectedTextColor="@color/colorSelector"
-                    app:tabIndicatorColor="@color/colorTab"
-                    android:background="@color/colorTab">
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/tab_home"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/home"
-                        android:icon="@drawable/ic_home_selector"
+                <!--<android.support.design.widget.TabLayout-->
+                    <!--android:id="@+id/tab_main"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:tabMode="fixed"-->
+                    <!--app:tabGravity="fill"-->
+                    <!--app:tabTextColor="@android:color/white"-->
+                    <!--app:tabPadding="@dimen/activity_space"-->
+                    <!--app:tabSelectedTextColor="@color/colorSelector"-->
+                    <!--app:tabIndicatorColor="@color/colorTab"-->
+                    <!--android:background="@color/colorTab">-->
+                    <!--<android.support.design.widget.TabItem-->
+                        <!--android:id="@+id/tab_home"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/home"-->
+                        <!--android:icon="@drawable/ic_home_selector"-->
 
-                        />
-                    <android.support.design.widget.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/help"
-                        android:icon="@drawable/ic_help_selector"
+                        <!--/>-->
+                    <!--<android.support.design.widget.TabItem-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/help"-->
+                        <!--android:icon="@drawable/ic_help_selector"-->
 
-                        />
-                    <android.support.design.widget.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/report"
-                        android:icon="@drawable/ic_assignment_selector"
-                        />
-                    <android.support.design.widget.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:icon="@drawable/ic_settings_selector"
-                        android:text="@string/setting"
-                        />
+                        <!--/>-->
+                    <!--<android.support.design.widget.TabItem-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/report"-->
+                        <!--android:icon="@drawable/ic_assignment_selector"-->
+                        <!--/>-->
+                    <!--<android.support.design.widget.TabItem-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:icon="@drawable/ic_settings_selector"-->
+                        <!--android:text="@string/setting"-->
+                        <!--/>-->
 
-                </android.support.design.widget.TabLayout>
+                <!--</android.support.design.widget.TabLayout>-->
 
             </LinearLayout>
 

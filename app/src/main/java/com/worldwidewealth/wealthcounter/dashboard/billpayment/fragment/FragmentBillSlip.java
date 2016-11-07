@@ -43,8 +43,8 @@ public class FragmentBillSlip extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        mTabMain.setVisibility(View.GONE);
+//        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        mTabMain.setVisibility(View.GONE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         mHolder.mBtnBackToDashboard.setOnClickListener(new View.OnClickListener() {
             @Override

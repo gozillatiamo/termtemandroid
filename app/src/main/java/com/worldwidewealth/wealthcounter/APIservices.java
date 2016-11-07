@@ -49,15 +49,12 @@ public interface APIservices {
     @POST("wealthservice/service.ashx")
     Call<ResponseBody> PRE(@Body InAppModel inAppModel);
 
-    @POST("checktinpinservice.asmx?wsdl")
-    Call<ResponseBody> checkIden(@Body IdenModel idenModel);
-
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(5, TimeUnit.MINUTES)
+            .readTimeout(5, TimeUnit.MINUTES)
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {

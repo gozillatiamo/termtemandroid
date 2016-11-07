@@ -41,8 +41,8 @@ public class FragmentHome extends Fragment {
         } else mHolder = (ViewHolder) rootView.getTag();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        mTabMain.setVisibility(View.VISIBLE);
+//        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        mTabMain.setVisibility(View.VISIBLE);
 
         initListDashboard();
 

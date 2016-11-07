@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1da59b</color>
-    <color name="colorPrimaryDark">#1da59b</color>
-    <color name="colorAccent">#E39774</color>
-    <color name="colorBackground">#626868</color>
+    <color name="colorPrimary">#1ca499</color>
+    <color name="colorPrimaryDark">#1ca499</color>
+    <color name="colorAccent">#1ca499</color>
+    <color name="colorBackground">#007378</color>
     <color name="colorSelector">#E39774</color>
     <color name="colorSuccess">#4CAF50</color>
     <color name="colorTab">#4c8ba8</color>
@@ -11,14 +11,18 @@
     <color name="colorRed">#F44336</color>
     <color name="colorGreen">#4CAF50</color>
 
-
     <color name="color_bg_card">#009688</color>
 
     <array name="color_list_dashboard">
-        <item>#BA78E2</item>
-        <item>#009688</item>
-        <item>#FFBF00</item>
-        <item>#E91E63</item>
+        <item>#32b7b4</item>
+        <item>#209ea8</item>
+        <item>#5b8ebd</item>
+        <item>#3d73a1</item>
+        <item>#32b7b3</item>
+        <item>#1f9ea7</item>
+        <item>#5b8ebd</item>
+        <item>#3d73a1</item>
+        <item>#1f9ea7</item>
     </array>
 
     <array name="color_list_bank">
@@ -29,4 +33,5 @@
         <item>#69bde0</item>
         <item>#f27c33</item>
     </array>
+
 </resources>

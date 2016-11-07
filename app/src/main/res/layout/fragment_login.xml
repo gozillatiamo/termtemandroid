@@ -46,6 +46,16 @@
                 android:imeOptions="actionGo"/>
 
         </LinearLayout>
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:background="@color/colorPrimary"
+            android:visibility="visible"/>
 
     </LinearLayout>
     <LinearLayout
@@ -54,18 +64,13 @@
         android:gravity="bottom"
         android:orientation="vertical">
         <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:backgroundTint="#FFBF00"
-            style="@style/MyButton" />
-        <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/MyButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:backgroundTint="#E83F6F"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:text="Register" />
 
     </LinearLayout>

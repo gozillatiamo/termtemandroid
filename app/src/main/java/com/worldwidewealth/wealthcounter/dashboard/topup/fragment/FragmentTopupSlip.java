@@ -59,8 +59,8 @@ public class FragmentTopupSlip extends Fragment {
         } else mHolder = (ViewHolder) rootView.getTag();
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        tabLayout.setVisibility(View.GONE);
+//        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        tabLayout.setVisibility(View.GONE);
 
         switch (mPage){
             case "airtime":

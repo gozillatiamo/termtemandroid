@@ -66,7 +66,7 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
                     default:
                         if (pos == TO) Global.setPage(0);
                         else if (pos == TP) Global.setPage(1);
-                        startFragment(FragmentTopup.newInstance());
+//                        startFragment(FragmentTopup.newInstance());
                         break;
                 }
 
@@ -84,16 +84,16 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
         holder.mCoins.setTextColor(mColorList[position]);
     }
 
-    private void startFragment(Fragment fragment){
-
-        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.dashboard_container, fragment)
-                .addToBackStack(null);
-        transaction.commit();
-
-    }
+//    private void startFragment(Fragment fragment){
+//
+//        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
+//                .beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+//                .replace(R.id.dashboard_container, fragment)
+//                .addToBackStack(null);
+//        transaction.commit();
+//
+//    }
 
     @Override
     public int getItemCount() {

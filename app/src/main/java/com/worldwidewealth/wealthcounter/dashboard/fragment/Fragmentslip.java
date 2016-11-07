@@ -51,7 +51,7 @@ public class FragmentSlip extends Fragment{
 
         mPage = getArguments().getString(PAGE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-        getActivity().findViewById(R.id.tab_main).setVisibility(View.GONE);
+//        getActivity().findViewById(R.id.tab_main).setVisibility(View.GONE);
 
         mHolder.mBtnBackToDashBoard.setOnClickListener(new View.OnClickListener() {
             @Override

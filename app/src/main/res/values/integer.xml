@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="ic_list_dashboard">
-        <item>@drawable/ic_bill_payment</item>
-        <item>@drawable/ic_mt</item>
-        <item>@drawable/ic_topup</item>
-        <item>@drawable/ic_topup</item>
-    </integer-array>
 
     <integer-array name="ic_list_credit_limit">
         <item>@drawable/book_bank</item>
@@ -27,5 +21,21 @@
         <item>@drawable/ic_water_128</item>
         <item>@drawable/ic_internet_128</item>
         <item>@drawable/ic_telephone_128</item>
+    </integer-array>
+
+    <integer-array name="ic_list_dashboard">
+        <item>@drawable/ic_my_card_64</item>
+        <item>@drawable/ic_card_to_card_64</item>
+        <item>@drawable/ic_gift_64</item>
+        <item>@drawable/ic_bag_wallet_64</item>
+        <item>@drawable/ic_web_passport_64</item>
+        <item>@drawable/ic_credit_64</item>
+        <item>@drawable/ic_service_64</item>
+        <item>@drawable/ic_my_profile_64</item>
+        <item>@drawable/ic_settings_64</item>
+        <item>@drawable/ic_time_line_64</item>
+        <item>@drawable/ic_vouchers_64</item>
+        <item>@drawable/ic_qr_code_white_64</item>
+        <item>@drawable/ic_qr_code_scan_64</item>
     </integer-array>
 </resources>

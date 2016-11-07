@@ -50,8 +50,8 @@ public class FragmentTransfer extends Fragment {
         } else mHolder = (ViewHolder) rootView.getTag();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("เติมเงินในเครดิต");
 
-        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        mTabMain.setVisibility(View.VISIBLE);
+//        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        mTabMain.setVisibility(View.VISIBLE);
         mHolder.mBtnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

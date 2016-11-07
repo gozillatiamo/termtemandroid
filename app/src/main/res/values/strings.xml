@@ -72,14 +72,36 @@
     <string name="network_error_title">การเชื่อมต่อล้มเหลว</string>
     <string name="network_error_message">การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง</string>
     <string name="try_again">ลองใหม่</string>
+    <string name="dashboard_my_card">My Cards</string>
+    <string name="dashboard_card_to_card">Card to Card</string>
+    <string name="dashboard_loyalty">Loyalty</string>
+    <string name="dashboard_wallet">Wallet</string>
+    <string name="dashboard_web_passport">Web Passport</string>
+    <string name="dashboard_credit">Credit</string>
+    <string name="dashboard_service">Service</string>
+    <string name="dashboard_my_profile">My Profile</string>
+    <string name="dashboard_settings">Settings</string>
+    <string name="dashboard_time_line">Timeline</string>
+    <string name="dashboard_vouchers">Vouchers</string>
+    <string name="dashboard_my_qr">My QR</string>
+    <string name="dashboard_scan_qr">Scan QR</string>
 
 
 
     <string-array name="str_list_dashboard">
-        <item>@string/bill_payment</item>
-        <item>@string/transfer</item>
-        <item>@string/topup_online</item>
-        <item>@string/topup_pin</item>
+        <item>@string/dashboard_my_card</item>
+        <item>@string/dashboard_card_to_card</item>
+        <item>@string/dashboard_loyalty</item>
+        <item>@string/dashboard_wallet</item>
+        <item>@string/dashboard_web_passport</item>
+        <item>@string/dashboard_credit</item>
+        <item>@string/dashboard_service</item>
+        <item>@string/dashboard_my_profile</item>
+        <item>@string/dashboard_settings</item>
+        <item>@string/dashboard_time_line</item>
+        <item>@string/dashboard_vouchers</item>
+        <item>@string/dashboard_my_qr</item>
+        <item>@string/dashboard_scan_qr</item>
     </string-array>
 
     <string-array name="str_list_credit_limit">

@@ -49,8 +49,8 @@ public class FragmentCreditLimit extends Fragment {
         } mHolder = (ViewHolder) rootView.getTag();
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        mTabMain.setVisibility(View.VISIBLE);
+//        mTabMain = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        mTabMain.setVisibility(View.VISIBLE);
         initListMenu();
 
         return rootView;

@@ -7,17 +7,23 @@ import android.support.design.widget.TabItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentHome;
 import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupSlip;
+import com.worldwidewealth.wealthcounter.until.SimpleDividerItemDecoration;
+import com.worldwidewealth.wealthcounter.until.SpacesGridDecoration;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -25,13 +31,14 @@ import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupS
 public class ActivityDashboard extends AppCompatActivity{
 
     private ViewHolder mHolder;
+    private AdapterDashboard mAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
         mHolder = new ViewHolder(this);
-        TabItem tabhome = (TabItem) findViewById(R.id.tab_home);
 
 //        tabhome.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -39,35 +46,51 @@ public class ActivityDashboard extends AppCompatActivity{
 //                ActivityDashboard.this.getSupportFragmentManager().popBackStack(0, 0);
 //            }
 //        });
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.dashboard_container, FragmentHome.newInstance())
-                .addToBackStack(null);
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.dashboard_container, FragmentHome.newInstance())
+//                .addToBackStack(null);
+//        transaction.commit();
 
         initToolbar();
+        initListDashboard();
     }
 
     private void initToolbar(){
         setSupportActionBar(mHolder.mToolbar);
-        getSupportActionBar().setTitle(getString(R.string.app_name));
+        getSupportActionBar().setTitle("");
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        return super.onCreateOptionsMenu(menu);
+    private void initListDashboard(){
+        mAdapter = new AdapterDashboard(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 12);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mAdapter.getItemViewType(position);
+            }
+        });
+
+        mHolder.mListDashboard.setAdapter(mAdapter);
+        mHolder.mListDashboard.setLayoutManager(layoutManager);
+        mHolder.mListDashboard.addItemDecoration(new SpacesGridDecoration(8));
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        return super.onPrepareOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -84,11 +107,11 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private TabItem mItemHome;
+        private RecyclerView mListDashboard;
 
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-            mItemHome = (TabItem) view.findViewById(R.id.tab_home);
+            mListDashboard = (RecyclerView) view.findViewById(R.id.list_dashborad);
         }
     }
 }

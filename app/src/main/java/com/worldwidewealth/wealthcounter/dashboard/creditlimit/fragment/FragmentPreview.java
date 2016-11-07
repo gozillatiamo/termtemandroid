@@ -45,8 +45,8 @@ public class FragmentPreview extends Fragment {
         } else mHolder = (ViewHolder) rootView.getTag();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Preview");
 
-        mMainTab = (TabLayout) getActivity().findViewById(R.id.tab_main);
-        mMainTab.setVisibility(View.GONE);
+//        mMainTab = (TabLayout) getActivity().findViewById(R.id.tab_main);
+//        mMainTab.setVisibility(View.GONE);
         mHolder.mBtnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
