@@ -66,7 +66,7 @@ public class AdapterListDashboard extends RecyclerView.Adapter<AdapterListDashbo
                     default:
                         if (pos == TO) Global.setPage(0);
                         else if (pos == TP) Global.setPage(1);
-//                        startFragment(FragmentTopup.newInstance());
+//                        startFragment(FragmentTopup.newInstance()); startFragment(FragmentTopup.newInstance());
                         break;
                 }
 

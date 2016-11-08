@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthcounter.model.InAppModel;
+import com.worldwidewealth.wealthcounter.model.PreResponseModel;
 import com.worldwidewealth.wealthcounter.until.GPSTracker;
 
 import java.io.File;
@@ -20,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,13 +33,13 @@ public class SplashScreen extends AppCompatActivity{
     private static final String TAG = "FCM";
     protected String mAction;
     protected double mLat, mLong;
-    private APIservices services;
+    private APIServices services;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        services = APIservices.retrofit.create(APIservices.class);
+        services = APIServices.retrofit.create(APIServices.class);
         initFCM();
 
     }
@@ -96,10 +96,13 @@ public class SplashScreen extends AppCompatActivity{
 //        finish();
 
         if (model != null) {
-            Call<ResponseBody> call = services.PRE(model);
-            call.enqueue(new Callback<ResponseBody>() {
+            Call<PreResponseModel> call = services.PRE(model);
+            call.enqueue(new Callback<PreResponseModel>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<PreResponseModel> call, Response<PreResponseModel> response) {
+                    PreResponseModel model = response.body();
+
+                    Global.setTXID(model.getTXID());
                     Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -108,7 +111,7 @@ public class SplashScreen extends AppCompatActivity{
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<PreResponseModel> call, Throwable t) {
                     t.printStackTrace();
                     new DialogNetworkError(SplashScreen.this);
                 }

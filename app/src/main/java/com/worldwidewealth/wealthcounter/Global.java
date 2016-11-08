@@ -8,6 +8,15 @@ public class Global {
     private static int page;
     private static String DEVICEID;
     private static String TOKEN;
+    private static String TXID;
+
+    public static String getTXID() {
+        return TXID;
+    }
+
+    public static void setTXID(String TXID) {
+        Global.TXID = TXID;
+    }
 
     public static String getDEVICEID() {
         return DEVICEID;

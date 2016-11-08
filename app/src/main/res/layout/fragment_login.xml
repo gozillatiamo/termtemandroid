@@ -14,64 +14,94 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@android:drawable/editbox_background_normal">
+            >
             <EditText
                 android:id="@+id/edit_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_space"
-                android:drawableLeft="@drawable/ic_phone"
+                android:drawableLeft="@drawable/ic_phone_android"
                 android:drawablePadding="@dimen/activity_space"
                 android:background="@android:color/transparent"
                 android:hint="@string/phone_number"
                 android:inputType="phone"
-                android:textColorHint="@android:color/secondary_text_dark_nodisable"
+                android:textColorHint="@android:color/white"
+                android:textColor="@android:color/white"
                 android:imeOptions="actionNext"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/line_divider"/>
+                android:background="@drawable/line_divider_main"/>
+
             <EditText
                 android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_space"
-                android:drawableLeft="@drawable/ic_vpn_key_black_24dp"
+                android:drawableLeft="@drawable/ic_lock_outline"
                 android:drawablePadding="@dimen/activity_space"
+                android:layout_marginTop="@dimen/activity_space"
                 android:background="@android:color/transparent"
-                android:drawableTint="@android:color/secondary_text_dark_nodisable"
-                android:textColorHint="@android:color/secondary_text_dark_nodisable"
-                android:hint="พาสเวิร์ด"
+                android:textColorHint="@android:color/white"
+                android:hint="@string/password"
+                android:textColor="@android:color/white"
                 android:inputType="numberPassword"
                 android:imeOptions="actionGo"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/line_divider_main"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/forgot_password"
+                android:textAllCaps="false"
+                android:textColor="@color/colorLineMain"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
 
         </LinearLayout>
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:background="@color/colorPrimary"
-            android:visibility="visible"/>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="vertical">
         <Button
-            android:id="@+id/btn_register"
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:backgroundTint="#E83F6F"
+            android:text="@string/sign_in"
             android:textColor="@android:color/white"
+            android:layout_gravity="center"
             android:textStyle="bold"
-            android:text="Register" />
+            android:background="@color/colorPrimary"
+            android:backgroundTintMode="src_atop"
+            android:backgroundTint="@color/colorPrimary"
+            android:visibility="visible"
+            android:textAllCaps="false"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_vertical_margin"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_have_account"
+                android:textColor="@color/colorLineMain"/>
+            <TextView
+                android:id="@+id/btn_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up"
+                android:layout_marginLeft="@dimen/activity_space"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
 
     </LinearLayout>
 

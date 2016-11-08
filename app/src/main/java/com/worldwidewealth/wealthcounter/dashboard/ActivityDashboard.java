@@ -56,6 +56,12 @@ public class ActivityDashboard extends AppCompatActivity{
         initListDashboard();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportActionBar().show();
+    }
+
     private void initToolbar(){
         setSupportActionBar(mHolder.mToolbar);
         getSupportActionBar().setTitle("");
@@ -73,7 +79,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
         mHolder.mListDashboard.setAdapter(mAdapter);
         mHolder.mListDashboard.setLayoutManager(layoutManager);
-        mHolder.mListDashboard.addItemDecoration(new SpacesGridDecoration(8));
+        mHolder.mListDashboard.addItemDecoration(new SpacesGridDecoration(6));
     }
 
 //    @Override
@@ -95,13 +101,16 @@ public class ActivityDashboard extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         int stackCount = getSupportFragmentManager().getBackStackEntryCount();
-        Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount-1);
-        if (currentFragment instanceof FragmentSlipCreditLimit ||
-                currentFragment instanceof FragmentBillSlip ||
-                currentFragment instanceof FragmentTopupSlip ||
-                currentFragment instanceof FragmentSlip) return;
-        if (stackCount == 1) finish();
-        else  super.onBackPressed();
+
+        if (stackCount != 0) {
+            Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
+            if (currentFragment instanceof FragmentSlipCreditLimit ||
+                    currentFragment instanceof FragmentBillSlip ||
+                    currentFragment instanceof FragmentTopupSlip ||
+                    currentFragment instanceof FragmentSlip) return;
+        }
+
+        super.onBackPressed();
     }
 
     public class ViewHolder{

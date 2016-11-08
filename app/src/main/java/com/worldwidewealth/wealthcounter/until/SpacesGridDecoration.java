@@ -18,9 +18,9 @@ public class SpacesGridDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        outRect.left = mSpace;
         outRect.right = mSpace;
         outRect.bottom = mSpace;
         outRect.top = mSpace;
-        outRect.left = mSpace;
     }
 }

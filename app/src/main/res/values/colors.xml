@@ -10,19 +10,25 @@
     <color name="colorTextTitle">#38686A</color>
     <color name="colorRed">#F44336</color>
     <color name="colorGreen">#4CAF50</color>
+    <color name="colorIcon">#518f91</color>
+    <color name="colorLineMain">#11908b</color>
 
     <color name="color_bg_card">#009688</color>
 
     <array name="color_list_dashboard">
-        <item>#32b7b4</item>
+        <item>#32b7b3</item>
         <item>#209ea8</item>
         <item>#5b8ebd</item>
         <item>#3d73a1</item>
         <item>#32b7b3</item>
-        <item>#1f9ea7</item>
-        <item>#5b8ebd</item>
+        <item>#209ea7</item>
+        <item>#5b8ebc</item>
+        <item>#5b8ebb</item>
         <item>#3d73a1</item>
+        <item>#32b7b4</item>
         <item>#1f9ea7</item>
+        <item>#32b7b3</item>
+        <item>#5b8ebb</item>
     </array>
 
     <array name="color_list_bank">

@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.worldwidewealth.wealthcounter.APIservices;
+import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 
@@ -30,7 +30,7 @@ import retrofit2.Response;
 public class FragmentTopupPreview extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
-    private APIservices service;
+    private APIServices service;
     private String mPage;
     public static Fragment newInstance(String page){
         Bundle bundle = new Bundle();
@@ -57,7 +57,7 @@ public class FragmentTopupPreview extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mPage = getArguments().getString("page");
-        service = APIservices.retrofit.create(APIservices.class);
+        service = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_preview, container, false);
             mHolder = new ViewHolder(rootView);

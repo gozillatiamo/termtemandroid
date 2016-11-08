@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,10 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTopupSlip.this.getFragmentManager().popBackStack(0, 0);
+                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
+//                FragmentTopupSlip.this.getFragmentManager().popBackStack();
             }
         });
 
@@ -86,7 +90,9 @@ public class FragmentTopupSlip extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(FragmentTopupSlip.this.getContext(), ActivityGame.class);
                 startActivity(intent);
-                FragmentTopupSlip.this.getFragmentManager().popBackStack(0, 0);
+                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
             }
         });
         return rootView;

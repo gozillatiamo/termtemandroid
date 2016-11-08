@@ -21,7 +21,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorBackground"
+                    android:background="@color/colorPrimary"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:elevation="10dp"
@@ -54,12 +54,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@color/colorBackground"
                     >
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/list_dashborad"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:padding="2dp"
                         >
 
                     </android.support.v7.widget.RecyclerView>

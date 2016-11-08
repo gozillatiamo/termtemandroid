@@ -2,8 +2,9 @@ package com.worldwidewealth.wealthcounter;
 
 import android.util.Log;
 
-import com.worldwidewealth.wealthcounter.model.IdenModel;
 import com.worldwidewealth.wealthcounter.model.InAppModel;
+import com.worldwidewealth.wealthcounter.model.PreResponseModel;
+import com.worldwidewealth.wealthcounter.model.SignInModel;
 import com.worldwidewealth.wealthcounter.model.TestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -21,7 +21,6 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -29,7 +28,7 @@ import retrofit2.http.POST;
  * Created by MyNet on 11/10/2559.
  */
 
-public interface APIservices {
+public interface APIServices {
 
     @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
@@ -46,8 +45,12 @@ public interface APIservices {
     @POST("wealthservice/syncout.ashx")
     Call<ResponseBody> testpost(@Body TestModel test);
 
-    @POST("wealthservice/service.ashx")
-    Call<ResponseBody> PRE(@Body InAppModel inAppModel);
+    @POST("service.ashx")
+    Call<PreResponseModel> PRE(@Body InAppModel inAppModel);
+
+    @POST("service.ashx")
+    Call<ResponseBody> LOGIN(@Body SignInModel signInModel);
+
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -72,7 +75,7 @@ public interface APIservices {
             }).build();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://180.128.21.31/").client(client)
+        .baseUrl("http://180.128.21.31/wealthservice/").client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build();
 
