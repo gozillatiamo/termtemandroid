@@ -44,13 +44,31 @@ public class Until {
             public void writeTo(BufferedSink sink) throws IOException {
                 Buffer buffer = new Buffer();
                 body.writeTo(buffer);
-                byte[] encoded = Base64.encode(buffer.readByteArray(), Base64.DEFAULT);
-                sink.write(encoded);
-                Log.e("encoded", encoded.toString());
+                String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.DEFAULT);
+                byte[] converted = ConvertJsonEncode(encoded).getBytes();
+                sink.write(converted);
+                Log.e("encoded", encoded);
+                Log.e("converted", ConvertJsonEncode(encoded));
                 buffer.close();
                 sink.close();
             }
         };
+    }
+
+    public static String ConvertJsonEncode(String encode){
+        String jsonconvert = "";
+        int cnt = encode.length()-1;
+        while (cnt >= 0)
+        {
+            jsonconvert += encode.substring(cnt, cnt+1);
+            cnt--;
+        }
+        return jsonconvert;
+    }
+
+    public static String decode(String strEncode){
+        byte[] decode = Base64.decode(strEncode, Base64.DEFAULT);
+        return new String(decode);
     }
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 

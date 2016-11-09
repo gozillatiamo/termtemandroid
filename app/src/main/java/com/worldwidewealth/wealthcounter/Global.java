@@ -7,8 +7,26 @@ package com.worldwidewealth.wealthcounter;
 public class Global {
     private static int page;
     private static String DEVICEID;
+    private static String USERID;
+    private static String AGENTID;
     private static String TOKEN;
     private static String TXID;
+
+    public static String getUSERID() {
+        return USERID;
+    }
+
+    public static void setUSERID(String USERID) {
+        Global.USERID = USERID;
+    }
+
+    public static String getAGENTID() {
+        return AGENTID;
+    }
+
+    public static void setAGENTID(String AGENTID) {
+        Global.AGENTID = AGENTID;
+    }
 
     public static String getTXID() {
         return TXID;

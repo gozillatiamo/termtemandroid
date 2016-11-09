@@ -15,6 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.worldwidewealth.wealthcounter.APIServices;
+import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
@@ -22,8 +25,14 @@ import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentHome;
 import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupSlip;
+import com.worldwidewealth.wealthcounter.model.LogoutModel;
 import com.worldwidewealth.wealthcounter.until.SimpleDividerItemDecoration;
 import com.worldwidewealth.wealthcounter.until.SpacesGridDecoration;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -32,12 +41,13 @@ public class ActivityDashboard extends AppCompatActivity{
 
     private ViewHolder mHolder;
     private AdapterDashboard mAdapter;
+    private APIServices services;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
+        services = APIServices.retrofit.create(APIServices.class);
         mHolder = new ViewHolder(this);
 
 //        tabhome.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +70,26 @@ public class ActivityDashboard extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         getSupportActionBar().show();
+    }
+
+    @Override
+    protected void onStop() {
+        Call<ResponseBody> call = services.LOGOUT(new LogoutModel());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Global.setAGENTID("");
+                Global.setUSERID("");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+        super.onStop();
+        finish();
     }
 
     private void initToolbar(){

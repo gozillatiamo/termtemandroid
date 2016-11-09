@@ -1,11 +1,13 @@
 package com.worldwidewealth.wealthcounter.model;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by MyNet on 8/11/2559.
  */
 
-public class PreResponseModel {
-    private int Status;
+public class ResponseModel{
+    private String Status;
     private String Msg;
     private String TXID;
 
@@ -25,11 +27,11 @@ public class PreResponseModel {
         this.TXID = TXID;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         Status = status;
     }
 }

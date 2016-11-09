@@ -1,65 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            >
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/please_enter_data"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="@dimen/activity_space"
-            android:textStyle="bold"/>
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/activity_space"
-            android:background="@android:drawable/editbox_background_normal">
-            <EditText
-                android:id="@+id/edit_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/activity_space"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:textColorHint="@android:color/secondary_text_dark_nodisable"
-                android:background="@android:color/transparent"
-                android:imeOptions="actionNext"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/line_divider"
-                />
-
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_space"
                 android:hint="@string/name"
-                android:textColorHint="@android:color/secondary_text_dark_nodisable"
+                android:textColorHint="@android:color/white"
                 android:background="@android:color/transparent"
+                android:drawablePadding="@dimen/activity_space"
+                android:drawableLeft="@drawable/ic_person_outline"
                 android:inputType="text"
                 android:imeOptions="actionNext"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="2dp"
                 android:background="@drawable/line_divider"/>
+            <EditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_space"
+                android:hint="@string/email"
+                android:layout_marginTop="@dimen/activity_space"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_email"
+                android:drawablePadding="@dimen/activity_space"
+                android:textColorHint="@android:color/white"
+                android:background="@android:color/transparent"
+                android:imeOptions="actionNext"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/line_divider"
+                />
+
+
             <EditText
                 android:id="@+id/edit_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_space"
                 android:hint="@string/phone_number"
+                android:layout_marginTop="@dimen/activity_space"
                 android:textColorHint="@android:color/secondary_text_dark_nodisable"
                 android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_phone_android"
                 android:maxLength="10"
                 android:inputType="phone"
                 android:imeOptions="actionNext"/>
@@ -140,5 +158,5 @@
             android:text="@string/next"
             android:textColor="@android:color/white"
             android:background="@drawable/ripple_button" />
-
-</LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

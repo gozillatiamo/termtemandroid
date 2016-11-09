@@ -4,10 +4,10 @@ package com.worldwidewealth.wealthcounter.model;
  * Created by MyNet on 4/11/2559.
  */
 
-public class InAppModel {
+public class PreModel {
     private String action;
     private Data data;
-    public InAppModel(String action, Data data) {
+    public PreModel(String action, Data data) {
         this.action = action;
         this.data = data;
     }
@@ -18,6 +18,8 @@ public class InAppModel {
         private double LAT;
         private double LONG;
         private String PLATFORM;
+        private String AGENTID = "";
+        private String USERID = "";
 
         public Data(String token, String device_id, double latitude, double longitude, String platfrom) {
             this.PUSHTOKEN = token;

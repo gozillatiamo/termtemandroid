@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Wealth Counter</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
-    <string name="name">ชื่อ</string>
+    <string name="name">Name</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
     <string name="identity_number">เลขบัตรประชาชน</string>
     <string name="next">ถัดไป</string>
-    <string name="email">อีเมลล์</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="password_again">ยืนยันพาสเวิร์ด</string>
@@ -176,6 +176,10 @@
         <item>กรุณาเลือก</item>
         <item>บุคคล</item>
         <item>นิติบุคคล</item>
+    </string-array>
+
+    <string-array name="phone_country">
+        <item>TH</item>
     </string-array>
 
 

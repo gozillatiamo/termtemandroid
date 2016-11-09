@@ -28,7 +28,7 @@ public class EncryptionData {
 
     static public String EncryptData(String strData)
     {
-        String strResult;
+        String strResult = strData + ";" ;
         if (strData.length() > 92160)
         {
             strResult = strData;
@@ -41,7 +41,7 @@ public class EncryptionData {
             return strResult;
         }
 
-        byte[] rbData = strData.getBytes(characterSet);
+        byte[] rbData = strResult.getBytes(characterSet);
 
         try {
 
@@ -53,8 +53,11 @@ public class EncryptionData {
             byte[] encoded = cipher.doFinal(rbData);
 
             String strEncoded = Base64.encodeToString(encoded, Base64.DEFAULT);
+            String convertPlus = strEncoded.replace("+", "%2B");
             Log.e("Encoded", strEncoded);
-            return strEncoded;
+            Log.e("convertPlus", convertPlus);
+            return convertPlus;
+
         } catch (Exception e){
             e.printStackTrace();
             Log.e("Encoded", "null");
@@ -65,7 +68,7 @@ public class EncryptionData {
 
     static public String DecryptData(String strData)
     {
-        String strResult;
+        String strResult = strData.replace("%2B", "+");
 
         if (!InitKey(key))
         {
@@ -74,7 +77,7 @@ public class EncryptionData {
         }
 
         int nReturn = 0;
-        byte[] rbData = Base64.decode(strData.getBytes(characterSet), Base64.DEFAULT);
+        byte[] rbData = Base64.decode(strResult.getBytes(characterSet), Base64.DEFAULT);
 
         try {
 
@@ -86,7 +89,9 @@ public class EncryptionData {
             cipher.init(Cipher.DECRYPT_MODE, key, iv);
             byte[] decoded = cipher.doFinal(rbData);
             String strDecode = new String(decoded, Charset.forName("UTF8"));
+            String convertDecode = strDecode.concat(";");
             Log.e("Decoded", strDecode);
+            Log.e("convertDecode", convertDecode);
             return strDecode;
         } catch (Exception e){
             e.printStackTrace();

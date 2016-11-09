@@ -16,23 +16,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
+import com.worldwidewealth.wealthcounter.model.LoginSuccessModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SignInModel;
+import com.worldwidewealth.wealthcounter.until.Until;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.RealResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class FragmentLogin extends Fragment {
+public class FragmentLogin extends Fragment{
 
     private View rootView;
     private ViewHolder mHolder;
@@ -57,6 +73,7 @@ public class FragmentLogin extends Fragment {
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
         initBtn();
+        initSpinner();
         return rootView;
     }
 
@@ -64,6 +81,14 @@ public class FragmentLogin extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mHolder.mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("TH"));
         }
+    }
+
+    private void initSpinner(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.phone_country, R.layout.text_spinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mHolder.mSpinnerPhoneCountry.setAdapter(adapter);
+        mHolder.mSpinnerPhoneCountry.setSelection(0);
+
     }
 
     private void initBtn(){
@@ -78,19 +103,46 @@ public class FragmentLogin extends Fragment {
                     return;
                 }
 
-                Log.e("LoginData:", "Phone:" + mPhone + "\n"+
-                        "Password:" + mPassword);
+                Log.e("LoginData:", "action:LOGIN" + "\n"+
+                        "DEVICEID:" + Global.getDEVICEID() + "\n" +
+                        "PLATFORM:" + Configs.getPLATFORM() + "\n" +
+                        "USERNAME:" + mPhone + "\n" +
+                        "PASSWORD:" + mPassword + "\n" +
+                        "TXIK:" + Global.getTXID());
 
-                Call<ResponseBody> call = services.LOGIN(new SignInModel(new SignInModel.Data(
+                Call<Object> call = services.LOGIN(new SignInModel(new SignInModel.Data(
                         Global.getDEVICEID(),
                         Configs.getPLATFORM(),
-                        mPhone,
-                        mPassword,
+                        EncryptionData.EncryptData(mPhone),
+                        EncryptionData.EncryptData(mPassword),
                         Global.getTXID())));
 
-                call.enqueue(new Callback<ResponseBody>() {
+                call.enqueue(new Callback<Object>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        Gson gson = new Gson();
+                        if (!(response.body() instanceof String)){
+                            Log.e("ResponseModel", "true");
+
+                            JsonObject jsonObject = gson.toJsonTree(response.body()).getAsJsonObject();
+                            ResponseModel responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+                            Toast.makeText(FragmentLogin.this.getContext(), responseModel.getMsg(),
+                                    Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Log.e("ResponseModel", "false");
+                            String responseStr = (String)response.body();
+                            String converted = Until.ConvertJsonEncode(responseStr);
+                            String responDecode = Until.decode(converted);
+                            Log.e("strResponse", converted);
+                            Log.e("strDecode", responDecode);
+
+                            //String json = gson.toJson(responDecode);
+                            LoginSuccessModel loginSuccessModel = gson.fromJson(responDecode, LoginSuccessModel.class);
+                            Global.setUSERID(loginSuccessModel.getUSERID());
+                            Global.setAGENTID(loginSuccessModel.getAGENTID());
+                        }
+
                         Activity activity = FragmentLogin.this.getActivity();
                         Intent intent = new Intent(activity, ActivityDashboard.class);
                         activity.startActivity(intent);
@@ -100,7 +152,7 @@ public class FragmentLogin extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<Object> call, Throwable t) {
                         t.printStackTrace();
                     }
                 });
@@ -128,6 +180,7 @@ public class FragmentLogin extends Fragment {
         private TextView mBtnRegister;
         private AppCompatButton mBtnLogin;
         private AppCompatEditText mPhone, mPassword;
+        private Spinner mSpinnerPhoneCountry;
         public ViewHolder(View view){
 
             mBtnRegister = (TextView) view.findViewById(R.id.btn_register);
@@ -136,6 +189,7 @@ public class FragmentLogin extends Fragment {
             mPhone = (AppCompatEditText) view.findViewById(R.id.edit_phone);
 
             mPassword = (AppCompatEditText) view.findViewById(R.id.edit_password);
+            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
         }
     }
 }

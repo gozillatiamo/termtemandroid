@@ -2,13 +2,17 @@ package com.worldwidewealth.wealthcounter;
 
 import android.util.Log;
 
-import com.worldwidewealth.wealthcounter.model.InAppModel;
-import com.worldwidewealth.wealthcounter.model.PreResponseModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.worldwidewealth.wealthcounter.model.LogoutModel;
+import com.worldwidewealth.wealthcounter.model.PreModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SignInModel;
 import com.worldwidewealth.wealthcounter.model.TestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -46,10 +50,13 @@ public interface APIServices {
     Call<ResponseBody> testpost(@Body TestModel test);
 
     @POST("service.ashx")
-    Call<PreResponseModel> PRE(@Body InAppModel inAppModel);
+    Call<ResponseModel> PRE(@Body PreModel inAppModel);
 
     @POST("service.ashx")
-    Call<ResponseBody> LOGIN(@Body SignInModel signInModel);
+    Call<Object> LOGIN(@Body SignInModel signInModel);
+
+    @POST("service.ashx")
+    Call<ResponseBody> LOGOUT(@Body LogoutModel logoutModel);
 
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -70,13 +77,19 @@ public interface APIServices {
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
 
                     }
+
+
                     return chain.proceed(builder.build());
                 }
             }).build();
 
+    public static final Gson gson = new GsonBuilder()
+            .setLenient()
+            .create();
+
     public static final Retrofit retrofit = new Retrofit.Builder()
         .baseUrl("http://180.128.21.31/wealthservice/").client(client)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 
 }

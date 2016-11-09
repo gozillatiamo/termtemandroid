@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
-import com.worldwidewealth.wealthcounter.model.InAppModel;
-import com.worldwidewealth.wealthcounter.model.PreResponseModel;
+import com.worldwidewealth.wealthcounter.model.PreModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.GPSTracker;
 
 import java.io.File;
@@ -74,7 +74,7 @@ public class SplashScreen extends AppCompatActivity{
                     "platform:" + Configs.getPLATFORM());
 
 
-            InAppModel mPreModel = new InAppModel(mAction, new InAppModel.Data(
+            PreModel mPreModel = new PreModel(mAction, new PreModel.Data(
                     Global.getTOKEN(),
                     Global.getDEVICEID(),
                     mLat,
@@ -88,7 +88,7 @@ public class SplashScreen extends AppCompatActivity{
         }
     }
 
-    protected  void SendDataService(InAppModel model){
+    protected  void SendDataService(PreModel model){
 
 //        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
 //        startActivity(intent);
@@ -96,11 +96,11 @@ public class SplashScreen extends AppCompatActivity{
 //        finish();
 
         if (model != null) {
-            Call<PreResponseModel> call = services.PRE(model);
-            call.enqueue(new Callback<PreResponseModel>() {
+            Call<ResponseModel> call = services.PRE(model);
+            call.enqueue(new Callback<ResponseModel>() {
                 @Override
-                public void onResponse(Call<PreResponseModel> call, Response<PreResponseModel> response) {
-                    PreResponseModel model = response.body();
+                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                    ResponseModel model = response.body();
 
                     Global.setTXID(model.getTXID());
                     Intent intent = new Intent(SplashScreen.this, MainActivity.class);
@@ -111,7 +111,7 @@ public class SplashScreen extends AppCompatActivity{
                 }
 
                 @Override
-                public void onFailure(Call<PreResponseModel> call, Throwable t) {
+                public void onFailure(Call<ResponseModel> call, Throwable t) {
                     t.printStackTrace();
                     new DialogNetworkError(SplashScreen.this);
                 }

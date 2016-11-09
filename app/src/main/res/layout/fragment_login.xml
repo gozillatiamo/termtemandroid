@@ -15,22 +15,46 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <EditText
-                android:id="@+id/edit_phone"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/activity_space"
-                android:drawableLeft="@drawable/ic_phone_android"
-                android:drawablePadding="@dimen/activity_space"
-                android:background="@android:color/transparent"
-                android:hint="@string/phone_number"
-                android:inputType="phone"
-                android:textColorHint="@android:color/white"
-                android:textColor="@android:color/white"
-                android:imeOptions="actionNext"/>
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_phone_android"
+                    android:padding="@dimen/activity_space"/>
+                <Spinner
+                    android:id="@+id/spinner_phone_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="true"
+                    android:backgroundTint="@android:color/white"
+                    ></Spinner>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="(+66)"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"/>
+                <EditText
+                    android:id="@+id/edit_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/activity_space"
+                    android:background="@android:color/transparent"
+                    android:hint="_ _  _ _ _  _ _ _"
+                    android:inputType="phone"
+                    android:textColorHint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:imeOptions="actionNext"/>
+
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="2dp"
                 android:background="@drawable/line_divider_main"/>
 
             <EditText
@@ -49,7 +73,7 @@
                 android:imeOptions="actionGo"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="2dp"
                 android:background="@drawable/line_divider_main"/>
             <Button
                 android:layout_width="wrap_content"
@@ -72,7 +96,7 @@
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:text="@string/sign_in"
             android:textColor="@android:color/white"
             android:layout_gravity="center"

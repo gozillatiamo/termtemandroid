@@ -4,8 +4,9 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    style="@style/TextAppearance.AppCompat.Medium"
+    android:textStyle="bold"
     android:gravity="left"
-    android:textColor="@android:color/secondary_text_dark_nodisable"
+    android:textColor="@android:color/white"
 
     />
