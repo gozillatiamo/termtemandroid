@@ -1,11 +1,9 @@
 package com.worldwidewealth.wealthcounter;
 
-import android.content.ContentValues;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +22,7 @@ import com.worldwidewealth.wealthcounter.until.CheckSyntaxData;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class FragmentRegister extends Fragment {
+public class ActivityRegister extends Fragment {
 
     private View rootView;
     private ViewHolder mHolder;
@@ -36,17 +34,17 @@ public class FragmentRegister extends Fragment {
     private String mEmail, mName, mTel, mIden, mPeople;
     private boolean[] mDataCheck = new boolean[5];
 
-    public static Fragment newInstance(){
-        FragmentRegister fragment = new FragmentRegister();
-        return fragment;
-    }
+//    public static Fragment newInstance(){
+//        FragmentRegister fragment = new FragmentRegister();
+//        return fragment;
+//    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (rootView == null){
-            rootView = inflater.inflate(R.layout.fragment_register, null, false);
+            rootView = inflater.inflate(R.layout.activity_register, null, false);
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
@@ -89,7 +87,7 @@ public class FragmentRegister extends Fragment {
 
                 for (boolean check: mDataCheck){
                     if (!check){
-                        Toast.makeText(FragmentRegister.this.getContext(), "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityRegister.this, "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -106,14 +104,14 @@ public class FragmentRegister extends Fragment {
                         "Iden:" + mIden +"\n"+
                         "People:" + mPeople);
 
-                FragmentTransaction transaction = FragmentRegister.this.getActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.main_container, FragmentRegisterDone.newInstance())
-                        .addToBackStack(null);
-
-                transaction.commit();
+//                FragmentTransaction transaction = FragmentRegister.this.getActivity()
+//                        .getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit, R.anim.slide_in_left, R.anim.slide_out_right)
+//                        .replace(R.id.main_container, FragmentRegisterDone.newInstance())
+//                        .addToBackStack(null);
+//
+//                transaction.commit();
             }
         });
 

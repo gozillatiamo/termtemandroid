@@ -28,7 +28,7 @@ import retrofit2.Response;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class SplashScreen extends AppCompatActivity{
+public class SplashScreenWWW extends AppCompatActivity{
 
     private static final String TAG = "FCM";
     protected String mAction;
@@ -38,7 +38,7 @@ public class SplashScreen extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
         initFCM();
 
@@ -90,7 +90,7 @@ public class SplashScreen extends AppCompatActivity{
 
     protected  void SendDataService(PreModel model){
 
-//        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+//        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
 //        startActivity(intent);
 //        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 //        finish();
@@ -103,7 +103,7 @@ public class SplashScreen extends AppCompatActivity{
                     ResponseModel model = response.body();
 
                     Global.setTXID(model.getTXID());
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
@@ -113,7 +113,7 @@ public class SplashScreen extends AppCompatActivity{
                 @Override
                 public void onFailure(Call<ResponseModel> call, Throwable t) {
                     t.printStackTrace();
-                    new DialogNetworkError(SplashScreen.this);
+                    new DialogNetworkError(SplashScreenWWW.this);
                 }
             });
         }
