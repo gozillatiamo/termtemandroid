@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentChoiceTopup;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentListPackage;
 
 /**
@@ -16,7 +17,7 @@ import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentListPa
 public class AdapterPageTopup extends FragmentPagerAdapter {
 
     private String[] title = new String[]{
-        "AIRTIME",
+        "Airtime",
             "VAS"
     };
 
@@ -36,13 +37,6 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return FragmentListPackage.newInstance(R.layout.fragment_topup_listairtime_package);
-            case 1:
-                return FragmentListPackage.newInstance(R.layout.fragment_topup_listvas_package);
-        }
-
-        return null;
+        return new FragmentChoiceTopup();
     }
 }

@@ -47,12 +47,12 @@ public class FragmentBillPreview extends Fragment{
         mHolder.mBtnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit)
-                        .replace(R.id.dashboard_container, FragmentBillSlip.newInstance())
-                        .addToBackStack(null);
-                transaction.commit();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit)
+//                        .replace(R.id.dashboard_container, FragmentBillSlip.newInstance())
+//                        .addToBackStack(null);
+//                transaction.commit();
             }
         });
 

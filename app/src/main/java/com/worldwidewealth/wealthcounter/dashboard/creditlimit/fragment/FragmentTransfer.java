@@ -56,6 +56,7 @@ public class FragmentTransfer extends Fragment {
             @Override
             public void onClick(View v) {
 
+/*
                 FragmentTransaction transaction = FragmentTransfer.this.getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -64,6 +65,7 @@ public class FragmentTransfer extends Fragment {
 
                 transaction.commit();
 
+*/
             }
         });
         initSpinnerCurrency();

@@ -30,9 +30,9 @@ public class FragmentTopupSlip extends Fragment {
     private TabLayout tabLayout;
     private String mPage;
 
-    public static Fragment newInstance(String page){
+    public static Fragment newInstance(){
         Bundle bundle = new Bundle();
-        bundle.putString("page", page);
+//        bundle.putString("page", page);
         FragmentTopupSlip fragment = new FragmentTopupSlip();
         fragment.setArguments(bundle);
         return fragment;
@@ -43,7 +43,6 @@ public class FragmentTopupSlip extends Fragment {
         private TextView mTextTopup;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
-            mTextTopup = (TextView) itemview.findViewById(R.id.txt_topup);
             mBtnGame = (Button) itemview.findViewById(R.id.btn_play_game);
         }
     }
@@ -51,7 +50,7 @@ public class FragmentTopupSlip extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mPage = getArguments().getString("page");
+//        mPage = getArguments().getString("page");
 
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_slip, container, false);
@@ -59,28 +58,20 @@ public class FragmentTopupSlip extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
+        initBtn();
+        return rootView;
+    }
 
-        switch (mPage){
-            case "airtime":
-//                mHolder.mTextTopup.setText("10,000 KIP");
-//                mHolder.mTextTopup.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.lao_kip_64), null);
-                break;
-            case "vas":
-//                mHolder.mTextTopup.setText("3GB/10,000KIP/30day");
-//                mHolder.mTextTopup.setCompoundDrawables(null, null, null, null);
-
-                break;
-
-        }
+    private void initBtn(){
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
+                getActivity().finish();
+//                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
+//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
 //                FragmentTopupSlip.this.getFragmentManager().popBackStack();
             }
         });
@@ -90,12 +81,13 @@ public class FragmentTopupSlip extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(FragmentTopupSlip.this.getContext(), ActivityGame.class);
                 startActivity(intent);
-                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
+                getActivity().finish();
+//                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
+//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
             }
         });
-        return rootView;
+
     }
 
 }

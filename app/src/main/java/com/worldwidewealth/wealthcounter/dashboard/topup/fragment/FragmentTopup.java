@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 
@@ -28,9 +29,11 @@ public class FragmentTopup extends Fragment {
     }
 
     public class ViewHolder{
-        private CardView mBtnLao;
+        private CardView mBtnAis, mBtnTruemove, mBtnDtac;
         public ViewHolder(View itemview){
-            mBtnLao = (CardView) itemview.findViewById(R.id.btn_lao_tel);
+            mBtnAis = (CardView) itemview.findViewById(R.id.btn_ais);
+            mBtnTruemove = (CardView) itemview.findViewById(R.id.btn_truemove);
+            mBtnDtac = (CardView) itemview.findViewById(R.id.btn_dtac);
         }
     }
 
@@ -43,19 +46,40 @@ public class FragmentTopup extends Fragment {
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
-
-        mHolder.mBtnLao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.dashboard_container, FragmentTopupPackage.newInstance())
-                        .addToBackStack(null);
-                transaction.commit();
-            }
-        });
+        initBtnServices();
         return rootView;
     }
 
+    private void initBtnServices(){
+        mHolder.mBtnAis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFragmentService(Configs.TopupServices.AIS);
+            }
+        });
+
+        mHolder.mBtnTruemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFragmentService(Configs.TopupServices.TRUEMOVE);
+            }
+        });
+
+        mHolder.mBtnDtac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFragmentService(Configs.TopupServices.DTAC);
+            }
+        });
+    }
+
+    private void startFragmentService(String service){
+
+        this.getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(service))
+                .addToBackStack(null)
+                .commit();
+    }
 }

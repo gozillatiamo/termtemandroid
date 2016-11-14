@@ -1,9 +1,14 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,48 +22,78 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.worldwidewealth.wealthcounter.game.ActivityGame;
+import com.worldwidewealth.wealthcounter.model.RegisterModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.CheckSyntaxData;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityRegister extends Fragment {
+public class ActivityRegister extends AppCompatActivity {
 
     private View rootView;
     private ViewHolder mHolder;
-    private static final int EMAIL = 0;
-    private static final int NAME = 1;
-    private static final int TEL = 2;
-    private static final int IDEN = 3;
-    private static final int PEOPLE = 4;
-    private String mEmail, mName, mTel, mIden, mPeople;
-    private boolean[] mDataCheck = new boolean[5];
+    private static final int FIRSTNAME = 0;
+    private static final int LASTNAME = 1;
+    private static final int EMAIL = 2;
+    private static final int TEL = 3;
+    private static final int IDEN = 4;
+    private static final int PEOPLE = 5;
+    private String mEmail, mFirstName, mLastName, mTel, mIden;
+    private int mPerson;
+    private boolean[] mDataCheck = new boolean[6];
+    private APIServices services;
 
 //    public static Fragment newInstance(){
 //        FragmentRegister fragment = new FragmentRegister();
 //        return fragment;
 //    }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        if (rootView == null){
-            rootView = inflater.inflate(R.layout.activity_register, null, false);
-            mHolder = new ViewHolder(rootView);
-            rootView.setTag(mHolder);
-        } else mHolder = (ViewHolder) rootView.getTag();
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        mHolder = new ViewHolder(this);
+        services = APIServices.retrofit.create(APIServices.class);
+        initToolbar();
         initPeople();
         initNext();
 
-
-        return rootView;
     }
 
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//
+//        if (rootView == null){
+//            rootView = inflater.inflate(R.layout.activity_register, null, false);
+//            mHolder = new ViewHolder(rootView);
+//            rootView.setTag(mHolder);
+//        } else mHolder = (ViewHolder) rootView.getTag();
+//
+//
+//
+//        return rootView;
+//    }
+
+    private void initToolbar(){
+        setSupportActionBar(mHolder.mToolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     private void initPeople(){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.type_people_dropdown, R.layout.text_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type_people_dropdown, R.layout.text_spinner);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mHolder.mSpinnerTypePeople.setAdapter(adapter);
@@ -93,16 +128,54 @@ public class ActivityRegister extends Fragment {
                 }
 
                 mEmail = mHolder.mEditEmail.getText().toString();
-                mName = mHolder.mEditName.getText().toString();
+                mFirstName = mHolder.mEditFristName.getText().toString();
+                mLastName = mHolder.mEditLastName.getText().toString();
                 mTel = mHolder.mEditTel.getText().toString();
                 mIden = mHolder.mEditIdentification.getText().toString();
-                mPeople = mHolder.mSpinnerTypePeople.getSelectedItem().toString();
+                mPerson = mHolder.mSpinnerTypePeople.getSelectedItemPosition()-1;
 
                 Log.e("RegisterData:", "E-mail:" + mEmail +"\n"+
-                        "Name:" + mName +"\n"+
+                        "FirstName:" + mFirstName +"\n"+
+                        "LastName:" + mLastName +"\n"+
                         "Tel:" + mTel +"\n"+
                         "Iden:" + mIden +"\n"+
-                        "People:" + mPeople);
+                        "People:" + mPerson);
+
+                Call<ResponseModel> call = services.SIGNUP(new RegisterModel(new RegisterModel.Data(
+                        mFirstName,
+                        mLastName,
+                        mEmail,
+                        mTel,
+                        mIden,
+                        mPerson
+                )));
+
+                call.enqueue(new Callback<ResponseModel>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                        String Msg = response.body().getMsg();
+
+                        if(Msg.equals("Success")){
+
+                            AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
+                                    .setMessage(R.string.register_done)
+                                    .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ActivityRegister.this.finish();
+                                        }
+                                    }).show();
+                        } else {
+                            Toast.makeText(ActivityRegister.this, Msg,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
 
 //                FragmentTransaction transaction = FragmentRegister.this.getActivity()
 //                        .getSupportFragmentManager()
@@ -138,11 +211,6 @@ public class ActivityRegister extends Fragment {
                     case EMAIL:
                         check = CheckSyntaxData.isEmailValid(s.toString());
                         break;
-                    case NAME:
-                        if (s.toString().equals("")){
-                            check = false;
-                        } else check= true;
-                        break;
                     case TEL:
                         check = s.length() == 10;
                         break;
@@ -151,13 +219,18 @@ public class ActivityRegister extends Fragment {
                             check = CheckSyntaxData.isIdentificationValid(s.toString());
                         }
                         break;
+                    default:
+                        if (s.toString().equals("")){
+                            check = false;
+                        } else check= true;
+                        break;
                 }
                 Drawable imgCheck;
 
                 if (check)
-                    imgCheck = getContext().getResources().getDrawable( R.drawable.ic_check_circle );
+                    imgCheck = getResources().getDrawable( R.drawable.ic_check_circle );
                 else
-                    imgCheck = getContext().getResources().getDrawable( R.drawable.ic_cancel );
+                    imgCheck = getResources().getDrawable( R.drawable.ic_cancel );
 
                 editText.setCompoundDrawablesWithIntrinsicBounds(null, null, imgCheck, null);
 
@@ -171,20 +244,24 @@ public class ActivityRegister extends Fragment {
     public class ViewHolder{
 
         private Button mBtnNext;
-        private EditText mEditEmail, mEditName, mEditTel, mEditIdentification;
+        private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification;
         private Spinner mSpinnerTypePeople;
-        public ViewHolder(View view){
+        private Toolbar mToolbar;
+        public ViewHolder(Activity view){
 
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
             mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
             mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
-            mEditName = (EditText) view.findViewById(R.id.edit_name);
-            mEditName.addTextChangedListener(onTextChanged(mEditName, NAME));
+            mEditFristName = (EditText) view.findViewById(R.id.edit_name);
+            mEditFristName.addTextChangedListener(onTextChanged(mEditFristName, FIRSTNAME));
+            mEditLastName = (EditText) view.findViewById(R.id.edit_last_name);
+            mEditLastName.addTextChangedListener(onTextChanged(mEditLastName, LASTNAME));
             mEditTel = (EditText) view.findViewById(R.id.edit_tel);
             mEditTel.addTextChangedListener(onTextChanged(mEditTel, TEL));
             mEditIdentification = (EditText) view.findViewById(R.id.edit_identification);
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
+            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         }
     }
 

@@ -55,12 +55,12 @@ public class FragmentBillPayment extends Fragment {
         mHolder.mBtnLao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.dashboard_container, FragmentChooseScan.newInstance())
-                        .addToBackStack(null);
-                transaction.commit();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+//                        .replace(R.id.dashboard_container, FragmentChooseScan.newInstance())
+//                        .addToBackStack(null);
+//                transaction.commit();
 
             }
         });

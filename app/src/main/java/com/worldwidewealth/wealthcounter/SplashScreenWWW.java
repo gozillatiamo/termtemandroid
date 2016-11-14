@@ -8,6 +8,8 @@ import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -38,6 +40,8 @@ public class SplashScreenWWW extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
         initFCM();
@@ -103,7 +107,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                     ResponseModel model = response.body();
 
                     Global.setTXID(model.getTXID());
-                    Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
+                    Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();

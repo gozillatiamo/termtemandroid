@@ -46,6 +46,7 @@ public class AdapterListCreditLimit extends RecyclerView.Adapter<AdapterListCred
                 FragmentTransaction transaction;
                 switch (pos){
                     case 0:
+/*
                         transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -53,14 +54,17 @@ public class AdapterListCreditLimit extends RecyclerView.Adapter<AdapterListCred
                                 .addToBackStack(null);
 
                         transaction.commit();
+*/
                         break;
                     case 2:
+/*
                         transaction = ((AppCompatActivity) mContext).getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.dashboard_container, FragmentNotiPayment.newInstance())
                                 .addToBackStack(null);
 
                         transaction.commit();
+*/
 
                         break;
                 }

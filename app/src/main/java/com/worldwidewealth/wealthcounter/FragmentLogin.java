@@ -141,13 +141,14 @@ public class FragmentLogin extends Fragment{
                             LoginSuccessModel loginSuccessModel = gson.fromJson(responDecode, LoginSuccessModel.class);
                             Global.setUSERID(loginSuccessModel.getUSERID());
                             Global.setAGENTID(loginSuccessModel.getAGENTID());
+                            Activity activity = FragmentLogin.this.getActivity();
+                            Intent intent = new Intent(activity, ActivityDashboard.class);
+                            activity.startActivity(intent);
+                            activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                            activity.finish();
+
                         }
 
-                        Activity activity = FragmentLogin.this.getActivity();
-                        Intent intent = new Intent(activity, ActivityDashboard.class);
-                        activity.startActivity(intent);
-                        activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                        activity.finish();
 
                     }
 
@@ -162,14 +163,14 @@ public class FragmentLogin extends Fragment{
         mHolder.mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = FragmentLogin.this.getActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                        .replace(R.id.main_container, FragmentRegister.newInstance())
-                        .addToBackStack(null);
-
-                transaction.commit();
+//                FragmentTransaction transaction = FragmentLogin.this.getActivity()
+//                        .getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+//                        .replace(R.id.main_container, FragmentRegister.newInstance())
+//                        .addToBackStack(null);
+//
+//                transaction.commit();
             }
         });
 

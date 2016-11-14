@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1ca499</color>
-    <color name="colorPrimaryDark">#1ca499</color>
+    <color name="colorPrimary">#03c974</color>
+    <color name="colorPrimaryDark">#03c974</color>
     <color name="colorAccent">#1ca499</color>
-    <color name="colorBackground">#007378</color>
+    <color name="colorBackground">#ededed</color>
     <color name="colorSelector">#E39774</color>
-    <color name="colorSuccess">#4CAF50</color>
+    <color name="colorSuccess">#21987a</color>
     <color name="colorTab">#4c8ba8</color>
     <color name="colorTextTitle">#38686A</color>
     <color name="colorRed">#F44336</color>
     <color name="colorGreen">#4CAF50</color>
     <color name="colorIcon">#518f91</color>
-    <color name="colorLineMain">#11908b</color>
+    <color name="colorLine">#ededed</color>
 
     <color name="color_bg_card">#009688</color>
 

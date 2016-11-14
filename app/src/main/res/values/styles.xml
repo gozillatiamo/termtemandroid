@@ -1,14 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-
+        <item name="background">@color/colorBackground</item>
         <item name="actionModeBackground">@color/colorAccent</item>
 
     </style>
@@ -45,7 +44,14 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>
-        <item name="android:padding">@dimen/activity_vertical_margin</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
+    <style name="MyContainerFragment">
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
     </style>
 
 </resources>

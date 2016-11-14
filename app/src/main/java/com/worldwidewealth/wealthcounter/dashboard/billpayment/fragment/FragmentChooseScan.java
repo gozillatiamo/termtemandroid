@@ -43,6 +43,7 @@ public class FragmentChooseScan extends Fragment {
         mHolder.mBtnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -50,6 +51,7 @@ public class FragmentChooseScan extends Fragment {
                         .addToBackStack(null);
 
                 transaction.commit();
+*/
             }
         });
 
@@ -60,6 +62,7 @@ public class FragmentChooseScan extends Fragment {
                 dialogReference.setOnSubmit(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+/*
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -67,6 +70,7 @@ public class FragmentChooseScan extends Fragment {
                                 .addToBackStack(null);
                         dialogReference.dismiss();
                         transaction.commit();
+*/
 
                     }
                 });

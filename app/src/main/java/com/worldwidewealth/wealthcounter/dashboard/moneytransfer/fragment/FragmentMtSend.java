@@ -56,6 +56,7 @@ public class FragmentMtSend extends Fragment {
         mHolder.mBtnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
                 FragmentTransaction transaction = FragmentMtSend.this.getActivity()
                         .getSupportFragmentManager()
                         .beginTransaction()
@@ -65,6 +66,7 @@ public class FragmentMtSend extends Fragment {
 
                 transaction.commit();
 
+*/
             }
         });
         return rootView;

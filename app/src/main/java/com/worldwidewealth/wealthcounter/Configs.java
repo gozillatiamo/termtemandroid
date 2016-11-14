@@ -16,4 +16,10 @@ public class Configs {
         public static final String MT_RECEIVE = "mt_receive";
         public static final String MT_SEND = "mt_send";
     }
+
+    public static final class TopupServices{
+        public static final String AIS = "ais";
+        public static final String TRUEMOVE = "truemove";
+        public static final String DTAC = "dtac";
+    }
 }

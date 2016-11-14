@@ -54,6 +54,7 @@ public class FragmentHome extends Fragment {
         mHolder.mBtnCreditLimit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
                 FragmentTransaction transaction = FragmentHome.this.getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
@@ -61,6 +62,7 @@ public class FragmentHome extends Fragment {
                         .addToBackStack(null);
 
                         transaction.commit();
+*/
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);

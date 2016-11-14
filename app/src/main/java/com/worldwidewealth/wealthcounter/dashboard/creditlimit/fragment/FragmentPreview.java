@@ -50,6 +50,7 @@ public class FragmentPreview extends Fragment {
         mHolder.mBtnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
                 FragmentTransaction transaction = FragmentPreview.this.getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit)
@@ -57,6 +58,7 @@ public class FragmentPreview extends Fragment {
                         .addToBackStack(null);
 
                 transaction.commit();
+*/
 
             }
         });

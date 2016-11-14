@@ -35,7 +35,6 @@
         <item>@drawable/ic_settings_64</item>
         <item>@drawable/ic_time_line_64</item>
         <item>@drawable/ic_vouchers_64</item>
-        <item>@drawable/ic_qr_code_white_64</item>
         <item>@drawable/ic_qr_code_scan_64</item>
     </integer-array>
 </resources>

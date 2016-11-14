@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.worldwidewealth.wealthcounter.model.LogoutModel;
 import com.worldwidewealth.wealthcounter.model.PreModel;
+import com.worldwidewealth.wealthcounter.model.RegisterModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SignInModel;
 import com.worldwidewealth.wealthcounter.model.TestModel;
@@ -57,6 +58,10 @@ public interface APIServices {
 
     @POST("service.ashx")
     Call<ResponseBody> LOGOUT(@Body LogoutModel logoutModel);
+
+    @POST("service.ashx")
+    Call<ResponseModel> SIGNUP(@Body RegisterModel registerModel);
+
 
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);

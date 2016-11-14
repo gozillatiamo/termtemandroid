@@ -92,12 +92,12 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void startFragment(Fragment fragment){
 
-        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.dashboard_container, fragment)
-                .addToBackStack(null);
-        transaction.commit();
+//        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager()
+//                .beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+//                .replace(R.id.dashboard_container, fragment)
+//                .addToBackStack(null);
+//        transaction.commit();
 
     }
 

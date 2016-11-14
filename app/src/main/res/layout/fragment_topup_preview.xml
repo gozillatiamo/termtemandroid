@@ -1,270 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<android.support.v7.widget.CardView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:padding="@dimen/activity_vertical_margin">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_weight="1"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    app:cardElevation="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="เติมเงิน AIS 100 THB"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:background="@drawable/bg_btn_normal"/>
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="@dimen/cardview_default_radius"
-        app:cardElevation="@dimen/cardview_default_elevation">
+        android:orientation="vertical"
+        android:padding="@dimen/activity_space">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            android:text="เลือกสกุลเงินที่จ่าย" />
+        <Spinner
+            android:id="@+id/spinner"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_space"
+            >
+        </Spinner>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:visibility="gone"
             android:orientation="vertical"
             android:padding="@dimen/activity_space">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:layout_centerInParent="true"
+                        android:drawableRight="@drawable/american_dollar_32"
+                        android:drawablePadding="@dimen/activity_space"/>
+                    f
+                </RelativeLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/shuffle_64"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8133.15"
+                        android:drawableRight="@drawable/lao_kip_32"
+                        android:drawablePadding="@dimen/activity_space"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/textView8" />
+                    f
+                </RelativeLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:layout_centerInParent="true"
+                        android:drawableRight="@drawable/coin_32"
+                        android:drawablePadding="@dimen/activity_space"/>
+                    f
+                </RelativeLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shuffle_64"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:layout_centerInParent="true"
+                        android:drawableRight="@drawable/american_dollar_32"
+                        android:drawablePadding="@dimen/activity_space"/>
+                    f
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                android:text="เลือกสกุลเงินที่จ่าย" />
-            <Spinner
-                android:id="@+id/spinner"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_space"
-                >
-            </Spinner>
-
+                style="@style/TextAppearance.AppCompat.Medium" android:text="@string/amount"/>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical"
-                android:padding="@dimen/activity_space">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/american_dollar_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/shuffle_64"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="8133.15"
-                            android:drawableRight="@drawable/lao_kip_32"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:id="@+id/textView8" />
-                        f
-                    </RelativeLayout>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/coin_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/shuffle_64"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="3"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/american_dollar_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="center|right">
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="จำนวนเงิน"/>
-                <TextView
+                    android:textColor="@android:color/black"
+                    android:text="THB   "/>
+                <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="190.00" />
 
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="95"
-                    android:drawableRight="@drawable/thai_baht_64"
-                    android:drawablePadding="@dimen/activity_space"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="FEE 10%"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-
-                    android:text="0.123"
-                    android:drawableRight="@drawable/thai_baht_64"
-                    android:drawablePadding="@dimen/activity_space"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="Commission 5%"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-
-                    android:text="5"
-                    android:drawableRight="@drawable/thai_baht_64"
-                    android:drawablePadding="@dimen/activity_space"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="Total"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="100"
-                    android:drawableRight="@drawable/thai_baht_64"
-                    android:drawablePadding="@dimen/activity_space"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="Balance"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="9,905"
-                    android:drawableRight="@drawable/thai_baht_64"
-                    android:drawablePadding="@dimen/activity_space"/>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:id="@+id/btn_next"
-        android:background="@drawable/ripple_green"
-        android:text="Topup"
-        android:textColor="@android:color/white"/>
-</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/icon_size"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="Commission 5%"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="center|right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="THB   "/>
+                <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="10.00" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/icon_size"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="Balance"
+                android:id="@+id/textView9" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="center|right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="THB   "/>
+                <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="9,800.00" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

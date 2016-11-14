@@ -7,6 +7,4 @@
     style="@style/TextAppearance.AppCompat.Medium"
     android:textStyle="bold"
     android:gravity="left"
-    android:textColor="@android:color/white"
-
     />

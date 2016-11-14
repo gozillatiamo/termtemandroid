@@ -6,109 +6,110 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="@dimen/elevation_cardview">
+    <include
+        layout="@layout/card_my_wallet"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|right"
-            android:text="100,000"
-            style="@style/TextAppearance.AppCompat.Large.Inverse"
-            android:layout_marginRight="@dimen/activity_space"
-            android:textColor="@color/colorSelector"
-            android:textStyle="bold"
-            android:drawableRight="@drawable/coin"
-            android:drawablePadding="@dimen/activity_space"/>
-    </RelativeLayout>
-
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_ais"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:cardBackgroundColor="@android:color/white"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/btn_lao_tel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            app:cardElevation="@dimen/cardview_default_elevation">
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="88dp"
+            android:padding="@dimen/activity_space"
+            android:layout_gravity="center"
+            android:src="@drawable/ais_logo" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:gravity="center"
-                >
+    </android.support.v7.widget.CardView>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="120dp"
-                    android:padding="@dimen/activity_space"
-                    android:src="@drawable/ais_logo" />
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_truemove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="AIS"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/darker_gray"/>
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="88dp"
+            android:padding="@dimen/activity_space"
+            android:layout_gravity="center"
+            android:src="@drawable/truemove_logo" />
 
-            </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-        </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_dtac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/btn_scan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            app:cardUseCompatPadding="true"
-            android:visibility="invisible"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            app:cardElevation="@dimen/cardview_default_elevation">
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="88dp"
+            android:padding="@dimen/activity_space"
+            android:layout_gravity="center"
+            android:src="@drawable/dtac_logo" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:gravity="center"
-                >
+    </android.support.v7.widget.CardView>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/activity_space"
-                    android:src="@drawable/barcode_256"
-
-                    android:id="@+id/imageView" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="SCAN"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_red_dark"/>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
 
-    </LinearLayout>
+        <!--<android.support.v7.widget.CardView-->
+            <!--android:id="@+id/btn_scan"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_margin="@dimen/activity_vertical_margin"-->
+            <!--app:cardUseCompatPadding="true"-->
+            <!--android:visibility="invisible"-->
+            <!--app:cardCornerRadius="@dimen/cardview_default_radius"-->
+            <!--app:cardElevation="@dimen/cardview_default_elevation">-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_margin="@dimen/activity_vertical_margin"-->
+                <!--android:gravity="center"-->
+                <!--&gt;-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="@dimen/activity_space"-->
+                    <!--android:src="@drawable/barcode_256"-->
+
+                    <!--android:id="@+id/imageView" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--style="@style/TextAppearance.AppCompat.Medium"-->
+                    <!--android:text="SCAN"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColor="@android:color/holo_red_dark"/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</android.support.v7.widget.CardView>-->
+
+
+    <!--</LinearLayout>-->
 
 </LinearLayout>
