@@ -14,11 +14,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.topup.adapter.AdapterPageTopup;
+import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
+import com.worldwidewealth.wealthcounter.model.LoadButtonRequestModel;
+import com.worldwidewealth.wealthcounter.model.LoadButtonResponseModel;
+import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
+import com.worldwidewealth.wealthcounter.model.RequestModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
+import com.worldwidewealth.wealthcounter.until.Until;
+
+import java.io.IOException;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -64,6 +75,37 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initPageTopup(){
+        Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
+                    new LoadButtonRequestModel(mTopupService)
+                ));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                String responseStr = null;
+                try {
+                    responseStr = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String converted = Until.ConvertJsonEncode(responseStr);
+                String responDecode = Until.decode(converted);
+                Log.e("strResponse", converted);
+                Log.e("strDecode", responDecode);
+
+
+                //String json = gson.toJson(responDecode);
+//                LoginResponseModel loginResponseModel = new Gson().fromJson(responDecode, LoginResponseModel.class);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                new DialogNetworkError(FragmentTopupPackage.this.getContext());
+            }
+        });
         getFragmentManager().beginTransaction()
                 .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance())
                 .commit();
@@ -71,14 +113,14 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void initData(){
         switch (mTopupService){
-            case Configs.TopupServices.AIS:
-                mHolder.mLogoService.setImageResource(R.drawable.ais_logo);
+            case APIServices.AIS:
+                mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
                 break;
-            case Configs.TopupServices.TRUEMOVE:
-                mHolder.mLogoService.setImageResource(R.drawable.truemove_logo);
+            case APIServices.TRUEMOVE:
+                mHolder.mLogoService.setImageResource(R.drawable.logo_truemove);
                 break;
-            case Configs.TopupServices.DTAC:
-                mHolder.mLogoService.setImageResource(R.drawable.dtac_logo);
+            case APIServices.DTAC:
+                mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
                 break;
         }
     }

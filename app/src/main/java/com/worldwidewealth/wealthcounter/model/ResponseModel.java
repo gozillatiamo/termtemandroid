@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
  */
 
 public class ResponseModel{
-    private String Status;
+    private int Status;
     private String Msg;
     private String TXID;
 
@@ -15,23 +15,12 @@ public class ResponseModel{
         return Msg;
     }
 
-    public void setMsg(String msg) {
-        Msg = msg;
-    }
 
     public String getTXID() {
         return TXID;
     }
 
-    public void setTXID(String TXID) {
-        this.TXID = TXID;
-    }
-
-    public String getStatus() {
+    public int getStatus() {
         return Status;
-    }
-
-    public void setStatus(String status) {
-        Status = status;
     }
 }

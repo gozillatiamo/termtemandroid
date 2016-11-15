@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,237 +42,302 @@
                         android:layout_gravity="center"/>
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="@dimen/activity_space"
+                android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 >
-                <android.support.v7.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardUseCompatPadding="true">
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_space"
+                    >
+<!--
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardUseCompatPadding="true">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/icon_size">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/dashboard_wallet"
+                                    android:textColor="@android:color/black"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="THB"
+                                    android:layout_marginTop="@dimen/activity_space"
+                                    android:textColor="@android:color/secondary_text_light_nodisable"
+                                    style="@style/TextAppearance.AppCompat.Large"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingBottom="@dimen/activity_space"
+                                android:orientation="horizontal"
+                                android:gravity="bottom|right">
+                                <TextView
+                                    android:id="@+id/txt_balance_integer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="36sp"
+                                    android:text="10,000"/>
+
+                                <TextView
+                                    android:id="@+id/txt_balance_decimal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimary"
+                                    style="@style/TextAppearance.AppCompat.Medium"
+                                    android:text=".00"/>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+-->
+                    <include
+                        android:id="@+id/include_my_wallet"
+                        layout="@layout/card_my_wallet"/>
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/menu_topup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardUseCompatPadding="true"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/icon_size"
+                            android:gravity="center">
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/ic_topup"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="@string/topup"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/icon_size">
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/dashboard_wallet"
-                                android:textColor="@android:color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="THB"
-                                android:layout_marginTop="@dimen/activity_space"
-                                android:textColor="@android:color/secondary_text_light_nodisable"
-                                style="@style/TextAppearance.AppCompat.Large"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
+                        <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:paddingBottom="@dimen/activity_space"
-                            android:orientation="horizontal"
-                            android:gravity="bottom|right">
-                            <TextView
-                                android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="36sp"
-                                android:text="10,000"/>
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_add_credit"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/add_credit"
+                                    android:singleLine="true"
+                                    app:sizeToFit="true"
+                                    />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/colorPrimary"
-                                style="@style/TextAppearance.AppCompat.Medium"
-                                android:text=".00"/>
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_support"
+                                    android:layout_marginRight="@dimen/activity_space"/>
 
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/support"
+                                    android:singleLine="true"
+                                    app:sizeToFit="true" />
 
-                        </LinearLayout>
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/menu_topup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardUseCompatPadding="true"
-                    >
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_report"/>
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/report"
+                                    app:sizeToFit="true"
+                                    android:singleLine="true"
+                                     />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_setting"
+                                    android:layout_marginRight="@dimen/activity_space"/>
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/setting"
+                                    app:sizeToFit="true"
+                                    android:singleLine="true"
+                                     />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_my_qr"
+                                    android:layout_marginRight="@dimen/activity_space"/>
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/dashboard_my_qr"
+                                    app:sizeToFit="true"
+                                    android:singleLine="true"
+                                    />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/icon_size"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_scan_qr"
+                                    android:layout_marginRight="@dimen/activity_space"/>
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/dashboard_scan_qr"
+                                    app:sizeToFit="true"
+                                    android:singleLine="true"
+                                     />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_forgot_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/icon_size"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/topup"
-                        android:drawableLeft="@drawable/ic_phone_android_36"/>
-                </android.support.v7.widget.CardView>
+                        android:layout_gravity="right"
+                        android:text="@string/change_password"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/tertiary_text_light"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/add_credit"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_money_64" />
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/support"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_error_outline" />
-
-
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/report"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_event_note" />
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/setting"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_settings" />
-
-
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/dashboard_my_qr"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_qr_code_64"
-                            android:drawableTint="@color/colorPrimary"/>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:cardUseCompatPadding="true">
-
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="@string/dashboard_scan_qr"
-                            app:minTextSize="8sp"
-                            android:drawablePadding="@dimen/activity_space"
-                            android:padding="@dimen/icon_size"
-                            android:drawableLeft="@drawable/ic_qr_code_scan_64"
-                            android:drawableTint="@color/colorPrimary"
-                            android:id="@+id/autofitTextView" />
-
-
-                    </android.support.v7.widget.CardView>
-
-
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="@string/forgot_password"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/tertiary_text_light"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-                <!--<FrameLayout-->
+                    <!--<FrameLayout-->
                     <!--android:id="@+id/dashboard_container"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="match_parent"-->
@@ -280,17 +346,17 @@
                     <!--&gt;-->
 
                     <!--<android.support.v7.widget.RecyclerView-->
-                        <!--android:id="@+id/list_dashborad"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:padding="2dp"-->
-                        <!--&gt;-->
+                    <!--android:id="@+id/list_dashborad"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="2dp"-->
+                    <!--&gt;-->
 
                     <!--</android.support.v7.widget.RecyclerView>-->
 
-                <!--</FrameLayout>-->
+                    <!--</FrameLayout>-->
 
-                <!--<android.support.design.widget.TabLayout-->
+                    <!--<android.support.design.widget.TabLayout-->
                     <!--android:id="@+id/tab_main"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
@@ -302,36 +368,38 @@
                     <!--app:tabIndicatorColor="@color/colorTab"-->
                     <!--android:background="@color/colorTab">-->
                     <!--<android.support.design.widget.TabItem-->
-                        <!--android:id="@+id/tab_home"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/home"-->
-                        <!--android:icon="@drawable/ic_home_selector"-->
+                    <!--android:id="@+id/tab_home"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/home"-->
+                    <!--android:icon="@drawable/ic_home_selector"-->
 
-                        <!--/>-->
+                    <!--/>-->
                     <!--<android.support.design.widget.TabItem-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/help"-->
-                        <!--android:icon="@drawable/ic_help_selector"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/help"-->
+                    <!--android:icon="@drawable/ic_help_selector"-->
 
-                        <!--/>-->
+                    <!--/>-->
                     <!--<android.support.design.widget.TabItem-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/report"-->
-                        <!--android:icon="@drawable/ic_assignment_selector"-->
-                        <!--/>-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/report"-->
+                    <!--android:icon="@drawable/ic_assignment_selector"-->
+                    <!--/>-->
                     <!--<android.support.design.widget.TabItem-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:icon="@drawable/ic_settings_selector"-->
-                        <!--android:text="@string/setting"-->
-                        <!--/>-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:icon="@drawable/ic_settings_selector"-->
+                    <!--android:text="@string/setting"-->
+                    <!--/>-->
 
-                <!--</android.support.design.widget.TabLayout>-->
+                    <!--</android.support.design.widget.TabLayout>-->
 
-            </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
 
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>

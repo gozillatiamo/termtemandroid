@@ -1,12 +1,7 @@
 package com.worldwidewealth.wealthcounter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -19,22 +14,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
-import com.worldwidewealth.wealthcounter.model.LoginSuccessModel;
+import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
-import com.worldwidewealth.wealthcounter.model.SignInModel;
+import com.worldwidewealth.wealthcounter.model.SignInRequestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -101,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
 
-                Call<Object> call = services.LOGIN(new SignInModel(new SignInModel.Data(
+                Call<Object> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getDEVICEID(),
                         Configs.getPLATFORM(),
                         EncryptionData.EncryptData(mPhone),
@@ -129,9 +115,10 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("strDecode", responDecode);
 
                             //String json = gson.toJson(responDecode);
-                            LoginSuccessModel loginSuccessModel = gson.fromJson(responDecode, LoginSuccessModel.class);
-                            Global.setUSERID(loginSuccessModel.getUSERID());
-                            Global.setAGENTID(loginSuccessModel.getAGENTID());
+                            LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
+                            Global.setUSERID(loginResponseModel.getUSERID());
+                            Global.setAGENTID(loginResponseModel.getAGENTID());
+                            Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
                             startActivity(intent);

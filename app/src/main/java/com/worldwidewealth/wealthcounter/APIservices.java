@@ -4,16 +4,15 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.worldwidewealth.wealthcounter.model.LogoutModel;
-import com.worldwidewealth.wealthcounter.model.PreModel;
-import com.worldwidewealth.wealthcounter.model.RegisterModel;
+import com.worldwidewealth.wealthcounter.model.LogoutRequestModel;
+import com.worldwidewealth.wealthcounter.model.PreRequestModel;
+import com.worldwidewealth.wealthcounter.model.RegisterRequestModel;
+import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
-import com.worldwidewealth.wealthcounter.model.SignInModel;
-import com.worldwidewealth.wealthcounter.model.TestModel;
+import com.worldwidewealth.wealthcounter.model.SignInRequestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -34,6 +33,14 @@ import retrofit2.http.POST;
  */
 
 public interface APIServices {
+    public static final int SUCCESS = 0;
+
+    public static final String ACTIONCHANGEPASSWORD = "CHANGEPASSWORD";
+    public static final String ACTIONLOADBUTTON = "LOADBUTTON";
+
+    public static final String AIS = "12CALL";
+    public static final String TRUEMOVE = "TMVH";
+    public static final String DTAC = "HAPPY";
 
     @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
@@ -47,20 +54,23 @@ public interface APIServices {
     @GET("apifcm/getluck.aspx")
     Call<ResponseBody> getluck();
 
-    @POST("wealthservice/syncout.ashx")
-    Call<ResponseBody> testpost(@Body TestModel test);
+    @POST("service.ashx")
+    Call<ResponseModel> PRE(@Body PreRequestModel inAppModel);
 
     @POST("service.ashx")
-    Call<ResponseModel> PRE(@Body PreModel inAppModel);
+    Call<Object> LOGIN(@Body SignInRequestModel signInRequestModel);
 
     @POST("service.ashx")
-    Call<Object> LOGIN(@Body SignInModel signInModel);
+    Call<ResponseBody> LOGOUT(@Body LogoutRequestModel logoutRequestModel);
 
     @POST("service.ashx")
-    Call<ResponseBody> LOGOUT(@Body LogoutModel logoutModel);
+    Call<ResponseModel> SIGNUP(@Body RegisterRequestModel registerRequestModel);
 
     @POST("service.ashx")
-    Call<ResponseModel> SIGNUP(@Body RegisterModel registerModel);
+    Call<ResponseModel> CHANGEPASSWORD(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<ResponseBody> loadButton(@Body RequestModel requestModel);
 
 
 

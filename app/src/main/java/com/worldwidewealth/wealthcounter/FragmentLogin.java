@@ -6,12 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,28 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
-import com.worldwidewealth.wealthcounter.model.LoginSuccessModel;
+import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
-import com.worldwidewealth.wealthcounter.model.SignInModel;
+import com.worldwidewealth.wealthcounter.model.SignInRequestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Objects;
-
-import okhttp3.ResponseBody;
-import okhttp3.internal.http.RealResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -110,7 +95,7 @@ public class FragmentLogin extends Fragment{
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
 
-                Call<Object> call = services.LOGIN(new SignInModel(new SignInModel.Data(
+                Call<Object> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getDEVICEID(),
                         Configs.getPLATFORM(),
                         EncryptionData.EncryptData(mPhone),
@@ -138,9 +123,9 @@ public class FragmentLogin extends Fragment{
                             Log.e("strDecode", responDecode);
 
                             //String json = gson.toJson(responDecode);
-                            LoginSuccessModel loginSuccessModel = gson.fromJson(responDecode, LoginSuccessModel.class);
-                            Global.setUSERID(loginSuccessModel.getUSERID());
-                            Global.setAGENTID(loginSuccessModel.getAGENTID());
+                            LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
+                            Global.setUSERID(loginResponseModel.getUSERID());
+                            Global.setAGENTID(loginResponseModel.getAGENTID());
                             Activity activity = FragmentLogin.this.getActivity();
                             Intent intent = new Intent(activity, ActivityDashboard.class);
                             activity.startActivity(intent);

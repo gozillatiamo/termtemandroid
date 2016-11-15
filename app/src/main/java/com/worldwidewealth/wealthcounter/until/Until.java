@@ -14,10 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -123,6 +126,16 @@ public class Until {
             Window w = activity.getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+    }
+
+    public static void setBalanceWallet(TextView balanceInteger, TextView balanceDecimal){
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+
+        String[] balance = format.format(Global.getBALANCE()).split("\\.");
+        balanceInteger.setText(balance[0]);
+        balanceDecimal.setText("."+balance[1]);
+
     }
 
 }

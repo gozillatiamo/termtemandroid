@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
-import com.worldwidewealth.wealthcounter.model.PreModel;
+import com.worldwidewealth.wealthcounter.model.PreRequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.GPSTracker;
 
@@ -78,7 +78,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                     "platform:" + Configs.getPLATFORM());
 
 
-            PreModel mPreModel = new PreModel(mAction, new PreModel.Data(
+            PreRequestModel mPreRequestModel = new PreRequestModel(mAction, new PreRequestModel.Data(
                     Global.getTOKEN(),
                     Global.getDEVICEID(),
                     mLat,
@@ -86,13 +86,13 @@ public class SplashScreenWWW extends AppCompatActivity{
                     Configs.getPLATFORM()
             ));
 
-            SendDataService(mPreModel);
+            SendDataService(mPreRequestModel);
         } else {
             gpsTracker.showSettingsAlert();
         }
     }
 
-    protected  void SendDataService(PreModel model){
+    protected  void SendDataService(PreRequestModel model){
 
 //        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
 //        startActivity(intent);

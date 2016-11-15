@@ -11,6 +11,15 @@ public class Global {
     private static String AGENTID;
     private static String TOKEN;
     private static String TXID;
+    private static Double BALANCE;
+
+    public static Double getBALANCE() {
+        return BALANCE;
+    }
+
+    public static void setBALANCE(Double BALANCE) {
+        Global.BALANCE = BALANCE;
+    }
 
     public static String getUSERID() {
         return USERID;

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_vertical_margin">
+        android:padding="@dimen/icon_size">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -37,6 +37,7 @@
             android:orientation="horizontal"
             android:gravity="bottom|right">
             <TextView
+                android:id="@+id/txt_balance_integer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -44,6 +45,7 @@
                 android:text="10,000"/>
 
             <TextView
+                android:id="@+id/txt_balance_decimal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"

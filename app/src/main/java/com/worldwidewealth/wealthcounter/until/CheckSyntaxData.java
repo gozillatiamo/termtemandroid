@@ -37,7 +37,7 @@ public class CheckSyntaxData {
             sum += num*i;
         }
         Log.e("sum", sum+"");
-        int resultCheckBit = (11 - (sum % 11) % 10);
+        int resultCheckBit = (11 - (sum % 11)) % 10;
         Log.e("resultCheckBit", resultCheckBit+"");
         if (resultCheckBit == checkbit)
             return true;

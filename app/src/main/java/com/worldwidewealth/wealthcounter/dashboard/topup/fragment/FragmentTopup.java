@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
+import com.worldwidewealth.wealthcounter.until.Until;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -30,10 +33,17 @@ public class FragmentTopup extends Fragment {
 
     public class ViewHolder{
         private CardView mBtnAis, mBtnTruemove, mBtnDtac;
+        private View mIncludeMyWallet;
+        private TextView mTextBalanceInteger, mTextBalanceDecimal;
+
         public ViewHolder(View itemview){
             mBtnAis = (CardView) itemview.findViewById(R.id.btn_ais);
             mBtnTruemove = (CardView) itemview.findViewById(R.id.btn_truemove);
             mBtnDtac = (CardView) itemview.findViewById(R.id.btn_dtac);
+            mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
+            mTextBalanceDecimal = (TextView) mIncludeMyWallet.findViewById(R.id.txt_balance_decimal);
+            mTextBalanceInteger = (TextView) mIncludeMyWallet.findViewById(R.id.txt_balance_integer);
+
         }
     }
 
@@ -47,6 +57,7 @@ public class FragmentTopup extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
         initBtnServices();
+        initData();
         return rootView;
     }
 
@@ -54,23 +65,27 @@ public class FragmentTopup extends Fragment {
         mHolder.mBtnAis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFragmentService(Configs.TopupServices.AIS);
+                startFragmentService(APIServices.AIS);
             }
         });
 
         mHolder.mBtnTruemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFragmentService(Configs.TopupServices.TRUEMOVE);
+                startFragmentService(APIServices.TRUEMOVE);
             }
         });
 
         mHolder.mBtnDtac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFragmentService(Configs.TopupServices.DTAC);
+                startFragmentService(APIServices.DTAC);
             }
         });
+    }
+
+    private void initData(){
+        Until.setBalanceWallet(mHolder.mTextBalanceInteger, mHolder.mTextBalanceDecimal);
     }
 
     private void startFragmentService(String service){

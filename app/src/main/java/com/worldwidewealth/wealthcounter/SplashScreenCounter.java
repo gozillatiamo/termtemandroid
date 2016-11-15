@@ -14,7 +14,7 @@ public class SplashScreenCounter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_splash_screen_counter);
+        setContentView(R.layout.splash_screen_counter);
 
         new Handler().postDelayed(new Runnable() {
             @Override
