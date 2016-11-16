@@ -15,6 +15,26 @@ public class DataRequestModel {
     private String AGENTID = Global.getAGENTID();
     private String USERID = Global.getUSERID();
 
+    public void setAGENTID(String AGENTID) {
+        this.AGENTID = AGENTID;
+    }
+
+    public void setDEVICEID(String DEVICEID) {
+        this.DEVICEID = DEVICEID;
+    }
+
+    public void setPLATFORM(String PLATFORM) {
+        this.PLATFORM = PLATFORM;
+    }
+
+    public void setTXID(String TXID) {
+        this.TXID = TXID;
+    }
+
+    public void setUSERID(String USERID) {
+        this.USERID = USERID;
+    }
+
     public String getDEVICEID() {
         return DEVICEID;
     }

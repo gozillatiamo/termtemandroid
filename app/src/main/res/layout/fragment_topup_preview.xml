@@ -143,6 +143,7 @@
                     android:textColor="@android:color/black"
                     android:text="THB   "/>
                 <me.grantland.widget.AutofitTextView
+                    android:id="@+id/txt_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
@@ -162,7 +163,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:text="Commission 5%"/>
+                android:text="Commission "/>
+            <TextView
+                android:id="@+id/txt_commission_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="0%"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -176,6 +184,7 @@
                     android:textColor="@android:color/black"
                     android:text="THB   "/>
                 <me.grantland.widget.AutofitTextView
+                    android:id="@+id/txt_commission_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
@@ -212,6 +221,7 @@
                     android:textColor="@android:color/black"
                     android:text="THB   "/>
                 <me.grantland.widget.AutofitTextView
+                    android:id="@+id/txt_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"

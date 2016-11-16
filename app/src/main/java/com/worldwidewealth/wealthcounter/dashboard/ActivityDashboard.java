@@ -69,11 +69,6 @@ public class ActivityDashboard extends AppCompatActivity{
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Call<ResponseBody> call = services.LOGOUT(new LogoutRequestModel());
@@ -82,6 +77,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Global.setAGENTID("");
                 Global.setUSERID("");
+                Global.setBALANCE(0.00);
+                Global.setTXID("");
             }
 
             @Override
@@ -89,12 +86,6 @@ public class ActivityDashboard extends AppCompatActivity{
                 t.printStackTrace();
             }
         });
-
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Log.e("onNewIntent", "true");
 
     }
 

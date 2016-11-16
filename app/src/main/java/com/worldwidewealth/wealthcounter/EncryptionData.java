@@ -19,6 +19,7 @@ import javax.crypto.spec.IvParameterSpec;
 public class EncryptionData {
 
     private static final String key = "WWW$2oi6-0o1www";
+    private static final String OTPKEY = "OTP$2oi6-0o1otp";
 
     private static byte[] m_Key = new byte[8];
     private static byte[] m_IV = new byte[8];

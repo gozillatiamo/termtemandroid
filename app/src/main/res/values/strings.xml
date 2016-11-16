@@ -115,6 +115,9 @@
     <string name="password_not_same">ยืนยันรหัสผ่านไม่ถูกต้อง!!!</string>
     <string name="success">สำเร็จ</string>
     <string name="change_password_success">เปลี่ยนรหัสผ่านสำเร็จ</string>
+    <string name="please_choice_topup">กรุณาเลือกจำรวนที่ท่านต้องการจะเติม</string>
+    <string name="register">ลงทะเบียน</string>
+    <string name="msg_progress">กรุณารอสักครู่...</string>
 
 
 

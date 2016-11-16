@@ -37,6 +37,9 @@ public interface APIServices {
 
     public static final String ACTIONCHANGEPASSWORD = "CHANGEPASSWORD";
     public static final String ACTIONLOADBUTTON = "LOADBUTTON";
+    public static final String ACTIONPREVIEW = "PREVIEW";
+    public static final String ACTIONREGISTERDEVICE = "REGISTERDEVICE";
+    public static final String ACTIONGETOTP = "GETOTP";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -72,6 +75,14 @@ public interface APIServices {
     @POST("topupservice.ashx")
     Call<ResponseBody> loadButton(@Body RequestModel requestModel);
 
+    @POST("topupservice.ashx")
+    Call<ResponseBody> preview(@Body RequestModel requestModel);
+
+    @POST("service.ashx")
+    Call<ResponseModel> registerDevice(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<String> getOTP(@Body RequestModel requestModel);
 
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -105,6 +116,7 @@ public interface APIServices {
     public static final Retrofit retrofit = new Retrofit.Builder()
         .baseUrl("http://180.128.21.31/wealthservice/").client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(new Until.ToStringConverterFactory())
         .build();
 
 }

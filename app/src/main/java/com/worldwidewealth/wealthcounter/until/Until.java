@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -16,16 +19,26 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
+import retrofit2.Converter;
+import retrofit2.Retrofit;
 
 /**
  * Created by MyNet on 17/10/2559.
@@ -136,6 +149,58 @@ public class Until {
         balanceInteger.setText(balance[0]);
         balanceDecimal.setText("."+balance[1]);
 
+    }
+
+    public static class JsonDateDeserializer implements JsonDeserializer<Date> {
+
+        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            String s = json.getAsJsonPrimitive().getAsString();
+            long l = Long.parseLong(s.substring(6, s.length() - 2));
+            Date d = new Date(l);
+            return d;
+        }
+    }
+
+    public static Fragment getFragmentFromViewpager(FragmentManager fm, ViewPager container, int position) {
+        String name = makeFragmentName(container.getId(), position);
+        return  fm.findFragmentByTag(name);
+    }
+
+    private static String makeFragmentName(int viewId, int index) {
+        return "android:switcher:" + viewId + ":" + index;
+    }
+
+    public static class ToStringConverterFactory extends Converter.Factory {
+        private static final MediaType MEDIA_TYPE = MediaType.parse("text/plain");
+
+
+        @Override
+        public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+            if (String.class.equals(type)) {
+                return new Converter<ResponseBody, String>() {
+                    @Override
+                    public String convert(ResponseBody value) throws IOException {
+                        return value.string();
+                    }
+                };
+            }
+            return null;
+        }
+
+        @Override
+        public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations,
+                                                              Annotation[] methodAnnotations, Retrofit retrofit) {
+
+            if (String.class.equals(type)) {
+                return new Converter<String, RequestBody>() {
+                    @Override
+                    public RequestBody convert(String value) throws IOException {
+                        return RequestBody.create(MEDIA_TYPE, value);
+                    }
+                };
+            }
+            return null;
+        }
     }
 
 }

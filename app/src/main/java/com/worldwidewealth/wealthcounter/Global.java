@@ -11,9 +11,9 @@ public class Global {
     private static String AGENTID;
     private static String TOKEN;
     private static String TXID;
-    private static Double BALANCE;
+    private static double BALANCE;
 
-    public static Double getBALANCE() {
+    public static double getBALANCE() {
         return BALANCE;
     }
 

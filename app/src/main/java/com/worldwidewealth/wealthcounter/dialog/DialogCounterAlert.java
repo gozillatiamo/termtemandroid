@@ -1,10 +1,10 @@
 package com.worldwidewealth.wealthcounter.dialog;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
 
 /**
  * Created by MyNet on 15/11/2559.
@@ -19,5 +19,21 @@ public class DialogCounterAlert {
                 .setPositiveButton(R.string.done, null)
                 .show();
 
+    }
+
+    public static class DialogProgress{
+        private static ProgressDialog progressDialog;
+
+        public DialogProgress(Context context) {
+            progressDialog = ProgressDialog.show(context,
+                    null,
+                    context.getString(R.string.msg_progress),
+                    true,
+                    false);
+        }
+
+        public static void dismiss(){
+            progressDialog.dismiss();
+        }
     }
 }

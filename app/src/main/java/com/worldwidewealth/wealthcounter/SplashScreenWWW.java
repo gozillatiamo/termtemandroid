@@ -36,6 +36,8 @@ public class SplashScreenWWW extends AppCompatActivity{
     protected String mAction;
     protected double mLat, mLong;
     private APIServices services;
+    private Runnable runnable;
+    private Handler handler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +46,13 @@ public class SplashScreenWWW extends AppCompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                getDataDevice();
+            }
+        };
         initFCM();
 
     }
@@ -51,14 +60,13 @@ public class SplashScreenWWW extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getDataDevice();
-            }
-        }, 5000);
+        handler.postDelayed(runnable, 5000);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 
     protected void getDataDevice(){
@@ -136,6 +144,7 @@ public class SplashScreenWWW extends AppCompatActivity{
 //        writeToFile(FirebaseInstanceId.getInstance().getToken());
     }
 
+/*
     public void writeToFile(String data) {
         // Get the directory for the user's public pictures directory.
         final File path =
@@ -172,5 +181,6 @@ public class SplashScreenWWW extends AppCompatActivity{
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+*/
 
 }

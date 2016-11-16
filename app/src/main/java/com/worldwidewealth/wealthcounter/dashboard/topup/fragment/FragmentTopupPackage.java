@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -7,28 +8,39 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.topup.adapter.AdapterPageTopup;
+import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
+import com.worldwidewealth.wealthcounter.model.GetOTPRequestModel;
 import com.worldwidewealth.wealthcounter.model.LoadButtonRequestModel;
 import com.worldwidewealth.wealthcounter.model.LoadButtonResponseModel;
 import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
+import com.worldwidewealth.wealthcounter.model.PreviewRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -43,14 +55,15 @@ import retrofit2.Response;
 public class FragmentTopupPackage extends  Fragment{
     private View rootView;
     private ViewHolder mHolder;
-    private String mTopupService;
+    private String mCarrier;
     private APIServices services;
+    private double mAmt = 0.00;
 
-    private static final String TOPUPSERVICE = "service";
-    public static Fragment newInstance(String service){
+    private static final String CARRIER = "carrier";
+    public static Fragment newInstance(String carrier){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
-        bundle.putString(TOPUPSERVICE, service);
+        bundle.putString(CARRIER, carrier);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -58,7 +71,7 @@ public class FragmentTopupPackage extends  Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mTopupService = getArguments().getString(TOPUPSERVICE);
+        mCarrier = getArguments().getString(CARRIER);
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_package, container, false);
@@ -74,9 +87,15 @@ public class FragmentTopupPackage extends  Fragment{
         return rootView;
     }
 
+    public void setAmt(double price){
+        this.mAmt = price;
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        mHolder.mTextPrice.setText(format.format(mAmt));
+    }
+
     private void initPageTopup(){
         Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
-                    new LoadButtonRequestModel(mTopupService)
+                    new LoadButtonRequestModel(mCarrier)
                 ));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -88,15 +107,10 @@ public class FragmentTopupPackage extends  Fragment{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                String converted = Until.ConvertJsonEncode(responseStr);
-                String responDecode = Until.decode(converted);
-                Log.e("strResponse", converted);
-                Log.e("strDecode", responDecode);
 
-
-                //String json = gson.toJson(responDecode);
-//                LoginResponseModel loginResponseModel = new Gson().fromJson(responDecode, LoginResponseModel.class);
-
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance(responseStr))
+                        .commit();
 
             }
 
@@ -106,13 +120,11 @@ public class FragmentTopupPackage extends  Fragment{
                 new DialogNetworkError(FragmentTopupPackage.this.getContext());
             }
         });
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance())
-                .commit();
     }
 
     private void initData(){
-        switch (mTopupService){
+        setAmt(mAmt);
+        switch (mCarrier){
             case APIServices.AIS:
                 mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
                 break;
@@ -129,23 +141,70 @@ public class FragmentTopupPackage extends  Fragment{
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHolder.mBtnNext.setVisibility(View.GONE);
-                mHolder.mBtnTopup.setVisibility(View.VISIBLE);
-                FragmentTopupPackage.this.getFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right,
-                                R.anim.slide_out_left,
-                                R.anim.slide_in_left,
-                                R.anim.slide_out_right)
-                        .replace(R.id.container_topup_package, FragmentTopupPreview.newInstance())
-                        .addToBackStack(null)
-                        .commit();
+
+                if (mAmt == 0){
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.please_choice_topup)
+                            .setPositiveButton(R.string.confirm, null)
+                            .show();
+                    return;
+                }
+
+                Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
+                        new PreviewRequestModel(mAmt, mCarrier)));
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        String strRespose = null;
+                        try {
+                            strRespose = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        mHolder.mBtnNext.setVisibility(View.GONE);
+                        mHolder.mBtnTopup.setVisibility(View.VISIBLE);
+
+                        FragmentTopupPackage.this.getFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right,
+                                        R.anim.slide_out_left,
+                                        R.anim.slide_in_left,
+                                        R.anim.slide_out_right)
+                                .replace(R.id.container_topup_package, FragmentTopupPreview.newInstance(strRespose))
+                                .addToBackStack(null)
+                                .commit();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        new DialogNetworkError(FragmentTopupPackage.this.getContext());
+                    }
+                });
             }
         });
 
         mHolder.mBtnTopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new DialogCounterAlert.DialogProgress(getContext());
+                Call<String> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
+                        new GetOTPRequestModel()));
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        DialogCounterAlert.DialogProgress.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        t.printStackTrace();
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        new DialogNetworkError(getContext());
+                    }
+                });
+/*
                 Call<ResponseBody> call = null;
 
                 switch (Global.getPage()){
@@ -194,9 +253,27 @@ public class FragmentTopupPackage extends  Fragment{
                         t.printStackTrace();
                     }
                 });
+*/
+
 
             }
         });
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    mHolder.mBtnNext.setVisibility(View.VISIBLE);
+                    mHolder.mBtnTopup.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        } );
 
     }
 
@@ -204,6 +281,7 @@ public class FragmentTopupPackage extends  Fragment{
         private ViewPager mViewPage;
         private TabLayout mTab;
         private Button mBtnNext, mBtnTopup;
+        private TextView mTextPrice;
         private ImageView mLogoService;
         public ViewHolder(View itemview){
 //            mViewPage = (ViewPager) itemview.findViewById(R.id.viewpager);
@@ -211,6 +289,7 @@ public class FragmentTopupPackage extends  Fragment{
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
             mBtnTopup = (Button) itemview.findViewById(R.id.btn_topup);
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
+            mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
 
         }
     }

@@ -3,6 +3,7 @@ package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.model.LoadButtonResponseModel;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import java.text.NumberFormat;
+import java.util.List;
 
 /**
  * Created by MyNet on 14/11/2559.
@@ -24,6 +29,14 @@ public class FragmentChoiceTopup extends Fragment{
 
     private GridView mGrid;
     private int previousSelectedPosition = -1;
+    private List<LoadButtonResponseModel> mDataList;
+    private TextView textProductItem = null;
+    private TextView textCurrency = null;
+
+
+    public FragmentChoiceTopup(List datalist){
+        this.mDataList = datalist;
+    }
 
     @Nullable
     @Override
@@ -39,12 +52,12 @@ public class FragmentChoiceTopup extends Fragment{
         mGrid.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return 12;
+                return mDataList.size();
             }
 
             @Override
-            public Object getItem(int position) {
-                return null;
+            public LoadButtonResponseModel getItem(int position) {
+                return mDataList.get(position);
             }
 
             @Override
@@ -55,6 +68,13 @@ public class FragmentChoiceTopup extends Fragment{
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view =  LayoutInflater.from(getContext()).inflate(R.layout.item_topup, parent, false);
+                TextView textProductItem = (TextView) view.findViewById(R.id.txt_product_item);
+                TextView textCurency = (TextView) view.findViewById(R.id.txt_currency);
+                if (getItem(position).getPRODUCT_TYPE().equals("VAS")){
+                    String[] item = getItem(position).getPRODUCT_ITEM().split("/");
+                    textProductItem.setText(item[0]);
+                    textCurency.setText(item[1]);
+                }else textProductItem.setText(getItem(position).getPRODUCT_ITEM());
                 return view;
             }
         });
@@ -62,28 +82,52 @@ public class FragmentChoiceTopup extends Fragment{
         mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textPrice = (TextView) view.findViewById(R.id.txt_price);
-                TextView textCurrency = (TextView) view.findViewById(R.id.txt_currency);
-
-                textPrice.setTextColor(getResources().getColor(R.color.colorPrimary));
-                textCurrency.setTextColor(getResources().getColor(R.color.colorPrimary));
-
-
-                View previousSelectedView = (View) mGrid.getChildAt(previousSelectedPosition);
-
-                if (previousSelectedPosition != -1){
-                    textPrice = (TextView) previousSelectedView.findViewById(R.id.txt_price);
-                    textCurrency = (TextView) previousSelectedView.findViewById(R.id.txt_currency);
-
-                    textPrice.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-                    textCurrency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-
-                }
-
-                previousSelectedPosition = position;
-
+                setClickChoiceTopup(parent, view, position);
             }
         });
 
     }
+
+    private void setClickChoiceTopup(AdapterView parent, View view, int position){
+
+        double nowAmt = 0;
+
+        if (position != -1) {
+            if (previousSelectedPosition == position) return;
+            textProductItem = (TextView) view.findViewById(R.id.txt_product_item);
+            textCurrency = (TextView) view.findViewById(R.id.txt_currency);
+
+            textProductItem.setTextColor(getResources().getColor(R.color.colorPrimary));
+            textCurrency.setTextColor(getResources().getColor(R.color.colorPrimary));
+            nowAmt = ((LoadButtonResponseModel) parent.getItemAtPosition(position)).getPRODUCT_PRICE();
+        }
+
+        Fragment fragment = getParentFragment().getParentFragment();
+
+        if (fragment instanceof FragmentTopupPackage) {
+
+            ((FragmentTopupPackage) fragment).setAmt(nowAmt);
+        }
+
+        clearSelected();
+
+        previousSelectedPosition = position;
+
+    }
+
+    public void clearSelected(){
+
+        Log.e("previousSelected", previousSelectedPosition+"");
+        if (previousSelectedPosition != -1){
+            View previousSelectedView = (View) mGrid.getChildAt(previousSelectedPosition);
+            textProductItem = (TextView) previousSelectedView.findViewById(R.id.txt_product_item);
+            textCurrency = (TextView) previousSelectedView.findViewById(R.id.txt_currency);
+
+            textProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
+            textCurrency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
+
+        }
+
+    }
+
 }
