@@ -33,7 +33,9 @@ public class DialogCounterAlert {
         }
 
         public static void dismiss(){
-            progressDialog.dismiss();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }
     }
 }

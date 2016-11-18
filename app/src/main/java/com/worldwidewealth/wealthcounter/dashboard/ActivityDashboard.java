@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.worldwidewealth.wealthcounter.APIServices;
+import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
@@ -147,7 +148,7 @@ public class ActivityDashboard extends AppCompatActivity{
                             Toast.makeText(ActivityDashboard.this, R.string.password_not_same, Toast.LENGTH_LONG).show();
                         } else {
                             Call<ResponseModel> call = services.CHANGEPASSWORD(new RequestModel(APIServices.ACTIONCHANGEPASSWORD,
-                                    new ChangePasswordRequestModel(editNewPass.getText().toString())
+                                    new ChangePasswordRequestModel(EncryptionData.EncryptData(editNewPass.getText().toString(), null))
                             ));
 
                             call.enqueue(new Callback<ResponseModel>() {

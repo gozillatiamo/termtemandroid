@@ -12,6 +12,15 @@ public class Global {
     private static String TOKEN;
     private static String TXID;
     private static double BALANCE;
+    private static String OTP = null;
+
+    public static String getOTP() {
+        return OTP;
+    }
+
+    public static void setOTP(String OTP) {
+        Global.OTP = OTP;
+    }
 
     public static double getBALANCE() {
         return BALANCE;

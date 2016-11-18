@@ -65,7 +65,7 @@ public class Until {
             public void writeTo(BufferedSink sink) throws IOException {
                 Buffer buffer = new Buffer();
                 body.writeTo(buffer);
-                String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.DEFAULT);
+                String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                 byte[] converted = ConvertJsonEncode(encoded).getBytes();
                 sink.write(converted);
                 Log.e("encoded", encoded);
@@ -168,39 +168,6 @@ public class Until {
 
     private static String makeFragmentName(int viewId, int index) {
         return "android:switcher:" + viewId + ":" + index;
-    }
-
-    public static class ToStringConverterFactory extends Converter.Factory {
-        private static final MediaType MEDIA_TYPE = MediaType.parse("text/plain");
-
-
-        @Override
-        public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-            if (String.class.equals(type)) {
-                return new Converter<ResponseBody, String>() {
-                    @Override
-                    public String convert(ResponseBody value) throws IOException {
-                        return value.string();
-                    }
-                };
-            }
-            return null;
-        }
-
-        @Override
-        public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations,
-                                                              Annotation[] methodAnnotations, Retrofit retrofit) {
-
-            if (String.class.equals(type)) {
-                return new Converter<String, RequestBody>() {
-                    @Override
-                    public RequestBody convert(String value) throws IOException {
-                        return RequestBody.create(MEDIA_TYPE, value);
-                    }
-                };
-            }
-            return null;
-        }
     }
 
 }

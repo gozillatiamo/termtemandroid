@@ -61,7 +61,7 @@ public interface APIServices {
     Call<ResponseModel> PRE(@Body PreRequestModel inAppModel);
 
     @POST("service.ashx")
-    Call<Object> LOGIN(@Body SignInRequestModel signInRequestModel);
+    Call<ResponseBody> LOGIN(@Body SignInRequestModel signInRequestModel);
 
     @POST("service.ashx")
     Call<ResponseBody> LOGOUT(@Body LogoutRequestModel logoutRequestModel);
@@ -82,7 +82,7 @@ public interface APIServices {
     Call<ResponseModel> registerDevice(@Body RequestModel requestModel);
 
     @POST("topupservice.ashx")
-    Call<String> getOTP(@Body RequestModel requestModel);
+    Call<ResponseBody> getOTP(@Body RequestModel requestModel);
 
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -116,7 +116,6 @@ public interface APIServices {
     public static final Retrofit retrofit = new Retrofit.Builder()
         .baseUrl("http://180.128.21.31/wealthservice/").client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
-            .addConverterFactory(new Until.ToStringConverterFactory())
         .build();
 
 }

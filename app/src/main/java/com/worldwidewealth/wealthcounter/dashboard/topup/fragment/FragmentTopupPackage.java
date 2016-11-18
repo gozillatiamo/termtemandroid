@@ -35,6 +35,7 @@ import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.PreviewRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
+import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.io.IOException;
@@ -189,19 +190,38 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onClick(View v) {
                 new DialogCounterAlert.DialogProgress(getContext());
-                Call<String> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
+                Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                         new GetOTPRequestModel()));
-                call.enqueue(new Callback<String>() {
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        DialogCounterAlert.DialogProgress.dismiss();
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+
+                                    while(Global.getOTP() == null) {
+//                                        sleep(1000);
+                                        Log.e("NEWOTP", "null");
+                                    }
+
+                                    Log.e("NEWOTP", Global.getOTP());
+
+                                    Global.setOTP(null);
+                                    DialogCounterAlert.DialogProgress.dismiss();
+
+                            }
+                        };
+
+                        thread.start();
+
+
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        t.printStackTrace();
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        new DialogNetworkError(getContext());
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        new ErrorNetworkThrowable(t).networkError(getContext());
                     }
                 });
 /*

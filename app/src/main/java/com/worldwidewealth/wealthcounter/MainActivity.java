@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,8 +28,12 @@ import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SignInRequestModel;
+import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthcounter.until.Until;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHolder = new ViewHolder(this);
-//        FragmentTransaction transaction = this.getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.main_container, FragmentLogin.newInstance())
-//                .addToBackStack(null);
-//
-//        transaction.commit();
 
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
@@ -92,19 +92,28 @@ public class MainActivity extends AppCompatActivity {
                         "USERNAME:" + mPhone + "\n" +
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
+                new DialogCounterAlert.DialogProgress(MainActivity.this);
 
-                Call<Object> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
+                Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getDEVICEID(),
                         Configs.getPLATFORM(),
-                        EncryptionData.EncryptData(mPhone),
-                        EncryptionData.EncryptData(mPassword),
+                        EncryptionData.EncryptData(mPhone, Global.getDEVICEID()+Global.getTXID()),
+                        EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
                         Global.getTXID())));
 
-                call.enqueue(new Callback<Object>() {
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<Object> call, Response<Object> response) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Gson gson = new Gson();
-                        if (!(response.body() instanceof String)){
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        String strResponse = null;
+                        try {
+                           strResponse = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (!(strResponse instanceof String)){
                             Log.e("ResponseModel", "true");
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
                             JsonObject jsonObject = gson.toJsonTree(response.body()).getAsJsonObject();
@@ -120,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             Log.e("ResponseModel", "false");
-                            String responseStr = (String)response.body();
+                            String responseStr = strResponse;
                             String converted = Until.ConvertJsonEncode(responseStr);
                             String responDecode = Until.decode(converted);
                             Log.e("strResponse", converted);
@@ -128,8 +137,9 @@ public class MainActivity extends AppCompatActivity {
 
                             //String json = gson.toJson(responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                            Global.setUSERID(loginResponseModel.getUSERID());
-                            Global.setAGENTID(loginResponseModel.getAGENTID());
+                            EncryptionData.DecryptData(loginResponseModel.getAGENTID(), Global.getDEVICEID()+Global.getTXID());
+                            Global.setUSERID(EncryptionData.DecryptData(loginResponseModel.getUSERID(), loginResponseModel.getAGENTID()+Global.getTXID()));
+                            Global.setAGENTID(EncryptionData.DecryptData(loginResponseModel.getAGENTID(), loginResponseModel.getAGENTID()+Global.getTXID()));
                             Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
@@ -143,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Object> call, Throwable t) {
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
                         t.printStackTrace();
+//                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
                     }
                 });
             }
@@ -155,14 +166,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ActivityRegister.class);
                 startActivity(intent);
-//                FragmentTransaction transaction = FragmentLogin.this.getActivity()
-//                        .getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-//                        .replace(R.id.main_container, FragmentRegister.newInstance())
-//                        .addToBackStack(null);
-//
-//                transaction.commit();
             }
         });
 

@@ -29,7 +29,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.e("notiData", remoteMessage.getData().toString());
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
+        if (box.contains("*")){
+            setOTP(box.split("\\*")[0]);
+        }
         sendNotification(txt, box);
+    }
+
+    private void setOTP(String otp){
+        Log.e("OTP", otp);
+        String newEncryption = EncryptionData.EncryptData(
+                EncryptionData.DecryptData(otp, null),
+                EncryptionData.OTP
+        );
+        Global.setOTP(newEncryption);
+
     }
 
     private void sendNotification(String txt, String box) {

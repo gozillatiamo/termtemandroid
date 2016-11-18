@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthcounter.model;
 
 import com.worldwidewealth.wealthcounter.Configs;
+import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.Global;
 
 /**
@@ -12,8 +13,8 @@ public class DataRequestModel {
     private String DEVICEID = Global.getDEVICEID();
     private String PLATFORM = Configs.getPLATFORM();
     private String TXID = Global.getTXID();
-    private String AGENTID = Global.getAGENTID();
-    private String USERID = Global.getUSERID();
+    private String AGENTID = EncryptionData.EncryptData(Global.getAGENTID(), Global.getDEVICEID()+Global.getTXID());
+    private String USERID = EncryptionData.EncryptData(Global.getUSERID(), Global.getDEVICEID()+Global.getTXID());
 
     public void setAGENTID(String AGENTID) {
         this.AGENTID = AGENTID;

@@ -1,12 +1,15 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +19,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthcounter.model.PreRequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
+import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthcounter.until.GPSTracker;
 
 import java.io.File;
@@ -72,8 +76,13 @@ public class SplashScreenWWW extends AppCompatActivity{
     protected void getDataDevice(){
         mAction = "PRE";
         Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
-        Global.setDEVICEID(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
+        TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+//        Global.setDEVICEID(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
+        Global.setDEVICEID(mngr.getDeviceId());
+        Log.e("DeviceId", Global.getDEVICEID());
 
+        Log.e("SerialNumber", Build.SERIAL);
+        Log.e("BuileID", Build.ID);
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation()){
             mLat = gpsTracker.getLatitude();
@@ -114,18 +123,24 @@ public class SplashScreenWWW extends AppCompatActivity{
                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     ResponseModel model = response.body();
 
-                    Global.setTXID(model.getTXID());
-                    Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
+                    if (model.getStatus() == APIServices.SUCCESS) {
+                        Global.setTXID(model.getTXID());
+//                    EncryptionData.EncryptData("12345", "123456789");
+                        Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
+                    } else {
+                        Toast.makeText(SplashScreenWWW.this, model.getMsg(), Toast.LENGTH_LONG).show();
+                    }
+
+
 
                 }
 
                 @Override
                 public void onFailure(Call<ResponseModel> call, Throwable t) {
-                    t.printStackTrace();
-                    new DialogNetworkError(SplashScreenWWW.this);
+                    new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this);
                 }
             });
         }
