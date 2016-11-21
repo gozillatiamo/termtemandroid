@@ -61,7 +61,8 @@
         <activity android:name=".game.ActivityGame" />
         <activity android:name=".SplashScreenCounter" />
         <activity android:name=".ActivityRegister" />
-        <activity android:name=".dashboard.topup.ActivityTopup"></activity>
+        <activity android:name=".dashboard.topup.ActivityTopup" />
+        <activity android:name=".dashboard.report.ActivityReport"></activity>
     </application>
 
 </manifest>

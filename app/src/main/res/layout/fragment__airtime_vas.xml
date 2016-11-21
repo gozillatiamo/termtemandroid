@@ -14,8 +14,6 @@
             android:id="@+id/topup_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorPrimary"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             app:tabGravity="fill"

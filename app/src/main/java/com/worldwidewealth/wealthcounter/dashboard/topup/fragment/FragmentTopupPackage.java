@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -95,6 +96,8 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initPageTopup(){
+        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+
         Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
                     new LoadButtonRequestModel(mCarrier)
                 ));
@@ -143,6 +146,16 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onClick(View v) {
 
+                String phoneNumber = mHolder.mEditPhone.getText().toString();
+
+                if (phoneNumber.length() != 10){
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.please_phone_topup_error)
+                            .setPositiveButton(R.string.confirm, null)
+                            .show();
+                    return;
+                }
+
                 if (mAmt == 0){
                     AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                             .setMessage(R.string.please_choice_topup)
@@ -189,20 +202,34 @@ public class FragmentTopupPackage extends  Fragment{
         mHolder.mBtnTopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogCounterAlert.DialogProgress(getContext());
+                new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
                 Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                         new GetOTPRequestModel()));
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+                        String responseStr = null;
+                        try {
+                            responseStr = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        String converted = Until.ConvertJsonEncode(responseStr);
+                        String responDecode = Until.decode(converted);
+                        Log.e("strResponse", converted);
+                        Log.e("strDecode", responDecode);
 
                         Thread thread = new Thread() {
                             @Override
                             public void run() {
 
                                     while(Global.getOTP() == null) {
-//                                        sleep(1000);
+                                        try {
+                                            sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                         Log.e("NEWOTP", "null");
                                     }
 
@@ -210,6 +237,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                                     Global.setOTP(null);
                                     DialogCounterAlert.DialogProgress.dismiss();
+
 
                             }
                         };
@@ -303,6 +331,7 @@ public class FragmentTopupPackage extends  Fragment{
         private Button mBtnNext, mBtnTopup;
         private TextView mTextPrice;
         private ImageView mLogoService;
+        private EditText mEditPhone;
         public ViewHolder(View itemview){
 //            mViewPage = (ViewPager) itemview.findViewById(R.id.viewpager);
 //            mTab = (TabLayout) itemview.findViewById(R.id.tab_package);
@@ -310,6 +339,7 @@ public class FragmentTopupPackage extends  Fragment{
             mBtnTopup = (Button) itemview.findViewById(R.id.btn_topup);
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
+            mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
 
         }
     }

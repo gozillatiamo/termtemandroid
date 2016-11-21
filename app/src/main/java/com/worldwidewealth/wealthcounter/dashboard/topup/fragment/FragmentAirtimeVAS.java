@@ -2,6 +2,7 @@ package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.topup.adapter.AdapterPageTopup;
+import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 /**
@@ -22,8 +24,13 @@ public class FragmentAirtimeVAS extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
     private String mData;
+    private static int sTabColor = R.color.colorTabAirtime;
     private static final String DATA = "data";
     private AdapterPageTopup mAdapterPageTopup;
+
+    private static final int AIRTIME = 0;
+    private static final int VAS = 1;
+
     public static Fragment newInstance(String data) {
         Bundle bundle = new Bundle();
         FragmentAirtimeVAS fragmentAirtimeVAS = new FragmentAirtimeVAS();
@@ -47,7 +54,14 @@ public class FragmentAirtimeVAS extends Fragment {
             mHolder = (ViewHolder) rootView.getTag();
         }
 
-        initChoiceTopup();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initChoiceTopup();
+                DialogCounterAlert.DialogProgress.dismiss();
+            }
+        },1000);
         return rootView;
     }
 
@@ -76,6 +90,35 @@ public class FragmentAirtimeVAS extends Fragment {
             }
         });
         mHolder.mTab.setupWithViewPager(mHolder.mPager);
+        mHolder.mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int tabCurrent = tab.getPosition();
+                switch (tabCurrent){
+                    case AIRTIME:
+                        setsTabColor(R.color.colorTabAirtime);
+                        break;
+                    case VAS:
+                        setsTabColor(R.color.colorTabVAS);
+                        break;
+                }
+
+                mHolder.mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
+                mHolder.mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
+                        getResources().getColor(getsTabColor()));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+
+        });
 
         for(int i=0; i < mHolder.mTab.getTabCount(); i++) {
             View tab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(i);
@@ -92,12 +135,23 @@ public class FragmentAirtimeVAS extends Fragment {
         }
     }
 
+    public static int getsTabColor() {
+        return sTabColor;
+    }
+
+    public static void setsTabColor(int sTabColor) {
+        FragmentAirtimeVAS.sTabColor = sTabColor;
+    }
+
     private class ViewHolder{
 
         private TabLayout mTab;
         private ViewPager mPager;
         public ViewHolder(View itemView){
             mTab = (TabLayout) itemView.findViewById(R.id.topup_tab);
+            mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
+            mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
+                    getResources().getColor(getsTabColor()));
             mPager = (ViewPager) itemView.findViewById(R.id.topup_pager);
         }
     }

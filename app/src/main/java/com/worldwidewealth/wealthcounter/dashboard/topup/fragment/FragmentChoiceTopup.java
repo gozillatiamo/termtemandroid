@@ -97,8 +97,11 @@ public class FragmentChoiceTopup extends Fragment{
             textProductItem = (TextView) view.findViewById(R.id.txt_product_item);
             textCurrency = (TextView) view.findViewById(R.id.txt_currency);
 
-            textProductItem.setTextColor(getResources().getColor(R.color.colorPrimary));
-            textCurrency.setTextColor(getResources().getColor(R.color.colorPrimary));
+            if (getParentFragment() instanceof FragmentAirtimeVAS) {
+                FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS)getParentFragment();
+                textProductItem.setTextColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
+                textCurrency.setTextColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
+            }
             nowAmt = ((LoadButtonResponseModel) parent.getItemAtPosition(position)).getPRODUCT_PRICE();
         }
 
@@ -125,7 +128,7 @@ public class FragmentChoiceTopup extends Fragment{
 
             textProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
             textCurrency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-
+            previousSelectedPosition = -1;
         }
 
     }

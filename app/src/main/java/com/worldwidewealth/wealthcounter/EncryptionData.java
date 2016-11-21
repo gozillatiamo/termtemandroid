@@ -79,14 +79,10 @@ public class EncryptionData {
 
             String strEncoded = Base64.encodeToString(encoded, Base64.NO_WRAP);
             String convertPlus = strEncoded.replace("+", "%2B");
-            Log.e("Encoded", strEncoded);
-            Log.e("EncodedSize", encoded.length+"");
-            Log.e("convertPlus", convertPlus);
             return convertPlus;
 
         } catch (Exception e){
             e.printStackTrace();
-            Log.e("Encoded", "null");
             return  null;
         }
 
@@ -119,12 +115,9 @@ public class EncryptionData {
             byte[] decoded = cipher.doFinal(rbData);
             String strDecode = new String(decoded, Charset.forName("UTF8"));
             String convertDecode = strDecode.concat(";");
-            Log.e("Decoded", strDecode);
-            Log.e("convertDecode", convertDecode);
             return strDecode;
         } catch (Exception e){
             e.printStackTrace();
-            Log.e("Decoded", "null");
             return  null;
         }
     }
@@ -132,64 +125,15 @@ public class EncryptionData {
     static private boolean InitKey(String strKey) {
         try
         {
-/*
-            m_Key = new byte[24];
-            m_IV = new byte[24];
-*/
-
-/*
-            char[] strArrayBase64 = strKeyBase64.toCharArray();
-            Log.e("strKeyBase64Size", strArrayBase64.length+"");
-            for (int i = 0; i < strArrayBase64.length; i++){
-
-                Log.e("strKeyBase64"+i, strArrayBase64[i]+"");
-                if (i == 12){
-                    Log.e("13", "13");
-                }
-            }
-*/
-
-//            byte[] bp = strKey.getBytes(characterSet);
-//            Log.e("BPSize", bp.length+"");
-//            for (int i = 0; i < bp.length; i++){
-//                Log.e("BP"+i, bp[i]+"");
-//            }
 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(strKey.getBytes(characterSet), 0, strKey.length());
             byte[] sha512hash = md.digest();
-/*
-            String sha512 = Base64.encodeToString(sha512hash, Base64.NO_WRAP);
-            sha512hash = sha512.getBytes(characterSet);
-*/
-            Log.e("sha1hash", Base64.encodeToString(sha512hash, Base64.NO_WRAP));
-            Log.e("sha1", sha512hash.length+"");
-            for (int i = 0; i < sha512hash.length; i++){
-                Log.e("sha512_"+i, sha512hash[i]+"");
-            }
-
             m_Key = Arrays.copyOf(sha512hash, 8);
             m_IV = Arrays.copyOfRange(sha512hash, 8, 16);
 
-            for (int i = 0; i < m_Key.length; i++)
-                Log.e("m_Key_"+i, m_Key[i]+"");
-
-            for (int i = 0; i < m_IV.length; i++)
-                Log.e("m_IV_"+i, m_IV[i]+"");
 
 
-
-/*
-            int i;
-            for (i = 0; i < 24; i++)
-                m_Key[i] = sha512hash[i];
-
-            for (i = 24; i < 48; i++)
-                m_IV[i - 24] = sha512hash[i];
-
-            Log.e("m_Key", Base64.encodeToString(m_Key, Base64.DEFAULT));
-            Log.e("m_IV", Base64.encodeToString(m_IV, Base64.DEFAULT));
-*/
             return true;
         }
         catch (Exception e)

@@ -100,6 +100,7 @@
     <string name="add_credit">Add Credit Line</string>
     <string name="support">Support</string>
     <string name="title_topup">Mobile Topup</string>
+    <string name="title_report">Mobile Report</string>
     <string name="amount">Amount :</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">Carrier :</string>
@@ -118,7 +119,7 @@
     <string name="please_choice_topup">กรุณาเลือกจำรวนที่ท่านต้องการจะเติม</string>
     <string name="register">ลงทะเบียน</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
-
+    <string name="please_phone_topup_error">หมายเลขโทรศัพท์ไม่ถูกต้อง</string>
 
 
     <string-array name="str_list_dashboard">

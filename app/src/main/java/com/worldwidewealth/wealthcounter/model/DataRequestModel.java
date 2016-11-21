@@ -13,8 +13,12 @@ public class DataRequestModel {
     private String DEVICEID = Global.getDEVICEID();
     private String PLATFORM = Configs.getPLATFORM();
     private String TXID = Global.getTXID();
-    private String AGENTID = EncryptionData.EncryptData(Global.getAGENTID(), Global.getDEVICEID()+Global.getTXID());
-    private String USERID = EncryptionData.EncryptData(Global.getUSERID(), Global.getDEVICEID()+Global.getTXID());
+    private String AGENTID = EncryptionData.EncryptData(
+            EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()),
+            Global.getDEVICEID()+Global.getTXID());
+    private String USERID = EncryptionData.EncryptData(
+            EncryptionData.DecryptData(Global.getUSERID(),
+                    Global.getTXID()), Global.getDEVICEID()+Global.getTXID());
 
     public void setAGENTID(String AGENTID) {
         this.AGENTID = AGENTID;

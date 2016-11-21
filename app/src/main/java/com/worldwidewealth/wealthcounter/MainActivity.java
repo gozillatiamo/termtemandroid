@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.internal.Excluder;
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
 import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
@@ -78,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
+                Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                finish();
+*/
 
                 mPhone = mHolder.mPhone.getText().toString();
                 mPassword = mHolder.mPassword.getText().toString();
@@ -107,17 +115,22 @@ public class MainActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         DialogCounterAlert.DialogProgress.dismiss();
                         String strResponse = null;
+                        ResponseModel responseModel = null;
                         try {
                            strResponse = response.body().string();
-                        } catch (IOException e) {
+                            JsonParser jsonParser = new JsonParser();
+
+                            JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
+                            responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        if (!(strResponse instanceof String)){
+                        if (responseModel != null){
                             Log.e("ResponseModel", "true");
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
-                            JsonObject jsonObject = gson.toJsonTree(response.body()).getAsJsonObject();
-                            ResponseModel responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+
                             String[] strRegisDevice = responseModel.getMsg().split(":");
                             if (strRegisDevice.length > 1){
                                 registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
@@ -137,9 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
                             //String json = gson.toJson(responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                            EncryptionData.DecryptData(loginResponseModel.getAGENTID(), Global.getDEVICEID()+Global.getTXID());
-                            Global.setUSERID(EncryptionData.DecryptData(loginResponseModel.getUSERID(), loginResponseModel.getAGENTID()+Global.getTXID()));
-                            Global.setAGENTID(EncryptionData.DecryptData(loginResponseModel.getAGENTID(), loginResponseModel.getAGENTID()+Global.getTXID()));
+                            Global.setUSERID(loginResponseModel.getUSERID());
+                            Global.setAGENTID(loginResponseModel.getAGENTID());
                             Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);

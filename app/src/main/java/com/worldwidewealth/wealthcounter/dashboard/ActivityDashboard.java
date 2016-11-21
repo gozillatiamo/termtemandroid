@@ -26,6 +26,7 @@ import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
+import com.worldwidewealth.wealthcounter.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthcounter.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
@@ -90,6 +91,8 @@ public class ActivityDashboard extends AppCompatActivity{
 
     }
 
+
+
     private void initData(){
         Until.setBalanceWallet(mHolder.mTextBalanceInteger, mHolder.mTextBalanceDecimal);
     }
@@ -106,6 +109,15 @@ public class ActivityDashboard extends AppCompatActivity{
                 Intent intent = new Intent(ActivityDashboard.this, ActivityTopup.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
+            }
+        });
+
+        mHolder.mMenuReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -201,13 +213,14 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup;
+        private CardView mMenuTopup, mMenuReport;
         private Button mBtnForgotPassword;
         private View mIncludeMyWallet;
         private TextView mTextBalanceInteger, mTextBalanceDecimal;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mMenuTopup = (CardView) view.findViewById(R.id.menu_topup);
+            mMenuReport = (CardView) view.findViewById(R.id.menu_report);
             mBtnForgotPassword = (Button) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mTextBalanceDecimal = (TextView) mIncludeMyWallet.findViewById(R.id.txt_balance_decimal);

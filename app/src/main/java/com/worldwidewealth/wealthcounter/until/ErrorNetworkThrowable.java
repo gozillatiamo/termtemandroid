@@ -55,15 +55,16 @@ public class ErrorNetworkThrowable extends Throwable {
             }
             Log.e("FilePath", path.getAbsolutePath());
             final File file = new File(path, "WealthCounterError.txt");
-//
+
 
             String error = DateFormat.getDateTimeInstance().format(new Date()) + "\n";
             Writer writer = new StringWriter();
             PrintWriter printWriter = new PrintWriter(writer);
             printStackTrace(printWriter);
-            error += writer.toString() + "\n\n";
-            OutputStreamWriter out = new OutputStreamWriter(MyApplication.getContext().openFileOutput(file.getAbsolutePath(), Context.MODE_APPEND));
-            out.write(error);
+            error += writer.toString();
+
+            OutputStreamWriter out = new OutputStreamWriter(MyApplication.getContext().openFileOutput("WealthCounterError.txt", Context.MODE_APPEND));
+            out.append("\n\n" + error);
             out.close();
             Log.e("TrackError", "Save Done");
         }

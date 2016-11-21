@@ -56,17 +56,6 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         List<LoadButtonResponseModel> modelList = (List<LoadButtonResponseModel>)  gson.fromJson(responDecode, listType);
         int i = 0;
         for (LoadButtonResponseModel model : modelList){
-            Log.e(i+"",
-                    "getCARRIER_CODE: " + model.getCARRIER_CODE() + "\n" +
-                    "getCREATED_BY: " + model.getCREATED_BY() + "\n" +
-                    "getPRODUCT_ITEM: " + model.getPRODUCT_ITEM() + "\n" +
-                    "getPRODUCT_TYPE: " + model.getPRODUCT_TYPE() + "\n" +
-                    "getTXID: " + model.getTXID() + "\n" +
-                    "getUPDATE_BY: " + model.getUPDATE_BY() + "\n" +
-                    "getACTIVE: " + model.getACTIVE() + "\n" +
-                    "getCREATED_DATE: " + model.getCREATED_DATE() + "\n" +
-                    "getPRODUCT_PRICE: " + model.getPRODUCT_PRICE() + "\n" +
-                    "getSORT_NO: " + model.getSORT_NO());
             i++;
 
             switch (model.getPRODUCT_TYPE()){

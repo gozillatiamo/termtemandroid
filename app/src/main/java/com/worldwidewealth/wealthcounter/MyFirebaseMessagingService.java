@@ -36,11 +36,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void setOTP(String otp){
-        Log.e("OTP", otp);
-        String newEncryption = EncryptionData.EncryptData(
-                EncryptionData.DecryptData(otp, null),
-                EncryptionData.OTP
-        );
+
+        String newEncryption = EncryptionData.EncryptData(otp, Global.getAGENTID());
+        Log.e("OTP", newEncryption);
         Global.setOTP(newEncryption);
 
     }
