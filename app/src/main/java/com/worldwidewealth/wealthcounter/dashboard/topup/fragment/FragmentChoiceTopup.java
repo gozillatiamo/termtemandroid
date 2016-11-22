@@ -3,6 +3,7 @@ package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class FragmentChoiceTopup extends Fragment{
     private List<LoadButtonResponseModel> mDataList;
     private TextView textProductItem = null;
     private TextView textCurrency = null;
+    private CardView mBtnChoice;
 
 
     public FragmentChoiceTopup(List datalist){
@@ -45,6 +47,21 @@ public class FragmentChoiceTopup extends Fragment{
         mGrid = new GridView(getActivity());
         initGrid();
         return mGrid;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        clearSelected();
+        previousSelectedPosition = -1;
+        Fragment fragment = getParentFragment().getParentFragment();
+
+        if (fragment instanceof FragmentTopupPackage) {
+
+            ((FragmentTopupPackage) fragment).setAmt(0);
+
+        }
+
     }
 
     private void initGrid(){
@@ -96,11 +113,13 @@ public class FragmentChoiceTopup extends Fragment{
             if (previousSelectedPosition == position) return;
             textProductItem = (TextView) view.findViewById(R.id.txt_product_item);
             textCurrency = (TextView) view.findViewById(R.id.txt_currency);
+            mBtnChoice = (CardView) view.findViewById(R.id.btn_choice);
 
             if (getParentFragment() instanceof FragmentAirtimeVAS) {
                 FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS)getParentFragment();
-                textProductItem.setTextColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
-                textCurrency.setTextColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
+                textProductItem.setTextColor(getResources().getColor(android.R.color.white));
+                textCurrency.setTextColor(getResources().getColor(android.R.color.white));
+                mBtnChoice.setCardBackgroundColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
             }
             nowAmt = ((LoadButtonResponseModel) parent.getItemAtPosition(position)).getPRODUCT_PRICE();
         }
@@ -122,12 +141,15 @@ public class FragmentChoiceTopup extends Fragment{
 
         Log.e("previousSelected", previousSelectedPosition+"");
         if (previousSelectedPosition != -1){
-            View previousSelectedView = (View) mGrid.getChildAt(previousSelectedPosition);
+            View previousSelectedView = (View) ((GridView)getView()).getChildAt(previousSelectedPosition);
             textProductItem = (TextView) previousSelectedView.findViewById(R.id.txt_product_item);
             textCurrency = (TextView) previousSelectedView.findViewById(R.id.txt_currency);
+            mBtnChoice = (CardView) previousSelectedView.findViewById(R.id.btn_choice);
+
 
             textProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
             textCurrency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
+            mBtnChoice.setCardBackgroundColor(getResources().getColor(android.R.color.white));
             previousSelectedPosition = -1;
         }
 

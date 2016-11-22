@@ -1,7 +1,15 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.content.ContentValues;
 import android.util.Base64;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
+import com.worldwidewealth.wealthcounter.until.Until;
+
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
@@ -15,16 +23,18 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import okhttp3.ResponseBody;
+
 /**
  * Created by MyNet on 1/11/2559.
  */
 
 public class EncryptionData {
 
-    private static final String DEFAULTKEY = "WWW$2oi6-0o1www";
-    private static final String OTPKEY = "OTP$2oi6-0o1otp";
+    public static final String ASRESPONSEMODEL = "asresponsemodel";
+    public static final String STRMODEL = "strmodel";
 
-    public static final String OTP = "otp";
+
 
     private static byte[] m_Key;
     private static byte[] m_IV;
@@ -114,8 +124,8 @@ public class EncryptionData {
             cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
             byte[] decoded = cipher.doFinal(rbData);
             String strDecode = new String(decoded, Charset.forName("UTF8"));
-            String convertDecode = strDecode.concat(";");
-            return strDecode;
+            String[] convertDecode = strDecode.split(";");
+            return convertDecode[0];
         } catch (Exception e){
             e.printStackTrace();
             return  null;
@@ -141,5 +151,38 @@ public class EncryptionData {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static ContentValues getModel(ResponseBody response){
+        ContentValues resultvalues = new ContentValues();
+        ResponseModel responseModel = null;
+        Gson gson = new Gson();
+        String strRespone = null;
+        try {
+            strRespone = response.string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            responseModel = gson.fromJson(strRespone, ResponseModel.class);
+        }catch (JsonSyntaxException e){
+            e.printStackTrace();
+        }
+
+        if (responseModel != null){
+            resultvalues.put(ASRESPONSEMODEL, true);
+            resultvalues.put(STRMODEL, strRespone);
+        } else {
+            String converted = Until.ConvertJsonEncode(strRespone);
+            String responDecode = Until.decode(converted);
+            Log.e("responDecode", responDecode);
+            resultvalues.put(ASRESPONSEMODEL, false);
+            resultvalues.put(STRMODEL, responDecode);
+
+        }
+
+
+        return resultvalues;
     }
 }

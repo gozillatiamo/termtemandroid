@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +31,7 @@ import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupS
 import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthcounter.model.ChangePasswordRequestModel;
-import com.worldwidewealth.wealthcounter.model.LogoutRequestModel;
+import com.worldwidewealth.wealthcounter.model.DataRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.Until;
@@ -72,8 +71,9 @@ public class ActivityDashboard extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        Call<ResponseBody> call = services.LOGOUT(new LogoutRequestModel());
+
+        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
+                new DataRequestModel()));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -88,7 +88,7 @@ public class ActivityDashboard extends AppCompatActivity{
                 t.printStackTrace();
             }
         });
-
+        super.onDestroy();
     }
 
 
@@ -160,7 +160,7 @@ public class ActivityDashboard extends AppCompatActivity{
                             Toast.makeText(ActivityDashboard.this, R.string.password_not_same, Toast.LENGTH_LONG).show();
                         } else {
                             Call<ResponseModel> call = services.CHANGEPASSWORD(new RequestModel(APIServices.ACTIONCHANGEPASSWORD,
-                                    new ChangePasswordRequestModel(EncryptionData.EncryptData(editNewPass.getText().toString(), null))
+                                    new ChangePasswordRequestModel(EncryptionData.EncryptData(editNewPass.getText().toString(), Global.getDEVICEID()+Global.getTXID()))
                             ));
 
                             call.enqueue(new Callback<ResponseModel>() {

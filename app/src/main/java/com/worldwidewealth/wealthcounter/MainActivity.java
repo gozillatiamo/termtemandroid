@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("LoginData:", "action:LOGIN" + "\n"+
                         "DEVICEID:" + Global.getDEVICEID() + "\n" +
                         "PLATFORM:" + Configs.getPLATFORM() + "\n" +
-                        "USERNAME:" + mPhone + "\n" +
+                        "USERNAME:" + mPhone.replace(" ", "") + "\n" +
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getDEVICEID(),
                         Configs.getPLATFORM(),
-                        EncryptionData.EncryptData(mPhone, Global.getDEVICEID()+Global.getTXID()),
+                        EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
                         EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
                         Global.getTXID())));
 
@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
                             Global.setUSERID(loginResponseModel.getUSERID());
                             Global.setAGENTID(loginResponseModel.getAGENTID());
+                            Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
                             Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);

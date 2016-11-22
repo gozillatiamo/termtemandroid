@@ -37,5 +37,9 @@ public class DialogCounterAlert {
                 progressDialog.dismiss();
             }
         }
+
+        public static boolean isShow(){
+            return progressDialog.isShowing();
+        }
     }
 }

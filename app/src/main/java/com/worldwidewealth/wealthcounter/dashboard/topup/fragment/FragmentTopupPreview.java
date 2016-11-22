@@ -1,33 +1,23 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.model.PreviewResponseModel;
+import com.worldwidewealth.wealthcounter.model.TopupPreviewResponseModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.text.NumberFormat;
-import java.util.Locale;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -38,7 +28,7 @@ public class FragmentTopupPreview extends Fragment {
     private ViewHolder mHolder;
     private APIServices service;
     private String mData;
-    private PreviewResponseModel mModel;
+    private TopupPreviewResponseModel mModel;
     private NumberFormat format = NumberFormat.getInstance();
     private static final String DATA = "data";
     public static Fragment newInstance(String data){
@@ -77,12 +67,37 @@ public class FragmentTopupPreview extends Fragment {
         return rootView;
     }
 
-    private void transferData(){
-        String converted = Until.ConvertJsonEncode(mData);
-        String responDecode = Until.decode(converted);
-        Log.e("strDecodePreview", responDecode);
+    @Override
+    public void onStart() {
+        super.onStart();
+        initBackPress();
+    }
 
-        mModel = new Gson().fromJson(responDecode, PreviewResponseModel.class);
+    private void transferData(){
+        mModel = new Gson().fromJson(mData, TopupPreviewResponseModel.class);
+
+    }
+
+    private void initBackPress(){
+        this.getView().setFocusableInTouchMode(true);
+        this.getView().requestFocus();
+        this.getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    if (getParentFragment() instanceof FragmentTopupPackage){
+                        FragmentTopupPackage fragmentTopupPackage = (FragmentTopupPackage)getParentFragment();
+                        fragmentTopupPackage.onBackPress();
+                        fragmentTopupPackage.getChildFragmentManager().popBackStack();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } );
 
     }
 
@@ -92,7 +107,13 @@ public class FragmentTopupPreview extends Fragment {
         mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));
         mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
         mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
-        mHolder.mTextBalance.setText(format.format(Global.getBALANCE() + mModel.getBALANCE()));
+        mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
+    }
+
+    public boolean canTopup(){
+        if (mModel.getBALANCE() < 0) return false;
+
+        return true;
     }
 
 

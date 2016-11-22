@@ -4,7 +4,7 @@ package com.worldwidewealth.wealthcounter.model;
  * Created by MyNet on 16/11/2559.
  */
 
-public class PreviewResponseModel {
+public class TopupPreviewResponseModel {
     private double AMOUNT;
     private String COMMISSION_RATE;
     private double COMMISSION_AMOUNT;

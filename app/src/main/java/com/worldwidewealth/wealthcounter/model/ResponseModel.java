@@ -10,6 +10,15 @@ public class ResponseModel{
     private int Status;
     private String Msg;
     private String TXID;
+    private String ff;
+
+    public String getFf() {
+        return ff;
+    }
+
+    public void setFf(String ff) {
+        this.ff = ff;
+    }
 
     public String getMsg() {
         return Msg;

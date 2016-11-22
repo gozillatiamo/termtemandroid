@@ -120,6 +120,8 @@
     <string name="register">ลงทะเบียน</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
     <string name="please_phone_topup_error">หมายเลขโทรศัพท์ไม่ถูกต้อง</string>
+    <string name="save_slip_success">บันทึก E-Slip สำเร็จ!!!</string>
+    <string name="save_slip_fail">บันทึก E-Slip ล้มเหลว!!!</string>
 
 
     <string-array name="str_list_dashboard">

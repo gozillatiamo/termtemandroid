@@ -46,6 +46,10 @@ public class FragmentAirtimeVAS extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mData = this.getArguments().getString(DATA);
+        if (!DialogCounterAlert.DialogProgress.isShow()){
+            new DialogCounterAlert.DialogProgress(getContext());
+        }
+
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment__airtime_vas, container, false);
             mHolder = new ViewHolder(rootView);
@@ -82,6 +86,9 @@ public class FragmentAirtimeVAS extends Fragment {
                                 position);
                 fragmentChoiceTopup.clearSelected();
                 ((FragmentTopupPackage)getParentFragment()).setAmt(0);
+
+                setTabViewColor(position);
+
             }
 
             @Override
@@ -93,23 +100,13 @@ public class FragmentAirtimeVAS extends Fragment {
         mHolder.mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabCurrent = tab.getPosition();
-                switch (tabCurrent){
-                    case AIRTIME:
-                        setsTabColor(R.color.colorTabAirtime);
-                        break;
-                    case VAS:
-                        setsTabColor(R.color.colorTabVAS);
-                        break;
-                }
 
-                mHolder.mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
-                mHolder.mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
-                        getResources().getColor(getsTabColor()));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                View viewTab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(tab.getPosition());
+                viewTab.setBackgroundColor(getResources().getColor(android.R.color.white));
 
             }
 
@@ -133,6 +130,29 @@ public class FragmentAirtimeVAS extends Fragment {
 
             tab.requestLayout();
         }
+
+        setTabViewColor(0);
+
+    }
+
+    private void setTabViewColor(int position){
+
+        switch (position){
+            case AIRTIME:
+                setsTabColor(R.color.colorTabAirtime);
+                break;
+            case VAS:
+                setsTabColor(R.color.colorTabVAS);
+                break;
+        }
+
+        mHolder.mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
+        View viewTab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(position);
+        viewTab.setBackgroundColor(getResources().getColor(getsTabColor()));
+        mHolder.mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
+                getResources().getColor(android.R.color.white));
+
+
     }
 
     public static int getsTabColor() {

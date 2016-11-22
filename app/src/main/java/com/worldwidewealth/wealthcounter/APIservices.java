@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.worldwidewealth.wealthcounter.model.LogoutRequestModel;
 import com.worldwidewealth.wealthcounter.model.PreRequestModel;
 import com.worldwidewealth.wealthcounter.model.RegisterRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
@@ -40,6 +39,10 @@ public interface APIServices {
     public static final String ACTIONPREVIEW = "PREVIEW";
     public static final String ACTIONREGISTERDEVICE = "REGISTERDEVICE";
     public static final String ACTIONGETOTP = "GETOTP";
+    public static final String ACTIONSUBMITTOPUP = "SUBMITTOPUP";
+    public static final String ACTIONLOGOUT = "LOGOUT";
+    public static final String ACTIONESLIP = "ESLIP";
+    public static final String ACTIONSAVESLIP = "SAVESLIPE";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -64,7 +67,7 @@ public interface APIServices {
     Call<ResponseBody> LOGIN(@Body SignInRequestModel signInRequestModel);
 
     @POST("service.ashx")
-    Call<ResponseBody> LOGOUT(@Body LogoutRequestModel logoutRequestModel);
+    Call<ResponseBody> logout(@Body RequestModel requestModel);
 
     @POST("service.ashx")
     Call<ResponseModel> SIGNUP(@Body RegisterRequestModel registerRequestModel);
@@ -83,6 +86,16 @@ public interface APIServices {
 
     @POST("topupservice.ashx")
     Call<ResponseBody> getOTP(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<ResponseBody> submitTopup(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<ResponseBody> eslip(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<ResponseBody> saveSlip(@Body RequestModel requestModel);
+
 
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
