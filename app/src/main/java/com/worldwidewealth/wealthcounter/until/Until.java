@@ -2,6 +2,7 @@ package com.worldwidewealth.wealthcounter.until;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -20,12 +21,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.model.DataRequestModel;
+import com.worldwidewealth.wealthcounter.model.RequestModel;
+import com.worldwidewealth.wealthcounter.model.ResponseModel;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -46,6 +51,8 @@ import retrofit2.Retrofit;
  */
 
 public class Until {
+
+    public static final String KEYPF = "data";
 
     public static void initSpinnerCurrency(Context context, Spinner spinner) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency, android.R.layout.simple_spinner_item);
@@ -169,6 +176,28 @@ public class Until {
 
     private static String makeFragmentName(int viewId, int index) {
         return "android:switcher:" + viewId + ":" + index;
+    }
+
+    public static void setSharedPreferences(Activity activity, boolean remove){
+
+        SharedPreferences sharedPref = activity.getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (!remove) {
+            editor.putBoolean("LOGOUT", false);
+            editor.putString("AGENTID", Global.getAGENTID());
+            editor.putString("DEVICEID", Global.getDEVICEID());
+            editor.putString("TXID", Global.getTXID());
+            editor.putString("USERID", Global.getUSERID());
+        } else {
+            editor.putBoolean("LOGOUT", true);
+            editor.putString("AGENTID", null);
+            editor.putString("DEVICEID", null);
+            editor.putString("TXID", null);
+            editor.putString("USERID", null);
+        }
+
+        editor.commit();
+
     }
 
 }

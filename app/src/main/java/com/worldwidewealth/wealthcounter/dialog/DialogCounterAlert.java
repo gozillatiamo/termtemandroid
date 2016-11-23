@@ -12,7 +12,7 @@ import com.worldwidewealth.wealthcounter.R;
 
 public class DialogCounterAlert {
 
-    public DialogCounterAlert(Context context, String title, int msg){
+    public DialogCounterAlert(Context context, String title, String msg){
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(msg)

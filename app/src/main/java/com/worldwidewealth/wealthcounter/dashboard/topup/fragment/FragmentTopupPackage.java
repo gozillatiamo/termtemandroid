@@ -266,7 +266,7 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceSubmitToup(String responseStr){
 
         String converted = Until.ConvertJsonEncode(responseStr);
-        String responDecode = Until.decode(converted);
+        final String responDecode = Until.decode(converted);
         final TopupResponseModel model = new Gson().fromJson(responDecode, TopupResponseModel.class);
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -280,9 +280,6 @@ public class FragmentTopupPackage extends  Fragment{
                     }
                 }
 
-                serviceEslip(model.getTranid());
-
-/*
                 Call<ResponseBody> callSubmit = services.submitTopup(
                         new RequestModel(APIServices.ACTIONSUBMITTOPUP,
                                 new SubmitTopupRequestModel(String.valueOf(getmAmt()),
@@ -294,18 +291,28 @@ public class FragmentTopupPackage extends  Fragment{
                 callSubmit.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                        activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance()).commit();
+                        ContentValues responseValues = EncryptionData.getModel(response.body());
+                        if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                            ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
+                                    ResponseModel.class);
+
+                            DialogCounterAlert.DialogProgress.dismiss();
+                            if (responseModel.getFf().equals("")) {
+                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
+                            } else {
+                                serviceEslip(model.getTranid());
+                            }
+
+                        } else {
+
+                        }
+
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext());
                     }
                 });
-*/
 
             }
         }, postDelay);
@@ -324,9 +331,9 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-    private void serviceEslip(String transid){
+    private void serviceEslip(final String transid){
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTIONESLIP, new EslipRequestModel("0c406997-4217-4721-95a8-f24139453564")));
+        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTIONESLIP, new EslipRequestModel(transid)));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -339,7 +346,7 @@ public class FragmentTopupPackage extends  Fragment{
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
                     activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, "0c406997-4217-4721-95a8-f24139453564")).commit();
+                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
 
                 }
 

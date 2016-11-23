@@ -67,17 +67,20 @@ public class FragmentTopupPreview extends Fragment {
         return rootView;
     }
 
+/*
     @Override
     public void onStart() {
         super.onStart();
         initBackPress();
     }
+*/
 
     private void transferData(){
         mModel = new Gson().fromJson(mData, TopupPreviewResponseModel.class);
 
     }
 
+/*
     private void initBackPress(){
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
@@ -89,15 +92,24 @@ public class FragmentTopupPreview extends Fragment {
                 if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
 
                     if (getParentFragment() instanceof FragmentTopupPackage){
-                        FragmentTopupPackage fragmentTopupPackage = (FragmentTopupPackage)getParentFragment();
-                        fragmentTopupPackage.onBackPress();
-                        fragmentTopupPackage.getChildFragmentManager().popBackStack();
+
+                        fragmentPopBack(getParentFragment());
+
                         return true;
                     }
                 }
                 return false;
             }
         } );
+
+    }
+*/
+
+    public void fragmentPopBack(Fragment fragment){
+
+        FragmentTopupPackage fragmentTopupPackage = (FragmentTopupPackage)fragment;
+        fragmentTopupPackage.onBackPress();
+        fragmentTopupPackage.getChildFragmentManager().popBackStack();
 
     }
 

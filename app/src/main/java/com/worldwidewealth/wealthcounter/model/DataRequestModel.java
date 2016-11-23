@@ -20,6 +20,8 @@ public class DataRequestModel {
             EncryptionData.DecryptData(Global.getUSERID(), Global.getTXID()),
             Global.getDEVICEID()+Global.getTXID());
 
+
+
     public void setAGENTID(String AGENTID) {
         this.AGENTID = AGENTID;
     }

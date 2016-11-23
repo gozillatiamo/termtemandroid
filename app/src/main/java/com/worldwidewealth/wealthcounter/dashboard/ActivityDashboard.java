@@ -1,8 +1,10 @@
 package com.worldwidewealth.wealthcounter.dashboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.ArraySet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.Global;
@@ -50,6 +55,7 @@ public class ActivityDashboard extends AppCompatActivity{
     private AdapterDashboard mAdapter;
     private APIServices services;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +77,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-
+        super.onDestroy();
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
         call.enqueue(new Callback<ResponseBody>() {
@@ -81,6 +87,9 @@ public class ActivityDashboard extends AppCompatActivity{
                 Global.setUSERID("");
                 Global.setBALANCE(0.00);
                 Global.setTXID("");
+                Global.setDEVICEID("");
+                Until.setSharedPreferences(ActivityDashboard.this, true);
+
             }
 
             @Override
@@ -88,13 +97,12 @@ public class ActivityDashboard extends AppCompatActivity{
                 t.printStackTrace();
             }
         });
-        super.onDestroy();
+
     }
-
-
 
     private void initData(){
         Until.setBalanceWallet(mHolder.mTextBalanceInteger, mHolder.mTextBalanceDecimal);
+        Until.setSharedPreferences(this, false);
     }
 
     private void initToolbar(){
@@ -170,7 +178,7 @@ public class ActivityDashboard extends AppCompatActivity{
                                             alertDialog.dismiss();
                                             new DialogCounterAlert(ActivityDashboard.this,
                                                     response.body().getMsg(),
-                                                    R.string.change_password_success);
+                                                    getString(R.string.change_password_success));
                                         } else {
                                             new DialogNetworkError(ActivityDashboard.this);
 

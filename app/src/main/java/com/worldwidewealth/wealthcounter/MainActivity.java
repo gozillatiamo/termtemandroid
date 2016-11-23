@@ -185,20 +185,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerDevice(String msg, String agantId, String userId){
-        final DataRequestModel dataRequestModel = new DataRequestModel();
-        dataRequestModel.setAGENTID(agantId);
-        dataRequestModel.setUSERID(userId);
+        //final DataRequestModel dataRequestModel = new DataRequestModel();
+        Global.setAGENTID(agantId);
+        Global.setUSERID(userId);
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(msg)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, dataRequestModel));
+                        Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, new DataRequestModel()));
                         call.enqueue(new Callback<ResponseModel>() {
                             @Override
                             public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                                new DialogCounterAlert(MainActivity.this, getString(R.string.register), R.string.register_done);
+                                new DialogCounterAlert(MainActivity.this, getString(R.string.register), getString(R.string.register_done));
                             }
 
                             @Override

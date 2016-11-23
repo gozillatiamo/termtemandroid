@@ -43,6 +43,7 @@ public interface APIServices {
     public static final String ACTIONLOGOUT = "LOGOUT";
     public static final String ACTIONESLIP = "ESLIP";
     public static final String ACTIONSAVESLIP = "SAVESLIPE";
+    public static final String ACTIONSALERPT = "SALERPT";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -95,6 +96,9 @@ public interface APIServices {
 
     @POST("topupservice.ashx")
     Call<ResponseBody> saveSlip(@Body RequestModel requestModel);
+
+    @POST("topupservice.ashx")
+    Call<ResponseBody> salerpt(@Body RequestModel requestModel);
 
 
 
