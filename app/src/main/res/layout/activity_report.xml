@@ -26,13 +26,27 @@
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_report"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <TextView
+            android:id="@+id/txt_not_found_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_found_report"
+            android:layout_centerInParent="true"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/tertiary_text_dark"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_report"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

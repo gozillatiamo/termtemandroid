@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/color_bg_card"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:textStyle="bold"
         android:text="@string/please_select"
         />
@@ -31,6 +32,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorRed"
         android:textStyle="bold"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+
         android:text="@string/please_select"
 
         />

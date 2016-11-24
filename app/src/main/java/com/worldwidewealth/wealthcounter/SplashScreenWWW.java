@@ -69,29 +69,31 @@ public class SplashScreenWWW extends AppCompatActivity{
                     Global.setAGENTID(sharedPref.getString("AGENTID", null));
                     Global.setUSERID(sharedPref.getString("USERID", null));
                     Global.setDEVICEID(sharedPref.getString("DEVICEID", null));
+                    if (Global.getAGENTID() != null) {
+                        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Global.setAGENTID("");
+                                Global.setUSERID("");
+                                Global.setBALANCE(0.00);
+                                Global.setTXID("");
+                                Global.setDEVICEID("");
+                                Until.setSharedPreferences(SplashScreenWWW.this, true);
+                                getDataDevice();
+                                return;
+                            }
 
-                    Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Global.setAGENTID("");
-                            Global.setUSERID("");
-                            Global.setBALANCE(0.00);
-                            Global.setTXID("");
-                            Global.setDEVICEID("");
-                            Until.setSharedPreferences(SplashScreenWWW.this, true);
-                            getDataDevice();
-                        }
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            t.printStackTrace();
-                        }
-                    });
-
-                }else {
-                    getDataDevice();
                 }
+                getDataDevice();
+
             }
         };
         initFCM();

@@ -51,7 +51,7 @@
     <string name="payment">ชำระเงิน</string>
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
-    <string name="commission">Commission :</string>
+    <string name="commission">Commission</string>
     <string name="total">Total :</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
@@ -126,6 +126,8 @@
     <string name="search_form">ตั้งแต่</string>
     <string name="search_to">จนถึง</string>
     <string name="please_select">กรุณาเลือก</string>
+    <string name="pay_code">หมายเลขการชำระ :</string>
+    <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
 
 
     <string-array name="str_list_dashboard">

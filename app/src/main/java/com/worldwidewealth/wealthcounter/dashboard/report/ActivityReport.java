@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.R;
@@ -28,15 +30,21 @@ import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SalerptRequestModel;
+import com.worldwidewealth.wealthcounter.model.SalerptResponseModel;
 import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthcounter.until.SimpleDividerItemDecoration;
+import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,10 +102,11 @@ public class ActivityReport extends AppCompatActivity {
 
     private void initListReport(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mAdapter = new ReportAdapter(this);
+        mAdapter = new ReportAdapter(this, null);
         mHolder.mListReport.setLayoutManager(layoutManager);
-        mHolder.mListReport.setAdapter(mAdapter);
+        mHolder.mListReport.setAdapter(new AlphaInAnimationAdapter(mAdapter));
         mHolder.mListReport.addItemDecoration(new SimpleDividerItemDecoration(this));
+        salerptService(mPreviousDateFrom+"", mPeviousDateTo+"");
     }
 
     private void initSearchDialog(){
@@ -140,10 +149,8 @@ public class ActivityReport extends AppCompatActivity {
         builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String timeFrom = mPreviousDateFrom+"";
-                String timeTo = mPeviousDateTo+"";
-                Log.e("DateForm", mPreviousDateFrom + "");
-                Log.e("DateTo", mPeviousDateTo +"");
+                String timeFrom = (mPreviousDateFrom)+"";
+                String timeTo = (mPeviousDateTo)+"";
                 salerptService(timeFrom, timeTo);
             }
         });
@@ -168,6 +175,18 @@ public class ActivityReport extends AppCompatActivity {
                     new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg());
                 } else {
                     DialogCounterAlert.DialogProgress.dismiss();
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
+                    List<SalerptResponseModel> modelList = gson
+                            .fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
+                                    new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
+
+                    if (modelList.size() == 0){
+                        findViewById(R.id.txt_not_found_report).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.txt_not_found_report).setVisibility(View.GONE);
+                    }
+                    mAdapter.updateAll(modelList);
+
                 }
             }
 
