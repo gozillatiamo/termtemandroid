@@ -51,7 +51,7 @@
     <string name="payment">ชำระเงิน</string>
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
-    <string name="commission">Commission</string>
+    <string name="commission">Commission :</string>
     <string name="total">Total :</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
@@ -88,7 +88,7 @@
     <string name="dashboard_vouchers">Vouchers</string>
     <string name="dashboard_my_qr">My QR</string>
     <string name="dashboard_scan_qr">Scan QR</string>
-    <string name="not_have_account">"Don't have an account?"</string>
+    <string name="not_have_account">"คุณยังไม่มีบัญชีผู้ใช้งาน?"</string>
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
     <string name="first_name">ชื่อ</string>
@@ -96,7 +96,7 @@
     <string name="birth_day">วันเกิด</string>
     <string name="person_type">ประเภทบุคคล</string>
     <string name="create">สร้าง</string>
-    <string name="already_have_account">มีผู้ใช้งานนี้แล้ว</string>
+    <string name="already_have_account">คุณมีบัญชีผู้ใช้งานอยู่แล้ว</string>
     <string name="add_credit">Add Credit Line</string>
     <string name="support">ช่วยเหลือ</string>
     <string name="title_topup">Mobile Topup</string>

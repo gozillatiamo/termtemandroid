@@ -58,7 +58,7 @@ public class FragmentChoiceTopup extends Fragment{
 
         if (fragment instanceof FragmentTopupPackage) {
 
-            ((FragmentTopupPackage) fragment).setAmt(0);
+            ((FragmentTopupPackage) fragment).setAmt(0, null);
 
         }
 
@@ -108,7 +108,7 @@ public class FragmentChoiceTopup extends Fragment{
     private void setClickChoiceTopup(AdapterView parent, View view, int position){
 
         double nowAmt = 0;
-
+        String buttonId = null;
         if (position != -1) {
             if (previousSelectedPosition == position) return;
             textProductItem = (TextView) view.findViewById(R.id.txt_product_item);
@@ -121,14 +121,16 @@ public class FragmentChoiceTopup extends Fragment{
                 textCurrency.setTextColor(getResources().getColor(android.R.color.white));
                 mBtnChoice.setCardBackgroundColor(getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
             }
-            nowAmt = ((LoadButtonResponseModel) parent.getItemAtPosition(position)).getPRODUCT_PRICE();
+            LoadButtonResponseModel buttonResponseModel = (LoadButtonResponseModel) parent.getItemAtPosition(position);
+            nowAmt = buttonResponseModel.getPRODUCT_PRICE();
+            buttonId = buttonResponseModel.getTXID();
         }
 
         Fragment fragment = getParentFragment().getParentFragment();
 
         if (fragment instanceof FragmentTopupPackage) {
 
-            ((FragmentTopupPackage) fragment).setAmt(nowAmt);
+            ((FragmentTopupPackage) fragment).setAmt(nowAmt, buttonId);
         }
 
         clearSelected();

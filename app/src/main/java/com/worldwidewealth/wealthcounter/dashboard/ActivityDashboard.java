@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthcounter.dashboard;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.Global;
+import com.worldwidewealth.wealthcounter.MyApplication;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
@@ -41,6 +43,8 @@ import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +58,7 @@ public class ActivityDashboard extends AppCompatActivity{
     private ViewHolder mHolder;
     private AdapterDashboard mAdapter;
     private APIServices services;
+    private long userInteractionTime = 0;
 
 
     @Override
@@ -75,6 +80,7 @@ public class ActivityDashboard extends AppCompatActivity{
         getSupportActionBar().show();
     }
 
+    /*
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -99,6 +105,7 @@ public class ActivityDashboard extends AppCompatActivity{
         });
 
     }
+*/
 
     private void initData(){
         Until.setBalanceWallet(mHolder.mTextBalanceInteger, mHolder.mTextBalanceDecimal);

@@ -63,6 +63,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mPhone;
     private APIServices services;
     private double mAmt = 0.00;
+    private String mButtonID = null;
     private Handler mHandler;
 
     private static final String CARRIER = "carrier";
@@ -98,8 +99,9 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
 
-    public void setAmt(double price){
+    public void setAmt(double price, String buttonid){
         this.mAmt = price;
+        this.mButtonID = buttonid;
         NumberFormat format = NumberFormat.getInstance();
         mHolder.mTextPrice.setText(format.format(mAmt));
     }
@@ -140,7 +142,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initData(){
-        setAmt(mAmt);
+        setAmt(mAmt, null);
         switch (mCarrier){
             case APIServices.AIS:
                 mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
@@ -286,7 +288,8 @@ public class FragmentTopupPackage extends  Fragment{
                                         mCarrier,
                                         Global.getOTP(),
                                         mPhone,
-                                        model.getTranid())));
+                                        model.getTranid(),
+                                        mButtonID)));
                 Global.setOTP(null);
                 callSubmit.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -297,11 +300,8 @@ public class FragmentTopupPackage extends  Fragment{
                                     ResponseModel.class);
 
                             DialogCounterAlert.DialogProgress.dismiss();
-                            if (responseModel.getFf().equals("")) {
-                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
-                            } else {
-                                serviceEslip(model.getTranid());
-                            }
+
+                            serviceEslip(model.getTranid());
 
                         } else {
 
@@ -341,12 +341,19 @@ public class FragmentTopupPackage extends  Fragment{
                 if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                     ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
                     Toast.makeText(FragmentTopupPackage.this.getContext(), responseModel.getMsg(), Toast.LENGTH_LONG).show();
-                    byte[] imageByte = Base64.decode(responseModel.getFf(), Base64.NO_WRAP);
-                    DialogCounterAlert.DialogProgress.dismiss();
-                    AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    if (responseModel.getFf().equals("")) {
+
+                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
+
+                    } else {
+
+                        byte[] imageByte = Base64.decode(responseModel.getFf(), Base64.NO_WRAP);
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
+                        activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    }
 
                 }
 

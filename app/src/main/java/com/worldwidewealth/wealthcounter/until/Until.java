@@ -2,6 +2,7 @@ package com.worldwidewealth.wealthcounter.until;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -26,8 +27,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
+import com.worldwidewealth.wealthcounter.SplashScreenWWW;
+import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
 import com.worldwidewealth.wealthcounter.model.DataRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
@@ -43,7 +47,10 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Converter;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -151,8 +158,9 @@ public class Until {
 
     public static void setBalanceWallet(TextView balanceInteger, TextView balanceDecimal){
 
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
         String[] balance = format.format(Global.getBALANCE()).split("\\.");
         balanceInteger.setText(balance[0]);
         balanceDecimal.setText("."+balance[1]);
@@ -198,6 +206,41 @@ public class Until {
 
         editor.commit();
 
+    }
+
+    public static void logoutAPI(final Activity activity){
+        if (Global.getAGENTID() == null) return;
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
+                new DataRequestModel()));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Global.setAGENTID("");
+                Global.setUSERID("");
+                Global.setBALANCE(0.00);
+                Global.setTXID("");
+                Global.setDEVICEID("");
+                Until.setSharedPreferences(activity, true);
+//                Until.backToSignIn(activity);
+                activity.finish();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public static void backToSignIn(Activity activity){
+        Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("exit", true);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
 }

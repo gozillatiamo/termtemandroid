@@ -15,8 +15,9 @@ public class SubmitTopupRequestModel extends DataRequestModel{
     private String PHONENO;
     private String TRANID;
     private String OTP;
+    private String BUTTONID;
 
-    public SubmitTopupRequestModel(String AMT, String CARRIER, String OTP, String PHONENO, String TRANID) {
+    public SubmitTopupRequestModel(String AMT, String CARRIER, String OTP, String PHONENO, String TRANID, String BUTTONID) {
         Log.e("SubmitTopupRequest",
                 "AMT: " + AMT + "\n" +
                 "CARRIER: " + CARRIER + "\n" +
@@ -35,5 +36,6 @@ public class SubmitTopupRequestModel extends DataRequestModel{
         this.PHONENO = EncryptionData.EncryptData(PHONENO, Global.getDEVICEID()+TRANID);
 
         this.TRANID = TRANID;
+        this.BUTTONID = BUTTONID;
     }
 }

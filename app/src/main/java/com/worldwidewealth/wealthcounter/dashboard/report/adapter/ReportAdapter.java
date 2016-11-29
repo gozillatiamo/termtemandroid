@@ -46,19 +46,20 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        NumberFormat format = NumberFormat.getInstance();
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("th", "TH"));
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         holder.mTextPayCode.setText(getItem(position).getPAYCODE());
-        holder.mTextGrantTotal.setText(format.format(getItem(position).getGRANTTOTAL()));
+        holder.mTextCheckTotal.setText(format.format(getItem(position).getCHECKTOTAL()));
         Format formatter;
         formatter = new SimpleDateFormat("dd MMM yyyy - HH:mm", new Locale("th", "TH"));
         String strDate = formatter.format(getItem(position).getPAYMENT_DATE());
         holder.mTextDatePayment.setText(strDate);
-        holder.mTextComRate.setText(mContext.getString(R.string.commission) + "  " +
-                getItem(position).getCOMM_RATE() + "% :");
         holder.mTextComAmount.setText(format.format(getItem(position).getCOMM_AMT()));
         holder.mTextAmount.setText(format.format(getItem(position).getAMOUNT()));
+        holder.mTextBiller.setText(getItem(position).getBILLER());
+        holder.mTextPhoneNum.setText(getItem(position).getPHONENO());
+        holder.mTextTiltle.setText(mContext.getString(R.string.topup) + " " + getItem(position).getTYPE());
     }
 
     @Override
@@ -74,18 +75,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         return mModelList.get(position);
     }
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView mTextGrantTotal, mTextPayCode, mTextCarrier, mTextPhoneNum, mTextAmount
-                , mTextComRate, mTextComAmount, mTextDatePayment;
+        private TextView mTextCheckTotal, mTextPayCode, mTextBiller, mTextPhoneNum, mTextAmount
+                , mTextComAmount, mTextDatePayment, mTextTiltle;
         public ViewHolder(View itemView) {
             super(itemView);
             mTextAmount = (TextView) itemView.findViewById(R.id.txt_amount);
-            mTextCarrier = (TextView) itemView.findViewById(R.id.txt_carrier);
+            mTextBiller = (TextView) itemView.findViewById(R.id.txt_biller);
             mTextComAmount = (TextView) itemView.findViewById(R.id.txt_commission_amount);
-            mTextComRate = (TextView) itemView.findViewById(R.id.txt_commission_rate);
             mTextDatePayment = (TextView) itemView.findViewById(R.id.txt_payment_date);
-            mTextGrantTotal = (TextView) itemView.findViewById(R.id.txt_grant_total);
+            mTextCheckTotal = (TextView) itemView.findViewById(R.id.txt_check_total);
             mTextPayCode = (TextView) itemView.findViewById(R.id.txt_pay_code);
             mTextPhoneNum = (TextView) itemView.findViewById(R.id.txt_phone_number);
+            mTextTiltle = (TextView) itemView.findViewById(R.id.title_item);
         }
     }
 }

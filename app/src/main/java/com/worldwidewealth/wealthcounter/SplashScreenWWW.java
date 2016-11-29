@@ -51,6 +51,16 @@ public class SplashScreenWWW extends AppCompatActivity{
     private Handler handler;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            Log.e("exit", bundle.getBoolean("exit")+"");
+            if (bundle.getBoolean("exit")) this.finish();
+        }
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

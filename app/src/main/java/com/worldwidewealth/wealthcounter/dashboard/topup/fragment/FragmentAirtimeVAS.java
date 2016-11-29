@@ -85,7 +85,7 @@ public class FragmentAirtimeVAS extends Fragment {
                                 mHolder.mPager,
                                 position);
                 fragmentChoiceTopup.clearSelected();
-                ((FragmentTopupPackage)getParentFragment()).setAmt(0);
+                ((FragmentTopupPackage)getParentFragment()).setAmt(0, null);
 
                 setTabViewColor(position);
 

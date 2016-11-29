@@ -24,6 +24,7 @@ import com.worldwidewealth.wealthcounter.model.RegisterRequestModel;
 import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.until.CheckSyntaxData;
 
+import me.grantland.widget.AutofitTextView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -252,7 +253,8 @@ public class ActivityRegister extends AppCompatActivity {
         private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification;
         private Spinner mSpinnerTypePeople;
         private Toolbar mToolbar;
-        public ViewHolder(Activity view){
+        private AutofitTextView mBtnSignIn;
+        public ViewHolder(final Activity view){
 
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
             mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
@@ -267,6 +269,13 @@ public class ActivityRegister extends AppCompatActivity {
             mEditIdentification = (EditText) view.findViewById(R.id.edit_identification);
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            mBtnSignIn = (AutofitTextView) view.findViewById(R.id.btn_signin);
+            mBtnSignIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    view.finish();
+                }
+            });
         }
     }
 
