@@ -31,31 +31,33 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        Log.e("onActivityCreated", "true");
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        Log.e("onActivityStarted", "true");
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.e("onActivityResumed", "true");
-        if (canUseLeaving(activity)) LeavingOrEntering.activityResumed(activity);
+        if (canUseLeaving(activity)){
+
+            if (LeavingOrEntering.currentActivity == null ||
+                    activity != LeavingOrEntering.currentActivity) {
+                LeavingOrEntering.activityResumed(activity);
+            } else {
+                LeavingOrEntering.activityStopped(activity);
+            }
+        }
 
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        Log.e("onActivityPaused", "true");
 
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        Log.e("onActivityStopped", "true");
-        if (canUseLeaving(activity)) LeavingOrEntering.activityStopped(activity);
     }
 
     @Override
@@ -65,7 +67,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        Log.e("onActivityDestroyed", "true");
 
     }
 
@@ -77,6 +78,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         {
                 Log.e("currentActivity", "null");// Start the music!
             currentActivity = activity;
+
         }
 
         public static void activityStopped( Activity activity )

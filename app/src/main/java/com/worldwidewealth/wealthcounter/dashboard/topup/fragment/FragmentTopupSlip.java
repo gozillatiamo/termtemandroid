@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,16 +22,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.worldwidewealth.wealthcounter.APIServices;
+import com.worldwidewealth.wealthcounter.EncryptionData;
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.MyApplication;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthcounter.game.ActivityGame;
+import com.worldwidewealth.wealthcounter.model.DataRequestModel;
 import com.worldwidewealth.wealthcounter.model.EslipRequestModel;
+import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
 import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
+import com.worldwidewealth.wealthcounter.until.Until;
 
 import org.w3c.dom.Text;
 
@@ -73,12 +79,13 @@ public class FragmentTopupSlip extends Fragment {
     public class ViewHolder{
         private Button mBtnBack, mBtnGame, mBtnSavePic;
         private ImageView mImageSlip;
-        private TextView mTextTopup;
+        private View mIncludeMyWallet;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
             mBtnGame = (Button) itemview.findViewById(R.id.btn_play_game);
             mImageSlip = (ImageView) itemview.findViewById(R.id.image_slip);
             mBtnSavePic = (Button) itemview.findViewById(R.id.btn_save_pic);
+            mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
         }
     }
 
@@ -102,6 +109,38 @@ public class FragmentTopupSlip extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initHeader();
+    }
+
+    private void initHeader(){
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ContentValues values = EncryptionData.getModel(response.body());
+                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                    new DialogCounterAlert.DialogFromResponse(FragmentTopupSlip.this.getContext(), values.getAsString(EncryptionData.STRMODEL));
+                } else {
+                    LoginResponseModel loginResponseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), LoginResponseModel.class);
+                    Global.setBALANCE(loginResponseModel.getBALANCE());
+                    Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+
+                }
+
+                DialogCounterAlert.DialogProgress.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext());
+            }
+        });
+
+    }
     private void initEslip(){
         mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
         mHolder.mImageSlip.setImageBitmap(mImageBitmap);

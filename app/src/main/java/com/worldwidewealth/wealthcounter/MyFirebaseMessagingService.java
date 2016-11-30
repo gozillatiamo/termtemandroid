@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -22,6 +21,8 @@ import java.util.Random;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "Message";
+    public static final String TEXT = "text";
+    public static final String BOX = "box";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -31,24 +32,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String box = remoteMessage.getData().get("box");
         if (box.contains("*")){
             Global.setOTP(box.split("\\*")[0]);
+        } else {
+            sendNotification(txt, box);
         }
-        sendNotification(txt, box);
     }
 
 
     private void sendNotification(String txt, String box) {
-        Intent intent = null;
-
-        if (box != null && box.contains("Get")){
-           intent = new Intent(this, ActivityLuck.class);
-        } else  intent = new Intent(this, ActivityPin.class);
 
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+        Intent intent = new Intent(this, ActivityShowNotify.class);
+        intent.putExtra(TEXT, txt);
+        intent.putExtra(BOX, box);
+        Log.e("notiBox", box);
+
+        int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), iUniqueId, intent, 0);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.logo_wc)
+                .setSmallIcon(R.drawable.logo_wc_without_text)
                 .setContentTitle(txt)
                 .setContentText(box)
                 .setAutoCancel(true)

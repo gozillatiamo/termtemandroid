@@ -29,6 +29,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.worldwidewealth.wealthcounter.APIServices;
 import com.worldwidewealth.wealthcounter.Global;
+import com.worldwidewealth.wealthcounter.MyApplication;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.SplashScreenWWW;
 import com.worldwidewealth.wealthcounter.dashboard.ActivityDashboard;
@@ -60,6 +61,7 @@ import retrofit2.Retrofit;
 public class Until {
 
     public static final String KEYPF = "data";
+    public static final String KEYTXID = "txid";
 
     public static void initSpinnerCurrency(Context context, Spinner spinner) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency, android.R.layout.simple_spinner_item);
@@ -156,8 +158,9 @@ public class Until {
         }
     }
 
-    public static void setBalanceWallet(TextView balanceInteger, TextView balanceDecimal){
-
+    public static void setBalanceWallet(View myWallet){
+        TextView balanceDecimal = (TextView) myWallet.findViewById(R.id.txt_balance_decimal);
+        TextView balanceInteger = (TextView) myWallet.findViewById(R.id.txt_balance_integer);
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
@@ -186,7 +189,7 @@ public class Until {
         return "android:switcher:" + viewId + ":" + index;
     }
 
-    public static void setSharedPreferences(Activity activity, boolean remove){
+    public static void setLogoutSharedPreferences(Activity activity, boolean remove){
 
         SharedPreferences sharedPref = activity.getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -208,6 +211,18 @@ public class Until {
 
     }
 
+    public static void setTXIDSharedPreferences(String txid){
+        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEYTXID, txid);
+        editor.commit();
+    }
+
+    public static String getTXIDSharedPreferences(){
+        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
+        return preferences.getString(KEYTXID, null);
+    }
+
     public static void logoutAPI(final Activity activity){
         if (Global.getAGENTID() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
@@ -221,9 +236,9 @@ public class Until {
                 Global.setBALANCE(0.00);
                 Global.setTXID("");
                 Global.setDEVICEID("");
-                Until.setSharedPreferences(activity, true);
-//                Until.backToSignIn(activity);
-                activity.finish();
+                Until.setLogoutSharedPreferences(activity, true);
+                Until.backToSignIn(activity);
+
 
             }
 
@@ -238,7 +253,6 @@ public class Until {
     public static void backToSignIn(Activity activity){
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("exit", true);
         activity.startActivity(intent);
         activity.finish();
     }

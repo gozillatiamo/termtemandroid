@@ -71,13 +71,12 @@ public class ActivityDashboard extends AppCompatActivity{
 
         initToolbar();
         initClickMainMenu();
-        initData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSupportActionBar().show();
+        initData();
     }
 
     /*
@@ -108,8 +107,8 @@ public class ActivityDashboard extends AppCompatActivity{
 */
 
     private void initData(){
-        Until.setBalanceWallet(mHolder.mTextBalanceInteger, mHolder.mTextBalanceDecimal);
-        Until.setSharedPreferences(this, false);
+        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+        Until.setLogoutSharedPreferences(this, false);
     }
 
     private void initToolbar(){
@@ -231,15 +230,12 @@ public class ActivityDashboard extends AppCompatActivity{
         private CardView mMenuTopup, mMenuReport;
         private Button mBtnForgotPassword;
         private View mIncludeMyWallet;
-        private TextView mTextBalanceInteger, mTextBalanceDecimal;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mMenuTopup = (CardView) view.findViewById(R.id.menu_topup);
             mMenuReport = (CardView) view.findViewById(R.id.menu_report);
             mBtnForgotPassword = (Button) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
-            mTextBalanceDecimal = (TextView) mIncludeMyWallet.findViewById(R.id.txt_balance_decimal);
-            mTextBalanceInteger = (TextView) mIncludeMyWallet.findViewById(R.id.txt_balance_integer);
         }
     }
 }

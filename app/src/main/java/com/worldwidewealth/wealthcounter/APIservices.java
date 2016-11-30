@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.PreRequestModel;
 import com.worldwidewealth.wealthcounter.model.RegisterRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
@@ -44,6 +45,7 @@ public interface APIServices {
     public static final String ACTIONESLIP = "ESLIP";
     public static final String ACTIONSAVESLIP = "SAVESLIPE";
     public static final String ACTIONSALERPT = "SALERPT";
+    public static final String ACTIONGETBALANCE = "GETBALANCE";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -99,6 +101,9 @@ public interface APIServices {
 
     @POST("topupservice.ashx")
     Call<ResponseBody> salerpt(@Body RequestModel requestModel);
+
+    @POST("service.ashx")
+    Call<ResponseBody> getbalance(@Body RequestModel requestModel);
 
 
 

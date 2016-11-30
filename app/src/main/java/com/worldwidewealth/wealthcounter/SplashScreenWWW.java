@@ -51,16 +51,6 @@ public class SplashScreenWWW extends AppCompatActivity{
     private Handler handler;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
-            Log.e("exit", bundle.getBoolean("exit")+"");
-            if (bundle.getBoolean("exit")) this.finish();
-        }
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -89,9 +79,8 @@ public class SplashScreenWWW extends AppCompatActivity{
                                 Global.setBALANCE(0.00);
                                 Global.setTXID("");
                                 Global.setDEVICEID("");
-                                Until.setSharedPreferences(SplashScreenWWW.this, true);
+                                Until.setLogoutSharedPreferences(SplashScreenWWW.this, true);
                                 getDataDevice();
-                                return;
                             }
 
                             @Override
@@ -101,8 +90,10 @@ public class SplashScreenWWW extends AppCompatActivity{
                         });
                     }
 
+                } else {
+                    getDataDevice();
                 }
-                getDataDevice();
+
 
             }
         };
@@ -136,7 +127,7 @@ public class SplashScreenWWW extends AppCompatActivity{
         if (gpsTracker.canGetLocation()){
             mLat = gpsTracker.getLatitude();
             mLong = gpsTracker.getLongitude();
-            Log.d("InAppData", "action:" + mAction + "\n" +
+            Log.e("InAppData", "action:" + mAction + "\n" +
                     "token:" + Global.getTOKEN() + "\n" +
                     "device_id:" + Global.getDEVICEID() + "\n" +
                     "lat:" + mLat + "\n" +
@@ -173,7 +164,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                     ResponseModel model = response.body();
 
                     if (model.getStatus() == APIServices.SUCCESS) {
-                        Global.setTXID(model.getTXID());
+                        Until.setTXIDSharedPreferences(model.getTXID());
 //                    EncryptionData.EncryptData("12345", "123456789");
                         Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
                         startActivity(intent);

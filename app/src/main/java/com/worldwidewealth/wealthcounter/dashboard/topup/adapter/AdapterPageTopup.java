@@ -54,9 +54,7 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
         Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
         List<LoadButtonResponseModel> modelList = (List<LoadButtonResponseModel>)  gson.fromJson(responDecode, listType);
-        int i = 0;
         for (LoadButtonResponseModel model : modelList){
-            i++;
 
             switch (model.getPRODUCT_TYPE()){
                 case "AIRTIME":

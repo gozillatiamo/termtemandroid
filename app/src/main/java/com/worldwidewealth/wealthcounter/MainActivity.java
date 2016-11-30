@@ -3,6 +3,8 @@ package com.worldwidewealth.wealthcounter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Global.setTXID(Until.getTXIDSharedPreferences());
+    }
 
     private void initEditText(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -86,7 +93,13 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 finish();
 */
+                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
+                if (mWifi.isConnected()) {
+                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi));
+                    return;
+                }
                 mPhone = mHolder.mPhone.getText().toString();
                 mPassword = mHolder.mPassword.getText().toString();
                 if (mPhone.equals("") || mPassword.equals("")) {
@@ -167,8 +180,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        t.printStackTrace();
-//                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+//                        t.printStackTrace();
+                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
                     }
                 });
             }

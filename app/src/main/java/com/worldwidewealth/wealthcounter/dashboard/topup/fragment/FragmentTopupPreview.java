@@ -109,6 +109,7 @@ public class FragmentTopupPreview extends Fragment {
 
         FragmentTopupPackage fragmentTopupPackage = (FragmentTopupPackage)fragment;
         fragmentTopupPackage.onBackPress();
+
         fragmentTopupPackage.getChildFragmentManager().popBackStack();
 
     }

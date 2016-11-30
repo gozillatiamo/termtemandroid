@@ -54,8 +54,8 @@ public class ActivityReport extends AppCompatActivity {
 
     private ViewHolder mHolder;
     private ReportAdapter mAdapter;
-    private long mPreviousDateFrom = System.currentTimeMillis();
-    private long mPeviousDateTo = System.currentTimeMillis();
+    private long mPreviousDateFrom;
+    private long mPeviousDateTo;
     private Calendar mCalendar = Calendar.getInstance();
     private APIServices services;
 
@@ -69,6 +69,8 @@ public class ActivityReport extends AppCompatActivity {
         setContentView(R.layout.activity_report);
         mHolder = new ViewHolder(this);
         services = APIServices.retrofit.create(APIServices.class);
+        mPreviousDateFrom = getTimestamp(System.currentTimeMillis(), 0);
+        mPeviousDateTo = getTimestamp(System.currentTimeMillis(), 23);
         initToolbar();
         initListReport();
     }
@@ -92,6 +94,11 @@ public class ActivityReport extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private long getTimestamp(long timestamp, int hourOfDay){
+        mCalendar.setTimeInMillis(timestamp);
+        mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        return mCalendar.getTimeInMillis();
+    }
 
     private void initToolbar(){
         this.setSupportActionBar(mHolder.mToolbar);
@@ -207,10 +214,10 @@ public class ActivityReport extends AppCompatActivity {
 
                 switch (type){
                     case FORM:
-                        mPreviousDateFrom = calendar.getTimeInMillis();
+                        mPreviousDateFrom = getTimestamp(calendar.getTimeInMillis(), 0);
                         break;
                     case TO:
-                        mPreviousDateFrom = calendar.getTimeInMillis();
+                        mPeviousDateTo = getTimestamp(calendar.getTimeInMillis(), 23);
                         break;
                 }
 
