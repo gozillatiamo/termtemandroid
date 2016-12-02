@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,9 +26,11 @@ public class MyApplication extends Application implements Application.ActivityLi
         mContext = getApplicationContext();
     }
 
+
     public static Context getContext(){
         return mContext;
     }
+
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -39,8 +42,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if (canUseLeaving(activity)){
 
+        if (canUseLeaving(activity)){
             if (LeavingOrEntering.currentActivity == null ||
                     activity != LeavingOrEntering.currentActivity) {
                 LeavingOrEntering.activityResumed(activity);
@@ -58,6 +61,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStopped(Activity activity) {
+        if (canUseLeaving(activity)){
+            LeavingOrEntering.activityStopped(activity);
+        }
     }
 
     @Override
@@ -70,9 +76,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
-    static class LeavingOrEntering
+    public static class LeavingOrEntering
     {
-        private static Activity currentActivity = null;
+        public static Activity currentActivity = null;
 
         public static void activityResumed( Activity activity )
         {
@@ -90,9 +96,14 @@ public class MyApplication extends Application implements Application.ActivityLi
             {
                 // We were stopped and no-one else has been started.
                 Log.e("currentActivity", "currentActivity == activity"); // Stop the music!
-                Until.logoutAPI(activity);
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
+                if (sharedPreferences.getBoolean("LOGOUT", true)){
+                    Until.backToSignIn(activity);
+                    currentActivity = null;
+                } else {
+                    Until.logoutAPI();
+                }
                 //Until.backToSignIn(activity);
-                currentActivity = null;
             }
         }
     }

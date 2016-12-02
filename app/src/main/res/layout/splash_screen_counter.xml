@@ -13,6 +13,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_wc"
+        android:src="@drawable/logo_wealth_wallet"
         android:layout_centerInParent="true"/>
 </RelativeLayout>

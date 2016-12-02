@@ -79,7 +79,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                                 Global.setBALANCE(0.00);
                                 Global.setTXID("");
                                 Global.setDEVICEID("");
-                                Until.setLogoutSharedPreferences(SplashScreenWWW.this, true);
+                                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
                                 getDataDevice();
                             }
 
@@ -151,10 +151,6 @@ public class SplashScreenWWW extends AppCompatActivity{
 
     protected  void SendDataService(PreRequestModel model){
 
-//        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
-//        startActivity(intent);
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        finish();
 
         if (model != null) {
             Call<ResponseModel> call = services.PRE(model);
@@ -165,7 +161,6 @@ public class SplashScreenWWW extends AppCompatActivity{
 
                     if (model.getStatus() == APIServices.SUCCESS) {
                         Until.setTXIDSharedPreferences(model.getTXID());
-//                    EncryptionData.EncryptData("12345", "123456789");
                         Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

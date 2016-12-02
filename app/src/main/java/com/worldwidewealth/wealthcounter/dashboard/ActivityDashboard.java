@@ -32,7 +32,9 @@ import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
+import com.worldwidewealth.wealthcounter.dashboard.myqrcode.ActivityMyQrCode;
 import com.worldwidewealth.wealthcounter.dashboard.report.ActivityReport;
+import com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.wealthcounter.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.wealthcounter.dialog.DialogCounterAlert;
@@ -71,44 +73,13 @@ public class ActivityDashboard extends AppCompatActivity{
 
         initToolbar();
         initClickMainMenu();
+        Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
-    }
-
-    /*
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
-                new DataRequestModel()));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Global.setAGENTID("");
-                Global.setUSERID("");
-                Global.setBALANCE(0.00);
-                Global.setTXID("");
-                Global.setDEVICEID("");
-                Until.setSharedPreferences(ActivityDashboard.this, true);
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
-    }
-*/
-
-    private void initData(){
         Until.setBalanceWallet(mHolder.mIncludeMyWallet);
-        Until.setLogoutSharedPreferences(this, false);
     }
 
     private void initToolbar(){
@@ -135,12 +106,31 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+        mHolder.mMenuReMT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityDashboard.this, ActivityReportMT.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
         mHolder.mBtnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initDialogChangePassword();
             }
         });
+
+        mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityDashboard.this, ActivityMyQrCode.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
     }
 
     private void initDialogChangePassword(){
@@ -227,15 +217,17 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup, mMenuReport;
-        private Button mBtnForgotPassword;
+        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT;
+        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mMenuTopup = (CardView) view.findViewById(R.id.menu_topup);
             mMenuReport = (CardView) view.findViewById(R.id.menu_report);
-            mBtnForgotPassword = (Button) view.findViewById(R.id.btn_forgot_password);
+            mBtnForgotPassword = (TextView) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
+            mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
+            mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
         }
     }
 }

@@ -18,6 +18,11 @@ import com.worldwidewealth.wealthcounter.model.ResponseModel;
 public class DialogCounterAlert {
 
     public DialogCounterAlert(Context context, String title, String msg){
+
+        if (DialogProgress.isShow()){
+            DialogProgress.dismiss();
+        }
+
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(msg)
@@ -54,6 +59,7 @@ public class DialogCounterAlert {
         }
 
         public static boolean isShow(){
+            if (progressDialog == null) return false;
             return progressDialog.isShowing();
         }
     }

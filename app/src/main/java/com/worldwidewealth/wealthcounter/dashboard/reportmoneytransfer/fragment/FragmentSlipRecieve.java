@@ -1,9 +1,8 @@
-package com.worldwidewealth.wealthcounter.dashboard.moneytransfer.fragment;
+package com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.until.Until;
 
 /**
  * Created by MyNet on 17/10/2559.
@@ -30,8 +28,6 @@ public class FragmentSlipRecieve extends Fragment{
         private Spinner mSpinnerSend, mSpinnerRecipient;
         public ViewHolder(View itemview){
             mBtnTransfer = (Button) itemview.findViewById(R.id.btn_transfer);
-            mSpinnerSend = (Spinner) itemview.findViewById(R.id.spinner_send);
-            mSpinnerRecipient = (Spinner) itemview.findViewById(R.id.spinner_recipient);
         }
     }
 

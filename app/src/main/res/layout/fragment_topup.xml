@@ -17,7 +17,8 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
-        app:cardElevation="@dimen/cardview_default_elevation">
+        app:cardElevation="0dp"
+        >
 
         <ImageView
             android:layout_width="150dp"
@@ -37,7 +38,8 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
-        app:cardElevation="@dimen/cardview_default_elevation">
+        app:cardElevation="0dp"
+        >
 
         <ImageView
             android:layout_width="200dp"
@@ -57,7 +59,8 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
-        app:cardElevation="@dimen/cardview_default_elevation">
+        app:cardElevation="0dp"
+        >
 
         <ImageView
             android:layout_width="120dp"

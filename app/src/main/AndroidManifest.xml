@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".MyApplication"
@@ -41,8 +43,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
@@ -62,12 +63,10 @@
         <activity android:name=".game.ActivityGame" />
         <activity android:name=".SplashScreenCounter" />
         <activity android:name=".ActivityRegister" />
-        <activity
-            android:name=".dashboard.topup.ActivityTopup"
-            />
-        <activity
-            android:name=".dashboard.report.ActivityReport"
-            />
+        <activity android:name=".dashboard.topup.ActivityTopup" />
+        <activity android:name=".dashboard.report.ActivityReport" />
+        <activity android:name=".dashboard.myqrcode.ActivityMyQrCode" />
+        <activity android:name=".dashboard.reportmoneytransfer.ActivityReportMT"></activity>
     </application>
 
 </manifest>

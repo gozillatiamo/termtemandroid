@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,7 @@ public class FragmentAirtimeVAS extends Fragment {
         }
 
         if (rootView == null){
-            rootView = inflater.inflate(R.layout.fragment__airtime_vas, container, false);
+            rootView = inflater.inflate(R.layout.fragment_airtime_vas, container, false);
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else {

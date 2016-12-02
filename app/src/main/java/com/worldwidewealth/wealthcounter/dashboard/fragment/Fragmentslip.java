@@ -12,8 +12,8 @@ import android.widget.Button;
 
 import com.worldwidewealth.wealthcounter.Configs;
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.dashboard.moneytransfer.fragment.FragmentSlipRecieve;
-import com.worldwidewealth.wealthcounter.dashboard.moneytransfer.fragment.FragmentSlipSend;
+import com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.fragment.FragmentSlipRecieve;
+import com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.fragment.FragmentSlipSend;
 
 /**
  * Created by MyNet on 17/10/2559.

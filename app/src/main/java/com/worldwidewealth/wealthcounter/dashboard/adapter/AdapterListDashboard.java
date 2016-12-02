@@ -2,9 +2,6 @@ package com.worldwidewealth.wealthcounter.dashboard.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +11,6 @@ import android.widget.TextView;
 
 import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.R;
-import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillPayment;
-import com.worldwidewealth.wealthcounter.dashboard.moneytransfer.fragment.FragmentMT;
-import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopup;
 
 /**
  * Created by gozillatiamo on 10/4/16.

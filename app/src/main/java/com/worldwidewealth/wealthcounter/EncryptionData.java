@@ -57,7 +57,6 @@ public class EncryptionData {
 //            return strResult;
 //        }
 
-        Log.e("strKey", key);
 
 //        byte[] bb = key.getBytes(characterSet);
 //        key = Base64.encodeToString(bb, Base64.DEFAULT);
@@ -81,7 +80,6 @@ public class EncryptionData {
             KeySpec keySpec = new DESKeySpec(m_Key);
             SecretKey secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
             IvParameterSpec iv = new IvParameterSpec(m_IV);
-            Log.e("ivSize", iv.getIV().length+"");
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
 //            Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);

@@ -30,8 +30,10 @@ public class ErrorNetworkThrowable extends Throwable {
     }
 
     public void networkError(Context context){
-        printStackTrace();
-        DialogCounterAlert.DialogProgress.dismiss();
+        //printStackTrace();
+        if (DialogCounterAlert.DialogProgress.isShow()) {
+            DialogCounterAlert.DialogProgress.dismiss();
+        }
         new DialogNetworkError(context);
 
     }

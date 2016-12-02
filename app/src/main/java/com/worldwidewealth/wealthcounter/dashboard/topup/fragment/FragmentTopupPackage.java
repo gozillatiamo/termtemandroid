@@ -104,6 +104,8 @@ public class FragmentTopupPackage extends  Fragment{
         this.mAmt = price;
         this.mButtonID = buttonid;
         NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
         mHolder.mTextPrice.setText(format.format(mAmt));
     }
 
@@ -312,8 +314,11 @@ public class FragmentTopupPackage extends  Fragment{
                         if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                             ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
                                     ResponseModel.class);
-
-                            serviceEslip(model.getTranid());
+                            if (responseModel.getStatus() == APIServices.SUCCESS) {
+                                serviceEslip(model.getTranid());
+                            } else {
+                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
+                            }
 
                         } else {
 
@@ -355,7 +360,7 @@ public class FragmentTopupPackage extends  Fragment{
 //                    Toast.makeText(FragmentTopupPackage.this.getContext(), responseModel.getMsg(), Toast.LENGTH_LONG).show();
                     if (responseModel.getFf().equals("")) {
 
-                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
+                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, getString(R.string.slip_not_found));
 
                     } else {
 

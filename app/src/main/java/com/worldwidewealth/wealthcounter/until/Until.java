@@ -62,6 +62,7 @@ public class Until {
 
     public static final String KEYPF = "data";
     public static final String KEYTXID = "txid";
+    public static final String LOGOUT = "LOGOUT";
 
     public static void initSpinnerCurrency(Context context, Spinner spinner) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency, android.R.layout.simple_spinner_item);
@@ -159,6 +160,9 @@ public class Until {
     }
 
     public static void setBalanceWallet(View myWallet){
+        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(LOGOUT, true)) return;
+
         TextView balanceDecimal = (TextView) myWallet.findViewById(R.id.txt_balance_decimal);
         TextView balanceInteger = (TextView) myWallet.findViewById(R.id.txt_balance_integer);
         NumberFormat format = NumberFormat.getInstance();
@@ -189,9 +193,9 @@ public class Until {
         return "android:switcher:" + viewId + ":" + index;
     }
 
-    public static void setLogoutSharedPreferences(Activity activity, boolean remove){
+    public static void setLogoutSharedPreferences(Context context, boolean remove){
 
-        SharedPreferences sharedPref = activity.getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!remove) {
             editor.putBoolean("LOGOUT", false);
@@ -223,7 +227,7 @@ public class Until {
         return preferences.getString(KEYTXID, null);
     }
 
-    public static void logoutAPI(final Activity activity){
+    public static void logoutAPI(){
         if (Global.getAGENTID() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
@@ -236,8 +240,8 @@ public class Until {
                 Global.setBALANCE(0.00);
                 Global.setTXID("");
                 Global.setDEVICEID("");
-                Until.setLogoutSharedPreferences(activity, true);
-                Until.backToSignIn(activity);
+                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
+//                Until.backToSignIn(activity);
 
 
             }

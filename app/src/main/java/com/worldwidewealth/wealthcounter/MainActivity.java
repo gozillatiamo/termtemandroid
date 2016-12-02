@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 finish();
 */
+/*
                 ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi));
                     return;
                 }
+*/
                 mPhone = mHolder.mPhone.getText().toString();
                 mPassword = mHolder.mPassword.getText().toString();
                 if (mPhone.equals("") || mPassword.equals("")) {

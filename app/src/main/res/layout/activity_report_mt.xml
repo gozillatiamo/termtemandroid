@@ -2,34 +2,35 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_topup"
+    android:id="@+id/activity_report_mt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.worldwidewealth.wealthcounter.dashboard.topup.ActivityTopup">
+    tools:context="com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.ActivityReportMT">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_topup"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:theme="@style/ToolbarColored">
-
-            <TextView
+            app:theme="@style/ToolbarColored"
+            android:layout_height="?attr/actionBarSize">
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/title_topup"
-                style="@style/MyTitleActionBar"
-                />
+                android:layout_height="wrap_content"
+                android:text="@string/dashboard_mtf"
+                android:textSize="16sp"
+                android:singleLine="true"
+                app:sizeToFit="true"
+                style="@style/MyTitleActionBar"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-
     <FrameLayout
-        android:id="@+id/container_topup"
+        android:id="@+id/container_report_mt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/activity_space"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
     </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,326 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin">
+    android:padding="@dimen/activity_space"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
-        app:cardElevation="@dimen/cardview_default_elevation"
-        app:cardCornerRadius="@dimen/cardview_default_radius">
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_space">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send"
-                    android:textStyle="bold"
-                    style="@style/TextAppearance.AppCompat.Medium"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_weight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:inputType="numberDecimal"/>
-                    <Spinner
-                        android:id="@+id/spinner_send"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="@dimen/activity_space">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-                    </Spinner>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/secondary_text_dark_nodisable"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/agent_phone_number"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/black"
+                        android:text="086-025-4055"/>
+
                 </LinearLayout>
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recipient_sets"
-                    android:textStyle="bold"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:id="@+id/textView11" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <EditText
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/secondary_text_dark_nodisable"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/amount_transfered"/>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:inputType="numberDecimal"/>
-                    <Spinner
-                        android:id="@+id/spinner_recipient"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="@dimen/activity_space">
-
-                    </Spinner>
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="@string/exchange_rate"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal"
+                        android:gravity="center">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/american_dollar_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/shuffle_64"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1000"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/lao_kip_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
+                            android:textSize="24sp"
+                            android:layout_marginRight="4dp"
+                            android:textColor="@android:color/black"
+                            android:text="THB"/>
 
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/coin_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/shuffle_64"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2"
-                            android:layout_centerInParent="true"
-                            android:drawableRight="@drawable/american_dollar_32"
-                            android:drawablePadding="@dimen/activity_space"/>
-                        f
-                    </RelativeLayout>
+                            android:textSize="24sp"
+                            android:layout_marginLeft="4dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"
+                            android:text="200.00"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:text="@string/withdrawal_fees"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="2.1%"
-                    android:drawablePadding="@dimen/activity_space"/>
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.4"
+                android:padding="@dimen/activity_vertical_margin">
+
+                <Button
+                    android:id="@+id/btn_done"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="@android:color/holo_orange_dark"
+                    android:text="@string/done"
+                    style="@style/MyButton"/>
+            </RelativeLayout>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/activity_space"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                android:text="@string/fee"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="40"
-                android:drawablePadding="@dimen/activity_space"
-                android:drawableRight="@drawable/thai_baht_64"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                android:text="@string/commission"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="10"
-                android:drawablePadding="@dimen/activity_space"
-                android:drawableRight="@drawable/thai_baht_64"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                android:text="@string/total"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="51"
-                android:drawablePadding="@dimen/activity_space"
-                android:drawableRight="@drawable/thai_baht_64"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                android:text="@string/total_coin"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="7.46"
-                android:drawablePadding="@dimen/activity_space"
-                android:drawableRight="@drawable/coin"/>
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_transfer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_transfer"
-        style="@style/BtnSubmit"
-        />
-
-</LinearLayout>
+</RelativeLayout>

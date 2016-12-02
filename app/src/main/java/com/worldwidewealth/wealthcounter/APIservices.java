@@ -1,9 +1,11 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.accounts.AuthenticatorException;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import com.worldwidewealth.wealthcounter.model.LoginResponseModel;
 import com.worldwidewealth.wealthcounter.model.PreRequestModel;
 import com.worldwidewealth.wealthcounter.model.RegisterRequestModel;
@@ -13,7 +15,9 @@ import com.worldwidewealth.wealthcounter.model.SignInRequestModel;
 import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -53,7 +57,6 @@ public interface APIServices {
 
     @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
-
 
     @GET("apifcm/pin.aspx")
     Call<ResponseBody> pin();
@@ -118,16 +121,13 @@ public interface APIServices {
                 public Response intercept(Chain chain) throws IOException {
                     Request originalRequest = chain.request();
                     Request.Builder builder = originalRequest.newBuilder();
-                    Log.e("method", originalRequest.method());
                     if (originalRequest.method().equalsIgnoreCase("POST")){
-                        Log.e("isPOST", "true");
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
 
                     }
 
-
-                    return chain.proceed(builder.build());
+                    return  chain.proceed(builder.build());
                 }
             }).build();
 

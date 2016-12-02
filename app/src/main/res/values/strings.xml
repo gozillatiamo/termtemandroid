@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Wealth Counter</string>
+    <style name="currentcy">THB</style>
+    <string name="app_name">Wealth Wallet</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -79,6 +80,7 @@
     <string name="dashboard_card_to_card">Card to Card</string>
     <string name="dashboard_loyalty">Loyalty</string>
     <string name="dashboard_wallet">Wallet</string>
+    <string name="dashboard_mtf">Report Money Transfer to wallet</string>
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>
@@ -129,6 +131,12 @@
     <string name="pay_code">หมายเลขการชำระ :</string>
     <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
     <string name="alert_connect_wifi">หากคุณกำลังเชื่อต่อ wifi คุณจะไม่สามารถใช้งานแอพพลิเคชั่นนี้ได้ กรุณายกเลิกการเชื่อต่อก่อนใช้งาน</string>
+    <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
+    <string name="slip_not_found">ไม่พบใบเสร็จ</string>
+    <string name="add_slip_picture">เพื่มรูปภาพใบเสร็จ</string>
+    <string name="agent_phone_number">หมายเลขโทรศัพท์ Agent :</string>
+    <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น :</string>
+    <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
 
 
     <string-array name="str_list_dashboard">
