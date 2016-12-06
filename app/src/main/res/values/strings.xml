@@ -1,5 +1,7 @@
 <resources>
+
     <style name="currentcy">THB</style>
+
     <string name="app_name">Wealth Wallet</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
@@ -137,6 +139,9 @@
     <string name="agent_phone_number">หมายเลขโทรศัพท์ Agent :</string>
     <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น :</string>
     <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
+    <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
+    <string name="please_add_image">กรุณาเพิ่มรูป</string>
+    <string name="scan_qr_code">Scan QR Code</string>
 
 
     <string-array name="str_list_dashboard">

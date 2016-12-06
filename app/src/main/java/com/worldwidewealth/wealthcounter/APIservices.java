@@ -67,7 +67,7 @@ public interface APIServices {
     Call<ResponseBody> getluck();
 
     @POST("service.ashx")
-    Call<ResponseModel> PRE(@Body PreRequestModel inAppModel);
+    Call<ResponseBody> PRE(@Body PreRequestModel inAppModel);
 
     @POST("service.ashx")
     Call<ResponseBody> LOGIN(@Body SignInRequestModel signInRequestModel);

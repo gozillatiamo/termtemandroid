@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthcounter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.UUID;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -61,15 +63,17 @@ public class SplashScreenWWW extends AppCompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
-                SharedPreferences sharedPref = getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
+                Log.e("logout", logout+"");
                 if (!logout) {
 
                     Global.setTXID(sharedPref.getString("TXID", null));
                     Global.setAGENTID(sharedPref.getString("AGENTID", null));
                     Global.setUSERID(sharedPref.getString("USERID", null));
                     Global.setDEVICEID(sharedPref.getString("DEVICEID", null));
-                    if (Global.getAGENTID() != null) {
+                    Log.e("AgentId", Global.getAGENTID()+ "");
+
                         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
@@ -88,7 +92,6 @@ public class SplashScreenWWW extends AppCompatActivity{
                                 t.printStackTrace();
                             }
                         });
-                    }
 
                 } else {
                     getDataDevice();
@@ -114,12 +117,17 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     protected void getDataDevice(){
+        String deviceId = null;
         mAction = "PRE";
         Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
         TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-//        Global.setDEVICEID(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
-        Global.setDEVICEID(mngr.getDeviceId());
-        Log.e("DeviceId", Global.getDEVICEID());
+        if (mngr.getDeviceId() != null){
+            deviceId = mngr.getDeviceId();
+        } else {
+            deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+        }
+        Global.setDEVICEID(deviceId);
+        Log.e("DeviceId", deviceId);
 
         Log.e("SerialNumber", Build.SERIAL);
         Log.e("BuileID", Build.ID);
@@ -153,28 +161,36 @@ public class SplashScreenWWW extends AppCompatActivity{
 
 
         if (model != null) {
-            Call<ResponseModel> call = services.PRE(model);
-            call.enqueue(new Callback<ResponseModel>() {
+            Call<ResponseBody> call = services.PRE(model);
+            call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                    ResponseModel model = response.body();
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                    if (model.getStatus() == APIServices.SUCCESS) {
-                        Until.setTXIDSharedPreferences(model.getTXID());
-                        Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        finish();
-                    } else {
-                        Toast.makeText(SplashScreenWWW.this, model.getMsg(), Toast.LENGTH_LONG).show();
+                    if (!response.isSuccessful()) {
+                        new DialogNetworkError(SplashScreenWWW.this);
+                        return;
                     }
 
+                    ContentValues values = EncryptionData.getModel(response.body());
+                    if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                        ResponseModel model = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
 
+                        if (model.getStatus() == APIServices.SUCCESS) {
+                            Until.setTXIDSharedPreferences(model.getTXID());
+                            Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            finish();
+                        } else {
+                            Toast.makeText(SplashScreenWWW.this, model.getMsg(), Toast.LENGTH_LONG).show();
+                        }
 
+                    } else {
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseModel> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this);
                 }
             });

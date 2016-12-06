@@ -29,6 +29,7 @@ import com.worldwidewealth.wealthcounter.Global;
 import com.worldwidewealth.wealthcounter.MyApplication;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.adapter.AdapterDashboard;
+import com.worldwidewealth.wealthcounter.dashboard.addcreditline.ActivityAddCreditLine;
 import com.worldwidewealth.wealthcounter.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthcounter.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthcounter.dashboard.fragment.FragmentSlip;
@@ -73,7 +74,10 @@ public class ActivityDashboard extends AppCompatActivity{
 
         initToolbar();
         initClickMainMenu();
-        Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
+
+        if (Global.getAGENTID() != null) {
+            Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
+        }
     }
 
     @Override
@@ -128,6 +132,15 @@ public class ActivityDashboard extends AppCompatActivity{
                 Intent intent = new Intent(ActivityDashboard.this, ActivityMyQrCode.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        mHolder.mMenuAddCreditLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditLine.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, 0);
             }
         });
 
@@ -217,7 +230,7 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT;
+        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine;
         private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
@@ -228,6 +241,7 @@ public class ActivityDashboard extends AppCompatActivity{
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
             mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
+            mMenuAddCreditLine = (CardView) view.findViewById(R.id.menu_add_credit_line);
         }
     }
 }

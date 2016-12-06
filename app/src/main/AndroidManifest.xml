@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -66,7 +68,11 @@
         <activity android:name=".dashboard.topup.ActivityTopup" />
         <activity android:name=".dashboard.report.ActivityReport" />
         <activity android:name=".dashboard.myqrcode.ActivityMyQrCode" />
-        <activity android:name=".dashboard.reportmoneytransfer.ActivityReportMT"></activity>
+        <activity
+            android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".dashboard.addcreditline.ActivityAddCreditLine"></activity>
     </application>
 
 </manifest>

@@ -42,7 +42,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
-
+        Log.e("onActivityResumed", "true");
         if (canUseLeaving(activity)){
             if (LeavingOrEntering.currentActivity == null ||
                     activity != LeavingOrEntering.currentActivity) {
@@ -61,6 +61,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStopped(Activity activity) {
+        Log.e("onActivityStopped", "true");
         if (canUseLeaving(activity)){
             LeavingOrEntering.activityStopped(activity);
         }
@@ -82,7 +83,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         public static void activityResumed( Activity activity )
         {
-                Log.e("currentActivity", "null");// Start the music!
+
+
             currentActivity = activity;
 
         }
