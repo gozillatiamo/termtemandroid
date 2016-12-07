@@ -163,7 +163,7 @@ public class FragmentTopupPackage extends  Fragment{
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+
                 servicePreview();
             }
         });
@@ -202,6 +202,7 @@ public class FragmentTopupPackage extends  Fragment{
             return;
         }
 
+        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
         Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
         call.enqueue(new Callback<ResponseBody>() {

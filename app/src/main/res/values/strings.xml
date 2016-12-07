@@ -141,7 +141,10 @@
     <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
     <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
+    <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์ Agent</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการแลกเปลี่ยน</string>
+    <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
 
 
     <string-array name="str_list_dashboard">
