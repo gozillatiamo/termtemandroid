@@ -1,21 +1,15 @@
-package com.worldwidewealth.wealthcounter.dashboard.topup.fragment;
+package com.worldwidewealth.wealthcounter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.worldwidewealth.wealthcounter.APIServices;
-import com.worldwidewealth.wealthcounter.Global;
-import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.model.TopupPreviewResponseModel;
-import com.worldwidewealth.wealthcounter.until.Until;
 
 import java.text.NumberFormat;
 
@@ -62,8 +56,10 @@ public class FragmentTopupPreview extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        transferData();
-        setData();
+        if (mData != null) {
+            transferData();
+            setData();
+        }
         return rootView;
     }
 
@@ -105,6 +101,7 @@ public class FragmentTopupPreview extends Fragment {
     }
 */
 
+/*
     public void fragmentPopBack(Fragment fragment){
 
         FragmentTopupPackage fragmentTopupPackage = (FragmentTopupPackage)fragment;
@@ -113,6 +110,7 @@ public class FragmentTopupPreview extends Fragment {
         fragmentTopupPackage.getChildFragmentManager().popBackStack();
 
     }
+*/
 
     private void setData(){
         format.setMaximumFractionDigits(2);
