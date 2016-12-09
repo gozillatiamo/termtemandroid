@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,9 @@ public class FragmentTopupSlip extends Fragment {
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
         initBtn();
-        initEslip();
+        if (mImageBitmap != null || mTransID != null) {
+            initEslip();
+        }
         return rootView;
     }
 
@@ -113,6 +116,7 @@ public class FragmentTopupSlip extends Fragment {
     public void onResume() {
         super.onResume();
         initHeader();
+        onBackPress();
     }
 
     private void initHeader(){
@@ -141,10 +145,28 @@ public class FragmentTopupSlip extends Fragment {
         });
 
     }
+
+    private void onBackPress(){
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+
+                return false;
+            }
+        });
+
+    }
+
     private void initEslip(){
         mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
         mHolder.mImageSlip.setImageBitmap(mImageBitmap);
     }
+
     private void initBtn(){
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override

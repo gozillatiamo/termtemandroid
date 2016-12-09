@@ -50,7 +50,6 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         String responDecode = Until.decode(converted);
         Log.e("strResponse", converted);
         Log.e("strDecode", responDecode);
-
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
         Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
         List<LoadButtonResponseModel> modelList = (List<LoadButtonResponseModel>)  gson.fromJson(responDecode, listType);

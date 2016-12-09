@@ -1,7 +1,6 @@
 package com.worldwidewealth.wealthcounter.dashboard.topup;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,8 +10,6 @@ import android.widget.FrameLayout;
 
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopup;
-import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupPackage;
-import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupPreview;
 
 public class ActivityTopup extends AppCompatActivity {
 
@@ -39,15 +36,22 @@ public class ActivityTopup extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager()
+//        Fragment fragment = getSupportFragmentManager()
+//                .findFragmentById(R.id.container_topup)
+//                .getChildFragmentManager()
+//                .findFragmentById(R.id.container_topup_package);
+//        if (fragment instanceof FragmentTopupPreview){
+//            FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview)fragment;
+//            fragmentTopupPreview.fragmentPopBack(fragmentTopupPreview.getParentFragment());
+//
+//        } else {
+//            super.onBackPressed();
+//        }
+
+        if (!getSupportFragmentManager()
                 .findFragmentById(R.id.container_topup)
                 .getChildFragmentManager()
-                .findFragmentById(R.id.container_topup_package);
-        if (fragment instanceof FragmentTopupPreview){
-            FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview)fragment;
-            fragmentTopupPreview.fragmentPopBack(fragmentTopupPreview.getParentFragment());
-
-        } else {
+                .popBackStackImmediate()){
             super.onBackPressed();
         }
     }

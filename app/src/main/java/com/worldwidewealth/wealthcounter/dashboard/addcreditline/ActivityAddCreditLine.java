@@ -33,6 +33,18 @@ public class ActivityAddCreditLine extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (!getSupportFragmentManager()
+                .findFragmentById(R.id.container_add_credit)
+                .getChildFragmentManager()
+                .popBackStackImmediate()){
+
+            super.onBackPressed();
+        }
+    }
+
     private void initToolbar(){
         setSupportActionBar(mHolder.mToolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
