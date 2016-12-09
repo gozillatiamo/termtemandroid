@@ -9,10 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.worldwidewealth.wealthcounter.FragmentTopupPreview;
 import com.worldwidewealth.wealthcounter.R;
 import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopup;
-import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupPackage;
-import com.worldwidewealth.wealthcounter.dashboard.topup.fragment.FragmentTopupPreview;
 
 public class ActivityTopup extends AppCompatActivity {
 
