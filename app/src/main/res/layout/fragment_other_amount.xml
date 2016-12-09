@@ -1,30 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.worldwidewealth.wealthcounter.dashboard.addcreditline.fragment.FragmentOtherAmount"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    android:padding="@dimen/activity_space"
-    tools:context="com.worldwidewealth.wealthcounter.dashboard.addcreditline.fragment.FragmentOtherAmount">
+    android:background="?attr/background"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/icon_large_size">
+        android:background="@android:color/white"
+        android:layout_marginTop="@dimen/activity_space"
+        android:layout_marginBottom="@dimen/activity_space"
+        android:padding="@dimen/activity_space">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/amount"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:theme="@style/MyEditTextStyle"
-            android:gravity="center"
-            android:padding="@dimen/activity_space"
-            android:layout_marginLeft="@dimen/activity_space"/>
-    </LinearLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/icon_large_size">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount"/>
+            <EditText
+                android:id="@+id/edit_other_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:theme="@style/MyEditTextStyle"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
+                android:inputType="numberDecimal"
+                android:imeOptions="actionDone"
+                android:layout_marginLeft="@dimen/activity_space"/>
+        </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

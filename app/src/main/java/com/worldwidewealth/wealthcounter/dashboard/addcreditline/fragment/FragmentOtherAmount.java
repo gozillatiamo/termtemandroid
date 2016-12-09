@@ -3,9 +3,14 @@ package com.worldwidewealth.wealthcounter.dashboard.addcreditline.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.worldwidewealth.wealthcounter.R;
 
@@ -24,26 +29,14 @@ public class FragmentOtherAmount extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
+    private ViewHolder mHolder;
     public FragmentOtherAmount() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentOtherAmount.
-     */
     // TODO: Rename and change types and number of parameters
-    public static FragmentOtherAmount newInstance(String param1, String param2) {
+    public static FragmentOtherAmount newInstance() {
         FragmentOtherAmount fragment = new FragmentOtherAmount();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -60,7 +53,67 @@ public class FragmentOtherAmount extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_other_amount, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_other_amount, container, false);
+        mHolder = new ViewHolder(rootView);
+        initEditOtherAmount();
+        return rootView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onBackPress();
+    }
+
+    private void onBackPress(){
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP)
+                    ((FragmentAddCreditChoice)getParentFragment()).clearData();
+
+                return false;
+            }
+        });
+    }
+    private void initEditOtherAmount(){
+        mHolder.mEditOtherAmount.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP)
+                    ((FragmentAddCreditChoice)getParentFragment()).clearData();
+                return false;
+            }
+        });
+        mHolder.mEditOtherAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Fragment parentFragment = FragmentOtherAmount.this.getParentFragment();
+                if (parentFragment instanceof FragmentAddCreditChoice){
+                    ((FragmentAddCreditChoice)parentFragment).setPrice(Double.parseDouble(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private class ViewHolder{
+        private EditText mEditOtherAmount;
+        public ViewHolder(View itemView) {
+            mEditOtherAmount = (EditText) itemView.findViewById(R.id.edit_other_amount);
+        }
+    }
+
 
 }

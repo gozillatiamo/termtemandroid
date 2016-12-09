@@ -4,16 +4,13 @@ import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +35,6 @@ import com.worldwidewealth.wealthcounter.model.ResponseModel;
 import com.worldwidewealth.wealthcounter.model.SubmitTopupRequestModel;
 import com.worldwidewealth.wealthcounter.model.TopupPreviewRequestModel;
 import com.worldwidewealth.wealthcounter.model.RequestModel;
-import com.worldwidewealth.wealthcounter.model.TopupPreviewResponseModel;
 import com.worldwidewealth.wealthcounter.model.TopupResponseModel;
 import com.worldwidewealth.wealthcounter.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthcounter.until.Until;
@@ -46,7 +42,6 @@ import com.worldwidewealth.wealthcounter.until.Until;
 import java.io.IOException;
 import java.text.NumberFormat;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -115,6 +110,8 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initPageTopup(){
+
+        Log.e("initPageTopup", "true");
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
 
         Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
@@ -173,7 +170,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onClick(View v) {
 
-                if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof  FragmentTopupPreview){
+                if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                     FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
                     if (!fragmentTopupPreview.canTopup()) return;
                 }
@@ -217,8 +214,6 @@ public class FragmentTopupPackage extends  Fragment{
                             .fromJson(modelValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
                     Toast.makeText(FragmentTopupPackage.this.getContext(), model.getMsg(), Toast.LENGTH_SHORT).show();
                 } else {
-                    mHolder.mBtnNext.setVisibility(View.GONE);
-                    mHolder.mBtnTopup.setVisibility(View.VISIBLE);
 
                     FragmentTopupPackage.this.getChildFragmentManager()
                             .beginTransaction()
@@ -250,9 +245,13 @@ public class FragmentTopupPackage extends  Fragment{
         if (enable){
             mHolder.mEditPhone.setBackgroundResource(android.R.drawable.editbox_background_normal);
             mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+            mHolder.mBtnNext.setVisibility(View.VISIBLE);
+            mHolder.mBtnTopup.setVisibility(View.GONE);
         } else {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
             mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
+            mHolder.mBtnNext.setVisibility(View.GONE);
+            mHolder.mBtnTopup.setVisibility(View.VISIBLE);
         }
     }
 
@@ -389,12 +388,6 @@ public class FragmentTopupPackage extends  Fragment{
 //        activity.getSupportFragmentManager().beginTransaction()
 //                .replace(R.id.container_topup, FragmentTopupSlip.newInstance()).commit();
 
-    }
-
-    public void onBackPress(){
-        mHolder.mBtnNext.setVisibility(View.VISIBLE);
-        mHolder.mBtnTopup.setVisibility(View.GONE);
-        setEnableEditPhone(true);
     }
 
     public class ViewHolder{

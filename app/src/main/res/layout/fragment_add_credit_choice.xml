@@ -47,36 +47,44 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/container_topup_package"
+    <FrameLayout
+        android:id="@+id/container_add_credit_choice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <me.grantland.widget.AutofitTextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/choose_amount_to_agent_transfer"
-            android:gravity="center"
-            app:sizeToFit="true"
-            android:singleLine="true"
-            android:textStyle="bold"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_space"
-            android:paddingRight="@dimen/activity_space"
-            />
-
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:numColumns="3"
             >
 
-        </GridView>
-    </LinearLayout>
+            <me.grantland.widget.AutofitTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_amount_to_agent_transfer"
+                android:gravity="center"
+                app:sizeToFit="true"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_space"
+                android:paddingRight="@dimen/activity_space"
+                />
+
+            <GridView
+                android:id="@+id/grid_amount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="3"
+                >
+
+            </GridView>
+        </LinearLayout>
+
+    </FrameLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

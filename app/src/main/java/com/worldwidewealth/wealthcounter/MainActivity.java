@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -116,76 +117,81 @@ public class MainActivity extends AppCompatActivity {
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
-
-                Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
-                        Global.getDEVICEID(),
-                        Configs.getPLATFORM(),
-                        EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
-                        EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
-                        Global.getTXID())));
-
-                call.enqueue(new Callback<ResponseBody>() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Gson gson = new Gson();
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        String strResponse = null;
-                        ResponseModel responseModel = null;
-                        try {
-                           strResponse = response.body().string();
-                            JsonParser jsonParser = new JsonParser();
+                    public void run() {
+                        Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
+                                Global.getDEVICEID(),
+                                Configs.getPLATFORM(),
+                                EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
+                                EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
+                                Global.getTXID())));
 
-                            JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
-                            responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Gson gson = new Gson();
+                                DialogCounterAlert.DialogProgress.dismiss();
+                                String strResponse = null;
+                                ResponseModel responseModel = null;
+                                try {
+                                    strResponse = response.body().string();
+                                    JsonParser jsonParser = new JsonParser();
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                                    JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
+                                    responseModel = gson.fromJson(jsonObject, ResponseModel.class);
 
-                        if (responseModel != null){
-                            Log.e("ResponseModel", "true");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (responseModel != null){
+                                    Log.e("ResponseModel", "true");
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
-                            String[] strRegisDevice = responseModel.getMsg().split(":");
-                            if (strRegisDevice.length > 1){
-                                registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
-                            } else{
-                                Toast.makeText(MainActivity.this, responseModel.getMsg(),
-                                        Toast.LENGTH_SHORT).show();
+                                    String[] strRegisDevice = responseModel.getMsg().split(":");
+                                    if (strRegisDevice.length > 1){
+                                        registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
+                                    } else{
+                                        Toast.makeText(MainActivity.this, responseModel.getMsg(),
+                                                Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                } else {
+                                    Log.e("ResponseModel", "false");
+                                    String responseStr = strResponse;
+                                    String converted = Until.ConvertJsonEncode(responseStr);
+                                    String responDecode = Until.decode(converted);
+                                    Log.e("strResponse", converted);
+                                    Log.e("strDecode", responDecode);
+
+                                    //String json = gson.toJson(responDecode);
+                                    LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
+                                    Global.setUSERID(loginResponseModel.getUSERID());
+                                    Global.setAGENTID(loginResponseModel.getAGENTID());
+                                    Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
+                                    Global.setBALANCE(loginResponseModel.getBALANCE());
+
+                                    Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+
+                                }
+
 
                             }
 
-                        } else {
-                            Log.e("ResponseModel", "false");
-                            String responseStr = strResponse;
-                            String converted = Until.ConvertJsonEncode(responseStr);
-                            String responDecode = Until.decode(converted);
-                            Log.e("strResponse", converted);
-                            Log.e("strDecode", responDecode);
-
-                            //String json = gson.toJson(responDecode);
-                            LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                            Global.setUSERID(loginResponseModel.getUSERID());
-                            Global.setAGENTID(loginResponseModel.getAGENTID());
-                            Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
-                            Global.setBALANCE(loginResponseModel.getBALANCE());
-
-                            Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                            finish();
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                        t.printStackTrace();
-                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                                new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                            }
+                        });
+
                     }
-                });
+                }, 1000);
             }
         });
 
@@ -209,19 +215,27 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, new DataRequestModel()));
-                        call.enqueue(new Callback<ResponseModel>() {
+                        new DialogCounterAlert.DialogProgress(MainActivity.this);
+                        new Handler().postDelayed(new Runnable() {
                             @Override
-                            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                                new DialogCounterAlert(MainActivity.this, getString(R.string.register), getString(R.string.register_done));
-                            }
+                            public void run() {
+                                Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, new DataRequestModel()));
+                                call.enqueue(new Callback<ResponseModel>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                                        DialogCounterAlert.DialogProgress.dismiss();
+                                        new DialogCounterAlert(MainActivity.this, getString(R.string.register), getString(R.string.register_done));
+                                    }
 
-                            @Override
-                            public void onFailure(Call<ResponseModel> call, Throwable t) {
-                                t.printStackTrace();
-                                new DialogNetworkError(MainActivity.this);
+                                    @Override
+                                    public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                        t.printStackTrace();
+                                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                                    }
+                                });
+
                             }
-                        });
+                        }, 1000);
                     }
                 }).show();
     }
