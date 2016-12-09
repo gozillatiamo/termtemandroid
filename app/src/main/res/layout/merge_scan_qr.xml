@@ -7,9 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/zxing_barcode_surface"
-        app:zxing_framing_rect_height="220dp"
-        app:zxing_framing_rect_width="250dp"
-
         />
 
     <com.journeyapps.barcodescanner.ViewfinderView
@@ -25,15 +22,16 @@
         android:id="@+id/zxing_status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:background="@color/zxing_transparent"
-        android:text="@string/zxing_msg_default_status"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/background_tilte_ovals"
+        android:text="@string/scan_qr_code"
+        android:layout_marginTop="@dimen/icon_size"
         android:textColor="@color/zxing_status_text"/>
     <RelativeLayout
-        android:layout_height="220dp"
+        android:layout_height="250dp"
         android:layout_width="250dp"
         android:layout_gravity="center"
-        android:background="@android:drawable/picture_frame">
+        android:background="@drawable/background_scan">
 
     </RelativeLayout>
 

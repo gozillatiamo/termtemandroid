@@ -38,13 +38,12 @@ public class ActivityRegister extends AppCompatActivity {
     private ViewHolder mHolder;
     private static final int FIRSTNAME = 0;
     private static final int LASTNAME = 1;
-    private static final int EMAIL = 2;
-    private static final int TEL = 3;
-    private static final int IDEN = 4;
-    private static final int PEOPLE = 5;
+    private static final int TEL = 2;
+    private static final int IDEN = 3;
+    private static final int PEOPLE = 4;
     private String mEmail, mFirstName, mLastName, mTel, mIden;
     private int mPerson;
-    private boolean[] mDataCheck = new boolean[6];
+    private boolean[] mDataCheck = new boolean[5];
     private APIServices services;
 
 //    public static Fragment newInstance(){
@@ -140,6 +139,12 @@ public class ActivityRegister extends AppCompatActivity {
                 mIden = mHolder.mEditIdentification.getText().toString();
                 mPerson = mHolder.mSpinnerTypePeople.getSelectedItemPosition()-1;
 
+                if (!mEmail.equals("")){
+                    if (!CheckSyntaxData.isEmailValid(mEmail)){
+                        Toast.makeText(ActivityRegister.this, getString(R.string.email_syntax_error), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 Log.e("RegisterData:", "E-mail:" + mEmail +"\n"+
                         "FirstName:" + mFirstName +"\n"+
                         "LastName:" + mLastName +"\n"+
@@ -214,9 +219,7 @@ public class ActivityRegister extends AppCompatActivity {
                 boolean check = false;
 
                 switch (type){
-                    case EMAIL:
-                        check = CheckSyntaxData.isEmailValid(s.toString());
-                        break;
+
                     case TEL:
                         check = s.length() == 10;
                         break;
@@ -259,7 +262,6 @@ public class ActivityRegister extends AppCompatActivity {
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
             mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
-            mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
             mEditFristName = (EditText) view.findViewById(R.id.edit_name);
             mEditFristName.addTextChangedListener(onTextChanged(mEditFristName, FIRSTNAME));
             mEditLastName = (EditText) view.findViewById(R.id.edit_last_name);
