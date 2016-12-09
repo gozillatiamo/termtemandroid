@@ -66,7 +66,7 @@
                             android:id="@+id/text_phone_country"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:gravity="center"
                             android:text="+66"
                             ></TextView>

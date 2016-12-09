@@ -14,9 +14,12 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +75,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void initEditText(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mHolder.mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("TH"));
+            mHolder.mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("TH"){
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    super.beforeTextChanged(s, start, count, after);
+                    Log.e("before", s.toString());
+                }
+
+                @Override
+                public synchronized void afterTextChanged(Editable s) {
+                    super.afterTextChanged(s);
+                    Log.e("after", s.toString());
+                }
+            });
         }
     }
 
@@ -248,18 +263,18 @@ public class MainActivity extends AppCompatActivity {
     public class ViewHolder{
 
         private TextView mBtnRegister;
-        private AppCompatButton mBtnLogin;
-        private AppCompatEditText mPhone, mPassword;
+        private Button mBtnLogin;
+        private EditText mPhone, mPassword;
         private Spinner mSpinnerPhoneCountry;
 
         public ViewHolder(AppCompatActivity view){
 
             mBtnRegister = (TextView) view.findViewById(R.id.btn_register);
-            mBtnLogin = (AppCompatButton) view.findViewById(R.id.btn_login);
+            mBtnLogin = (Button) view.findViewById(R.id.btn_login);
 
-            mPhone = (AppCompatEditText) view.findViewById(R.id.edit_phone);
+            mPhone = (EditText) view.findViewById(R.id.edit_phone);
 
-            mPassword = (AppCompatEditText) view.findViewById(R.id.edit_password);
+            mPassword = (EditText) view.findViewById(R.id.edit_password);
             mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
 
         }

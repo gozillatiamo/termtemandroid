@@ -96,8 +96,11 @@ public class FragmentAddCreditChoice extends Fragment {
                 onBackpress();
                 FragmentTransaction transaction = getChildFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                        .add(R.id.container_add_credit_choice, FragmentTopupPreview.newInstance(null))
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .replace(R.id.container_add_credit_choice, FragmentTopupPreview.newInstance(null))
                         .addToBackStack(null);
                 transaction.commit();
                 mHolder.mBtnNext.setVisibility(View.GONE);

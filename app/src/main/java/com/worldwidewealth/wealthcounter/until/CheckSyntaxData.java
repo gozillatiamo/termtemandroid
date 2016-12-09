@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthcounter.until;
 
+import android.content.ContentValues;
 import android.util.Log;
 
 import java.util.regex.Matcher;
@@ -42,6 +43,19 @@ public class CheckSyntaxData {
         if (resultCheckBit == checkbit)
             return true;
         else return false;
+    }
+
+    public static ContentValues formatPhoneNumber(String strPhone){
+        ContentValues values = null;
+        String format = "( _ _ ) _ _ _  _ _  _ _";
+        String valuesPhone = "0";
+
+        for (int i = 0; i < strPhone.length(); i++){
+            char subStr = strPhone.charAt(i);
+            if (i == 0){
+
+            }
+        }
     }
 
 }
