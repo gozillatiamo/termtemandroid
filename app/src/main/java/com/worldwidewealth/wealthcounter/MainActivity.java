@@ -15,6 +15,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -74,21 +75,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEditText(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mHolder.mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("TH"){
+
+            mHolder.mPhone.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    super.beforeTextChanged(s, start, count, after);
-                    Log.e("before", s.toString());
+                    Log.e("beforeTextChanged", s.toString());
                 }
 
                 @Override
-                public synchronized void afterTextChanged(Editable s) {
-                    super.afterTextChanged(s);
-                    Log.e("after", s.toString());
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    Log.e("onTextChanged", s.toString());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    Log.e("afterTextChanged", s.toString());
+
                 }
             });
-        }
+
     }
 
     private void initSpinner(){

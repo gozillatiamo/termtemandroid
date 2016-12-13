@@ -45,6 +45,7 @@ public class CheckSyntaxData {
         else return false;
     }
 
+/*
     public static ContentValues formatPhoneNumber(String strPhone){
         ContentValues values = null;
         String format = "( _ _ ) _ _ _  _ _  _ _";
@@ -57,5 +58,6 @@ public class CheckSyntaxData {
             }
         }
     }
+*/
 
 }
