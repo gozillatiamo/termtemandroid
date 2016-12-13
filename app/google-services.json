@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "800252382933",
-    "firebase_url": "https://wealthcounter-76ff8.firebaseio.com",
-    "project_id": "wealthcounter-76ff8",
-    "storage_bucket": "wealthcounter-76ff8.appspot.com"
+    "project_number": "717799341790",
+    "firebase_url": "https://weathwallet.firebaseio.com",
+    "project_id": "weathwallet",
+    "storage_bucket": "weathwallet.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:800252382933:android:c170f605f0669d40",
+        "mobilesdk_app_id": "1:717799341790:android:5b1ed2561536253c",
         "android_client_info": {
-          "package_name": "com.worldwidewealth.wealthcounter"
+          "package_name": "com.worldwidewealth.wealthwallet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "800252382933-tnj5raogakb7hetiao6qklj42p9kl2pm.apps.googleusercontent.com",
+          "client_id": "717799341790-sfrimtons9du8ljel653a5dhq3l3ci3d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA3cIVfiu9LgvLsIvml065bNfGtB4kDLC8"
+          "current_key": "AIzaSyCgXreb-4qwsoDbKGgu22-H3uKHijZbHrA"
         }
       ],
       "services": {

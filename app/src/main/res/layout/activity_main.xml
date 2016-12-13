@@ -8,7 +8,7 @@
     android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.worldwidewealth.wealthcounter.MainActivity">
+    tools:context="com.worldwidewealth.wealthwallet.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

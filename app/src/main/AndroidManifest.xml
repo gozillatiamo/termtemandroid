@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.worldwidewealth.wealthcounter">
+    package="com.worldwidewealth.wealthwallet">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,25 +15,25 @@
         android:required="true" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.worldwidewealth.wealthwallet.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo_wc_without_text"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="com.worldwidewealth.wealthwallet.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".MyFirebaseInstanceIDService">
+        <service android:name="com.worldwidewealth.wealthwallet.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".SplashScreenWWW"
+            android:name="com.worldwidewealth.wealthwallet.SplashScreenWWW"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -43,36 +43,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.worldwidewealth.wealthwallet.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.ActivityDashboard"
+            android:name="com.worldwidewealth.wealthwallet.dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ActivityShowNotify"
+            android:name="com.worldwidewealth.wealthwallet.ActivityShowNotify"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ActivityPin"
+            android:name="com.worldwidewealth.wealthwallet.ActivityPin"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".dashboard.billpayment.ActivitySettingAlert" />
-        <activity android:name=".dashboard.billpayment.ActivityOneBill" />
-        <activity android:name=".dashboard.billpayment.ActivityBillDetail" />
-        <activity android:name=".dashboard.billpayment.ActivityBillHistory" />
-        <activity android:name=".game.ActivityGame" />
-        <activity android:name=".SplashScreenCounter" />
-        <activity android:name=".ActivityRegister" />
-        <activity android:name=".dashboard.topup.ActivityTopup" />
-        <activity android:name=".dashboard.report.ActivityReport" />
-        <activity android:name=".dashboard.myqrcode.ActivityMyQrCode" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.billpayment.ActivitySettingAlert" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.billpayment.ActivityOneBill" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.billpayment.ActivityBillDetail" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.billpayment.ActivityBillHistory" />
+        <activity android:name="com.worldwidewealth.wealthwallet.game.ActivityGame" />
+        <activity android:name="com.worldwidewealth.wealthwallet.SplashScreenCounter" />
+        <activity android:name="com.worldwidewealth.wealthwallet.ActivityRegister" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.topup.ActivityTopup" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport" />
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.myqrcode.ActivityMyQrCode" />
         <activity
-            android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
+            android:name="com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.ActivityReportMT"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".dashboard.addcreditline.ActivityAddCreditLine"></activity>
+        <activity android:name="com.worldwidewealth.wealthwallet.dashboard.addcreditline.ActivityAddCreditLine"></activity>
     </application>
 
 </manifest>

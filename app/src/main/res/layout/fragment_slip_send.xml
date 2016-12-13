@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.worldwidewealth.wealthcounter.dashboard.reportmoneytransfer.fragment.FragmentSlipSend">
+    tools:context="com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment.FragmentSlipSend">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout

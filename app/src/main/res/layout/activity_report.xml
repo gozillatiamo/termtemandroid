@@ -5,7 +5,7 @@
     android:id="@+id/activity_report"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.worldwidewealth.wealthcounter.dashboard.report.ActivityReport">
+    tools:context="com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
