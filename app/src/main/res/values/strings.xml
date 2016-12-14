@@ -145,6 +145,11 @@
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการแลกเปลี่ยน</string>
     <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
+    <string name="take_photo">ถ่ายรูป</string>
+    <string name="choose_pic">เลือกรูปภาพ</string>
+    <string name="error">เกิดข้อผิดพลาด</string>
+    <string name="topup_time_out">การทำรายการของท่านใช้เวลานานกินกำหนดกรุณาลองใหม่ภายหลัง</string>
+    <string name="retry">ลองใหม่อีกครั้ง</string>
 
 
     <string-array name="str_list_dashboard">

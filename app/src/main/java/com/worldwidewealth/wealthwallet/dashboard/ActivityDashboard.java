@@ -177,7 +177,8 @@ public class ActivityDashboard extends AppCompatActivity{
                                             alertDialog.dismiss();
                                             new DialogCounterAlert(ActivityDashboard.this,
                                                     response.body().getMsg(),
-                                                    getString(R.string.change_password_success));
+                                                    getString(R.string.change_password_success),
+                                                    null);
                                         } else {
                                             new DialogNetworkError(ActivityDashboard.this);
 

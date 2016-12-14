@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.wealthwallet.model.TopupPreviewResponseModel;
 
 import java.text.NumberFormat;
@@ -63,7 +64,30 @@ public class FragmentTopupPreview extends Fragment {
         return rootView;
     }
 
-/*
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
+        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
+        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
+        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+
+    }
+
+    /*
     @Override
     public void onStart() {
         super.onStart();

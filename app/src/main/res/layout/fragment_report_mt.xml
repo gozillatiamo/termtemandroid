@@ -1,88 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:background="?attr/background"
     android:focusableInTouchMode="true">
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:padding="@dimen/activity_vertical_margin"
-        android:layout_weight="1">
+        >
 
-        <android.support.design.widget.TextInputLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:hintTextAppearance="@style/MyTextInputLayout"
-            android:textColorHint="@android:color/secondary_text_dark"
-            >
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/edit_amount"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_vertical_margin"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/fill_money_amount"
-                android:gravity="center"
-                android:inputType="numberDecimal"
-                app:theme="@style/MyEditTextStyle"
-                />
-        </android.support.design.widget.TextInputLayout>
-    </RelativeLayout>
+                android:layout_centerInParent="true"
+                app:hintTextAppearance="@style/MyTextInputLayout"
+                android:textColorHint="@android:color/secondary_text_dark"
+                >
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edit_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/fill_money_amount"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    app:theme="@style/MyEditTextStyle"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/image_photo"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            />
+            android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/icon_size"
-            android:textColor="@android:color/darker_gray"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:text="@string/add_slip_picture"/>
+            <ImageView
+                android:id="@+id/image_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                />
 
-        <ImageButton
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_a_photo"
-            android:background="@drawable/background_circle"
-            android:id="@+id/btn_take_photo"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/icon_size"
+                android:textColor="@android:color/darker_gray"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/add_slip_picture"/>
 
-    </RelativeLayout>
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_a_photo"
+                android:background="@drawable/background_circle"
+                android:id="@+id/btn_take_photo"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.4"
-        android:background="@android:color/white"
-        android:padding="@dimen/activity_vertical_margin">
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/btn_next"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:text="@string/next"
-            style="@style/MyButton"/>
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_vertical_margin">
 
-
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@android:color/holo_orange_dark"
+                android:text="@string/next"
+                style="@style/MyButton"/>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -174,7 +174,7 @@ public class ActivityReport extends AppCompatActivity {
                 if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                     ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
                     DialogCounterAlert.DialogProgress.dismiss();
-                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg());
+                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
                 } else {
                     DialogCounterAlert.DialogProgress.dismiss();
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();

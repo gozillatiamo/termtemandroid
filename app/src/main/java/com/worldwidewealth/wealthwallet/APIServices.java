@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,7 +25,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -101,7 +105,9 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> getbalance(@Body RequestModel requestModel);
 
-
+    @Multipart
+    @POST("/")
+    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("data") RequestModel requestModel);
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 

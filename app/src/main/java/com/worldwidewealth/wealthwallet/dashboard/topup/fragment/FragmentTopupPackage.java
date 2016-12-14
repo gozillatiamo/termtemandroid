@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthwallet.dashboard.topup.fragment;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -61,7 +62,9 @@ public class FragmentTopupPackage extends  Fragment{
     private APIServices services;
     private double mAmt = 0.00;
     private String mButtonID = null;
-    private Handler mHandler;
+    public Handler mHandler;
+    private int mTimeout = 0;
+    public Runnable mRunnableSubmit;
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -94,7 +97,6 @@ public class FragmentTopupPackage extends  Fragment{
 
         return rootView;
     }
-
 
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
@@ -282,21 +284,33 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-    private void serviceSubmitToup(String responseStr){
+    private void serviceSubmitToup(final String responseStr){
 
         String converted = Until.ConvertJsonEncode(responseStr);
         final String responDecode = Until.decode(converted);
         final TopupResponseModel model = new Gson().fromJson(responDecode, TopupResponseModel.class);
-        mHandler.postDelayed(new Runnable() {
+        mTimeout = 0;
+        mRunnableSubmit = new Runnable() {
             @Override
             public void run() {
+                mTimeout++;
+                Log.e("Time", mTimeout+"");
+                if (mTimeout == 10){
+                    new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.topup_time_out), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            serviceTopup();
+                        }
+                    });
+                    mHandler.removeCallbacks(mRunnableSubmit);
+                    return;
+                }
+                Log.e("OTP", Global.getOTP()+"");
 
-                while(Global.getOTP() == null) {
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                if (Global.getOTP() == null){
+                    mHandler.removeCallbacks(mRunnableSubmit);
+                    mHandler.postDelayed(mRunnableSubmit, postDelay);
+                    return;
                 }
 
                 Call<ResponseBody> callSubmit = services.submitTopup(
@@ -318,7 +332,10 @@ public class FragmentTopupPackage extends  Fragment{
                             if (responseModel.getStatus() == APIServices.SUCCESS) {
                                 serviceEslip(model.getTranid());
                             } else {
-                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, responseModel.getMsg());
+                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
+                                        null,
+                                        responseModel.getMsg(),
+                                        null);
                             }
 
                         } else {
@@ -333,7 +350,9 @@ public class FragmentTopupPackage extends  Fragment{
                 });
 
             }
-        }, postDelay);
+        };
+
+        mHandler.postDelayed(mRunnableSubmit, postDelay);
 
 /*
         Thread thread = new Thread() {
@@ -361,7 +380,10 @@ public class FragmentTopupPackage extends  Fragment{
 //                    Toast.makeText(FragmentTopupPackage.this.getContext(), responseModel.getMsg(), Toast.LENGTH_LONG).show();
                     if (responseModel.getFf().equals("")) {
 
-                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(), null, getString(R.string.slip_not_found));
+                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
+                                null,
+                                getString(R.string.slip_not_found),
+                                null);
 
                     } else {
 

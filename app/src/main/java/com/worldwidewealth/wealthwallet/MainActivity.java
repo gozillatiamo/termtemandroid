@@ -224,7 +224,10 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                         DialogCounterAlert.DialogProgress.dismiss();
-                                        new DialogCounterAlert(MainActivity.this, getString(R.string.register), getString(R.string.register_done));
+                                        new DialogCounterAlert(MainActivity.this,
+                                                getString(R.string.register),
+                                                getString(R.string.register_done),
+                                                null);
                                     }
 
                                     @Override
