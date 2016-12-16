@@ -1,10 +1,13 @@
 package com.worldwidewealth.wealthwallet;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
+import com.worldwidewealth.wealthwallet.model.RequestUploadImage;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.model.SignInRequestModel;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -47,6 +50,7 @@ public interface APIServices {
     public static final String ACTIONSAVESLIP = "SAVESLIPE";
     public static final String ACTIONSALERPT = "SALERPT";
     public static final String ACTIONGETBALANCE = "GETBALANCE";
+    public static final String ACTIONUPLOADIMAGE = "NOTIPAY";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -105,9 +109,8 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> getbalance(@Body RequestModel requestModel);
 
-    @Multipart
-    @POST("/")
-    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("data") RequestModel requestModel);
+    @POST("service.ashx")
+    Call<ResponseBody> postImage(@Body RequestModel requestModel);
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -121,9 +124,9 @@ public interface APIServices {
                     Request originalRequest = chain.request();
                     Request.Builder builder = originalRequest.newBuilder();
                     if (originalRequest.method().equalsIgnoreCase("POST")){
+                        Log.e("POST", "TRUE");
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
-
                     }
 
                     return  chain.proceed(builder.build());

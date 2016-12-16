@@ -150,6 +150,10 @@
     <string name="error">เกิดข้อผิดพลาด</string>
     <string name="topup_time_out">การทำรายการของท่านใช้เวลานานกินกำหนดกรุณาลองใหม่ภายหลัง</string>
     <string name="retry">ลองใหม่อีกครั้ง</string>
+    <string name="please_enter_reference">กรุณากรอกหมายเลขอ้างอิง</string>
+    <string name="please_select_date_time">กรุณาเลือก วันที่-เวลา</string>
+
+
 
 
     <string-array name="str_list_dashboard">

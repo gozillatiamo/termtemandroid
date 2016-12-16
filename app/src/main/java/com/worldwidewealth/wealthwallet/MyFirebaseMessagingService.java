@@ -30,10 +30,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.e("notiData", remoteMessage.getData().toString());
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
-        if (box.contains("*")){
-            Global.setOTP(box.split("\\*")[0]);
-        } else {
-            sendNotification(txt, box);
+
+        if (box != null) {
+            if (box.contains("*")) {
+                Global.setOTP(box.split("\\*")[0]);
+            } else {
+                sendNotification(txt, box);
+            }
         }
     }
 

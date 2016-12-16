@@ -42,6 +42,8 @@ import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -88,11 +90,12 @@ public class Until {
             public void writeTo(BufferedSink sink) throws IOException {
                 Buffer buffer = new Buffer();
                 body.writeTo(buffer);
+                Log.e("encode", "true");
                 String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
-                byte[] converted = ConvertJsonEncode(encoded).getBytes();
-                sink.write(converted);
                 Log.e("encoded", encoded);
-                Log.e("converted", ConvertJsonEncode(encoded));
+                byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
+                Log.e("converted", new StringBuilder(encoded).reverse().toString());
+                sink.write(converted);
                 buffer.close();
                 sink.close();
             }
@@ -268,7 +271,7 @@ public class Until {
 
     public static Uri getImageUri(Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
         String path = MediaStore.Images.Media.insertImage(MyApplication.getContext().getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
@@ -354,5 +357,17 @@ public class Until {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
+    }
+
+    public static String encodeBitmapToUpload(Bitmap bitmap){
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageData = baos.toByteArray();
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageData, Base64.DEFAULT);
+        return encodedImage;
     }
 }
