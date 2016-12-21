@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,11 +34,13 @@ import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.SimpleDividerItemDecoration;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import okhttp3.ResponseBody;
@@ -182,11 +185,23 @@ public class ActivityReport extends AppCompatActivity {
                             .fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
                                     new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
 
+                    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("th", "TH"));
+                    format.setMaximumFractionDigits(2);
+                    format.setMinimumFractionDigits(2);
+                    double total = 0;
+
                     if (modelList.size() == 0){
                         findViewById(R.id.txt_not_found_report).setVisibility(View.VISIBLE);
                     } else {
                         findViewById(R.id.txt_not_found_report).setVisibility(View.GONE);
+
+
+                        for (SalerptResponseModel model : modelList){
+                            total += model.getCHECKTOTAL();
+                        }
                     }
+
+                    mHolder.mTextReportTotal.setText(format.format(total));
                     mAdapter.updateAll(modelList);
 
                 }
@@ -228,10 +243,12 @@ public class ActivityReport extends AppCompatActivity {
     private class ViewHolder{
         private RecyclerView mListReport;
         private Toolbar mToolbar;
+        private TextView mTextReportTotal;
 
         public ViewHolder(Activity itemView){
             mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
             mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
+            mTextReportTotal = (TextView) itemView.findViewById(R.id.txt_report_total);
         }
     }
 }

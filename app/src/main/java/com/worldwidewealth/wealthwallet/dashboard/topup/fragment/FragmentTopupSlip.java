@@ -57,6 +57,7 @@ public class FragmentTopupSlip extends Fragment {
     private Bitmap mImageBitmap;
     private APIServices services;
     private String mTransID;
+    private String mFileName;
 
     private static final String IMAGE = "image";
     private static final String TRANSID = "transid";
@@ -90,6 +91,9 @@ public class FragmentTopupSlip extends Fragment {
         mImageByte = getArguments().getByteArray(IMAGE);
         mTransID = getArguments().getString(TRANSID);
         services = APIServices.retrofit.create(APIServices.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        Date now = new Date();
+        mFileName = formatter.format(now) + ".jpg";
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_slip, container, false);
             mHolder = new ViewHolder(rootView);
@@ -158,6 +162,7 @@ public class FragmentTopupSlip extends Fragment {
     private void initEslip(){
         mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
         mHolder.mImageSlip.setImageBitmap(mImageBitmap);
+        saveImage();
     }
 
     private void initBtn(){
@@ -194,32 +199,10 @@ public class FragmentTopupSlip extends Fragment {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        boolean success;
-                        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-                        File myDir = new File(root + "/WealthCounterSlip");
-                        myDir.mkdirs();
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-                        Date now = new Date();
-                        String fname = formatter.format(now) + ".jpg";
-                        File file = new File(myDir, fname);
-                        Log.e("file", "" + file);
-                        if (file.exists())
-                            file.delete();
-                        try {
-                            FileOutputStream out = new FileOutputStream(file);
-                            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                            out.flush();
-                            out.close();
-                            MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
-                            success = true;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            success = false;
-                        }
 
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(FragmentTopupSlip.this.getContext());
                         alertDialog.setPositiveButton(R.string.done, null);
-                        if (success){
+                        if (saveImage()){
                             alertDialog.setMessage(R.string.save_slip_success);
                         } else {
                             alertDialog.setMessage(R.string.save_slip_fail);
@@ -236,7 +219,28 @@ public class FragmentTopupSlip extends Fragment {
                 });
             }
         });
-
     }
 
+    private boolean saveImage(){
+        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        File myDir = new File(root + "/WealthCounterSlip");
+        myDir.mkdirs();
+
+        File file = new File(myDir, mFileName);
+        Log.e("file", "" + file);
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 }

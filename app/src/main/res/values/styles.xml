@@ -49,8 +49,8 @@
     <style name="MyButton" parent="Base.Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16dp</item>
-        <item name="android:padding">20dp</item>
+        <item name="android:textSize">@dimen/text_menu_size_dashboard</item>ti
+        <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>
 
     <style name="MyContainerFragment">
@@ -62,15 +62,15 @@
 
     <style name="MyTitleActionBar" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
     </style>
 
     <style name="MyIconMenuDashboard">
         <item name="android:adjustViewBounds">true</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
-        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingTop">@dimen/padding_icon_dashboard</item>
+        <item name="android:paddingBottom">@dimen/padding_icon_dashboard</item>
         <item name="android:paddingLeft">@dimen/activity_space</item>
         <item name="android:paddingRight">@dimen/activity_space</item>
     </style>
@@ -80,5 +80,24 @@
 
     </style>
 
+    <style name="MyTitleMenuDashboard">
+        <item name="android:singleLine">true</item>
+        <item name="sizeToFit">true</item>
+        <item name="android:textSize">@dimen/text_menu_size_dashboard</item>
+        <item name="android:paddingTop">@dimen/padding_icon_dashboard</item>
+        <item name="android:paddingBottom">@dimen/padding_icon_dashboard</item>
+        <item name="android:paddingRight">@dimen/activity_space</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="MyTabTextStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">@dimen/my_text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="MyTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyTabTextStyle</item>
+    </style>
 
 </resources>

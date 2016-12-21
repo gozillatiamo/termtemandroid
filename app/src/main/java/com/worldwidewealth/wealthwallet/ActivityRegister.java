@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.until.CheckSyntaxData;
+import com.worldwidewealth.wealthwallet.until.Until;
 
 import me.grantland.widget.AutofitTextView;
 import retrofit2.Call;
@@ -57,6 +58,7 @@ public class ActivityRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mHolder = new ViewHolder(this);
+        Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
         initPeople();
@@ -262,13 +264,18 @@ public class ActivityRegister extends AppCompatActivity {
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
             mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
+//            mEditEmail.setOnFocusChangeListener(Until.onFocusEditText());
             mEditFristName = (EditText) view.findViewById(R.id.edit_name);
+//            mEditFristName.setOnFocusChangeListener(Until.onFocusEditText());
             mEditFristName.addTextChangedListener(onTextChanged(mEditFristName, FIRSTNAME));
             mEditLastName = (EditText) view.findViewById(R.id.edit_last_name);
+//            mEditLastName.setOnFocusChangeListener(Until.onFocusEditText());
             mEditLastName.addTextChangedListener(onTextChanged(mEditLastName, LASTNAME));
             mEditTel = (EditText) view.findViewById(R.id.edit_tel);
+//            mEditTel.setOnFocusChangeListener(Until.onFocusEditText());
             mEditTel.addTextChangedListener(onTextChanged(mEditTel, TEL));
             mEditIdentification = (EditText) view.findViewById(R.id.edit_identification);
+//            mEditIdentification.setOnFocusChangeListener(Until.onFocusEditText());
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mBtnSignIn = (AutofitTextView) view.findViewById(R.id.btn_signin);

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:padding="@dimen/activity_space"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     >
 
     <LinearLayout

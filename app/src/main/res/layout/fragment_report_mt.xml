@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:background="?attr/background"
-    android:focusableInTouchMode="true">
+    android:clickable="true"
+    android:focusableInTouchMode="true" >
 
 
     <LinearLayout
@@ -22,25 +23,6 @@
             android:padding="@dimen/activity_vertical_margin"
             android:orientation="vertical"
             >
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                app:hintTextAppearance="@style/MyTextInputLayout"
-                android:textColorHint="@android:color/secondary_text_dark"
-                >
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_reference"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_reference"
-                    android:inputType="number"
-                    android:imeOptions="actionNext"
-                    app:theme="@style/MyEditTextStyle"
-                    />
-            </android.support.design.widget.TextInputLayout>
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +50,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/date_transfer"
                     android:textSize="16sp"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:gravity="center|right"
                     android:textColor="@android:color/secondary_text_dark"/>
 
@@ -90,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/time"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:textSize="16sp"
                     android:gravity="center|right"
                     android:textColor="@android:color/secondary_text_dark"/>
@@ -104,6 +86,96 @@
                     android:text="@string/please_select"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/bank_mt_start"
+                    android:layout_weight="1.5"
+                    android:textSize="16sp"
+                    android:gravity="center|right"
+                    android:textColor="@android:color/secondary_text_dark"/>
+                <include
+                    android:id="@+id/include_bank_start"
+                    layout="@layout/layout_btn_choice_bank"/>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/layout_bank_mt_start"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--style="@style/Widget.AppCompat.Button.Borderless.Colored">-->
+                    <!--<ImageView-->
+                        <!--android:id="@+id/icon_bank_start"-->
+                        <!--android:layout_width="@dimen/icon_size"-->
+                        <!--android:layout_height="@dimen/icon_size"-->
+                        <!--android:src="@drawable/ic_add_a_photo"-->
+                        <!--android:layout_marginRight="@dimen/activity_space"-->
+                        <!--android:visibility="gone"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/txt_bank"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/please_select"-->
+                        <!--android:gravity="center"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:textColor="@android:color/darker_gray"-->
+                        <!--style="@style/TextAppearance.AppCompat.Button" />-->
+
+                <!--</LinearLayout>-->
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/bank_mt_end"
+                    android:layout_weight="1.5"
+                    android:textSize="16sp"
+                    android:gravity="center|right"
+                    android:textColor="@android:color/secondary_text_dark"/>
+                <include
+                    android:id="@+id/include_bank_end"
+                    layout="@layout/layout_btn_choice_bank"/>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/layout_bank_mt"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--style="@style/Widget.AppCompat.Button.Borderless.Colored">-->
+                    <!--<ImageView-->
+                        <!--android:id="@+id/icon_bank"-->
+                        <!--android:layout_width="@dimen/icon_size"-->
+                        <!--android:layout_height="@dimen/icon_size"-->
+                        <!--android:src="@drawable/ic_add_a_photo"-->
+                        <!--android:layout_marginRight="@dimen/activity_space"-->
+                        <!--android:visibility="gone"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/txt_bank"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="@string/please_select"-->
+                        <!--android:gravity="center"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:textColor="@android:color/darker_gray"-->
+                        <!--style="@style/TextAppearance.AppCompat.Button" />-->
+
+                <!--</LinearLayout>-->
+
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -114,15 +186,6 @@
             android:layout_weight="1"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/icon_size"
-                android:textColor="@android:color/darker_gray"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="@string/add_slip_picture"/>
-
             <ImageButton
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -132,10 +195,21 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/activity_space"
+                android:textColor="@android:color/darker_gray"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/add_slip_picture"/>
+
+
             <ImageView
                 android:id="@+id/image_photo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"

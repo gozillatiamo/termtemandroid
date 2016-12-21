@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:text="THB"
+            android:visibility="gone"
             android:textColor="@android:color/tertiary_text_dark"
             android:textSize="8sp"/>
     </LinearLayout>

@@ -37,9 +37,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wealth Counter"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"/>
+                        style="@style/MyTitleActionBar"
+                        />
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
                 <LinearLayout
@@ -59,6 +58,7 @@
                         android:id="@+id/menu_add_credit_line"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:layout_weight="1"
                         app:cardElevation="0dp"
                         app:cardUseCompatPadding="true">
@@ -84,6 +84,214 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_topup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="0dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_topup"
+                                    android:id="@+id/imageView10" />
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:text="@string/topup"
+                                    android:id="@+id/autofitTextView4" />
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_report"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardElevation="0dp"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_report"/>
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/report_history"
+                                    style="@style/MyTitleMenuDashboard"
+                                    />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardElevation="0dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_setting" />
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/setting"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:id="@+id/autofitTextView3" />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardElevation="0dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_support"
+                                    android:id="@+id/imageView9" />
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/support"
+                                    style="@style/MyTitleMenuDashboard"
+                                    app:sizeToFit="true"
+                                    android:id="@+id/autofitTextView5" />
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            app:cardElevation="0dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_scan_qr"
+                                    android:tint="#ccc"
+                                    />
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/dashboard_scan_qr"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:textColor="#ccc"
+                                    android:id="@+id/autofitTextView6" />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_my_qr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:cardElevation="0dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_my_qr"
+                                    android:tint="#ccc"
+                                    />
+
+                                <me.grantland.widget.AutofitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/dashboard_my_qr"
+                                    android:textColor="#ccc"
+                                    style="@style/MyTitleMenuDashboard"
+
+                                    />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+
+                    </LinearLayout>
+
                     <android.support.v7.widget.CardView
                         android:id="@+id/menu_report_mtf"
                         android:layout_width="match_parent"
@@ -95,239 +303,36 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:gravity="center">
 
                             <ImageView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_report_money_tf"
+                                android:layout_height="match_parent"
                                 style="@style/MyIconMenuDashboard"
+                                android:src="@drawable/ic_report_money_tf"
                                 android:id="@+id/imageView7" />
 
                             <me.grantland.widget.AutofitTextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                app:sizeToFit="true"
+                                android:layout_height="match_parent"
+                                style="@style/MyTitleMenuDashboard"
                                 android:text="@string/dashboard_mtf"
                                 android:id="@+id/autofitTextView2" />
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_topup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:cardUseCompatPadding="true"
-                            app:cardElevation="0dp"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_topup"/>
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:singleLine="true"
-                                    app:sizeToFit="true"
-                                    android:gravity="center"
-                                    android:text="@string/topup"
-                                    />
-
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_support" />
-
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/support"
-                                    android:singleLine="true"
-                                    app:sizeToFit="true" />
-
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_report"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="true">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_report"/>
-
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/report"
-                                    app:sizeToFit="true"
-                                    android:singleLine="true"
-                                     />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="true">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_setting"
-                                    android:layout_marginRight="@dimen/activity_space"/>
-
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/setting"
-                                    app:sizeToFit="true"
-                                    android:singleLine="true"
-                                     />
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_my_qr"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="true">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_my_qr"
-                                    />
-
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dashboard_my_qr"
-                                    app:sizeToFit="true"
-                                    android:singleLine="true"
-                                    />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="true">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_scan_qr"
-                                    />
-
-                                <me.grantland.widget.AutofitTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dashboard_scan_qr"
-                                    app:sizeToFit="true"
-                                    android:singleLine="true"
-                                     />
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
-
-
-
-                    </LinearLayout>
-
-                    <TextView
+                    <Button
                         android:id="@+id/btn_forgot_password"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1.1"
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="right"
+                        android:gravity="center"
+                        style="@style/MyButton"
                         android:text="@string/change_password"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/tertiary_text_light"
-
+                        android:backgroundTint="@android:color/holo_orange_dark"
                         />
                 </LinearLayout>
 

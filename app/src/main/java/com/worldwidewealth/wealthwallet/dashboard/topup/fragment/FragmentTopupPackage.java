@@ -9,7 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,6 +92,7 @@ public class FragmentTopupPackage extends  Fragment{
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
+        Until.setupUI(rootView);
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
 //        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
         initPageTopup();
@@ -184,7 +188,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void servicePreview(){
-        mPhone = mHolder.mEditPhone.getText().toString();
+        mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
         if (mPhone.length() != 10){
             AlertDialog alertDialog = new AlertDialog.Builder(getContext())
@@ -417,12 +421,32 @@ public class FragmentTopupPackage extends  Fragment{
         private TextView mTextPrice;
         private ImageView mLogoService;
         private EditText mEditPhone;
+        private boolean mFormatting;
         public ViewHolder(View itemview){
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
             mBtnTopup = (Button) itemview.findViewById(R.id.btn_topup);
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
+//            mEditPhone.setOnFocusChangeListener(Until.onFocusEditText());
+            mEditPhone.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (!mFormatting){
+                        mFormatting = true;
+                        PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                        mFormatting = false;
+                    }
+                }
+            });
 
         }
     }

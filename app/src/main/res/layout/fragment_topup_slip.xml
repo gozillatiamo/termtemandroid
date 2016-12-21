@@ -227,11 +227,9 @@
                 android:id="@+id/btn_save_pic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/MyButton"
                 android:text="@string/save_screenshot"
-                android:textSize="18sp"
                 android:textAllCaps="false"
-                android:padding="20dp"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -246,7 +244,6 @@
                     android:text="@string/back_to_main"
                     android:textAllCaps="false"
                     android:backgroundTint="@android:color/holo_red_dark"
-                    android:textSize="14sp"
                     style="@style/MyButton"
                     />
 
@@ -259,6 +256,7 @@
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:text="@string/spin_lucky"
+                    android:visibility="gone"
                     style="@style/MyButton"
                     />
 

@@ -116,6 +116,7 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+/*
         mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +125,7 @@ public class ActivityDashboard extends AppCompatActivity{
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
+*/
 
         mHolder.mMenuAddCreditLine.setOnClickListener(new View.OnClickListener() {
             @Override

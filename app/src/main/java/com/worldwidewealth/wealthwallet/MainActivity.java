@@ -1,8 +1,11 @@
 package com.worldwidewealth.wealthwallet;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +41,8 @@ import com.worldwidewealth.wealthwallet.until.CheckSyntaxData;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.util.Locale;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHolder = new ViewHolder(this);
-
+        Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
         initBtn();
@@ -68,12 +74,27 @@ public class MainActivity extends AppCompatActivity {
         Global.setTXID(Until.getTXIDSharedPreferences());
     }
 
+    private boolean mFormatting;
+    private String lastChar = " ";
     private void initEditText(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mHolder.mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("TH"){
+        mHolder.mPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-            });
-        }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting){
+                    mFormatting = true;
+                    PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                    mFormatting = false;
+                }
+            }
+        });
     }
 
     private void initSpinner(){
@@ -94,16 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                 finish();
 */
-/*
-                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                if (mWifi.isConnected()) {
-                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi));
-                    return;
-                }
-*/
-                mPhone = mHolder.mPhone.getText().toString();
+//                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//
+//                if (mWifi.isConnected()) {
+//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
+//                    return;
+//                }
+                mPhone = mHolder.mPhone.getText().toString().replaceAll("-", "");
                 mPassword = mHolder.mPassword.getText().toString();
                 if (mPhone.equals("") || mPassword.equals("")) {
                     Toast.makeText(MainActivity.this, getString(R.string.please_enter_data), Toast.LENGTH_SHORT).show();
@@ -261,9 +280,8 @@ public class MainActivity extends AppCompatActivity {
             mBtnLogin = (Button) view.findViewById(R.id.btn_login);
 
             mPhone = (EditText) view.findViewById(R.id.edit_phone);
-
             mPassword = (EditText) view.findViewById(R.id.edit_password);
-            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
+//            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
 
         }
     }

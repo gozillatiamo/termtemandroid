@@ -3,6 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_space">8dp</dimen>
+    <dimen name="padding_icon_dashboard">20dp</dimen>
+    <dimen name="text_menu_size_dashboard">18sp</dimen>
+    <dimen name="my_text_size">16sp</dimen>
     <dimen name="icon_size">24dp</dimen>
     <dimen name="icon_large_size">36dp</dimen>
     <dimen name="padding_column_list">8dp</dimen>

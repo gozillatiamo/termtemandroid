@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.model.LoadButtonResponseModel;
+import com.worldwidewealth.wealthwallet.until.Until;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class FragmentChoiceTopup extends Fragment{
 
         mGrid = new GridView(getActivity());
         initGrid();
+        Until.setupUI(mGrid);
         return mGrid;
     }
 

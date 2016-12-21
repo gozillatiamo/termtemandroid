@@ -9,6 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -17,36 +18,67 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="@string/title_report"
-                style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:gravity="center"
-                android:textColor="@android:color/white"
+                android:text="@string/report_history"
+                style="@style/MyTitleActionBar"
                 />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <TextView
-            android:id="@+id/txt_not_found_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/not_found_report"
-            android:layout_centerInParent="true"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@android:color/tertiary_text_dark"
-            />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_report"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             >
+            <TextView
+                android:id="@+id/txt_not_found_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_found_report"
+                android:layout_centerInParent="true"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/tertiary_text_dark"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_report"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-        </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
 
-    </RelativeLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/total"
+                android:padding="@dimen/activity_space"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/txt_report_total"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="10000"
+                android:textColor="@android:color/white"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:padding="@dimen/activity_space"
+                android:gravity="center|right"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

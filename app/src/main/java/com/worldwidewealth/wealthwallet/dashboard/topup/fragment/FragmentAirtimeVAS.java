@@ -55,6 +55,7 @@ public class FragmentAirtimeVAS extends Fragment {
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_airtime_vas, container, false);
             mHolder = new ViewHolder(rootView);
+            Until.setupUI(rootView);
             rootView.setTag(mHolder);
         } else {
             mHolder = (ViewHolder) rootView.getTag();
@@ -121,6 +122,8 @@ public class FragmentAirtimeVAS extends Fragment {
 
         for(int i=0; i < mHolder.mTab.getTabCount(); i++) {
             View tab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(i);
+            tab.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            tab.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             tab.setBackgroundColor(getResources().getColor(android.R.color.white));
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
             if (i == 0){

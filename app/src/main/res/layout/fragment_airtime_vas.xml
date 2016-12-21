@@ -10,12 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <android.support.design.widget.TabLayout
             android:id="@+id/topup_tab"
+            android:background="@color/colorTabAirtime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            app:tabMaxWidth="0dp"
+            style="@style/MyTabLayoutStyle"
             app:tabGravity="fill"
             app:tabMode="fixed"
             >

@@ -6,8 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/white"
-    android:focusable="true"
+    android:clickable="true"
     android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:id="@+id/layout_parent"
     tools:context="com.worldwidewealth.wealthwallet.MainActivity">
 
     <RelativeLayout
@@ -66,8 +68,9 @@
                             android:id="@+id/text_phone_country"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:gravity="center"
+                            android:digits="0123456789+"
                             android:text="+66"
                             ></TextView>
 
@@ -78,6 +81,10 @@
                             android:padding="@dimen/activity_space"
                             android:background="@android:color/transparent"
                             android:inputType="phone"
+                            android:maxLength="12"
+                            android:hint="xxx-xxx-xxxx"
+                            android:digits="0123456789-"
+                            android:textColorHint="@android:color/secondary_text_dark_nodisable"
                             android:imeOptions="actionNext"/>
 
                     </LinearLayout>

@@ -9,11 +9,9 @@
 
     <integer-array name="ic_list_bank">
         <item>@drawable/logo_scb</item>
-        <item>@drawable/logo_tmb</item>
-        <item>@drawable/logo_gsb</item>
-        <item>@drawable/logo_kbank</item>
-        <item>@drawable/logo_ktb</item>
-        <item>@drawable/logo_tnch</item>
+        <item>@drawable/logo_kasikorn</item>
+        <item>@drawable/logo_bangkok</item>
+        <item>@drawable/logo_krungsri</item>
     </integer-array>
     
     <integer-array name="ic_bill">
@@ -37,4 +35,5 @@
         <item>@drawable/ic_vouchers_64</item>
         <item>@drawable/ic_qr_code_scan_64</item>
     </integer-array>
+
 </resources>

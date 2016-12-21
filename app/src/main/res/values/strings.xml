@@ -21,7 +21,8 @@
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>
-    <string name="setting">ตั้งค่า</string>
+    <string name="report_history">ประวัติรายการ</string>
+    <string name="setting">ตั้งค่าโปรแกรม</string>
     <string name="bill_payment">ชำระบิล</string>
     <string name="transfer">แล้เปลี่ยนเงิน</string>
     <string name="topup_online">Topup Online</string>
@@ -29,7 +30,7 @@
     <string name="notification">แจ้งเตือน</string>
     <string name="title_dashboard">Credit Limit</string>
     <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
-    <string name="topup">เติม</string>
+    <string name="topup">เติมเงินมือถือ</string>
     <string name="bank_account">บัญชีธนาคาร</string>
     <string name="credit_debit_card">บัตรเครดิต/เดบิต</string>
     <string name="noti_payment">แจ้งชำระเงิน</string>
@@ -55,7 +56,7 @@
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
-    <string name="total">Total :</string>
+    <string name="total">จำนวนเงิน:</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
@@ -81,8 +82,8 @@
     <string name="dashboard_my_card">My Cards</string>
     <string name="dashboard_card_to_card">Card to Card</string>
     <string name="dashboard_loyalty">Loyalty</string>
-    <string name="dashboard_wallet">Wallet</string>
-    <string name="dashboard_mtf">Report Money Transfer to wallet</string>
+    <string name="dashboard_wallet">กระเป๋าเงิน</string>
+    <string name="dashboard_mtf">แจ้งโอนเงินเข้ากระเป๋า</string>
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>
@@ -90,8 +91,8 @@
     <string name="dashboard_settings">Settings</string>
     <string name="dashboard_time_line">Timeline</string>
     <string name="dashboard_vouchers">Vouchers</string>
-    <string name="dashboard_my_qr">My QR</string>
-    <string name="dashboard_scan_qr">Scan QR</string>
+    <string name="dashboard_my_qr">QR ของฉัน</string>
+    <string name="dashboard_scan_qr">สแกน QR</string>
     <string name="not_have_account">"คุณยังไม่มีบัญชีผู้ใช้งาน?"</string>
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
@@ -103,12 +104,12 @@
     <string name="already_have_account">คุณมีบัญชีผู้ใช้งานอยู่แล้ว</string>
     <string name="add_credit">Add Credit Line</string>
     <string name="support">ช่วยเหลือ</string>
-    <string name="title_topup">Mobile Topup</string>
+    <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_report">Mobile Report</string>
     <string name="amount">ยอดชำระ :</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
-    <string name="phone_num_second">หมายเลขโทรศัพท์ :</string>
+    <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>
     <string name="topup_second">เติมเงิน :</string>
     <string name="date">วันที่ :</string>
     <string name="status">สถานะ :</string>
@@ -136,12 +137,12 @@
     <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
     <string name="add_slip_picture">เพื่มรูปภาพใบเสร็จ</string>
-    <string name="agent_phone_number">หมายเลขโทรศัพท์ Agent :</string>
-    <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น :</string>
+    <string name="agent_phone_number">หมายเลขโทรศัพท์มือถือ Agent :</string>
+    <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น</string>
     <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
     <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
-    <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์ Agent</string>
+    <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์มือถือ Agent</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการแลกเปลี่ยน</string>
     <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
@@ -152,6 +153,15 @@
     <string name="retry">ลองใหม่อีกครั้ง</string>
     <string name="please_enter_reference">กรุณากรอกหมายเลขอ้างอิง</string>
     <string name="please_select_date_time">กรุณาเลือก วันที่-เวลา</string>
+    <string name="please_select_bank_start">กรุณาเลือก ธนาคารต้นทาง</string>
+    <string name="please_select_bank_end">กรุณาเลือก ธนาคารปลายทาง</string>
+    <string name="airtime">ยอดเติม</string>
+    <string name="vas">VAS</string>
+    <string name="bank_mt_start">ธนาคารต้นทาง:</string>
+    <string name="bank_mt_end">ธนาคารปลายทาง:</string>
+    <string name="date_transfer_preview">วันที่-เวลา ในการโอน</string>
+    <string name="bank_preview">โอนจากธนาคาร ต้นทาง-ปลายทาง</string>
+
 
 
 
@@ -246,6 +256,19 @@
         <item>TH</item>
     </string-array>
 
+    <string-array name="list_name_bank">
+        <item>ธนาคารไทยพาณิชย์</item>
+        <item>ธนาคารกสิกร</item>
+        <item>ธนาคารกรุงเทพ</item>
+        <item>ธนาคารกรุงศรี</item>
+    </string-array>
+
+    <string-array name="list_code_bank">
+        <item>SCB</item>
+        <item>KBANG</item>
+        <item>BBL</item>
+        <item>BAY</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

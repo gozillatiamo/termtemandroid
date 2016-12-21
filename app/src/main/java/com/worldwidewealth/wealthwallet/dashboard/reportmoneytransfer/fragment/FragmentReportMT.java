@@ -3,57 +3,48 @@ package com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.worldwidewealth.wealthwallet.APIServices;
-import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dialog.BottomSheetDialogChoicePhoto;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
-import com.worldwidewealth.wealthwallet.model.DataRequestModel;
+import com.worldwidewealth.wealthwallet.dialog.PopupChoiceBank;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
-import com.worldwidewealth.wealthwallet.model.RequestUploadImage;
+import com.worldwidewealth.wealthwallet.model.NotiPayRequestModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Calendar;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Part;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,13 +55,15 @@ import static android.app.Activity.RESULT_OK;
 public class FragmentReportMT extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
-    private String mStrReference, mStrAmount;
+    private String mStrAmount, mStrBankStart = "", mStrBankEnd = "";
     private APIServices services;
     private String mBitmapEncode;
     private DatePickerDialog mDateDialog;
     private TimePickerDialog mTimeDialog;
     private long mDateTime = 0;
     private Calendar mCalender = Calendar.getInstance();
+    private byte[] mImageByte;
+    private PopupChoiceBank mPopupBankStart, mPopupBankEnd;
 
 
     public static Fragment newInstance(){
@@ -88,7 +81,7 @@ public class FragmentReportMT extends Fragment {
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
-
+        Until.setupUI(rootView);
         initBtn();
         return rootView;
     }
@@ -121,9 +114,9 @@ public class FragmentReportMT extends Fragment {
                 Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 200, 200);
                 Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
                 mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
-                byte[] imagebyte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
+                mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
 
-                mHolder.mImagePhoto.setImageBitmap(BitmapFactory.decodeByteArray(imagebyte, 0, imagebyte.length));
+                mHolder.mImagePhoto.setImageBitmap(BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length));
             }
         }
     }
@@ -132,13 +125,9 @@ public class FragmentReportMT extends Fragment {
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mStrReference = mHolder.mEditReference.getText().toString();
                 mStrAmount = mHolder.mEditAmount.getText().toString();
-
-                if (mStrReference.equals("")){
-                    Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_reference), Toast.LENGTH_LONG).show();
-                    return;
-                }
+                mStrBankStart = mPopupBankStart.getBank();
+                mStrBankEnd = mPopupBankEnd.getBank();
 
                 if (mStrAmount.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
@@ -150,18 +139,30 @@ public class FragmentReportMT extends Fragment {
                     return;
                 }
 
+                if (mStrBankStart.equals("")){
+                    Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_select_bank_start), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (mStrBankEnd.equals("")){
+                    Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_select_bank_end), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 if (mBitmapEncode == null || mBitmapEncode.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_add_image), Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                Log.e("BitmapEncode", mBitmapEncode);
                 new DialogCounterAlert.DialogProgress(getContext());
-                Call<okhttp3.ResponseBody> req = services.postImage(new RequestModel(
-                        APIServices.ACTIONUPLOADIMAGE,
-                        new RequestUploadImage(mStrReference,
-                                mStrAmount,
+                Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
+                        APIServices.ACTIONNOTIPAY,
+                        new NotiPayRequestModel(mStrAmount,
                                 mDateTime,
-                                mBitmapEncode)));
+                                mBitmapEncode,
+                                mStrBankStart,
+                                mStrBankEnd)));
 
                 req.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -172,7 +173,13 @@ public class FragmentReportMT extends Fragment {
                                 .getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                                .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance())
+                                .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance(
+                                        Double.parseDouble(mStrAmount),
+                                        mImageByte,
+                                        mHolder.mBtnDateTransfer.getText().toString(),
+                                        mHolder.mBtnTimeTransfer.getText().toString(),
+                                        mPopupBankStart.getPositionSelect(),
+                                        mPopupBankEnd.getPositionSelect()))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
 
@@ -208,6 +215,9 @@ public class FragmentReportMT extends Fragment {
                 showTimeDialog();
             }
         });
+
+        mPopupBankStart = new PopupChoiceBank(getContext(), mHolder.mIncludeBankStart);
+        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd);
     }
 
     private void showDateDialog(){
@@ -246,11 +256,13 @@ public class FragmentReportMT extends Fragment {
         mTimeDialog.show();
     }
 
+
     public class ViewHolder{
         private Button mBtnNext, mBtnDateTransfer, mBtnTimeTransfer;
         private ImageButton mBtnTakePhoto;
         private ImageView mImagePhoto;
-        private EditText mEditAmount, mEditReference;
+        private EditText mEditAmount;
+        private View mIncludeBankStart, mIncludeBankEnd;
 
         public ViewHolder(View itemview){
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
@@ -260,7 +272,8 @@ public class FragmentReportMT extends Fragment {
             mBtnTakePhoto = (ImageButton) itemview.findViewById(R.id.btn_take_photo);
             mImagePhoto = (ImageView) itemview.findViewById(R.id.image_photo);
             mEditAmount = (EditText) itemview.findViewById(R.id.edit_amount);
-            mEditReference = (EditText) itemview.findViewById(R.id.edit_reference);
+            mIncludeBankStart = (View) itemview.findViewById(R.id.include_bank_start);
+            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
 
         }
     }

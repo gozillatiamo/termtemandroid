@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
-import com.worldwidewealth.wealthwallet.model.RequestUploadImage;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.model.SignInRequestModel;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -16,10 +15,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -28,9 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -50,7 +45,7 @@ public interface APIServices {
     public static final String ACTIONSAVESLIP = "SAVESLIPE";
     public static final String ACTIONSALERPT = "SALERPT";
     public static final String ACTIONGETBALANCE = "GETBALANCE";
-    public static final String ACTIONUPLOADIMAGE = "NOTIPAY";
+    public static final String ACTIONNOTIPAY = "NOTIPAY";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -110,7 +105,7 @@ public interface APIServices {
     Call<ResponseBody> getbalance(@Body RequestModel requestModel);
 
     @POST("service.ashx")
-    Call<ResponseBody> postImage(@Body RequestModel requestModel);
+    Call<ResponseBody> notipay(@Body RequestModel requestModel);
 
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 

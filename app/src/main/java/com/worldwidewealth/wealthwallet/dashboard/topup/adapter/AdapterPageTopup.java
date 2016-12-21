@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.worldwidewealth.wealthwallet.MyApplication;
+import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentChoiceTopup;
 import com.worldwidewealth.wealthwallet.model.LoadButtonResponseModel;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -22,10 +24,7 @@ import java.util.List;
 
 public class AdapterPageTopup extends FragmentPagerAdapter {
 
-    private String[] title = new String[]{
-        "Airtime",
-            "VAS"
-    };
+    private String[] title;
 
     private String mData;
     private List<LoadButtonResponseModel> mListAirtime;
@@ -36,6 +35,10 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         this.mData = data;
         mListAirtime = new ArrayList<>();
         mListVAS = new ArrayList<>();
+        title = new String[]{
+                MyApplication.getContext().getString(R.string.airtime),
+                MyApplication.getContext().getString(R.string.vas)
+        };
         transferDataTopup();
     }
 
@@ -63,7 +66,7 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return title.length;
+        return title.length-1;
     }
 
     @Override
