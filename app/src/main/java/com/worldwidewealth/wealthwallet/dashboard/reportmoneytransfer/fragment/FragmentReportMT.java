@@ -2,6 +2,7 @@ package com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -229,9 +231,23 @@ public class FragmentReportMT extends Fragment {
                     mCalender.set(Calendar.YEAR, year);
                     mCalender.set(Calendar.MONTH, month);
                     mCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    mHolder.mBtnDateTransfer.setText(dayOfMonth+"/"+month+"/"+year);
+                    if (mCalender.getTimeInMillis() > System.currentTimeMillis()){
+                        new AlertDialog.Builder(getContext())
+                                .setCancelable(false)
+                                .setMessage(R.string.error_date_limit)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mDateDialog.show();
+                                        return;
+                                    }
+                                }).show();
+                    }
+
+                    mHolder.mBtnDateTransfer.setText(dayOfMonth+"/"+(month+1)+"/"+year);
                 }
             },  mCalender.get(Calendar.YEAR), mCalender.get(Calendar.MONTH), mCalender.get(Calendar.DAY_OF_MONTH));
+            mDateDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
             mDateDialog.setCancelable(false);
         }
 
@@ -245,7 +261,19 @@ public class FragmentReportMT extends Fragment {
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     mCalender.set(Calendar.MINUTE, minute);
-                    mHolder.mBtnTimeTransfer.setText(hourOfDay+":"+minute);
+                    String strHour = String.valueOf(hourOfDay);
+                    String strMinute = String.valueOf(minute);
+
+                    if (strHour.length() == 1){
+                        strHour = "0"+strHour;
+                    }
+
+                    if (strMinute.length() == 1){
+                        strMinute = "0"+strMinute;
+                    }
+
+                    mHolder.mBtnTimeTransfer.setText(strHour + ":" + strMinute);
+
                     mDateTime = mCalender.getTimeInMillis();
                 }
             }, mCalender.get(Calendar.HOUR_OF_DAY), mCalender.get(Calendar.MINUTE), true);

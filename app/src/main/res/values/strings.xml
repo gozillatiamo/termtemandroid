@@ -2,7 +2,7 @@
 
     <style name="currentcy">THB</style>
 
-    <string name="app_name">Wealth Wallet</string>
+    <string name="app_name">TermTem</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -134,6 +134,7 @@
     <string name="pay_code">หมายเลขการชำระ :</string>
     <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
     <string name="alert_connect_wifi">หากคุณกำลังเชื่อต่อ wifi คุณจะไม่สามารถใช้งานแอพพลิเคชั่นนี้ได้ กรุณายกเลิกการเชื่อต่อก่อนใช้งาน</string>
+    <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่านการเชื่อมต่อ wifi \nคุณยืนยันที่จะใช้งานแอพพลิเคชั่นนี้ต่อไปหรือไม่ ?</string>
     <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
     <string name="add_slip_picture">เพื่มรูปภาพใบเสร็จ</string>
@@ -161,6 +162,10 @@
     <string name="bank_mt_end">ธนาคารปลายทาง:</string>
     <string name="date_transfer_preview">วันที่-เวลา ในการโอน</string>
     <string name="bank_preview">โอนจากธนาคาร ต้นทาง-ปลายทาง</string>
+    <string name="use_wifi">ใช้ wifi</string>
+    <string name="close_wifi">ปิด wifi</string>
+    <string name="error_date_limit">คุณไม่สามารถเลือกวันเกินกำหนดได้!!! กรุณาเลือกอีกครั้ง</string>
+    <string name="ok">ตกลง</string>
 
 
 

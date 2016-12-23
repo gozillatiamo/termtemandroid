@@ -56,6 +56,8 @@ public class ActivityReport extends AppCompatActivity {
     private long mPeviousDateTo;
     private Calendar mCalendar = Calendar.getInstance();
     private APIServices services;
+    private DatePickerDialog mDatePickerDialog;
+    private AlertDialog mChoiceDialog;
 
     private static final int FORM = 0;
     private static final int TO = 1;
@@ -154,6 +156,19 @@ public class ActivityReport extends AppCompatActivity {
         builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (mPreviousDateFrom > mPeviousDateTo){
+                    new AlertDialog.Builder(ActivityReport.this)
+                            .setCancelable(false)
+                            .setMessage(R.string.error_date_limit)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mChoiceDialog.show();
+                                    return;
+                                }
+                            }).show();
+
+                }
                 String timeFrom = (mPreviousDateFrom)+"";
                 String timeTo = (mPeviousDateTo)+"";
                 salerptService(timeFrom, timeTo);
@@ -161,8 +176,8 @@ public class ActivityReport extends AppCompatActivity {
         });
         builder.setNegativeButton(R.string.cancel, null);
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        mChoiceDialog = builder.create();
+        mChoiceDialog.show();
     }
 
     private void salerptService(String timeFrom, String timeTo){
@@ -216,12 +231,25 @@ public class ActivityReport extends AppCompatActivity {
 
     private void initDatePickerDialog(long longdate, final Button btn, final int type){
         mCalendar.setTimeInMillis(longdate);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        mDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                 Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+                if (calendar.getTimeInMillis() > mDatePickerDialog.getDatePicker().getMaxDate() ||
+                        calendar.getTimeInMillis() < mDatePickerDialog.getDatePicker().getMinDate()){
+                    new AlertDialog.Builder(ActivityReport.this)
+                            .setCancelable(false)
+                            .setMessage(R.string.error_date_limit)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mDatePickerDialog.show();
+                                    return;
+                                }
+                            }).show();
+                }
 
+                btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                 switch (type){
                     case FORM:
                         mPreviousDateFrom = getTimestamp(calendar.getTimeInMillis(), 0);
@@ -233,9 +261,13 @@ public class ActivityReport extends AppCompatActivity {
 
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+        if (type == TO){
+            mDatePickerDialog.getDatePicker().setMinDate(mPreviousDateFrom);
+        }
+        mDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
-        datePickerDialog.setCancelable(false);
-        datePickerDialog.show();
+        mDatePickerDialog.setCancelable(false);
+        mDatePickerDialog.show();
     }
 
 

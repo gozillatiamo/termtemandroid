@@ -365,12 +365,12 @@ public class Until {
     public static String encodeBitmapToUpload(Bitmap bitmap){
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageData = baos.toByteArray();
 //        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 //        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageData, Base64.DEFAULT);
+        String encodedImage = Base64.encodeToString(imageData, Base64.NO_WRAP);
         return encodedImage;
     }
 

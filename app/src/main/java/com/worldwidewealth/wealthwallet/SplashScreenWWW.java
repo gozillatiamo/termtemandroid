@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,8 @@ import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.GPSTracker;
 import com.worldwidewealth.wealthwallet.until.Until;
+
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -55,6 +58,7 @@ public class SplashScreenWWW extends AppCompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
+                if (initFCM()) return;
                 SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
                 Log.e("logout", logout+"");
@@ -92,13 +96,18 @@ public class SplashScreenWWW extends AppCompatActivity{
 
             }
         };
-        initFCM();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Locale locale = new Locale("TH");
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
         handler.postDelayed(runnable, 3000);
     }
 
@@ -190,16 +199,34 @@ public class SplashScreenWWW extends AppCompatActivity{
 
     }
 
-    private void initFCM(){
+    private boolean initFCM(){
         if (getIntent().getExtras() != null) {
+            String txt = getIntent().getExtras().getString("txt");
+            String box = getIntent().getExtras().getString("box");
+            getIntent().getExtras().clear();
+            if (txt != null && box != null) {
+                Intent intent = new Intent(this, ActivityShowNotify.class);
+                intent.putExtra(MyFirebaseMessagingService.TEXT, txt);
+                intent.putExtra(MyFirebaseMessagingService.BOX, box);
+                startActivity(intent);
+            } else {
+                return false;
+            }
+/*
             for (String key : getIntent().getExtras().keySet()) {
                 String value = getIntent().getExtras().getString(key);
                 Log.d(TAG, "Key: " + key + " Value: " + value);
             }
+*/
+            Log.e("getExtrasNoti", "true");
+            return true;
         }
 
         Log.d(TAG, "InstanceID token: " + FirebaseInstanceId.getInstance().getToken());
 //        writeToFile(FirebaseInstanceId.getInstance().getToken());
+        Log.e("getExtrasNoti", "false");
+
+        return false;
     }
 
 /*

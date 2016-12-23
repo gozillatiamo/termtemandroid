@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -109,19 +110,7 @@ public class MainActivity extends AppCompatActivity {
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
-                Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                finish();
-*/
-//                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-//
-//                if (mWifi.isConnected()) {
-//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
-//                    return;
-//                }
+
                 mPhone = mHolder.mPhone.getText().toString().replaceAll("-", "");
                 mPassword = mHolder.mPassword.getText().toString();
                 if (mPhone.equals("") || mPassword.equals("")) {
@@ -136,81 +125,41 @@ public class MainActivity extends AppCompatActivity {
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
-                                Global.getDEVICEID(),
-                                Configs.getPLATFORM(),
-                                EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
-                                EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
-                                Global.getTXID())));
+                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                Gson gson = new Gson();
-                                DialogCounterAlert.DialogProgress.dismiss();
-                                String strResponse = null;
-                                ResponseModel responseModel = null;
-                                try {
-                                    strResponse = response.body().string();
-                                    JsonParser jsonParser = new JsonParser();
-
-                                    JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
-                                    responseModel = gson.fromJson(jsonObject, ResponseModel.class);
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                if (mWifi.isConnected()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(R.string.alert_sure_connect_wifi)
+                            .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    serviceLogin();
                                 }
-
-                                if (responseModel != null){
-                                    Log.e("ResponseModel", "true");
-//                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
-
-                                    String[] strRegisDevice = responseModel.getMsg().split(":");
-                                    if (strRegisDevice.length > 1){
-                                        registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
-                                    } else{
-                                        Toast.makeText(MainActivity.this, responseModel.getMsg(),
-                                                Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                                } else {
-                                    Log.e("ResponseModel", "false");
-                                    String responseStr = strResponse;
-                                    String converted = Until.ConvertJsonEncode(responseStr);
-                                    String responDecode = Until.decode(converted);
-                                    Log.e("strResponse", converted);
-                                    Log.e("strDecode", responDecode);
-
-                                    //String json = gson.toJson(responDecode);
-                                    LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                                    Global.setUSERID(loginResponseModel.getUSERID());
-                                    Global.setAGENTID(loginResponseModel.getAGENTID());
-                                    Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
-                                    Global.setBALANCE(loginResponseModel.getBALANCE());
-
-                                    Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                                    finish();
-
+                            })
+                            .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                                    DialogCounterAlert.DialogProgress.dismiss();
                                 }
+                            })
+                            .setCancelable(false);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                                    .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                        }
+                    });
+                    alertDialog.show();
+//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
+//                    return;
+                } else {
+                    serviceLogin();
+                }
 
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        t.printStackTrace();
-                                new ErrorNetworkThrowable(t).networkError(MainActivity.this);
-                            }
-                        });
-
-                    }
-                }, 1000);
             }
         });
 
@@ -224,6 +173,84 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void serviceLogin(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
+                        Global.getDEVICEID(),
+                        Configs.getPLATFORM(),
+                        EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
+                        EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
+                        Global.getTXID())));
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Gson gson = new Gson();
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        String strResponse = null;
+                        ResponseModel responseModel = null;
+                        try {
+                            strResponse = response.body().string();
+                            JsonParser jsonParser = new JsonParser();
+
+                            JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
+                            responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (responseModel != null){
+                            Log.e("ResponseModel", "true");
+//                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
+
+                            String[] strRegisDevice = responseModel.getMsg().split(":");
+                            if (strRegisDevice.length > 1){
+                                registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
+                            } else{
+                                Toast.makeText(MainActivity.this, responseModel.getMsg(),
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        } else {
+                            Log.e("ResponseModel", "false");
+                            String responseStr = strResponse;
+                            String converted = Until.ConvertJsonEncode(responseStr);
+                            String responDecode = Until.decode(converted);
+                            Log.e("strResponse", converted);
+                            Log.e("strDecode", responDecode);
+
+                            //String json = gson.toJson(responDecode);
+                            LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
+                            Global.setUSERID(loginResponseModel.getUSERID());
+                            Global.setAGENTID(loginResponseModel.getAGENTID());
+                            Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
+                            Global.setBALANCE(loginResponseModel.getBALANCE());
+
+                            Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                            finish();
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                        t.printStackTrace();
+                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                    }
+                });
+
+            }
+        }, 1000);
+
+    }
     private void registerDevice(String msg, String agantId, String userId){
         //final DataRequestModel dataRequestModel = new DataRequestModel();
         Global.setAGENTID(agantId);

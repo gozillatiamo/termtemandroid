@@ -38,6 +38,7 @@
                     android:hint="@string/fill_money_amount"
                     android:inputType="numberDecimal"
                     android:imeOptions="actionDone"
+                    android:gravity="center"
                     app:theme="@style/MyEditTextStyle"
                     />
             </android.support.design.widget.TextInputLayout>

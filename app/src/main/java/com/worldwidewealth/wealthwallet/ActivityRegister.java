@@ -20,9 +20,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.until.CheckSyntaxData;
+import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 import me.grantland.widget.AutofitTextView;
@@ -153,7 +155,7 @@ public class ActivityRegister extends AppCompatActivity {
                         "Tel:" + mTel +"\n"+
                         "Iden:" + mIden +"\n"+
                         "People:" + mPerson);
-
+                new DialogCounterAlert.DialogProgress(ActivityRegister.this);
                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                         mFirstName,
                         mLastName,
@@ -182,11 +184,12 @@ public class ActivityRegister extends AppCompatActivity {
                             Toast.makeText(ActivityRegister.this, Msg,
                                     Toast.LENGTH_SHORT).show();
                         }
+                        DialogCounterAlert.DialogProgress.dismiss();
                     }
 
                     @Override
                     public void onFailure(Call<ResponseModel> call, Throwable t) {
-                        t.printStackTrace();
+                        new ErrorNetworkThrowable(t).networkError(ActivityRegister.this);
                     }
                 });
 

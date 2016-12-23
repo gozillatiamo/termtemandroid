@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/logo_with_text"
+                android:src="@drawable/logo_with_text_old"
                 android:tint="@android:color/white"/>
 
             <LinearLayout
