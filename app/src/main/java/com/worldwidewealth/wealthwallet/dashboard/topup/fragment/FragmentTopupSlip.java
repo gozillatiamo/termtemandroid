@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.R;
@@ -102,6 +104,7 @@ public class FragmentTopupSlip extends Fragment {
 
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
+        initHeader();
         initBtn();
         if (mImageBitmap != null || mTransID != null) {
             initEslip();
@@ -112,13 +115,13 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initHeader();
+
         onBackPress();
     }
 
     private void initHeader(){
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ContentValues values = EncryptionData.getModel(response.body());
@@ -137,7 +140,7 @@ public class FragmentTopupSlip extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext());
+                new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext(), call, this);
             }
         });
 
@@ -192,31 +195,6 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnSavePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<ResponseBody> call = services.saveSlip(
-                        new RequestModel(APIServices.ACTIONSAVESLIP,
-                                new EslipRequestModel(mTransID)));
-
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FragmentTopupSlip.this.getContext());
-                        alertDialog.setPositiveButton(R.string.done, null);
-                        if (saveImage()){
-                            alertDialog.setMessage(R.string.save_slip_success);
-                        } else {
-                            alertDialog.setMessage(R.string.save_slip_fail);
-                        }
-
-                        alertDialog.show();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext());
-                    }
-                });
             }
         });
     }
@@ -236,9 +214,26 @@ public class FragmentTopupSlip extends Fragment {
             out.flush();
             out.close();
             MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
+            Toast.makeText(getContext(), getString(R.string.save_eslip_success), Toast.LENGTH_LONG).show();
+            Call<ResponseBody> call = services.saveSlip(
+                    new RequestModel(APIServices.ACTIONSAVESLIP,
+                            new EslipRequestModel(mTransID)));
+
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext(), call, this);
+                }
+            });
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+            new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.save_eslip_fail), null);
             return false;
         }
 

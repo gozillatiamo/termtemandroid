@@ -71,6 +71,7 @@ public class DialogCounterAlert {
                     context.getString(R.string.msg_progress),
                     true,
                     false);
+
         }
 
         public static void dismiss(){

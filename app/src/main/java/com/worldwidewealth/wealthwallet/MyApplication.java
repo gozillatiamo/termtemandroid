@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
+import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 /**
@@ -40,19 +42,24 @@ public class MyApplication extends Application implements Application.ActivityLi
     public void onActivityResumed(Activity activity) {
         Log.e("onActivityResumed", "true");
         if (canUseLeaving(activity)){
+
+            LeavingOrEntering.activityResumed(activity);
+/*
             if (LeavingOrEntering.currentActivity == null ||
                     activity != LeavingOrEntering.currentActivity) {
                 LeavingOrEntering.activityResumed(activity);
             } else {
                 LeavingOrEntering.activityStopped(activity);
             }
+*/
         }
 
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-
+        DialogCounterAlert.DialogProgress.dismiss();
+        DialogNetworkError.dismiss();
     }
 
     @Override
@@ -80,8 +87,13 @@ public class MyApplication extends Application implements Application.ActivityLi
         public static void activityResumed( Activity activity )
         {
 
+            if (currentActivity == activity){
+                Until.backToSignIn(activity);
+                currentActivity = null;
+            } else {
+                currentActivity = activity;
+            }
 
-            currentActivity = activity;
 
         }
 
@@ -94,6 +106,8 @@ public class MyApplication extends Application implements Application.ActivityLi
             {
                 // We were stopped and no-one else has been started.
                 Log.e("currentActivity", "currentActivity == activity"); // Stop the music!
+                Until.logoutAPI();
+/*
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 if (sharedPreferences.getBoolean("LOGOUT", true)){
                     Until.backToSignIn(activity);
@@ -101,6 +115,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                 } else {
                     Until.logoutAPI();
                 }
+*/
                 //Until.backToSignIn(activity);
             }
         }

@@ -1,25 +1,19 @@
 package com.worldwidewealth.wealthwallet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatEditText;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,11 +32,10 @@ import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.model.SignInRequestModel;
-import com.worldwidewealth.wealthwallet.until.CheckSyntaxData;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
-
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -72,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mHolder.mBtnLogin.setEnabled(true);
         Global.setTXID(Until.getTXIDSharedPreferences());
     }
 
@@ -124,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         "USERNAME:" + mPhone.replace(" ", "") + "\n" +
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
+                mHolder.mBtnLogin.setEnabled(false);
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
                 ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -184,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                         EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
                         Global.getTXID())));
 
-                call.enqueue(new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Gson gson = new Gson();
@@ -243,12 +238,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                        t.printStackTrace();
-                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                        new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
                     }
                 });
-
+                mHolder.mBtnLogin.setEnabled(true);
             }
         }, 1000);
+
+
 
     }
     private void registerDevice(String msg, String agantId, String userId){
@@ -266,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, new DataRequestModel()));
-                                call.enqueue(new Callback<ResponseModel>() {
+                                APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                                     @Override
                                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                         DialogCounterAlert.DialogProgress.dismiss();
@@ -279,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onFailure(Call<ResponseModel> call, Throwable t) {
                                         t.printStackTrace();
-                                        new ErrorNetworkThrowable(t).networkError(MainActivity.this);
+                                        new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
                                     }
                                 });
 

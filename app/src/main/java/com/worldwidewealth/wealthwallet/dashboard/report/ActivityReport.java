@@ -21,7 +21,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dashboard.report.adapter.ReportAdapter;
@@ -185,7 +186,7 @@ public class ActivityReport extends AppCompatActivity {
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
                         new SalerptRequestModel(timeFrom, timeTo)));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ContentValues responseValues = EncryptionData.getModel(response.body());
@@ -224,7 +225,7 @@ public class ActivityReport extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(ActivityReport.this);
+                new ErrorNetworkThrowable(t).networkError(ActivityReport.this, call, this);
             }
         });
     }

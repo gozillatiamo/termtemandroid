@@ -3,6 +3,9 @@
     <style name="currentcy">THB</style>
 
     <string name="app_name">TermTem</string>
+    <string name="app_name_th">เติมเต็ม</string>
+    <string name="version">เวอร์ชั่น: 1.0.0</string>
+    <string name="contact_us">ติดต่อ โทร: 02-3314788</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -137,7 +140,7 @@
     <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่านการเชื่อมต่อ wifi \nคุณยืนยันที่จะใช้งานแอพพลิเคชั่นนี้ต่อไปหรือไม่ ?</string>
     <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
-    <string name="add_slip_picture">เพื่มรูปภาพใบเสร็จ</string>
+    <string name="add_slip_picture">เพิ่มรูปภาพใบเสร็จ</string>
     <string name="agent_phone_number">หมายเลขโทรศัพท์มือถือ Agent :</string>
     <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น</string>
     <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
@@ -166,6 +169,8 @@
     <string name="close_wifi">ปิด wifi</string>
     <string name="error_date_limit">คุณไม่สามารถเลือกวันเกินกำหนดได้!!! กรุณาเลือกอีกครั้ง</string>
     <string name="ok">ตกลง</string>
+    <string name="save_eslip_success">บันทึก E-Slip ลงใน "อัลบั้มรูปภาพ" ของคุณเรียบร้อยแล้ว</string>
+    <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
 
 
 

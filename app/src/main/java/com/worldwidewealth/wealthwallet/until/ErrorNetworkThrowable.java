@@ -17,6 +17,9 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 /**
  * Created by MyNet on 17/11/2559.
  */
@@ -27,12 +30,12 @@ public class ErrorNetworkThrowable extends Throwable {
         super(t);
     }
 
-    public void networkError(Context context){
+    public void networkError(Context context, Call call, Callback callback){
         //printStackTrace();
         if (DialogCounterAlert.DialogProgress.isShow()) {
             DialogCounterAlert.DialogProgress.dismiss();
         }
-        new DialogNetworkError(context);
+        new DialogNetworkError(context, call, callback);
 
     }
 

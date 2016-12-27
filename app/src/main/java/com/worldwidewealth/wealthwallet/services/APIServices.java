@@ -1,4 +1,4 @@
-package com.worldwidewealth.wealthwallet;
+package com.worldwidewealth.wealthwallet.services;
 
 import android.util.Log;
 
@@ -124,7 +124,8 @@ public interface APIServices {
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
 
-                    return  chain.proceed(builder.build());
+                    Response response = chain.proceed(builder.build());
+                    return  response;
                 }
             }).build();
 

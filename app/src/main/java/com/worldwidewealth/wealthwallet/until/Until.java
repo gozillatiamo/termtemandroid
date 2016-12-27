@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -36,7 +34,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.R;
@@ -45,10 +44,7 @@ import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -61,8 +57,6 @@ import okio.BufferedSink;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.bitmap;
 
 /**
  * Created by MyNet on 17/10/2559.
@@ -243,7 +237,7 @@ public class Until {
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Global.setAGENTID("");

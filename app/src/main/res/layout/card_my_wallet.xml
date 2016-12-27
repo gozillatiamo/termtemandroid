@@ -57,7 +57,7 @@
                 android:textSize="36sp"
                 app:minTextSize="4dp"
                 app:sizeToFit="true"
-                android:text="10,000"/>
+                android:text="0"/>
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_balance_decimal"

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,8 +13,6 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,12 +23,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dialog.BottomSheetDialogChoicePhoto;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
@@ -129,8 +125,8 @@ public class FragmentReportMT extends Fragment {
             public void onClick(View v) {
                 mStrAmount = mHolder.mEditAmount.getText().toString();
                 mStrBankStart = mPopupBankStart.getBank();
-                mStrBankEnd = mPopupBankEnd.getBank();
-
+//                mStrBankEnd = mPopupBankEnd.getBank();
+                mStrBankEnd = "KBANK";
                 if (mStrAmount.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
                     return;
@@ -166,7 +162,7 @@ public class FragmentReportMT extends Fragment {
                                 mStrBankStart,
                                 mStrBankEnd)));
 
-                req.enqueue(new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         // Do Something
@@ -181,7 +177,7 @@ public class FragmentReportMT extends Fragment {
                                         mHolder.mBtnDateTransfer.getText().toString(),
                                         mHolder.mBtnTimeTransfer.getText().toString(),
                                         mPopupBankStart.getPositionSelect(),
-                                        mPopupBankEnd.getPositionSelect()))
+                                        1))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
 
@@ -189,7 +185,7 @@ public class FragmentReportMT extends Fragment {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(getContext());
+                        new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
                         t.printStackTrace();
                     }
                 });
@@ -219,7 +215,7 @@ public class FragmentReportMT extends Fragment {
         });
 
         mPopupBankStart = new PopupChoiceBank(getContext(), mHolder.mIncludeBankStart);
-        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd);
+//        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd);
     }
 
     private void showDateDialog(){
@@ -301,7 +297,7 @@ public class FragmentReportMT extends Fragment {
             mImagePhoto = (ImageView) itemview.findViewById(R.id.image_photo);
             mEditAmount = (EditText) itemview.findViewById(R.id.edit_amount);
             mIncludeBankStart = (View) itemview.findViewById(R.id.include_bank_start);
-            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
+//            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
 
         }
     }

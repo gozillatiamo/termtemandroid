@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthwallet.dashboard;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +13,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.MyApplication;
@@ -27,7 +30,6 @@ import com.worldwidewealth.wealthwallet.dashboard.addcreditline.ActivityAddCredi
 import com.worldwidewealth.wealthwallet.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.wealthwallet.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
 import com.worldwidewealth.wealthwallet.dashboard.fragment.FragmentSlip;
-import com.worldwidewealth.wealthwallet.dashboard.myqrcode.ActivityMyQrCode;
 import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.wealthwallet.dashboard.topup.ActivityTopup;
@@ -136,6 +138,27 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+        mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(ActivityDashboard.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_help);
+                dialog.show();
+            }
+        });
+
+        mHolder.mMenuSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(ActivityDashboard.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_setting);
+                dialog.show();
+
+            }
+        });
+
     }
 
     private void initDialogChangePassword(){
@@ -172,7 +195,7 @@ public class ActivityDashboard extends AppCompatActivity{
                                     new ChangePasswordRequestModel(EncryptionData.EncryptData(editNewPass.getText().toString(), Global.getDEVICEID()+Global.getTXID()))
                             ));
 
-                            call.enqueue(new Callback<ResponseModel>() {
+                            APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                                 @Override
                                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                         if (response.body().getStatus() == APIServices.SUCCESS){
@@ -181,16 +204,16 @@ public class ActivityDashboard extends AppCompatActivity{
                                                     response.body().getMsg(),
                                                     getString(R.string.change_password_success),
                                                     null);
-                                        } else {
+                                        }/* else {
                                             new DialogNetworkError(ActivityDashboard.this);
 
-                                        }
+                                        }*/
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseModel> call, Throwable t) {
                                     t.printStackTrace();
-                                    new DialogNetworkError(ActivityDashboard.this);
+                                    new DialogNetworkError(ActivityDashboard.this, call, this);
                                 }
                             });
                         }
@@ -223,7 +246,8 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine;
+        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine
+                , mMenuHelp, mMenuSetting;
         private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
@@ -234,6 +258,8 @@ public class ActivityDashboard extends AppCompatActivity{
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
             mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
+            mMenuHelp = (CardView) view.findViewById(R.id.menu_help);
+            mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
             mMenuAddCreditLine = (CardView) view.findViewById(R.id.menu_add_credit_line);
         }
     }

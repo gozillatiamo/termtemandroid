@@ -24,6 +24,8 @@ import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.GPSTracker;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -70,25 +72,25 @@ public class SplashScreenWWW extends AppCompatActivity{
                     Global.setDEVICEID(sharedPref.getString("DEVICEID", null));
                     Log.e("AgentId", Global.getAGENTID()+ "");
 
-                        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                Global.setAGENTID("");
-                                Global.setUSERID("");
-                                Global.setBALANCE(0.00);
-                                Global.setTXID("");
-                                Global.setDEVICEID("");
-                                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
-                                getDataDevice();
-                            }
+                    Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
+                    APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Global.setAGENTID("");
+                            Global.setUSERID("");
+                            Global.setBALANCE(0.00);
+                            Global.setTXID("");
+                            Global.setDEVICEID("");
+                            Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
+                            getDataDevice();
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
+                        }
 
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this, call, this);
+                        }
+                    });
                 } else {
                     getDataDevice();
                 }
@@ -136,6 +138,7 @@ public class SplashScreenWWW extends AppCompatActivity{
         if (gpsTracker.canGetLocation()){
             mLat = gpsTracker.getLatitude();
             mLong = gpsTracker.getLongitude();
+
             Log.e("InAppData", "action:" + mAction + "\n" +
                     "token:" + Global.getTOKEN() + "\n" +
                     "device_id:" + Global.getDEVICEID() + "\n" +
@@ -163,15 +166,9 @@ public class SplashScreenWWW extends AppCompatActivity{
 
         if (model != null) {
             Call<ResponseBody> call = services.PRE(model);
-            call.enqueue(new Callback<ResponseBody>() {
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    if (!response.isSuccessful()) {
-                        new DialogNetworkError(SplashScreenWWW.this);
-                        return;
-                    }
-
                     ContentValues values = EncryptionData.getModel(response.body());
                     if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                         ResponseModel model = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
@@ -186,13 +183,13 @@ public class SplashScreenWWW extends AppCompatActivity{
                             Toast.makeText(SplashScreenWWW.this, model.getMsg(), Toast.LENGTH_LONG).show();
                         }
 
-                    } else {
                     }
+
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this);
+                    new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this, call, this);
                 }
             });
         }

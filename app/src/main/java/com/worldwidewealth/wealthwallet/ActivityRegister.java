@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.CheckSyntaxData;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -165,7 +167,7 @@ public class ActivityRegister extends AppCompatActivity {
                         mPerson
                 )));
 
-                call.enqueue(new Callback<ResponseModel>() {
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                     @Override
                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                         String Msg = response.body().getMsg();
@@ -189,7 +191,7 @@ public class ActivityRegister extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseModel> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(ActivityRegister.this);
+                        new ErrorNetworkThrowable(t).networkError(ActivityRegister.this, call, this);
                     }
                 });
 

@@ -25,7 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.worldwidewealth.wealthwallet.APIServices;
+import com.worldwidewealth.wealthwallet.services.APIHelper;
+import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.FragmentTopupPreview;
 import com.worldwidewealth.wealthwallet.Global;
@@ -123,7 +124,7 @@ public class FragmentTopupPackage extends  Fragment{
         Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
                     new LoadButtonRequestModel(mCarrier)
                 ));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -142,8 +143,7 @@ public class FragmentTopupPackage extends  Fragment{
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                new DialogNetworkError(FragmentTopupPackage.this.getContext());
+                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
             }
         });
     }
@@ -209,7 +209,7 @@ public class FragmentTopupPackage extends  Fragment{
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
         Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DialogCounterAlert.DialogProgress.dismiss();
@@ -240,8 +240,7 @@ public class FragmentTopupPackage extends  Fragment{
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                new DialogNetworkError(FragmentTopupPackage.this.getContext());
+                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
             }
         });
 
@@ -265,7 +264,7 @@ public class FragmentTopupPackage extends  Fragment{
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
         Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                 new GetOTPRequestModel()));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -282,7 +281,7 @@ public class FragmentTopupPackage extends  Fragment{
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(getContext());
+                new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
             }
         });
 
@@ -326,7 +325,7 @@ public class FragmentTopupPackage extends  Fragment{
                                         model.getTranid(),
                                         mButtonID)));
                 Global.setOTP(null);
-                callSubmit.enqueue(new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         ContentValues responseValues = EncryptionData.getModel(response.body());
@@ -349,7 +348,7 @@ public class FragmentTopupPackage extends  Fragment{
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext());
+                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
                     }
                 });
 
@@ -375,7 +374,7 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceEslip(final String transid){
 
         Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTIONESLIP, new EslipRequestModel(transid)));
-        call.enqueue(new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ContentValues values = EncryptionData.getModel(response.body());
@@ -404,7 +403,7 @@ public class FragmentTopupPackage extends  Fragment{
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext());
+                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
             }
         });
 
