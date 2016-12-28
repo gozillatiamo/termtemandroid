@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.until.Until;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by MyNet on 17/11/2559.
@@ -20,6 +22,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
     }
@@ -40,7 +43,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.e("onActivityResumed", "true");
         if (canUseLeaving(activity)){
 
             LeavingOrEntering.activityResumed(activity);
@@ -64,7 +66,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStopped(Activity activity) {
-        Log.e("onActivityStopped", "true");
         if (canUseLeaving(activity)){
             LeavingOrEntering.activityStopped(activity);
         }
@@ -87,7 +88,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         public static void activityResumed( Activity activity )
         {
 
-            if (currentActivity == activity){
+            if (currentActivity == activity || Global.getAGENTID() == null){
                 Until.backToSignIn(activity);
                 currentActivity = null;
             } else {
@@ -105,7 +106,6 @@ public class MyApplication extends Application implements Application.ActivityLi
             if ( currentActivity == activity )
             {
                 // We were stopped and no-one else has been started.
-                Log.e("currentActivity", "currentActivity == activity"); // Stop the music!
                 Until.logoutAPI();
 /*
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);

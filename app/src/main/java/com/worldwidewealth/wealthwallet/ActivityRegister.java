@@ -151,12 +151,14 @@ public class ActivityRegister extends AppCompatActivity {
                         return;
                     }
                 }
+/*
                 Log.e("RegisterData:", "E-mail:" + mEmail +"\n"+
                         "FirstName:" + mFirstName +"\n"+
                         "LastName:" + mLastName +"\n"+
                         "Tel:" + mTel +"\n"+
                         "Iden:" + mIden +"\n"+
                         "People:" + mPerson);
+*/
                 new DialogCounterAlert.DialogProgress(ActivityRegister.this);
                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                         mFirstName,
@@ -209,7 +211,6 @@ public class ActivityRegister extends AppCompatActivity {
     }
 
     private TextWatcher onTextChanged(final EditText editText, final int type){
-        Log.e("Method:", "onTextChanged");
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

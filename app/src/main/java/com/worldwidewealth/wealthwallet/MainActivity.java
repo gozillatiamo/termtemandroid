@@ -112,12 +112,14 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+/*
                 Log.e("LoginData:", "action:LOGIN" + "\n"+
                         "DEVICEID:" + Global.getDEVICEID() + "\n" +
                         "PLATFORM:" + Configs.getPLATFORM() + "\n" +
                         "USERNAME:" + mPhone.replace(" ", "") + "\n" +
                         "PASSWORD:" + mPassword + "\n" +
                         "TXIK:" + Global.getTXID());
+*/
                 mHolder.mBtnLogin.setEnabled(false);
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
                 ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -198,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (responseModel != null){
-                            Log.e("ResponseModel", "true");
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
                             String[] strRegisDevice = responseModel.getMsg().split(":");
@@ -211,18 +212,14 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            Log.e("ResponseModel", "false");
                             String responseStr = strResponse;
                             String converted = Until.ConvertJsonEncode(responseStr);
                             String responDecode = Until.decode(converted);
-                            Log.e("strResponse", converted);
-                            Log.e("strDecode", responDecode);
 
                             //String json = gson.toJson(responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
                             Global.setUSERID(loginResponseModel.getUSERID());
                             Global.setAGENTID(loginResponseModel.getAGENTID());
-                            Log.e("AgenidDecrytp",  EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()));
                             Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);

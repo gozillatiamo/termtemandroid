@@ -41,7 +41,6 @@ public class FragmentTopup extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("FragmentTopup", "true");
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup, container, false);
             mHolder = new ViewHolder(rootView);
@@ -82,7 +81,8 @@ public class FragmentTopup extends Fragment {
     }
 
     private void initData(){
-        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+//        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+        Until.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
     }
 
     private void startFragmentService(String service){

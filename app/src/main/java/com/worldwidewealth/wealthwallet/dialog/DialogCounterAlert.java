@@ -56,7 +56,12 @@ public class DialogCounterAlert {
             ResponseModel responseModel = new Gson().fromJson(response, ResponseModel.class);
             new AlertDialog.Builder(context)
                     .setMessage(responseModel.getMsg())
-                    .setPositiveButton(R.string.done, null)
+                    .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
                     .show();
         }
     }

@@ -119,7 +119,6 @@ public interface APIServices {
                     Request originalRequest = chain.request();
                     Request.Builder builder = originalRequest.newBuilder();
                     if (originalRequest.method().equalsIgnoreCase("POST")){
-                        Log.e("POST", "TRUE");
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
@@ -134,7 +133,7 @@ public interface APIServices {
             .create();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://180.128.21.31/wealthservice/").client(client)
+        .baseUrl("http://180.128.21.81/wealthservice/").client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 

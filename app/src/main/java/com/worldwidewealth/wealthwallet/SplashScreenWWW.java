@@ -12,7 +12,6 @@ import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -63,14 +62,12 @@ public class SplashScreenWWW extends AppCompatActivity{
                 if (initFCM()) return;
                 SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
-                Log.e("logout", logout+"");
                 if (!logout) {
 
                     Global.setTXID(sharedPref.getString("TXID", null));
                     Global.setAGENTID(sharedPref.getString("AGENTID", null));
                     Global.setUSERID(sharedPref.getString("USERID", null));
                     Global.setDEVICEID(sharedPref.getString("DEVICEID", null));
-                    Log.e("AgentId", Global.getAGENTID()+ "");
 
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -130,21 +127,20 @@ public class SplashScreenWWW extends AppCompatActivity{
             deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
         }
         Global.setDEVICEID(deviceId);
-        Log.e("DeviceId", deviceId);
 
-        Log.e("SerialNumber", Build.SERIAL);
-        Log.e("BuileID", Build.ID);
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation()){
             mLat = gpsTracker.getLatitude();
             mLong = gpsTracker.getLongitude();
 
+/*
             Log.e("InAppData", "action:" + mAction + "\n" +
                     "token:" + Global.getTOKEN() + "\n" +
                     "device_id:" + Global.getDEVICEID() + "\n" +
                     "lat:" + mLat + "\n" +
                     "long:" + mLong + "\n" +
                     "platform:" + Configs.getPLATFORM());
+*/
 
 
             PreRequestModel mPreRequestModel = new PreRequestModel(mAction, new PreRequestModel.Data(
@@ -175,7 +171,7 @@ public class SplashScreenWWW extends AppCompatActivity{
 
                         if (model.getStatus() == APIServices.SUCCESS) {
                             Until.setTXIDSharedPreferences(model.getTXID());
-                            Intent intent = new Intent(SplashScreenWWW.this, SplashScreenCounter.class);
+                            Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();
@@ -215,13 +211,10 @@ public class SplashScreenWWW extends AppCompatActivity{
                 Log.d(TAG, "Key: " + key + " Value: " + value);
             }
 */
-            Log.e("getExtrasNoti", "true");
             return true;
         }
 
-        Log.d(TAG, "InstanceID token: " + FirebaseInstanceId.getInstance().getToken());
 //        writeToFile(FirebaseInstanceId.getInstance().getToken());
-        Log.e("getExtrasNoti", "false");
 
         return false;
     }

@@ -1,6 +1,7 @@
 package com.worldwidewealth.wealthwallet.until;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,18 +24,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.worldwidewealth.wealthwallet.EncryptionData;
+import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupSlip;
+import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
+import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.Global;
@@ -44,8 +54,13 @@ import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Date;
 
@@ -67,6 +82,7 @@ public class Until {
     public static final String KEYPF = "data";
     public static final String KEYTXID = "txid";
     public static final String LOGOUT = "LOGOUT";
+    public static final String TAG = Until.class.getSimpleName();
 
     public static void initSpinnerCurrency(Context context, Spinner spinner) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency, android.R.layout.simple_spinner_item);
@@ -87,11 +103,8 @@ public class Until {
             public void writeTo(BufferedSink sink) throws IOException {
                 Buffer buffer = new Buffer();
                 body.writeTo(buffer);
-                Log.e("encode", "true");
                 String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
-                Log.e("encoded", encoded);
                 byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
-                Log.e("converted", new StringBuilder(encoded).reverse().toString());
                 sink.write(converted);
                 buffer.close();
                 sink.close();
@@ -178,6 +191,55 @@ public class Until {
         balanceDecimal.setText("."+balance[1]);
 
     }
+
+    public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ContentValues values = EncryptionData.getModel(response.body());
+                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                    new DialogCounterAlert.DialogFromResponse(context, values.getAsString(EncryptionData.STRMODEL));
+                } else {
+                    LoginResponseModel loginResponseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), LoginResponseModel.class);
+                    Global.setBALANCE(loginResponseModel.getBALANCE());
+                    setBalanceWallet(includeMywallet);
+
+                }
+
+                DialogCounterAlert.DialogProgress.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(context, call, this);
+            }
+        });
+
+        ImageButton btnRefreshWallet = (ImageButton) includeMywallet.findViewById(R.id.btn_refresh_wallet);
+        btnRefreshWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                float ROTATE_FROM = 0.0f;
+                final float ROTATE_TO = 360.0f;
+                RotateAnimation rotateAnimation = new RotateAnimation(ROTATE_FROM, ROTATE_TO, Animation.RELATIVE_TO_SELF,
+                        0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotateAnimation.setDuration((long) 1000);
+                v.startAnimation(rotateAnimation);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateMyBalanceWallet(context, includeMywallet);
+                        v.clearAnimation();
+                    }
+                }, 2000);
+            }
+        });
+
+    }
+
 
     public static class JsonDateDeserializer implements JsonDeserializer<Date> {
 
@@ -274,10 +336,74 @@ public class Until {
     }
 
     public static String getRealPathFromURI(Uri uri) {
+        if( uri == null ) {
+            // TODO perform some logging or show user feedback
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = MyApplication.getContext().getContentResolver().query(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+
+        // for other file managers
+        return uri.getPath();
+/*
         Cursor cursor = MyApplication.getContext().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
+*/
+    }
+
+    public static String getPicasaImage(Uri imageUri) {
+
+        File cacheDir;
+        // if the device has an SD card
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(),".OCFL311");
+        } else {
+            // it does not have an SD card
+            cacheDir = MyApplication.getContext().getCacheDir();
+        }
+
+        if(!cacheDir.exists()) cacheDir.mkdirs();
+
+        File f = new File(cacheDir, "tempPicasa");
+
+        try {
+
+            InputStream is = null;
+            if (imageUri.toString().startsWith("content://com.google.android.gallery3d")
+                    || imageUri.toString().startsWith("content://com.sec.android.gallery3d.provider")) {
+
+                is = MyApplication.getContext().getContentResolver().openInputStream(imageUri);
+            } else {
+                is = new URL(imageUri.toString()).openStream();
+            }
+
+            OutputStream os = new FileOutputStream(f);
+
+            //Utils.InputToOutputStream(is, os);
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
+            }
+
+            return f.getAbsolutePath();
+        } catch (Exception ex) {
+            Log.i(Until.class.getName(), "Exception: " + ex.getMessage());
+            // something went wrong
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public static int calculateInSampleSize(
@@ -357,7 +483,6 @@ public class Until {
     }
 
     public static String encodeBitmapToUpload(Bitmap bitmap){
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageData = baos.toByteArray();

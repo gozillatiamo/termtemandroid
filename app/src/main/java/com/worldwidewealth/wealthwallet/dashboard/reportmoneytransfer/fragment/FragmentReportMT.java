@@ -51,6 +51,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class FragmentReportMT extends Fragment {
+    private static final String TAG = FragmentReportMT.class.getSimpleName();
     private View rootView;
     private ViewHolder mHolder;
     private String mStrAmount, mStrBankStart = "", mStrBankEnd = "";
@@ -100,23 +101,36 @@ public class FragmentReportMT extends Fragment {
 
                     break;
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CHOOSE:
+                    uri = data.getData();
+                    imgPath = Until.getRealPathFromURI(uri);
 
-                        uri = data.getData();
+                    uri.toString().replace("com.android.gallery3d","com.google.android.gallery3d");
+
+                    if (uri.toString().startsWith("content://com.google.android.gallery3d")
+                            || uri.toString().startsWith("content://com.sec.android.gallery3d.provider") ) {
+
+                        imgPath = Until.getPicasaImage(uri);
+                    }
+                    else
                         imgPath = Until.getRealPathFromURI(uri);
-                        Log.e("ImgPathFromChoose", imgPath);
+
+//                    imgPath = Until.getRealPathFromURI(uri);
+                    Log.e("ImgPathFromChoose", imgPath);
 
                     break;
             }
 
-            if (imgPath != null) {
+         if (imgPath != null) {
+                Log.e(TAG, imgPath+"");
                 Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 200, 200);
                 Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
+                Log.e(TAG, bitmapDecode.toString()+"");
                 mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
                 mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
 
-                mHolder.mImagePhoto.setImageBitmap(BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length));
+                mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
             }
-        }
+     }
     }
 
     private void initBtn(){

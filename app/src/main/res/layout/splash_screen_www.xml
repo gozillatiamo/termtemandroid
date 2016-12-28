@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/background_splash_www">
+    android:background="@android:color/white">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:src="@drawable/logo_www"
+        android:src="@drawable/logo_app_with_text"
         android:id="@+id/imageView6" />
 
     <com.wang.avi.AVLoadingIndicatorView
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         app:indicatorName="LineScaleIndicator"
+        app:indicatorColor="@color/colorPrimary"
         android:layout_gravity="center"
         android:layout_marginBottom="100dp"
     />

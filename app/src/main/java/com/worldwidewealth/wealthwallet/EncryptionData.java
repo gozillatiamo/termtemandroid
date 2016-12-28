@@ -95,6 +95,7 @@ public class EncryptionData {
     }
 
     static public String DecryptData(String strData, String key) {
+        if (strData == null) return null;
         String strResult = strData.replace("%2B", "+");
 
         byte[] bb = key.getBytes(characterSet);
@@ -172,7 +173,6 @@ public class EncryptionData {
         } else {
             String converted = Until.ConvertJsonEncode(strRespone);
             String responDecode = Until.decode(converted);
-            Log.e("responDecode", responDecode);
             resultvalues.put(ASRESPONSEMODEL, false);
             resultvalues.put(STRMODEL, responDecode);
 

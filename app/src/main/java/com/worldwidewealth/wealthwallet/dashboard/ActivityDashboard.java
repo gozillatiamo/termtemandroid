@@ -75,7 +75,8 @@ public class ActivityDashboard extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+//        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
     }
 
     private void initToolbar(){

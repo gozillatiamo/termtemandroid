@@ -11,7 +11,8 @@
     <string name="phone_number">หมายเลขโทรศัพท์</string>
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>
-    <string name="email">อีเมล์</string>
+    <string name="send">ส่ง</string>
+    <string name="email">อีเมล (ถ้ามี)</string>
     <string name="password">รหัสผ่าน</string>
     <string name="forgot_password">ลืมรหัสผ่าน</string>
     <string name="change_password">เปลี่ยนรหัสผ่าน</string>
@@ -34,6 +35,7 @@
     <string name="title_dashboard">Credit Limit</string>
     <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
     <string name="topup">เติมเงินมือถือ</string>
+    <string name="confirm_order">ยืนยันทำรายการ</string>
     <string name="bank_account">บัญชีธนาคาร</string>
     <string name="credit_debit_card">บัตรเครดิต/เดบิต</string>
     <string name="noti_payment">แจ้งชำระเงิน</string>
@@ -50,7 +52,6 @@
     <string name="reference">หมายเลขอ้างอิง :</string>
     <string name="confirm">ยืนยัน</string>
     <string name="cancel">ยกเลิก</string>
-    <string name="send">ส่ง :</string>
     <string name="recipient">Recipient :</string>
     <string name="mid_market_rate">Mid-Market rate :</string>
     <string name="withdrawal_fees">Withdrawal Fees :</string>

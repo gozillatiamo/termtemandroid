@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_splash_www"
+    android:background="@android:color/white"
     android:padding="@dimen/padding_icon_dashboard"
     android:gravity="center">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_www"/>
+        android:src="@drawable/logo_app_with_text"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:gravity="center"
         android:autoLink="phone"
+        android:layout_marginTop="@dimen/activity_space"
         android:clickable="true"
-        android:textSize="@dimen/my_text_size"
+        android:textSize="@dimen/padding_icon_dashboard"
         android:textStyle="bold"
-        android:text="@string/contact_us"/>
+        android:text="ติดต่อ\n099-447-0474\n095-162-0577"/>
 </LinearLayout>

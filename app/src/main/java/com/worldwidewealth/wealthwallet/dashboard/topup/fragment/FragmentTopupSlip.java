@@ -104,7 +104,7 @@ public class FragmentTopupSlip extends Fragment {
 
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
-        initHeader();
+        Until.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
         initBtn();
         if (mImageBitmap != null || mTransID != null) {
             initEslip();
@@ -119,6 +119,7 @@ public class FragmentTopupSlip extends Fragment {
         onBackPress();
     }
 
+/*
     private void initHeader(){
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -145,6 +146,7 @@ public class FragmentTopupSlip extends Fragment {
         });
 
     }
+*/
 
     private void onBackPress(){
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
