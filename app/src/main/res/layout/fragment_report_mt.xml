@@ -160,7 +160,7 @@
                         android:id="@+id/icon_bank"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
-                        android:src="@drawable/logo_kbank"
+                        android:src="@drawable/kbank"
                         android:layout_marginRight="@dimen/activity_space"
                         android:visibility="visible"
                         />
@@ -168,7 +168,7 @@
                         android:id="@+id/txt_bank"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="@string/kbank"
+                        android:text="KBANK"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textColor="@android:color/darker_gray"

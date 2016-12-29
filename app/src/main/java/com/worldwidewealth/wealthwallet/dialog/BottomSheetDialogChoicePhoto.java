@@ -3,14 +3,21 @@ package com.worldwidewealth.wealthwallet.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.R;
+import com.worldwidewealth.wealthwallet.until.Until;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by user on 14-Dec-16.
@@ -19,8 +26,10 @@ import com.worldwidewealth.wealthwallet.R;
 public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
     private ViewHolder mHolder;
     private Fragment mFragment;
+    private Uri photoURI;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
+    public static final String TAG = BottomSheetDialogChoicePhoto.class.getSimpleName();
 
     public BottomSheetDialogChoicePhoto(Fragment fragment) {
         this.mFragment = fragment;
@@ -39,10 +48,32 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
                 MyApplication.LeavingOrEntering.currentActivity = null;
                 BottomSheetDialogChoicePhoto.this.dismiss();
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
+                if (takePictureIntent.resolveActivity(mFragment.getContext().getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = Until.createImageFile();
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                        ex.printStackTrace();
+                    }
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+//                        photoURI = FileProvider.getUriForFile(mFragment.getContext(),
+//                                MyApplication.getContext().getPackageName(),
+//                                photoFile);
+                        photoURI = Uri.fromFile(photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        mFragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+/*
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     mFragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
-
+*/
+                }
             }
         });
 
@@ -58,6 +89,11 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
             }
         });
 
+    }
+
+    public Uri getImageUri(){
+        Log.e(TAG, photoURI.getPath());
+        return  photoURI;
     }
 
     private class ViewHolder{

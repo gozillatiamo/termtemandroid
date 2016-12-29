@@ -12,6 +12,7 @@ import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -41,12 +42,13 @@ import retrofit2.Response;
  */
 public class SplashScreenWWW extends AppCompatActivity{
 
-    private static final String TAG = "FCM";
+//    private static final String TAG = "FCM";
     protected String mAction;
     protected double mLat, mLong;
     private APIServices services;
     private Runnable runnable;
     private Handler handler;
+    public static final String TAG = SplashScreenWWW.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +61,6 @@ public class SplashScreenWWW extends AppCompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
-                if (initFCM()) return;
                 SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
                 if (!logout) {
@@ -107,7 +108,9 @@ public class SplashScreenWWW extends AppCompatActivity{
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
-        handler.postDelayed(runnable, 3000);
+        if (!initFCM()) {
+            handler.postDelayed(runnable, 3000);
+        }
     }
 
     @Override
@@ -194,16 +197,17 @@ public class SplashScreenWWW extends AppCompatActivity{
 
     private boolean initFCM(){
         if (getIntent().getExtras() != null) {
+
             String txt = getIntent().getExtras().getString("txt");
             String box = getIntent().getExtras().getString("box");
-            getIntent().getExtras().clear();
+//            Log.e(TAG, "txt: " +  txt + "\nbox: " + box);
+            getIntent().replaceExtras(new Bundle());
             if (txt != null && box != null) {
                 Intent intent = new Intent(this, ActivityShowNotify.class);
                 intent.putExtra(MyFirebaseMessagingService.TEXT, txt);
                 intent.putExtra(MyFirebaseMessagingService.BOX, box);
                 startActivity(intent);
-            } else {
-                return false;
+                return true;
             }
 /*
             for (String key : getIntent().getExtras().keySet()) {
@@ -211,7 +215,6 @@ public class SplashScreenWWW extends AppCompatActivity{
                 Log.d(TAG, "Key: " + key + " Value: " + value);
             }
 */
-            return true;
         }
 
 //        writeToFile(FirebaseInstanceId.getInstance().getToken());

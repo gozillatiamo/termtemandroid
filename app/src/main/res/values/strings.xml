@@ -268,17 +268,45 @@
     </string-array>
 
     <string-array name="list_name_bank">
-        <item>ธนาคารไทยพาณิชย์</item>
-        <item>ธนาคารกสิกร</item>
         <item>ธนาคารกรุงเทพ</item>
-        <item>ธนาคารกรุงศรี</item>
+        <item>ธนาคารกรุงไท​ย</item>
+        <item>ธนาคารกรุงศรีอยุธยา</item>
+        <item>ธนาคารกสิกรไทย</item>
+        <item>ธนาคารเกียรตินาคิน</item>
+        <item>ธนาคารซีไอเอ็มบีไทย</item>
+        <item>ธนาคารทหาร ไทย</item>
+        <item>ธนาคารทิสโก้</item>
+        <item>ธนาคารไทยพาณิชย์</item>
+        <item>ธนาคาร​ธนชาต</item>
+        <item>ธนาคารยูโอบี</item>
+        <item>ธน​าคารแลนด์ แอนด์ เฮ้าส์</item>
+        <item>ธนาคารสแตนดาร์ดชาร์เตอร์ด (ไทย)</item>
+        <item>ธนาคารไอซีบีซี (ไทย)</item>
+        <item>ธนาคารไทยเครดิตเพื่อรายย่อย</item>
+        <item>ธนาคารออมสิน</item>
+        <item>ธนาคารอาคารสงเคราะห์</item>
+        <item>ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</item>
     </string-array>
 
     <string-array name="list_code_bank">
-        <item>SCB</item>
-        <item>KBANG</item>
         <item>BBL</item>
+        <item>KTB</item>
         <item>BAY</item>
+        <item>KBANK</item>
+        <item>KK</item>
+        <item>CIMB</item>
+        <item>TMB</item>
+        <item>TISCO</item>
+        <item>SCB</item>
+        <item>TBANK</item>
+        <item>UOB</item>
+        <item>LHBANK</item>
+        <item>SCNB</item>
+        <item>ICBC</item>
+        <item>TCRB</item>
+        <item>GSB</item>
+        <item>GHB</item>
+        <item>BAAC</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

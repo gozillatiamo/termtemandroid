@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,8 @@ public class FragmentReportMT extends Fragment {
     private Calendar mCalender = Calendar.getInstance();
     private byte[] mImageByte;
     private PopupChoiceBank mPopupBankStart, mPopupBankEnd;
+    private BottomSheetDialogChoicePhoto sheetDialogFragment;
+    private String imgPath = null;
 
 
     public static Fragment newInstance(){
@@ -90,11 +93,13 @@ public class FragmentReportMT extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Uri uri = null;
-            String imgPath = null;
+
             switch (requestCode){
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CAPTURE:
-                    Bundle extras = data.getExtras();
-                    uri = Until.getImageUri((Bitmap) extras.get("data"));
+//                    Bundle extras = data.getExtras();
+//                    uri = Until.getImageUri((Bitmap) extras.get("data"));
+                    uri = sheetDialogFragment.getImageUri();
+
                     imgPath =  Until.getRealPathFromURI(uri);
 
                     Log.e("ImgPathFromCapture", imgPath);
@@ -122,13 +127,19 @@ public class FragmentReportMT extends Fragment {
 
          if (imgPath != null) {
                 Log.e(TAG, imgPath+"");
-                Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 200, 200);
-                Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
-                Log.e(TAG, bitmapDecode.toString()+"");
-                mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
-                mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 130, 130);
+                        Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
+                        Log.e(TAG, bitmapDecode.toString()+"");
+                        mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
+                        mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
 
-                mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
+                        mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
+
+                    }
+                }, 2000);
             }
      }
     }
@@ -191,7 +202,7 @@ public class FragmentReportMT extends Fragment {
                                         mHolder.mBtnDateTransfer.getText().toString(),
                                         mHolder.mBtnTimeTransfer.getText().toString(),
                                         mPopupBankStart.getPositionSelect(),
-                                        1))
+                                        3))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
 
@@ -199,7 +210,7 @@ public class FragmentReportMT extends Fragment {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
+                        new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
                         t.printStackTrace();
                     }
                 });
@@ -209,7 +220,7 @@ public class FragmentReportMT extends Fragment {
         mHolder.mBtnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialogFragment sheetDialogFragment = new BottomSheetDialogChoicePhoto(FragmentReportMT.this);
+                sheetDialogFragment = new BottomSheetDialogChoicePhoto(FragmentReportMT.this);
                 sheetDialogFragment.show(getActivity().getSupportFragmentManager(), sheetDialogFragment.getTag());
             }
         });

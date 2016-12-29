@@ -123,7 +123,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     private boolean canUseLeaving(Activity activity){
         return !(activity instanceof SplashScreenWWW |
-                activity instanceof SplashScreenCounter |
+                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister);
     }

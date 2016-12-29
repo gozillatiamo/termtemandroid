@@ -169,17 +169,19 @@
 
                             <ImageView
                                 android:id="@+id/icon_bank_start"
-                                android:layout_width="@dimen/activity_vertical_margin"
-                                android:layout_height="@dimen/activity_vertical_margin"
-                                android:src="@drawable/logo_kbank"/>
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
+                                android:src="@drawable/kbank"/>
 
                             <TextView
                                 android:id="@+id/txt_bank_start"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/activity_space"
                                 android:gravity="center"
+                                android:textSize="@dimen/my_text_size"
                                 android:textColor="@android:color/black"
-                                android:text="ธนาคารกสิกร"/>
+                                android:text="KBANK"/>
 
                         </LinearLayout>
 
@@ -188,7 +190,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="-"
-                            android:textSize="24sp"
+                            android:padding="@dimen/activity_space"
+                            android:textSize="@dimen/my_text_size"
                             android:textStyle="bold"
                             />
                         <LinearLayout
@@ -198,17 +201,19 @@
                             android:gravity="left|center">
                             <ImageView
                                 android:id="@+id/icon_bank_end"
-                                android:layout_width="@dimen/activity_vertical_margin"
-                                android:layout_height="@dimen/activity_vertical_margin"
-                                android:src="@drawable/logo_kbank"/>
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
+                                android:src="@drawable/kbank"/>
 
                             <TextView
                                 android:id="@+id/txt_bank_end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
+                                android:layout_marginLeft="@dimen/activity_space"
+                                android:textSize="@dimen/my_text_size"
                                 android:textColor="@android:color/black"
-                                android:text="ธนาคารกสิกร"/>
+                                android:text="KBANK"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -227,8 +232,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/logo_with_text_old"
-                    />
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
 
             <RelativeLayout

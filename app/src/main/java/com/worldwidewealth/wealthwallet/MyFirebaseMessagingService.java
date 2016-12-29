@@ -26,11 +26,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.e("notiData", remoteMessage.getData().toString());
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
-
         if (box != null) {
             if (box.contains("*")) {
                 Global.setOTP(box.split("\\*")[0]);
@@ -47,7 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, ActivityShowNotify.class);
         intent.putExtra(TEXT, txt);
         intent.putExtra(BOX, box);
-        Log.e("notiBox", box);
+//        Log.e("notiBox", box);
 
         int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
 

@@ -26,7 +26,7 @@ import java.util.Locale;
 public class FragmentReportMtPreview extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
-    private String[] mListNameBank;
+    private String[] mListCodeBank;
     private TypedArray mListIconBank;
     private static final String AMOUNTMT = "amountmt";
     private static final String IMAGESLIP = "imageslip";
@@ -51,7 +51,7 @@ public class FragmentReportMtPreview extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mListNameBank = getResources().getStringArray(R.array.list_name_bank);
+        mListCodeBank = getResources().getStringArray(R.array.list_code_bank);
         mListIconBank = getContext().getResources().obtainTypedArray(R.array.ic_list_bank);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_report_mt_preview, container, false);
@@ -105,8 +105,8 @@ public class FragmentReportMtPreview extends Fragment {
         mHolder.mImageSlip.setImageBitmap(BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length));
         mHolder.mTextDate.setText(getArguments().getString(DATE));
         mHolder.mTextTime.setText(getArguments().getString(TIME));
-        mHolder.mTextBankStart.setText(mListNameBank[getArguments().getInt(BANKSTART)]);
-        mHolder.mTextBankEnd.setText(mListNameBank[getArguments().getInt(BANKEND)]);
+        mHolder.mTextBankStart.setText(mListCodeBank[getArguments().getInt(BANKSTART)]);
+        mHolder.mTextBankEnd.setText(mListCodeBank[getArguments().getInt(BANKEND)]);
         mHolder.mIconBankStart.setImageDrawable(mListIconBank.getDrawable(getArguments().getInt(BANKSTART)));
         mHolder.mIconBankEnd.setImageDrawable(mListIconBank.getDrawable(getArguments().getInt(BANKEND)));
     }

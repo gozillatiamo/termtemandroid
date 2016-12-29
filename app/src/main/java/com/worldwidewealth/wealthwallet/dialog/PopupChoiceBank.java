@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class PopupChoiceBank {
     private String mStrBank = "";
     private int mPositionBank = -1;
 
+    public static final String TAG = PopupChoiceBank.class.getSimpleName();
+
     public PopupChoiceBank(Context context, View mRootView) {
         this.mRootView = mRootView;
         this.mContext = context;
@@ -35,14 +38,13 @@ public class PopupChoiceBank {
         mHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPopupMenu.isShowing()){
-                    mPopupMenu.dismiss();
-                } else {
-                    mPopupMenu.showAsDropDown(mHolder.itemView);
-                }
-
+                mPopupMenu.showAsDropDown(mHolder.itemView);
             }
         });
+    }
+
+    public boolean isShow(){
+        return mPopupMenu.isShowing();
     }
 
     public String getBank(){
@@ -60,7 +62,7 @@ public class PopupChoiceBank {
 
         mPopupMenu = new PopupWindow(
                 mRecyclerListBank,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
         mPopupMenu.setBackgroundDrawable(mContext.getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
@@ -71,7 +73,6 @@ public class PopupChoiceBank {
                 //TODO do sth here on dismiss
             }
         });
-
     }
 
     private class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHolder>{
@@ -94,7 +95,7 @@ public class PopupChoiceBank {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mHolder.mTextBank.setText((mListNameBank[position]));
+                    mHolder.mTextBank.setText((mListCodeBank[position]));
                     mHolder.mIconBank.setImageDrawable(mLisIconBank.getDrawable(position));
                     mStrBank = mListCodeBank[position];
                     mPositionBank = position;

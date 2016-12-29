@@ -8,10 +8,24 @@
     </integer-array>
 
     <integer-array name="ic_list_bank">
-        <item>@drawable/logo_scb</item>
-        <item>@drawable/logo_kasikorn</item>
-        <item>@drawable/logo_bangkok</item>
-        <item>@drawable/logo_krungsri</item>
+        <item>@drawable/bbl</item>
+        <item>@drawable/ktb</item>
+        <item>@drawable/bay</item>
+        <item>@drawable/kbank</item>
+        <item>@drawable/kk</item>
+        <item>@drawable/cimb</item>
+        <item>@drawable/tmb</item>
+        <item>@drawable/tisco</item>
+        <item>@drawable/scb</item>
+        <item>@drawable/tbank</item>
+        <item>@drawable/uob</item>
+        <item>@drawable/lhbank</item>
+        <item>@drawable/scnb</item>
+        <item>@drawable/icbc</item>
+        <item>@drawable/tcrb</item>
+        <item>@drawable/gsb</item>
+        <item>@drawable/ghb</item>
+        <item>@drawable/baac</item>
     </integer-array>
     
     <integer-array name="ic_bill">
