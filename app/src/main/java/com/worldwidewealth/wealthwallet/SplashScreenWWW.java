@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
@@ -179,7 +180,8 @@ public class SplashScreenWWW extends AppCompatActivity{
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();
                         } else {
-                            Toast.makeText(SplashScreenWWW.this, model.getMsg(), Toast.LENGTH_LONG).show();
+                            new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this,
+                                    model.getMsg(), call, this);
                         }
 
                     }

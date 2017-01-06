@@ -33,7 +33,7 @@ public abstract class RetryableCallback<T> implements Callback<T> {
                 Log.v(TAG, "Retrying API Call - (" + retryCount + "/" + totalRetries +")");
                 retry();
             } else
-                onFinalResponse(call, response);
+                onFinalFailure(call, null);
         } else
             onFinalResponse(call, response);
     }

@@ -50,7 +50,7 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         Log.e("strDecode", responDecode);
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
         Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
-        List<LoadButtonResponseModel> modelList = (List<LoadButtonResponseModel>)  gson.fromJson(responDecode, listType);
+        List<LoadButtonResponseModel> modelList = gson.fromJson(responDecode, listType);
         for (LoadButtonResponseModel model : modelList){
 
             switch (model.getPRODUCT_TYPE()){
@@ -78,10 +78,10 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
     public FragmentChoiceTopup getItem(int position) {
         switch (position){
             case 0:
-                return new FragmentChoiceTopup(mListAirtime);
+                return FragmentChoiceTopup.newInstance(mListAirtime);
 
             case 1:
-                return new FragmentChoiceTopup(mListVAS);
+                return FragmentChoiceTopup.newInstance(mListVAS);
         }
 
         return null;

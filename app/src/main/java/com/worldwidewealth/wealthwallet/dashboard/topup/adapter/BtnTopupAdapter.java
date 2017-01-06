@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,10 @@ import android.widget.TextView;
 
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentAirtimeVAS;
+import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentChoiceTopup;
 import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.wealthwallet.model.LoadButtonResponseModel;
+import com.worldwidewealth.wealthwallet.until.Until;
 
 import java.util.List;
 
@@ -26,7 +30,9 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
     private Context mContext;
     private Fragment mFragment;
     private List<LoadButtonResponseModel> mDataList;
-    private int previousSelectedPosition = -1;
+    public int previousSelectedPosition = -1;
+    public String TAG = BtnTopupAdapter.class.getSimpleName();
+    private SparseBooleanArray selectedItems;
 
     public BtnTopupAdapter(Context mContext, List<LoadButtonResponseModel> mDataList) {
         this.mContext = mContext;
@@ -44,26 +50,35 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.item_topup, parent, false);
+        Until.setupUI(rootView);
 
         return new ViewHolder(rootView);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
         if (getItem(position).getPRODUCT_TYPE().equals("VAS")){
             String[] item = getItem(position).getPRODUCT_ITEM().split("/");
             holder.mTextProductItem.setText(item[0]);
             holder.mTextCurency.setText(item[1]);
+
         }else holder.mTextProductItem.setText(getItem(position).getPRODUCT_ITEM());
+
+        holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
+        holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
+        holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+
+        if (position == previousSelectedPosition)
+            setBackgroundSelect(holder, position);
+
 
         holder.mBtnChoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setClickChoiceTopup(holder, position);
+
             }
         });
-
     }
 
     @Override
@@ -75,20 +90,32 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         return mDataList.get(position);
     }
 
+    private void setBackgroundSelect(ViewHolder holder, int position){
+        if (mFragment != null) {
+
+            if (mFragment.getParentFragment() instanceof FragmentAirtimeVAS) {
+                FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS) mFragment.getParentFragment();
+                holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.white));
+                holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.white));
+                holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
+            }
+
+
+            if (previousSelectedPosition == position) return;
+
+            if (mFragment instanceof FragmentChoiceTopup){
+                ((FragmentChoiceTopup)mFragment).clearSelected();
+            }
+        }
+    }
+
     private void setClickChoiceTopup(ViewHolder holder, int position){
 
         double nowAmt = 0;
         String buttonId = null;
         if (position != -1) {
             if (previousSelectedPosition == position) return;
-            if (mFragment != null) {
-                if (mFragment.getParentFragment() instanceof FragmentAirtimeVAS) {
-                    FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS) mFragment.getParentFragment();
-                    holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.white));
-                    holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.white));
-                    holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
-                }
-            }
+            setBackgroundSelect(holder, position);
             LoadButtonResponseModel buttonResponseModel = getItem(position);
             nowAmt = buttonResponseModel.getPRODUCT_PRICE();
             buttonId = buttonResponseModel.getTXID();
@@ -110,8 +137,8 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView mTextProductItem, mTextCurency;
-        private CardView mBtnChoice;
+        public TextView mTextProductItem, mTextCurency;
+        public CardView mBtnChoice;
 
         public ViewHolder(View itemView) {
             super(itemView);

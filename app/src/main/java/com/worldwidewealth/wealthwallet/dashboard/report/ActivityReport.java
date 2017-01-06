@@ -193,7 +193,13 @@ public class ActivityReport extends AppCompatActivity {
                 if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                     ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
                     DialogCounterAlert.DialogProgress.dismiss();
-                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
+
+//                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
+
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(ActivityReport.this,
+                                responseModel.getMsg(), call, this);
+
                 } else {
                     DialogCounterAlert.DialogProgress.dismiss();
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();

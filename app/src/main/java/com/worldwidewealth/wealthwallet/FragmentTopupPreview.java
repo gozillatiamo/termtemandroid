@@ -70,6 +70,7 @@ public class FragmentTopupPreview extends Fragment {
         super.onPause();
         FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
         parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        parentFragment.setEnabledBtn(true);
     }
 
     @Override

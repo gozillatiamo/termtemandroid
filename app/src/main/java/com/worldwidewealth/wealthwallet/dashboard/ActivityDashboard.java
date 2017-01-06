@@ -39,6 +39,7 @@ import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.model.ChangePasswordRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
+import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 import retrofit2.Call;
@@ -213,8 +214,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
                                 @Override
                                 public void onFailure(Call<ResponseModel> call, Throwable t) {
-                                    t.printStackTrace();
-                                    new DialogNetworkError(ActivityDashboard.this, call, this);
+                                    new ErrorNetworkThrowable(t).networkError(ActivityDashboard.this, call, this);
                                 }
                             });
                         }

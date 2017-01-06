@@ -42,9 +42,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.worldwidewealth.wealthwallet.EncryptionData;
+import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
+import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.Global;
@@ -202,7 +204,15 @@ public class Until {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ContentValues values = EncryptionData.getModel(response.body());
                 if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    new DialogCounterAlert.DialogFromResponse(context, values.getAsString(EncryptionData.STRMODEL));
+/*
+                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(context,
+                                responseModel.getMsg(), call, this);
+
+//                    new DialogCounterAlert.DialogFromResponse(context, values.getAsString(EncryptionData.STRMODEL));
+*/
                 } else {
                     LoginResponseModel loginResponseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), LoginResponseModel.class);
                     Global.setBALANCE(loginResponseModel.getBALANCE());
@@ -216,7 +226,7 @@ public class Until {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(context, call, this);
+//                new ErrorNetworkThrowable(t).networkError(context, call, this);
             }
         });
 

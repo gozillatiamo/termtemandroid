@@ -31,6 +31,7 @@ public class EncryptionData {
 
     public static final String ASRESPONSEMODEL = "asresponsemodel";
     public static final String STRMODEL = "strmodel";
+    public static final String TAG = EncryptionData.class.getSimpleName();
 
 
 
@@ -155,17 +156,13 @@ public class EncryptionData {
         ResponseModel responseModel = null;
         Gson gson = new Gson();
         String strRespone = null;
-        try {
-            strRespone = response.string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         try {
+            strRespone = response.string();
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
-        }catch (JsonSyntaxException e){
-            e.printStackTrace();
         }
+        catch (JsonSyntaxException e){}
+        catch (IOException e) {}
 
         if (responseModel != null){
             resultvalues.put(ASRESPONSEMODEL, true);

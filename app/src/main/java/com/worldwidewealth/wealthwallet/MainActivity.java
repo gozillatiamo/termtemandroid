@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
                             String[] strRegisDevice = responseModel.getMsg().split(":");
-                            if (strRegisDevice.length > 1){
+                            if (strRegisDevice.length == 3){
                                 registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
                             } else{
                                 Toast.makeText(MainActivity.this, responseModel.getMsg(),

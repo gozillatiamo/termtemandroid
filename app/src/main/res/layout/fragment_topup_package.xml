@@ -131,7 +131,7 @@
                 android:id="@+id/btn_topup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 style="@style/MyButton"
                 android:backgroundTint="@color/colorSuccess"
                 android:text="@string/confirm_order"

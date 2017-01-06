@@ -30,13 +30,17 @@ public class ErrorNetworkThrowable extends Throwable {
         super(t);
     }
 
-    public void networkError(Context context, Call call, Callback callback){
+    public void networkError(Context context, String msg, Call call, Callback callback){
         //printStackTrace();
         if (DialogCounterAlert.DialogProgress.isShow()) {
             DialogCounterAlert.DialogProgress.dismiss();
         }
-        new DialogNetworkError(context, call, callback);
+        new DialogNetworkError(context, msg, call, callback);
 
+    }
+
+    public void networkError(Context context, Call call, Callback callback){
+        networkError(context, "", call, callback);
     }
 
     @Override

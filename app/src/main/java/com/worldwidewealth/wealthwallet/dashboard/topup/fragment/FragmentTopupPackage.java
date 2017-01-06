@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
@@ -103,6 +104,17 @@ public class FragmentTopupPackage extends  Fragment{
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setEnabledBtn(true);
+    }
+
+    public void setEnabledBtn(boolean enabled){
+        mHolder.mBtnTopup.setEnabled(enabled);
+        mHolder.mBtnNext.setEnabled(enabled);
+    }
+
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
         this.mButtonID = buttonid;
@@ -144,6 +156,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
+                setEnabledBtn(true);
             }
         });
     }
@@ -167,7 +180,7 @@ public class FragmentTopupPackage extends  Fragment{
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mHolder.mBtnNext.setEnabled(false);
                 servicePreview();
             }
         });
@@ -175,7 +188,7 @@ public class FragmentTopupPackage extends  Fragment{
         mHolder.mBtnTopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mHolder.mBtnTopup.setEnabled(false);
                 if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                     FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
                     if (!fragmentTopupPreview.canTopup()) return;
@@ -216,9 +229,13 @@ public class FragmentTopupPackage extends  Fragment{
                 ContentValues modelValues = EncryptionData.getModel(response.body());
 
                 if (modelValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    ResponseModel model = new Gson()
+                    ResponseModel responseModel = new Gson()
                             .fromJson(modelValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-                    Toast.makeText(FragmentTopupPackage.this.getContext(), model.getMsg(), Toast.LENGTH_SHORT).show();
+
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(getContext(),
+                                responseModel.getMsg(), call, this);
+
                 } else {
 
                     FragmentTopupPackage.this.getChildFragmentManager()
@@ -241,6 +258,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
+                setEnabledBtn(true);
             }
         });
 
@@ -282,6 +300,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
+                setEnabledBtn(true);
             }
         });
 
@@ -335,20 +354,16 @@ public class FragmentTopupPackage extends  Fragment{
                             if (responseModel.getStatus() == APIServices.SUCCESS) {
                                 serviceEslip(model.getTranid());
                             } else {
-                                new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
-                                        null,
-                                        responseModel.getMsg(),
-                                        null);
+                                if (responseModel.getStatus() != APIServices.SUCCESS)
+                                    new ErrorNetworkThrowable(null).networkError(getContext(),
+                                            responseModel.getMsg(), call, this);
                             }
-
-                        } else {
-
                         }
-
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
+                        setEnabledBtn(true);
                     }
                 });
 
@@ -380,21 +395,26 @@ public class FragmentTopupPackage extends  Fragment{
                 ContentValues values = EncryptionData.getModel(response.body());
                 if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                     ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-//                    Toast.makeText(FragmentTopupPackage.this.getContext(), responseModel.getMsg(), Toast.LENGTH_LONG).show();
-                    if (responseModel.getFf().equals("")) {
 
-                        new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
-                                null,
-                                getString(R.string.slip_not_found),
-                                null);
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(getContext(),
+                                responseModel.getMsg(), call, this);
+                    else {
+                        if (responseModel.getFf().equals("")) {
 
-                    } else {
+                            new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
+                                    null,
+                                    getString(R.string.slip_not_found),
+                                    null);
 
-                        byte[] imageByte = Base64.decode(responseModel.getFf(), Base64.NO_WRAP);
-                        AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                        activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                        } else {
+
+                            byte[] imageByte = Base64.decode(responseModel.getFf(), Base64.NO_WRAP);
+                            AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
+                            activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            activity.getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                        }
                     }
 
                 }
@@ -404,6 +424,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
+                setEnabledBtn(true);
             }
         });
 

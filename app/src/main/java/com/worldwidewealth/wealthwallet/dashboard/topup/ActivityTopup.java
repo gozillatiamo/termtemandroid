@@ -13,13 +13,15 @@ import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopup;
 
 public class ActivityTopup extends AppCompatActivity {
 
-    private ViewHolder mHolder;
+    private FrameLayout mContainerTopup;
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topup);
-        mHolder = new ViewHolder(this);
 
+        initWidgets();
         initToolbar();
         initContainer();
     }
@@ -56,8 +58,13 @@ public class ActivityTopup extends AppCompatActivity {
         }
     }
 
+    private void initWidgets(){
+        mContainerTopup = (FrameLayout) findViewById(R.id.container_topup);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_topup);
+
+    }
     private void initToolbar(){
-        setSupportActionBar(mHolder.mToolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -71,13 +78,4 @@ public class ActivityTopup extends AppCompatActivity {
         transaction.commit();
     }
 
-    public class ViewHolder{
-        private FrameLayout mContainerTopup;
-        private Toolbar mToolbar;
-
-        public ViewHolder(Activity itemView){
-            mContainerTopup = (FrameLayout) itemView.findViewById(R.id.container_topup);
-            mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar_topup);
-        }
-    }
 }

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.view.WindowManager;
 
 import com.worldwidewealth.wealthwallet.R;
+import com.worldwidewealth.wealthwallet.SplashScreenWWW;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,16 +22,19 @@ public class DialogNetworkError {
     private Context mContext;
     private AlertDialog.Builder builder;
     private static AlertDialog alertDialog;
-    public DialogNetworkError(Context context, final Call call, final Callback callback){
+    public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback){
         this.mContext = context;
         builder = new AlertDialog.Builder(mContext)
                 .setTitle(mContext.getString(R.string.network_error_title))
-                .setMessage(mContext.getString(R.string.network_error_message))
+                .setMessage(mContext.getString(R.string.network_error_message) + "\n" + msg)
                 .setCancelable(false)
                 .setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((Activity)mContext).finish();
+                        if (context instanceof SplashScreenWWW)
+                            ((Activity)mContext).finish();
+                        else
+                            dialog.dismiss();
                     }
                 })
                 .setPositiveButton(mContext.getString(R.string.try_again), new DialogInterface.OnClickListener() {
@@ -45,6 +50,9 @@ public class DialogNetworkError {
                     }
                 });
 
+        if (alertDialog != null && alertDialog.isShowing())
+            alertDialog.dismiss();
+
         alertDialog = builder.create();
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -54,7 +62,10 @@ public class DialogNetworkError {
                                 .getColor(android.R.color.holo_red_dark));
             }
         });
-        alertDialog.show();
+
+        try {
+            alertDialog.show();
+        } catch (WindowManager.BadTokenException e){}
 
     }
 
