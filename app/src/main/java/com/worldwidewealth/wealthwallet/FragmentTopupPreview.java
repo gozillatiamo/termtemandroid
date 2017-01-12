@@ -38,12 +38,13 @@ public class FragmentTopupPreview extends Fragment {
     public class ViewHolder{
 
         private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance;
-
+        private View mLayoutCommission;
         public ViewHolder(View itemview){
             mTextAmount = (TextView) itemview.findViewById(R.id.txt_amount);
             mTextCommissionRate = (TextView) itemview.findViewById(R.id.txt_commission_rate);
             mTextCommissionAmout = (TextView) itemview.findViewById(R.id.txt_commission_amount);
             mTextBalance = (TextView) itemview.findViewById(R.id.txt_balance);
+            mLayoutCommission = (View) itemview.findViewById(R.id.layout_commission);
         }
     }
 
@@ -142,8 +143,13 @@ public class FragmentTopupPreview extends Fragment {
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));
-        mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
-        mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
+        if (mModel.getCOMMISSION_AMOUNT() != 0) {
+            mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
+            mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
+            mHolder.mLayoutCommission.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.mLayoutCommission.setVisibility(View.GONE);
+        }
         mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
     }
 

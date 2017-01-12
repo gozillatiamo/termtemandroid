@@ -191,11 +191,21 @@ public class FragmentTopupPackage extends  Fragment{
                 mHolder.mBtnTopup.setEnabled(false);
                 if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                     FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
-                    if (!fragmentTopupPreview.canTopup()) return;
+                    if (!fragmentTopupPreview.canTopup()) {
+                        setEnabledBtn(true);
+                        return;
+                    }
                 }
 
                 serviceTopup();
 
+            }
+        });
+
+        mHolder.mBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
             }
         });
     }
@@ -208,6 +218,8 @@ public class FragmentTopupPackage extends  Fragment{
                     .setMessage(R.string.please_phone_topup_error)
                     .setPositiveButton(R.string.confirm, null)
                     .show();
+            setEnabledBtn(true);
+
             return;
         }
 
@@ -216,10 +228,13 @@ public class FragmentTopupPackage extends  Fragment{
                     .setMessage(R.string.please_choice_topup)
                     .setPositiveButton(R.string.confirm, null)
                     .show();
+            setEnabledBtn(true);
+
             return;
         }
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+        setEnabledBtn(true);
         Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -235,6 +250,7 @@ public class FragmentTopupPackage extends  Fragment{
                     if (responseModel.getStatus() != APIServices.SUCCESS)
                         new ErrorNetworkThrowable(null).networkError(getContext(),
                                 responseModel.getMsg(), call, this);
+
 
                 } else {
 
@@ -269,17 +285,18 @@ public class FragmentTopupPackage extends  Fragment{
             mHolder.mEditPhone.setBackgroundResource(android.R.drawable.editbox_background_normal);
             mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_PHONE);
             mHolder.mBtnNext.setVisibility(View.VISIBLE);
-            mHolder.mBtnTopup.setVisibility(View.GONE);
+            mHolder.mLayoutBtnTopup.setVisibility(View.GONE);
         } else {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
             mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
             mHolder.mBtnNext.setVisibility(View.GONE);
-            mHolder.mBtnTopup.setVisibility(View.VISIBLE);
+            mHolder.mLayoutBtnTopup.setVisibility(View.VISIBLE);
         }
     }
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+        setEnabledBtn(true);
         Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                 new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -437,14 +454,17 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     public class ViewHolder{
-        private Button mBtnNext, mBtnTopup;
+        private Button mBtnNext, mBtnTopup, mBtnCancel;
         private TextView mTextPrice;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
+        private View mLayoutBtnTopup;
         public ViewHolder(View itemview){
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
             mBtnTopup = (Button) itemview.findViewById(R.id.btn_topup);
+            mBtnCancel = (Button) itemview.findViewById(R.id.btn_cancel);
+            mLayoutBtnTopup = (View) itemview.findViewById(R.id.layout_btn_topup);
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);

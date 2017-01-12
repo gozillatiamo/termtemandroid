@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:hint="@string/phone_number"
+                    android:hint="@string/hint_phone_number"
                     android:maxLength="12"
                     android:digits="0123456789-"
                     android:shadowColor="@color/colorPrimary"
@@ -127,16 +127,34 @@
                 android:backgroundTint="@android:color/holo_orange_dark"
                 android:text="@string/next"
                 android:textColor="@android:color/white"/>
-            <Button
-                android:id="@+id/btn_topup"
+            <LinearLayout
+                android:id="@+id/layout_btn_topup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                style="@style/MyButton"
-                android:backgroundTint="@color/colorSuccess"
-                android:text="@string/confirm_order"
-                android:textColor="@android:color/white"/>
+                android:visibility="visible"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    style="@style/MyButton"
+                    android:backgroundTint="@android:color/holo_red_dark"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white"/>
 
+                <Button
+                    android:id="@+id/btn_topup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/MyButton"
+                    android:backgroundTint="@color/colorSuccess"
+                    android:text="@string/confirm_order"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

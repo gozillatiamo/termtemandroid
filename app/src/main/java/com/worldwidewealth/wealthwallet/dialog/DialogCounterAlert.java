@@ -21,6 +21,16 @@ public class DialogCounterAlert {
                               String msg,
                               DialogInterface.OnClickListener listener){
 
+        new DialogCounterAlert(context, title, msg, null, listener);
+
+    }
+
+    public DialogCounterAlert(final Context context,
+                              String title,
+                              String msg,
+                              final String txtBtn,
+                              DialogInterface.OnClickListener listener){
+
         if (DialogProgress.isShow()){
             DialogProgress.dismiss();
         }
@@ -30,7 +40,11 @@ public class DialogCounterAlert {
                 .setMessage(msg)
                 .setCancelable(false);
 
-        if (listener != null){
+        if (txtBtn != null) {
+            builder.setPositiveButton(txtBtn, listener);
+            builder.setNegativeButton(R.string.cancel, null);
+
+        } else if (listener != null){
             builder.setPositiveButton(R.string.retry, listener);
             builder.setNegativeButton(R.string.cancel, null);
 
@@ -42,16 +56,24 @@ public class DialogCounterAlert {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                if (alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE) != null) {
+                if (txtBtn != null){
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources()
+                            .getColor(android.R.color.holo_red_dark));
+
+                } else if (alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE) != null) {
                     alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources()
                             .getColor(android.R.color.holo_red_dark));
                 }
             }
         });
+
         alertDialog.show();
+
+
     }
 
-    public static class DialogFromResponse{
+
+        public static class DialogFromResponse{
         public DialogFromResponse(Context context, String response){
             ResponseModel responseModel = new Gson().fromJson(response, ResponseModel.class);
             new AlertDialog.Builder(context)

@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_app_with_text"/>
-    <TextView
+
+    <ExpandableListView
+        android:id="@+id/expanded_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:autoLink="phone"
-        android:layout_marginTop="@dimen/activity_space"
-        android:clickable="true"
-        android:textSize="@dimen/padding_icon_dashboard"
-        android:textStyle="bold"
-        android:text="ติดต่อ\n099-447-0474\n095-162-0577"/>
+
+        android:headerDividersEnabled="true"
+        android:footerDividersEnabled="false">
+
+    </ExpandableListView>
 </LinearLayout>

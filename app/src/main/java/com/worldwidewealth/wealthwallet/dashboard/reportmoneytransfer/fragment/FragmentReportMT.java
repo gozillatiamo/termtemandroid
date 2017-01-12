@@ -60,7 +60,7 @@ public class FragmentReportMT extends Fragment {
     private String mBitmapEncode;
     private DatePickerDialog mDateDialog;
     private TimePickerDialog mTimeDialog;
-    private long mDateTime = 0;
+    private static long mDateTime = 0;
     private Calendar mCalender = Calendar.getInstance();
     private byte[] mImageByte;
     private PopupChoiceBank mPopupBankStart, mPopupBankEnd;

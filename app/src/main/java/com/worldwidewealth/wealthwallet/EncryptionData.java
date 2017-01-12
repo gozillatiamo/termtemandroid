@@ -42,7 +42,8 @@ public class EncryptionData {
 
     static public String EncryptData(String strData, String key) {
 //        String key = null;
-
+        Log.e(TAG, "strData: " + strData);
+        Log.e(TAG, "Key: " + key);
 //        if (type == null){
 //            key = DEFAULTKEY;
 //        } else {
@@ -86,6 +87,7 @@ public class EncryptionData {
 
             String strEncoded = Base64.encodeToString(encoded, Base64.NO_WRAP);
             String convertPlus = strEncoded.replace("+", "%2B");
+            Log.e(TAG, "encoded: " + convertPlus);
             return convertPlus;
 
         } catch (Exception e){
@@ -108,17 +110,14 @@ public class EncryptionData {
             return strResult;
         }
 
-        int nReturn = 0;
         byte[] rbData = Base64.decode(strResult.getBytes(characterSet), Base64.NO_WRAP);
 
         try {
 
             KeySpec keySpec = new DESKeySpec(m_Key);
             SecretKey secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
-            //IvParameterSpec iv = new IvParameterSpec(org.apache.commons.codec.binary.Hex.decodeHex(plainIV.toCharArray()));
             IvParameterSpec iv = new IvParameterSpec(m_IV);
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-//            Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS7Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
             byte[] decoded = cipher.doFinal(rbData);
             String strDecode = new String(decoded, Charset.forName("UTF8"));
@@ -133,13 +132,28 @@ public class EncryptionData {
     static private boolean InitKey(String strKey) {
         try
         {
+            Log.e(TAG, "First strKeyBase64: " + strKey);
 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(strKey.getBytes(characterSet), 0, strKey.length());
             byte[] sha512hash = md.digest();
+            Log.e(TAG, "SHA-1 size: " + sha512hash.length);
+            for (byte bytestr:sha512hash){
+                Log.e(TAG, "byte: "+ bytestr);
+            }
             m_Key = Arrays.copyOf(sha512hash, 8);
+            Log.e(TAG, m_Key.toString());
+            for (byte bytestr:m_Key){
+                Log.e(TAG, "byte m_Key: "+ bytestr);
+            }
             m_IV = Arrays.copyOfRange(sha512hash, 8, 16);
+            Log.e(TAG, m_IV.toString());
+            for (byte bytestr:m_IV){
+                Log.e(TAG, "byte m_Key: "+ bytestr);
+            }
 
+            String encodeBase64 = Base64.encodeToString(sha512hash, Base64.DEFAULT);
+            Log.e(TAG, "EncodeFormSHA-1: "+ encodeBase64);
 
 
             return true;

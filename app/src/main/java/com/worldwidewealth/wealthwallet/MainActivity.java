@@ -3,6 +3,7 @@ package com.worldwidewealth.wealthwallet;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -37,6 +39,10 @@ import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "Main";
     private APIServices services;
     private String mPhone, mPassword;
+    private SharedPreferences mShared;
+    private String[] mArrayHistoryUser;
+    private Set<String> mSetHistoryUser;
+    public static final String CACHEUSER = "cacheuser";
+    public static final String USER = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         mHolder = new ViewHolder(this);
         Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
+        mShared = MyApplication.getContext().getSharedPreferences(CACHEUSER, MyApplication.getContext().MODE_PRIVATE);
+        String decoded = EncryptionData.DecryptData("2TcLmac8O1Lkj6wvFPKXfQ==", "351542068115209afa80b26-0e8b-4f6e-984b-d5604d6e6059");
+        Log.e(TAG, "Decoded: " + decoded);
         initEditText();
         initBtn();
 //        initSpinner();
@@ -90,6 +104,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        mSetHistoryUser = mShared.getStringSet(USER, null);
+
+
+        if (mSetHistoryUser != null){
+            mArrayHistoryUser = new String[mSetHistoryUser.size()];
+            mSetHistoryUser.toArray(mArrayHistoryUser);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mArrayHistoryUser);
+            mHolder.mPhone.setAdapter(adapter);
+            mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mHolder.mPhone.isPopupShowing())
+                        mHolder.mPhone.showDropDown();
+                }
+            });
+            for (String str:mArrayHistoryUser){
+                Log.e(TAG, "HistoryUser: "+str);
+            }
+        }
+
+//        mHolder.mPhone.setText(mShared.getString(USER, ""));
     }
 
     private void initSpinner(){
@@ -203,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
                             String[] strRegisDevice = responseModel.getMsg().split(":");
-                            if (strRegisDevice.length == 3){
+
+                            if (strRegisDevice.length == 4){
                                 registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
                             } else{
                                 Toast.makeText(MainActivity.this, responseModel.getMsg(),
@@ -221,6 +258,24 @@ public class MainActivity extends AppCompatActivity {
                             Global.setUSERID(loginResponseModel.getUSERID());
                             Global.setAGENTID(loginResponseModel.getAGENTID());
                             Global.setBALANCE(loginResponseModel.getBALANCE());
+
+                            if (mSetHistoryUser == null||!mSetHistoryUser.contains(mPhone)){
+                                if (mSetHistoryUser == null)
+                                    mSetHistoryUser = new HashSet<String>();
+                                mSetHistoryUser.add(mHolder.mPhone.getText().toString());
+                                SharedPreferences.Editor editor = mShared.edit();
+                                editor.putStringSet(USER, mSetHistoryUser);
+                                editor.commit();
+                            }
+
+/*
+                            SharedPreferences.Editor editor = mShared.edit();
+                            List<String> list = null;
+                            Set<String> set = null;
+//                            set.
+                            editor.putStringSet(USER, set);
+                            editor.commit();
+*/
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
                             startActivity(intent);
@@ -292,7 +347,8 @@ public class MainActivity extends AppCompatActivity {
 
         private TextView mBtnRegister;
         private Button mBtnLogin;
-        private EditText mPhone, mPassword;
+        private EditText mPassword;
+        private AutoCompleteTextView mPhone;
         private Spinner mSpinnerPhoneCountry;
 
         public ViewHolder(AppCompatActivity view){
@@ -300,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
             mBtnRegister = (TextView) view.findViewById(R.id.btn_register);
             mBtnLogin = (Button) view.findViewById(R.id.btn_login);
 
-            mPhone = (EditText) view.findViewById(R.id.edit_phone);
+            mPhone = (AutoCompleteTextView) view.findViewById(R.id.edit_phone);
             mPassword = (EditText) view.findViewById(R.id.edit_password);
 //            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
 

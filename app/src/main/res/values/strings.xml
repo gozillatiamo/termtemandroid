@@ -4,11 +4,12 @@
 
     <string name="app_name">TermTem</string>
     <string name="app_name_th">เติมเต็ม</string>
+    <string name="main_menu">เมนูหลัก</string>
     <string name="version">เวอร์ชั่น: 1.0.0</string>
-    <string name="contact_us">ติดต่อ โทร: 02-3314788</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
+    <string name="hint_phone_number">กรอกหมายเลขโทรศัพท์</string>
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>
     <string name="send">ส่ง</string>
@@ -20,7 +21,7 @@
     <string name="done">เสร็จสิ้น</string>
     <string name="register_done">ได้รับคำขอสมัครเรียบร้อยแล้ว\nบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
-    <string name="back_to_main">กลับสู่หน้าหลัก</string>
+    <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
@@ -170,12 +171,14 @@
     <string name="close_wifi">ปิด wifi</string>
     <string name="error_date_limit">คุณไม่สามารถเลือกวันเกินกำหนดได้!!! กรุณาเลือกอีกครั้ง</string>
     <string name="ok">ตกลง</string>
+    <string name="title_logout">ออกจากระบบ</string>
+    <string name="msg_logout">คุณต้องการออกจากระบบหรือไม่?</string>
+    <string name="title_leave_app">ปิดการทำงาน</string>
+    <string name="msg_leave_app">หากคุณออกจากแอพพลิเคชั่น\nระบบจะทำการ "ออกจากระบบ" ให้คุณโดยอัตโนมัติ\nคุณต้องการออกจากแอพพลิเคชั่นหรือไม่?</string>
     <string name="save_eslip_success">บันทึก E-Slip ลงใน "อัลบั้มรูปภาพ" ของคุณเรียบร้อยแล้ว</string>
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
-
-
-
-
+    <string name="menu_contact">ติดต่อเรา</string>
+    <string name="menu_bank_detail">ข้อมูลธนาคาร</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
@@ -307,6 +310,11 @@
         <item>GSB</item>
         <item>GHB</item>
         <item>BAAC</item>
+    </string-array>
+
+    <string-array name="menu_help">
+        <item>@string/menu_bank_detail</item>
+        <item>@string/menu_contact</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
@@ -55,6 +58,7 @@ public class ActivityDashboard extends AppCompatActivity{
     private AdapterDashboard mAdapter;
     private APIServices services;
     private long userInteractionTime = 0;
+    private static final String TAG = ActivityDashboard.class.getSimpleName();
 
 
     @Override
@@ -80,9 +84,28 @@ public class ActivityDashboard extends AppCompatActivity{
         Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
     }
 
+
+
     private void initToolbar(){
+        mHolder.mToolbar.setNavigationIcon(R.drawable.ic_power_settings_new);
         setSupportActionBar(mHolder.mToolbar);
         getSupportActionBar().setTitle("");
+        mHolder.mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "Logout click: true");
+                new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_logout),
+                        getString(R.string.msg_logout),getString(R.string.title_logout),
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Until.logoutAPI();
+                        Until.backToSignIn(ActivityDashboard.this);
+                    }
+                });
+            }
+        });
+
     }
 
     private void initClickMainMenu(){
@@ -113,12 +136,13 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+/*
         mHolder.mBtnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDialogChangePassword();
             }
         });
+*/
 
 /*
         mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
@@ -143,9 +167,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(ActivityDashboard.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_help);
+                DialogHelp dialog = new DialogHelp(ActivityDashboard.this);
                 dialog.show();
             }
         });
@@ -156,6 +178,13 @@ public class ActivityDashboard extends AppCompatActivity{
                 Dialog dialog = new Dialog(ActivityDashboard.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_setting);
+                Button btnChangePassword = (Button)dialog.findViewById(R.id.btn_forgot_password);
+                btnChangePassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        initDialogChangePassword();
+                    }
+                });
                 dialog.show();
 
             }
@@ -240,8 +269,15 @@ public class ActivityDashboard extends AppCompatActivity{
                     currentFragment instanceof FragmentTopupSlip ||
                     currentFragment instanceof FragmentSlip) return;
         }
+        new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
+                getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
 
-        super.onBackPressed();
     }
 
     public class ViewHolder{
@@ -249,13 +285,13 @@ public class ActivityDashboard extends AppCompatActivity{
         private Toolbar mToolbar;
         private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine
                 , mMenuHelp, mMenuSetting;
-        private TextView mBtnForgotPassword;
+//        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mMenuTopup = (CardView) view.findViewById(R.id.menu_topup);
             mMenuReport = (CardView) view.findViewById(R.id.menu_report);
-            mBtnForgotPassword = (TextView) view.findViewById(R.id.btn_forgot_password);
+//            mBtnForgotPassword = (TextView) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
             mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
