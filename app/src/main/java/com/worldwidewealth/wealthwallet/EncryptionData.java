@@ -42,8 +42,6 @@ public class EncryptionData {
 
     static public String EncryptData(String strData, String key) {
 //        String key = null;
-        Log.e(TAG, "strData: " + strData);
-        Log.e(TAG, "Key: " + key);
 //        if (type == null){
 //            key = DEFAULTKEY;
 //        } else {
@@ -132,30 +130,12 @@ public class EncryptionData {
     static private boolean InitKey(String strKey) {
         try
         {
-            Log.e(TAG, "First strKeyBase64: " + strKey);
 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(strKey.getBytes(characterSet), 0, strKey.length());
             byte[] sha512hash = md.digest();
-            Log.e(TAG, "SHA-1 size: " + sha512hash.length);
-            for (byte bytestr:sha512hash){
-                Log.e(TAG, "byte: "+ bytestr);
-            }
             m_Key = Arrays.copyOf(sha512hash, 8);
-            Log.e(TAG, m_Key.toString());
-            for (byte bytestr:m_Key){
-                Log.e(TAG, "byte m_Key: "+ bytestr);
-            }
             m_IV = Arrays.copyOfRange(sha512hash, 8, 16);
-            Log.e(TAG, m_IV.toString());
-            for (byte bytestr:m_IV){
-                Log.e(TAG, "byte m_Key: "+ bytestr);
-            }
-
-            String encodeBase64 = Base64.encodeToString(sha512hash, Base64.DEFAULT);
-            Log.e(TAG, "EncodeFormSHA-1: "+ encodeBase64);
-
-
             return true;
         }
         catch (Exception e)

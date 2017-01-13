@@ -1,19 +1,21 @@
 package com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +29,10 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.worldwidewealth.wealthwallet.EncryptionData;
+import com.worldwidewealth.wealthwallet.MyApplication;
+import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.R;
@@ -44,7 +50,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -66,6 +71,9 @@ public class FragmentReportMT extends Fragment {
     private PopupChoiceBank mPopupBankStart, mPopupBankEnd;
     private BottomSheetDialogChoicePhoto sheetDialogFragment;
     private String imgPath = null;
+    private int id = 1;
+    public static NotificationManager mNotifyManager;
+    public static NotificationCompat.Builder mBuilder;
 
 
     public static Fragment newInstance(){
@@ -147,7 +155,7 @@ public class FragmentReportMT extends Fragment {
     private void initBtn(){
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 mStrAmount = mHolder.mEditAmount.getText().toString();
                 mStrBankStart = mPopupBankStart.getBank();
 //                mStrBankEnd = mPopupBankEnd.getBank();
@@ -177,21 +185,64 @@ public class FragmentReportMT extends Fragment {
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_add_image), Toast.LENGTH_LONG).show();
                     return;
                 }
+                mHolder.mBtnNext.setEnabled(false);
                 Log.e("BitmapEncode", mBitmapEncode);
-                new DialogCounterAlert.DialogProgress(getContext());
-                Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
-                        APIServices.ACTIONNOTIPAY,
-                        new NotiPayRequestModel(mStrAmount,
-                                mDateTime,
-                                mBitmapEncode,
-                                mStrBankStart,
-                                mStrBankEnd)));
-
-                APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
+                new DialogCounterAlert(getContext(), getString(R.string.dialog_alert_title), getString(R.string.msg_waiting_upload),
+                        getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        // Do Something
-                        DialogCounterAlert.DialogProgress.dismiss();
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
+                                APIServices.ACTIONNOTIPAY,
+                                new NotiPayRequestModel(mStrAmount,
+                                        mDateTime,
+                                        mBitmapEncode,
+                                        mStrBankStart,
+                                        mStrBankEnd)));
+
+                        mNotifyManager =
+                                (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        mBuilder = new NotificationCompat.Builder(MyApplication.getContext());
+                        mBuilder.setContentTitle(getString(R.string.title_upload))
+                                .setContentText(getString(R.string.msg_waiting_upload))
+                                .setSmallIcon(android.R.drawable.stat_sys_upload);
+
+                        mBuilder.setProgress(0, 0, true);
+                        mNotifyManager.notify(id, mBuilder.build());
+
+                        APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                // Do Something
+//                                DialogCounterAlert.DialogProgress.dismiss();
+                                ContentValues values = EncryptionData.getModel(response.body());
+                                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                                    if (responseModel.getStatus() == APIServices.SUCCESS){
+                                        mBuilder.setContentTitle(getString(R.string.title_upload_success));
+                                        mBuilder.setContentText(getString(R.string.msg_upload_success));
+                                    } else {
+                                        mBuilder.setContentTitle(getString(R.string.title_upload_fail));
+                                        mBuilder.setContentText(getString(R.string.msg_upload_fail));
+
+                                    }
+                                    mBuilder.setProgress(0, 0, true);
+                                    mNotifyManager.notify(id, mBuilder.build());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
+                                t.printStackTrace();
+                                mHolder.mBtnNext.setEnabled(true);
+                                mBuilder.setContentTitle(getString(R.string.title_upload_fail));
+                                mBuilder.setContentText(getString(R.string.msg_upload_fail));
+                                mBuilder.setProgress(0, 0, true);
+                                mNotifyManager.notify(id, mBuilder.build());
+                            }
+                        });
+
+                        mHolder.mBtnNext.setEnabled(true);
                         FragmentTransaction fragmentTransaction = FragmentReportMT.this.getActivity()
                                 .getSupportFragmentManager()
                                 .beginTransaction()
@@ -205,15 +256,11 @@ public class FragmentReportMT extends Fragment {
                                         3))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                        t.printStackTrace();
                     }
                 });
+                //new DialogCounterAlert.DialogProgress(getContext());
+                //MyApplication.LeavingOrEntering.currentActivity = null;
+
             }
         });
 
@@ -242,6 +289,7 @@ public class FragmentReportMT extends Fragment {
         mPopupBankStart = new PopupChoiceBank(getContext(), mHolder.mIncludeBankStart);
 //        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd);
     }
+
 
     private void showDateDialog(){
         if (mDateDialog == null){

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.worldwidewealth.wealthwallet.R;
+
+import java.util.regex.Pattern;
 
 /**
  * Created by user on 12-Jan-17.
@@ -95,8 +98,7 @@ public class DialogHelp extends Dialog {
             TextView title = (TextView) convertView.findViewById(android.R.id.text1);
             title.setText((String)getGroup(groupPosition));
             title.setTypeface(Typeface.DEFAULT_BOLD);
-            title.setTextColor(getContext().getResources().getColor(android.R.color.secondary_text_dark));
-            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.my_text_size));
 
 
             return convertView;
@@ -112,12 +114,15 @@ public class DialogHelp extends Dialog {
                 case 1:
                     convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
                     TextView title = (TextView) convertView.findViewById(android.R.id.text1);
-                    title.setText("(+66)2-331-4793" + " หรือ " + "(+66)99-447-0474");
+                    title.setText(getContext().getString(R.string.contact_phone_no));
                     title.setTypeface(Typeface.DEFAULT_BOLD);
                     title.setTextColor(getContext().getResources().getColor(android.R.color.secondary_text_dark));
                     title.setLinkTextColor(getContext().getResources().getColor(R.color.colorPrimary));
-                    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    Linkify.addLinks(title, Linkify.ALL);
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.small_text_size));
+                    Pattern pattern = Pattern.compile("(0\\d+)-\\d{3}-\\d{4}");
+
+                    Linkify.addLinks(title, pattern, "tel:");
+
                     break;
             }
             return convertView;

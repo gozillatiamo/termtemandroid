@@ -69,7 +69,6 @@
     <string name="currency">สกุลเงิน :</string>
     <string name="date_transfer">วันที่โอน :</string>
     <string name="time">เวลา :</string>
-    <string name="branch">สาขา :</string>
     <string name="evidance">หลักฐาน :</string>
     <string name="bank_start">ธนาคารต้นทาง :</string>
     <string name="bank_end">ธนาคารปลายทาง :</string>
@@ -179,6 +178,31 @@
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
     <string name="menu_contact">ติดต่อเรา</string>
     <string name="menu_bank_detail">ข้อมูลธนาคาร</string>
+    <string name="bank">ธนาคาร:</string>
+    <string name="bank_account_number">เลขที่บัญชี:</string>
+    <string name="title_bank_account_name">ชื่อบัญชี:</string>
+    <string name="title_bank_account_type">ประเภทบัญชี:</string>
+    <string name="title_branch">สาขา:</string>
+    <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
+    <string name="msg_upload">กรุณารอสักครู่.....</string>
+    <string name="msg_waiting_upload">\tระบบจะใช้เวลาในการอัพโหลดและตรวจสอบการทำรายการของท่านสักครู่
+        \nในขณะนี้ท่านสามารถให้งานแอพพลิเคชั่นได้ปกติ
+        \nหากรายการของท่านได้รับการตรวจสอบเรียบร้อยแล้ว
+        \nระบบจะแจ้งให้ท่านทราบผ่านการแจ้งเตือนที่แถทสถานะด้านบนโทรศัพท์ของท่าน</string>
+    <string name="dialog_alert_title">แจ้งเตือน!!</string>
+    <string name="title_upload_success">อัพโหลดเสร็จสิ้น</string>
+    <string name="msg_upload_success">กรุณาตรวจสอบยอดเงินของท่าน</string>
+    <string name="title_upload_fail">อัพโหลดล้มเหลว</string>
+    <string name="msg_upload_fail">กรุณาลองใหม่อีกครั้ง</string>
+
+
+
+
+    <string name="contact_phone_no">02-331-4793 หรือ 099-447-0474</string>
+    <string name="branch">สุขุมวิท 101</string>
+    <string name="bank_account_type">ออมทรัพย์</string>
+    <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
+    <string name="config_bank_account_number">019-8-36814-8</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

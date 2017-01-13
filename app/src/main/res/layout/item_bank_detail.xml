@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ธนาคาร:"
+            android:text="@string/bank"
             android:textStyle="bold"
             android:textSize="@dimen/small_text_size"/>
         <LinearLayout
@@ -23,14 +23,14 @@
             android:gravity="right|center"
             >
             <ImageView
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
+                android:layout_width="@dimen/small_text_size"
+                android:layout_height="@dimen/small_text_size"
                 android:src="@drawable/kbank"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_space"
-                android:text="ธนาคาร กริกรไทย"
+                android:text="@string/kbank"
                 android:textSize="@dimen/small_text_size"/>
 
         </LinearLayout>
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="เลขที่บัญชี:"
+            android:text="@string/bank_account"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"/>
         <TextView
@@ -54,7 +54,7 @@
             android:gravity="right"
             android:textSize="@dimen/small_text_size"
             android:autoLink="all"
-            android:text="019-8-36814-8"/>
+            android:text="@string/config_bank_account_number"/>
     </LinearLayout>
 
     <LinearLayout
@@ -67,58 +67,54 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold"
-                android:text="ชื่อบัญชี:"/>
+                android:text="@string/title_bank_account_name"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:textSize="@dimen/small_text_size"
-                android:text="บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+                android:text="@string/bank_account_name"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/small_text_size"
-                    android:textStyle="bold"
-                    android:text="ประเภทบัญชี:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/small_text_size"
-                    android:layout_marginLeft="@dimen/activity_space"
-                    android:text="ออมทรัพย์"/>
-            </LinearLayout>
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="bold"
+            android:text="@string/title_bank_account_type"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:textSize="@dimen/small_text_size"
+            android:layout_marginLeft="@dimen/activity_space"
+            android:text="@string/bank_account_type"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="bold"
+            android:text="@string/title_branch"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_marginLeft="@dimen/activity_space"
+            android:textSize="@dimen/small_text_size"
+            android:text="@string/branch"/>
+    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/small_text_size"
-                    android:textStyle="bold"
-                    android:text="สาขา:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_space"
-                    android:textSize="@dimen/small_text_size"
-                    android:text="สุขุมวิท 101"/>
-            </LinearLayout>
-
-        </LinearLayout>
 </LinearLayout>

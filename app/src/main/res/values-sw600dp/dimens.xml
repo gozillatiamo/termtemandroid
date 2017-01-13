@@ -12,5 +12,6 @@
     <dimen name="icon_large_size">56dp</dimen>
     <dimen name="padding_column_list">16dp</dimen>
     <dimen name="elevation_cardview">8dp</dimen>
+    <dimen name="small_text_size">16sp</dimen>
 
 </resources>
