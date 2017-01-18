@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="currentcy">THB</style>
+    <string name="currentcy">THB</string>
 
     <string name="app_name">TermTem</string>
     <string name="app_name_th">เติมเต็ม</string>
@@ -43,7 +43,7 @@
     <string name="scb">ธนาคารไทยพาณิชย์</string>
     <string name="tmb">ธนาคารทหารไทย</string>
     <string name="gsb">ธนาคารออมสิน</string>
-    <string name="kbank">ธนาคารกสิกร</string>
+    <string name="kbank">กสิกรไทย</string>
     <string name="ktb">ธนาคารกรุงไทย</string>
     <string name="tnch">ธนาคารธนชาต</string>
     <string name="exchange_rate">อัตราแลกเปลี่ยน</string>
@@ -144,7 +144,7 @@
     <string name="add_slip_picture">เพิ่มรูปภาพใบเสร็จ</string>
     <string name="agent_phone_number">หมายเลขโทรศัพท์มือถือ Agent :</string>
     <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น</string>
-    <string name="fill_money_amount">ใส่ยอดที่ท่านได้ชำระ</string>
+    <string name="fill_money_amount">ระบุยอดเงินโอน</string>
     <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
     <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์มือถือ Agent</string>
@@ -185,7 +185,7 @@
     <string name="title_branch">สาขา:</string>
     <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
     <string name="msg_upload">กรุณารอสักครู่.....</string>
-    <string name="msg_waiting_upload">\tระบบจะใช้เวลาในการอัพโหลดและตรวจสอบการทำรายการของท่านสักครู่
+    <string name="msg_waiting_upload">ระบบจะใช้เวลาในการอัพโหลดและตรวจสอบการทำรายการของท่านสักครู่
         \nในขณะนี้ท่านสามารถให้งานแอพพลิเคชั่นได้ปกติ
         \nหากรายการของท่านได้รับการตรวจสอบเรียบร้อยแล้ว
         \nระบบจะแจ้งให้ท่านทราบผ่านการแจ้งเตือนที่แถทสถานะด้านบนโทรศัพท์ของท่าน</string>
@@ -194,11 +194,10 @@
     <string name="msg_upload_success">กรุณาตรวจสอบยอดเงินของท่าน</string>
     <string name="title_upload_fail">อัพโหลดล้มเหลว</string>
     <string name="msg_upload_fail">กรุณาลองใหม่อีกครั้ง</string>
+    <string name="search_tutorial">หากท่านต้องการดูรายการย้อนหลัง\nโปรดเลือกเมนูค้นหา</string>
 
 
-
-
-    <string name="contact_phone_no">02-331-4793 หรือ 099-447-0474</string>
+    <string name="contact_phone_no">02-331-4788 , 095-162-8477 หรือ 095-162-0577 </string>
     <string name="branch">สุขุมวิท 101</string>
     <string name="bank_account_type">ออมทรัพย์</string>
     <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
@@ -301,7 +300,7 @@
         <item>ธนาคารกสิกรไทย</item>
         <item>ธนาคารเกียรตินาคิน</item>
         <item>ธนาคารซีไอเอ็มบีไทย</item>
-        <item>ธนาคารทหาร ไทย</item>
+        <item>ธนาคารทหารไทย</item>
         <item>ธนาคารทิสโก้</item>
         <item>ธนาคารไทยพาณิชย์</item>
         <item>ธนาคาร​ธนชาต</item>

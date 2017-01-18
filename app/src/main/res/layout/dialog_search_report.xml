@@ -10,6 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/my_text_size"
         android:text="@string/search_form"/>
     <Button
         android:id="@+id/btn_date_form"
@@ -24,6 +25,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/my_text_size"
         android:layout_marginTop="@dimen/activity_space"
         android:text="@string/search_to"/>
     <Button

@@ -72,8 +72,6 @@ public class FragmentReportMT extends Fragment {
     private BottomSheetDialogChoicePhoto sheetDialogFragment;
     private String imgPath = null;
     private int id = 1;
-    public static NotificationManager mNotifyManager;
-    public static NotificationCompat.Builder mBuilder;
 
 
     public static Fragment newInstance(){
@@ -198,47 +196,38 @@ public class FragmentReportMT extends Fragment {
                                         mBitmapEncode,
                                         mStrBankStart,
                                         mStrBankEnd)));
-
-                        mNotifyManager =
-                                (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                        mBuilder = new NotificationCompat.Builder(MyApplication.getContext());
-                        mBuilder.setContentTitle(getString(R.string.title_upload))
-                                .setContentText(getString(R.string.msg_waiting_upload))
-                                .setSmallIcon(android.R.drawable.stat_sys_upload);
-
-                        mBuilder.setProgress(0, 0, true);
-                        mNotifyManager.notify(id, mBuilder.build());
+                        Log.e(TAG, "0000");
+                       MyApplication.showNotifyUpload();
 
                         APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 // Do Something
 //                                DialogCounterAlert.DialogProgress.dismiss();
-                                ContentValues values = EncryptionData.getModel(response.body());
-                                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-                                    if (responseModel.getStatus() == APIServices.SUCCESS){
-                                        mBuilder.setContentTitle(getString(R.string.title_upload_success));
-                                        mBuilder.setContentText(getString(R.string.msg_upload_success));
-                                    } else {
-                                        mBuilder.setContentTitle(getString(R.string.title_upload_fail));
-                                        mBuilder.setContentText(getString(R.string.msg_upload_fail));
+                                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
 
-                                    }
-                                    mBuilder.setProgress(0, 0, true);
-                                    mNotifyManager.notify(id, mBuilder.build());
+                                if (responseValues instanceof ResponseModel){
+                                    MyApplication.uploadSuccess();
+
+                                } else {
+                                    MyApplication.uploadFail();
                                 }
+
+/*
+                                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)) {
+                                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                                    if (responseModel.getStatus() == APIServices.SUCCESS) {
+                                        return;
+                                    }
+                                }
+*/
+
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                t.printStackTrace();
-                                mHolder.mBtnNext.setEnabled(true);
-                                mBuilder.setContentTitle(getString(R.string.title_upload_fail));
-                                mBuilder.setContentText(getString(R.string.msg_upload_fail));
-                                mBuilder.setProgress(0, 0, true);
-                                mNotifyManager.notify(id, mBuilder.build());
+                                MyApplication.uploadFail();
                             }
                         });
 
@@ -256,6 +245,11 @@ public class FragmentReportMT extends Fragment {
                                         3))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mHolder.mBtnNext.setEnabled(true);
                     }
                 });
                 //new DialogCounterAlert.DialogProgress(getContext());

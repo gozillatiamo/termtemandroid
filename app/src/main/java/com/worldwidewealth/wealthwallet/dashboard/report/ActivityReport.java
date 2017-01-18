@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -77,6 +79,22 @@ public class ActivityReport extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        TapTargetView.showFor(this,
+                TapTarget.forToolbarMenuItem(mHolder.mToolbar,
+                        R.id.action_search,
+                        getString(R.string.search),
+                        getString(R.string.search_tutorial))
+                        .outerCircleColor(R.color.colorPrimary)
+                        .dimColor(android.R.color.black)
+                        .drawShadow(true)
+                        .transparentTarget(true)
+                        .targetCircleColor(android.R.color.black));
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_report, menu);
         return true;
@@ -102,6 +120,7 @@ public class ActivityReport extends AppCompatActivity {
     }
 
     private void initToolbar(){
+        mHolder.mToolbar.inflateMenu(R.menu.menu_report);
         this.setSupportActionBar(mHolder.mToolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -189,25 +208,17 @@ public class ActivityReport extends AppCompatActivity {
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ContentValues responseValues = EncryptionData.getModel(response.body());
-                if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-                    DialogCounterAlert.DialogProgress.dismiss();
+                Object responseValues = EncryptionData.getModel(ActivityReport.this, call, response.body(), this);
+                if (responseValues == null) return;
 
-//                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
-
-                    if (responseModel.getStatus() != APIServices.SUCCESS)
-                        new ErrorNetworkThrowable(null).networkError(ActivityReport.this,
-                                responseModel.getMsg(), call, this);
-
-                } else {
+                if (!(responseValues instanceof ResponseModel)){
                     DialogCounterAlert.DialogProgress.dismiss();
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
                     List<SalerptResponseModel> modelList = gson
-                            .fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
+                            .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
 
-                    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("th", "TH"));
+                    NumberFormat format = NumberFormat.getInstance();
                     format.setMaximumFractionDigits(2);
                     format.setMinimumFractionDigits(2);
                     double total = 0;
@@ -226,7 +237,27 @@ public class ActivityReport extends AppCompatActivity {
                     mHolder.mTextReportTotal.setText(format.format(total));
                     mAdapter.updateAll(modelList);
 
+
+                } else {
+                    DialogCounterAlert.DialogProgress.dismiss();
+
                 }
+
+                /*
+                if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                    ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                    DialogCounterAlert.DialogProgress.dismiss();
+
+//                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
+
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(ActivityReport.this,
+                                responseModel.getMsg(), call, this);
+
+                } else {
+*/
+
+//                }
             }
 
             @Override

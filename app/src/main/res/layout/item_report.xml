@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/activity_space"
-    >
+    android:padding="@dimen/activity_space">
     <ImageView
         android:id="@+id/icon_item"
         android:visibility="gone"
@@ -51,10 +52,12 @@
                 android:layout_weight="1.5"
                 android:text="@string/pay_code"
                 android:gravity="right"/>
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_pay_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:sizeToFit="true"
+                android:singleLine="true"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="AIS"/>
@@ -71,11 +74,13 @@
                 android:layout_weight="1.5"
                 android:text="@string/carrier"
                 android:gravity="right"/>
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_biller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                app:sizeToFit="true"
+                android:singleLine="true"
                 android:gravity="right"
                 android:text="AIS"/>
 
@@ -90,12 +95,14 @@
                 android:layout_weight="1.5"
                 android:text="@string/phone_num_second"
                 android:gravity="right"/>
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
+                app:sizeToFit="true"
+                android:singleLine="true"
                 android:text="0860254055"/>
 
         </LinearLayout>
@@ -111,16 +118,28 @@
                 android:layout_weight="1.5"
                 android:text="@string/amount"
                 android:gravity="right"/>
-            <TextView
-                android:id="@+id/txt_amount"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:orientation="horizontal"
                 android:gravity="right"
-                android:text="9.82"/>
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currentcy"/>
+                <TextView
+                    android:id="@+id/txt_amount"
+                    android:layout_marginLeft="@dimen/activity_small_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9.82"/>
+
+            </LinearLayout>
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_commission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -131,14 +150,24 @@
                 android:layout_weight="1.5"
                 android:text="@string/commission"
                 android:gravity="right"/>
-            <TextView
-                android:id="@+id/txt_commission_amount"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:orientation="horizontal"
                 android:gravity="right"
-                android:text="0.18"/>
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currentcy"/>
+                <TextView
+                    android:id="@+id/txt_commission_amount"
+                    android:layout_marginLeft="@dimen/activity_small_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.18"/>
 
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,12 +180,14 @@
                 android:text="@string/date"
                 android:gravity="right"/>
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_payment_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
+                app:sizeToFit="true"
+                android:singleLine="true"
                 android:text="11/11/16"/>
 
         </LinearLayout>

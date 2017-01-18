@@ -21,7 +21,6 @@
         android:layout_height="match_parent"
         android:text="@string/please_select"
         android:gravity="center"
-        android:textStyle="bold"
         android:textColor="@android:color/darker_gray"
         style="@style/TextAppearance.AppCompat.Button" />
 

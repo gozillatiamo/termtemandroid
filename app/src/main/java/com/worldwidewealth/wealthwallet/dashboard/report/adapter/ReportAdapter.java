@@ -44,7 +44,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("th", "TH"));
+        NumberFormat format = NumberFormat.getInstance();
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         holder.mTextPayCode.setText(getItem(position).getPAYCODE());
@@ -53,7 +53,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         formatter = new SimpleDateFormat("dd MMM yyyy - HH:mm", new Locale("th", "TH"));
         String strDate = formatter.format(getItem(position).getPAYMENT_DATE());
         holder.mTextDatePayment.setText(strDate);
-        holder.mTextComAmount.setText(format.format(getItem(position).getCOMM_AMT()));
+        if (getItem(position).getCOMM_AMT() == 0){
+            holder.mLayoutCommisstion.setVisibility(View.GONE);
+        } else {
+            holder.mTextComAmount.setText(format.format(getItem(position).getCOMM_AMT()));
+            holder.mLayoutCommisstion.setVisibility(View.VISIBLE);
+        }
         holder.mTextAmount.setText(format.format(getItem(position).getAMOUNT()));
         holder.mTextBiller.setText(getItem(position).getBILLER());
         holder.mTextPhoneNum.setText(getItem(position).getPHONENO());
@@ -75,6 +80,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mTextCheckTotal, mTextPayCode, mTextBiller, mTextPhoneNum, mTextAmount
                 , mTextComAmount, mTextDatePayment, mTextTiltle;
+        private View mLayoutCommisstion;
         public ViewHolder(View itemView) {
             super(itemView);
             mTextAmount = (TextView) itemView.findViewById(R.id.txt_amount);
@@ -85,6 +91,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             mTextPayCode = (TextView) itemView.findViewById(R.id.txt_pay_code);
             mTextPhoneNum = (TextView) itemView.findViewById(R.id.txt_phone_number);
             mTextTiltle = (TextView) itemView.findViewById(R.id.title_item);
+            mLayoutCommisstion = (View) itemView.findViewById(R.id.layout_commission);
         }
     }
 }

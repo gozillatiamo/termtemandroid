@@ -24,9 +24,10 @@ public class DialogNetworkError {
     private static AlertDialog alertDialog;
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback){
         this.mContext = context;
+        if (mContext == null) return;
         builder = new AlertDialog.Builder(mContext)
                 .setTitle(mContext.getString(R.string.network_error_title))
-                .setMessage(mContext.getString(R.string.network_error_message) + "\n" + msg)
+                .setMessage(mContext.getString(R.string.network_error_message))
                 .setCancelable(false)
                 .setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override

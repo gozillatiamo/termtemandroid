@@ -21,7 +21,7 @@ public class DialogCounterAlert {
                               String msg,
                               DialogInterface.OnClickListener listener){
 
-        new DialogCounterAlert(context, title, msg, null, listener);
+        new DialogCounterAlert(context, title, msg, null, listener, null);
 
     }
 
@@ -30,6 +30,18 @@ public class DialogCounterAlert {
                               String msg,
                               final String txtBtn,
                               DialogInterface.OnClickListener listener){
+
+        new DialogCounterAlert(context, title, msg, txtBtn, listener, null);
+
+    }
+
+
+    public DialogCounterAlert(final Context context,
+                                  String title,
+                                  String msg,
+                                  final String txtBtn,
+                                  DialogInterface.OnClickListener doneListener,
+                                  DialogInterface.OnClickListener cancelListener){
 
         if (DialogProgress.isShow()){
             DialogProgress.dismiss();
@@ -41,15 +53,15 @@ public class DialogCounterAlert {
                 .setCancelable(false);
 
         if (txtBtn != null) {
-            builder.setPositiveButton(txtBtn, listener);
-            builder.setNegativeButton(R.string.cancel, null);
+            builder.setPositiveButton(txtBtn, doneListener);
+            builder.setNegativeButton(R.string.cancel, cancelListener);
 
-        } else if (listener != null){
-            builder.setPositiveButton(R.string.retry, listener);
-            builder.setNegativeButton(R.string.cancel, null);
+        } else if (doneListener != null){
+            builder.setPositiveButton(R.string.retry, doneListener);
+            builder.setNegativeButton(R.string.cancel, cancelListener);
 
         } else {
-            builder.setPositiveButton(R.string.done, listener);
+            builder.setPositiveButton(R.string.done, doneListener);
 
         }
         alertDialog = builder.create();

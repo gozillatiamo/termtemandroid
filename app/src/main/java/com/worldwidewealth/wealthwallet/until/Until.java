@@ -85,6 +85,7 @@ public class Until {
 
     public static final String KEYPF = "data";
     public static final String KEYTXID = "txid";
+    public static final String KEYDEVICEID = "deviceid";
     public static final String LOGOUT = "LOGOUT";
     public static final String TAG = Until.class.getSimpleName();
 
@@ -202,22 +203,12 @@ public class Until {
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ContentValues values = EncryptionData.getModel(response.body());
-                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-/*
-                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                Object values = EncryptionData.getModel(context, call, response.body(), this);
 
-                    if (responseModel.getStatus() != APIServices.SUCCESS)
-                        new ErrorNetworkThrowable(null).networkError(context,
-                                responseModel.getMsg(), call, this);
-
-//                    new DialogCounterAlert.DialogFromResponse(context, values.getAsString(EncryptionData.STRMODEL));
-*/
-                } else {
-                    LoginResponseModel loginResponseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), LoginResponseModel.class);
+                if (values instanceof String){
+                    LoginResponseModel loginResponseModel = new Gson().fromJson((String)values, LoginResponseModel.class);
                     Global.setBALANCE(loginResponseModel.getBALANCE());
                     setBalanceWallet(includeMywallet);
-
                 }
 
                 DialogCounterAlert.DialogProgress.dismiss();
@@ -294,10 +285,11 @@ public class Until {
 
     }
 
-    public static void setTXIDSharedPreferences(String txid){
+    public static void setTXIDSharedPreferences(String txid, String deviceid){
         SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(KEYTXID, txid);
+        editor.putString(KEYDEVICEID, deviceid);
         editor.commit();
     }
 
@@ -305,6 +297,12 @@ public class Until {
         SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
         return preferences.getString(KEYTXID, null);
     }
+
+    public static String getDEVICEIDSharedPreferences(){
+        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
+        return preferences.getString(KEYDEVICEID, null);
+    }
+
 
     public static void logoutAPI(){
         if (Global.getAGENTID() == null) return;
@@ -314,15 +312,14 @@ public class Until {
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object values = EncryptionData.getModel(null, call, response.body(), this);
+                if (values == null) return;
                 Global.setAGENTID("");
                 Global.setUSERID("");
                 Global.setBALANCE(0.00);
                 Global.setTXID("");
                 Global.setDEVICEID("");
                 Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
-//                Until.backToSignIn(activity);
-
-
             }
 
             @Override

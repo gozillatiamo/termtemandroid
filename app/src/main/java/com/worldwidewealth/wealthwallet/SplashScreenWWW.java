@@ -66,23 +66,28 @@ public class SplashScreenWWW extends AppCompatActivity{
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
                 if (!logout) {
 
-                    Global.setTXID(sharedPref.getString("TXID", null));
-                    Global.setAGENTID(sharedPref.getString("AGENTID", null));
-                    Global.setUSERID(sharedPref.getString("USERID", null));
-                    Global.setDEVICEID(sharedPref.getString("DEVICEID", null));
+                    Global.setTXID(sharedPref.getString("TXID", ""));
+                    Global.setAGENTID(sharedPref.getString("AGENTID", ""));
+                    Global.setUSERID(sharedPref.getString("USERID", ""));
+                    Global.setDEVICEID(sharedPref.getString("DEVICEID", ""));
 
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Global.setAGENTID("");
-                            Global.setUSERID("");
-                            Global.setBALANCE(0.00);
-                            Global.setTXID("");
-                            Global.setDEVICEID("");
-                            Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
-                            getDataDevice();
+                            Object responseValues = EncryptionData.getModel(SplashScreenWWW.this, call, response.body(), this);
+                            if (responseValues == null) return;
 
+                            if (responseValues instanceof ResponseModel){
+                                Global.setAGENTID("");
+                                Global.setUSERID("");
+                                Global.setBALANCE(0.00);
+                                Global.setTXID("");
+                                Global.setDEVICEID("");
+                                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
+                                getDataDevice();
+
+                            }
                         }
 
                         @Override
@@ -93,8 +98,6 @@ public class SplashScreenWWW extends AppCompatActivity{
                 } else {
                     getDataDevice();
                 }
-
-
             }
         };
 
@@ -121,15 +124,19 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     protected void getDataDevice(){
-        String deviceId = null;
         mAction = "PRE";
         Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
-        TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        if (mngr.getDeviceId() != null){
-            deviceId = mngr.getDeviceId();
-        } else {
-            deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+        String deviceId = Until.getDEVICEIDSharedPreferences();
+
+        if (deviceId == null) {
+            TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (mngr.getDeviceId() != null) {
+                deviceId = mngr.getDeviceId();
+            } else {
+                deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+            }
         }
+
         Global.setDEVICEID(deviceId);
 
         GPSTracker gpsTracker = new GPSTracker(this);
@@ -169,22 +176,29 @@ public class SplashScreenWWW extends AppCompatActivity{
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    ContentValues values = EncryptionData.getModel(response.body());
+                    Object responseValues = EncryptionData.getModel(SplashScreenWWW.this, call, response.body(), this);
+                    if (responseValues == null) return;
+
+                    if (responseValues instanceof ResponseModel){
+                        Until.setTXIDSharedPreferences(((ResponseModel)responseValues).getTXID(), Global.getDEVICEID());
+                        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
+
+                    }
+/*
                     if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                         ResponseModel model = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
 
                         if (model.getStatus() == APIServices.SUCCESS) {
-                            Until.setTXIDSharedPreferences(model.getTXID());
-                            Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                            finish();
                         } else {
                             new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this,
                                     model.getMsg(), call, this);
                         }
 
                     }
+*/
 
                 }
 

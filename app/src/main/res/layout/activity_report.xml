@@ -67,17 +67,29 @@
                 android:textStyle="bold"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:gravity="center"/>
-            <TextView
-                android:id="@+id/txt_report_total"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="0.00"
-                android:textColor="@android:color/white"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:padding="@dimen/activity_space"
-                android:gravity="center|right"/>
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    style="@style/MyTextButton"
+                    android:text="@string/currentcy"/>
+                <TextView
+                    android:id="@+id/txt_report_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="0.00"
+                    android:textColor="@android:color/white"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:padding="@dimen/activity_space"
+                    android:gravity="center|right"/>
 
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

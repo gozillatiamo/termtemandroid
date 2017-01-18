@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         mShared = MyApplication.getContext().getSharedPreferences(CACHEUSER, MyApplication.getContext().MODE_PRIVATE);
-        String decoded = EncryptionData.DecryptData("2TcLmac8O1Lkj6wvFPKXfQ==", "351542068115209afa80b26-0e8b-4f6e-984b-d5604d6e6059");
-        Log.e(TAG, "Decoded: " + decoded);
         initEditText();
         initBtn();
 //        initSpinner();
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mHolder.mBtnLogin.setEnabled(true);
         Global.setTXID(Until.getTXIDSharedPreferences());
+        Global.setDEVICEID(Until.getDEVICEIDSharedPreferences());
     }
 
     private boolean mFormatting;
@@ -120,9 +119,11 @@ public class MainActivity extends AppCompatActivity {
                         mHolder.mPhone.showDropDown();
                 }
             });
+/*
             for (String str:mArrayHistoryUser){
                 Log.e(TAG, "HistoryUser: "+str);
             }
+*/
         }
 
 //        mHolder.mPhone.setText(mShared.getString(USER, ""));
@@ -260,8 +261,9 @@ public class MainActivity extends AppCompatActivity {
                             Global.setBALANCE(loginResponseModel.getBALANCE());
 
                             if (mSetHistoryUser == null||!mSetHistoryUser.contains(mPhone)){
-                                if (mSetHistoryUser == null)
+                                if (mSetHistoryUser == null) {
                                     mSetHistoryUser = new HashSet<String>();
+                                }
                                 mSetHistoryUser.add(mHolder.mPhone.getText().toString());
                                 SharedPreferences.Editor editor = mShared.edit();
                                 editor.putStringSet(USER, mSetHistoryUser);

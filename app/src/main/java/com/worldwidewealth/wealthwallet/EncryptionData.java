@@ -1,12 +1,15 @@
 package com.worldwidewealth.wealthwallet;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
+import com.worldwidewealth.wealthwallet.services.APIServices;
+import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 import java.io.IOException;
@@ -22,6 +25,8 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by MyNet on 1/11/2559.
@@ -85,7 +90,6 @@ public class EncryptionData {
 
             String strEncoded = Base64.encodeToString(encoded, Base64.NO_WRAP);
             String convertPlus = strEncoded.replace("+", "%2B");
-            Log.e(TAG, "encoded: " + convertPlus);
             return convertPlus;
 
         } catch (Exception e){
@@ -133,9 +137,9 @@ public class EncryptionData {
 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(strKey.getBytes(characterSet), 0, strKey.length());
-            byte[] sha512hash = md.digest();
-            m_Key = Arrays.copyOf(sha512hash, 8);
-            m_IV = Arrays.copyOfRange(sha512hash, 8, 16);
+            byte[] sha1hash = md.digest();
+            m_Key = Arrays.copyOf(sha1hash, 8);
+            m_IV = Arrays.copyOfRange(sha1hash, 8, 16);
             return true;
         }
         catch (Exception e)
@@ -145,7 +149,9 @@ public class EncryptionData {
         }
     }
 
-    public static ContentValues getModel(ResponseBody response){
+
+    public static final Object getModel(Context context, Call call, ResponseBody response, Callback callback){
+/*
         ContentValues resultvalues = new ContentValues();
         ResponseModel responseModel = null;
         Gson gson = new Gson();
@@ -171,5 +177,31 @@ public class EncryptionData {
 
 
         return resultvalues;
+*/
+
+        ResponseModel responseModel = null;
+        Gson gson = new Gson();
+        String strRespone = null;
+
+        try {
+            strRespone = response.string();
+            responseModel = gson.fromJson(strRespone, ResponseModel.class);
+
+            if (responseModel.getStatus() != APIServices.SUCCESS) {
+                DialogCounterAlert.DialogProgress.dismiss();
+                new ErrorNetworkThrowable(null).networkError(context,
+                        null, call, callback);
+            } else{
+                return responseModel;
+            }
+
+        } catch (JsonSyntaxException e){
+            String converted = Until.ConvertJsonEncode(strRespone);
+            String responDecode = Until.decode(converted);
+            return responDecode;
+
+        } catch (IOException e) {}
+
+        return null;
     }
 }

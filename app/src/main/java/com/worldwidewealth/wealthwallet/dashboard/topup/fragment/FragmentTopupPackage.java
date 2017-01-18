@@ -70,6 +70,7 @@ public class FragmentTopupPackage extends  Fragment{
     public Handler mHandler;
     private int mTimeout = 0;
     public Runnable mRunnableSubmit;
+    public static final String TAG = FragmentTopupPackage.class.getSimpleName();
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -132,33 +133,47 @@ public class FragmentTopupPackage extends  Fragment{
 
         Log.e("initPageTopup", "true");
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
-
-        Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
-                    new LoadButtonRequestModel(mCarrier)
-                ));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void run() {
+                Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
+                        new LoadButtonRequestModel(mCarrier)
+                ));
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
 
+                        if (responseValues == null) return;
+
+                        if (responseValues instanceof ResponseModel){
+                            DialogCounterAlert.DialogProgress.dismiss();
+                        } else {
+                            getChildFragmentManager().beginTransaction()
+                                    .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance((String)responseValues))
+                                    .commit();
+                        }
+/*
                 String responseStr = null;
                 try {
                     responseStr = response.body().string();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+*/
 
-                getChildFragmentManager().beginTransaction()
-                        .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance(responseStr))
-                        .commit();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
+                        setEnabledBtn(true);
+                    }
+                });
 
             }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
-                setEnabledBtn(true);
-            }
-        });
+        }, 500);
     }
 
     private void initData(){
@@ -240,20 +255,14 @@ public class FragmentTopupPackage extends  Fragment{
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                DialogCounterAlert.DialogProgress.dismiss();
-                ContentValues modelValues = EncryptionData.getModel(response.body());
 
-                if (modelValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    ResponseModel responseModel = new Gson()
-                            .fromJson(modelValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                Object modelValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                if (modelValues == null) return;
 
-                    if (responseModel.getStatus() != APIServices.SUCCESS)
-                        new ErrorNetworkThrowable(null).networkError(getContext(),
-                                responseModel.getMsg(), call, this);
-
-
-                } else {
-
+                if (modelValues instanceof ResponseModel){
+                    DialogCounterAlert.DialogProgress.dismiss();
+                }else {
+                    DialogCounterAlert.DialogProgress.dismiss();
                     FragmentTopupPackage.this.getChildFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right,
@@ -261,13 +270,31 @@ public class FragmentTopupPackage extends  Fragment{
                                     R.anim.slide_in_left,
                                     R.anim.slide_out_right)
                             .replace(R.id.container_topup_package, FragmentTopupPreview
-                                    .newInstance(modelValues.getAsString(EncryptionData.STRMODEL)))
+                                    .newInstance((String)modelValues))
                             .addToBackStack(null)
                             .commit();
                     setEnableEditPhone(false);
 
                 }
 
+/*
+                if (modelValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
+                    ResponseModel responseModel = new Gson()
+                            .fromJson(modelValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+
+                    if (responseModel.getStatus() != APIServices.SUCCESS)
+                        new ErrorNetworkThrowable(null).networkError(getContext(),
+                                responseModel.getMsg(), call, this);
+*/
+
+
+/*
+                } else {
+
+
+                }
+
+*/
 
             }
 
@@ -302,15 +329,22 @@ public class FragmentTopupPackage extends  Fragment{
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                if (responseValues == null) return;
 
+                if (responseValues instanceof String){
+                    serviceSubmitToup((String)responseValues);
+                }
+/*
                 String responseStr = null;
                 try {
                     responseStr = response.body().string();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+*/
 
-                serviceSubmitToup(responseStr);
+
 
             }
 
@@ -325,9 +359,9 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceSubmitToup(final String responseStr){
 
-        String converted = Until.ConvertJsonEncode(responseStr);
-        final String responDecode = Until.decode(converted);
-        final TopupResponseModel model = new Gson().fromJson(responDecode, TopupResponseModel.class);
+        /*String converted = Until.ConvertJsonEncode(responseStr);
+        final String responDecode = Until.decode(converted);*/
+        final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
         mTimeout = 0;
         mRunnableSubmit = new Runnable() {
             @Override
@@ -364,18 +398,24 @@ public class FragmentTopupPackage extends  Fragment{
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        ContentValues responseValues = EncryptionData.getModel(response.body());
+                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                        if (responseValues == null) return;
+
+                        if (responseValues instanceof ResponseModel){
+                            serviceEslip(model.getTranid());
+                        }
+/*
                         if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                             ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
                                     ResponseModel.class);
                             if (responseModel.getStatus() == APIServices.SUCCESS) {
-                                serviceEslip(model.getTranid());
                             } else {
                                 if (responseModel.getStatus() != APIServices.SUCCESS)
                                     new ErrorNetworkThrowable(null).networkError(getContext(),
                                             responseModel.getMsg(), call, this);
                             }
                         }
+*/
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -409,7 +449,21 @@ public class FragmentTopupPackage extends  Fragment{
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ContentValues values = EncryptionData.getModel(response.body());
+                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                if (responseValues == null) return;
+
+                if (responseValues instanceof ResponseModel){
+                    byte[] imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
+                            , Base64.NO_WRAP);
+                    AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
+                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+
+                }
+
+
+/*
                 if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
                     ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
 
@@ -426,15 +480,11 @@ public class FragmentTopupPackage extends  Fragment{
 
                         } else {
 
-                            byte[] imageByte = Base64.decode(responseModel.getFf(), Base64.NO_WRAP);
-                            AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                            activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            activity.getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
                         }
                     }
 
                 }
+*/
 
             }
 

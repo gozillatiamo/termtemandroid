@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     app:cardUseCompatPadding="true"
-    app:cardElevation="0dp"
+    app:cardElevation="@dimen/cardview_default_elevation"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout

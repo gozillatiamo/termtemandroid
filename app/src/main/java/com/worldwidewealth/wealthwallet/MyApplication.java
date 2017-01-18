@@ -2,12 +2,15 @@ package com.worldwidewealth.wealthwallet;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.NotificationCompat;
 
 import com.crashlytics.android.Crashlytics;
+import com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment.FragmentReportMT;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -19,6 +22,10 @@ import io.fabric.sdk.android.Fabric;
 
 public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context mContext;
+    private static NotificationManager mNotifyManager;
+    private static NotificationCompat.Builder mBuilder;
+    private static final int NOTIUPLOAD = 1;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -126,5 +133,38 @@ public class MyApplication extends Application implements Application.ActivityLi
                 activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister);
+    }
+
+    public static void showNotifyUpload(){
+
+        mNotifyManager =
+                (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(MyApplication.getContext().getApplicationContext());
+        mBuilder.setContentTitle(getContext().getString(R.string.title_upload))
+                .setContentText(getContext().getString(R.string.msg_upload))
+                .setOngoing(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo_app_without_text))
+                .setSmallIcon(android.R.drawable.stat_sys_upload);
+
+        mBuilder.setProgress(0, 0, true);
+        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+    }
+
+    public static void uploadSuccess(){
+        mBuilder.setContentTitle(getContext().getString(R.string.title_upload_success));
+        mBuilder.setContentText(getContext().getString(R.string.msg_upload_success));
+        mBuilder.setSmallIcon(android.R.drawable.stat_sys_upload_done);
+        mBuilder.setProgress(0, 0, false);
+        mBuilder.setOngoing(false);
+        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+    }
+
+    public static void uploadFail(){
+        mBuilder.setContentTitle(getContext().getString(R.string.title_upload_fail));
+        mBuilder.setContentText(getContext().getString(R.string.msg_upload_fail));
+        mBuilder.setSmallIcon(android.R.drawable.stat_notify_error);
+        mBuilder.setProgress(0, 0, false);
+        mBuilder.setOngoing(false);
+        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
     }
 }

@@ -52,7 +52,6 @@
 
                     <include
                         android:id="@+id/include_my_wallet"
-
                         layout="@layout/card_my_wallet"/>
 
                     <android.support.v7.widget.CardView
@@ -96,14 +95,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
                             app:cardUseCompatPadding="true"
-                            app:cardElevation="0dp"
+                            app:cardElevation="@dimen/cardview_default_elevation"
                             >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -115,6 +116,7 @@
                                 <me.grantland.widget.AutofitTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     style="@style/MyTitleMenuDashboard"
                                     android:text="@string/topup"
                                     android:id="@+id/autofitTextView4" />
@@ -127,13 +129,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:cardElevation="0dp"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardElevation="@dimen/cardview_default_elevation"
                             app:cardUseCompatPadding="true">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -143,6 +146,7 @@
                                 <me.grantland.widget.AutofitTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:text="@string/report_history"
                                     style="@style/MyTitleMenuDashboard"
                                     />
@@ -163,15 +167,16 @@
                             android:id="@+id/menu_setting"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:foreground="?android:attr/selectableItemBackground"
                             android:layout_weight="1"
-                            app:cardElevation="0dp"
+                            app:cardElevation="@dimen/cardview_default_elevation"
                             app:cardUseCompatPadding="true">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -181,6 +186,7 @@
                                 <me.grantland.widget.AutofitTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:text="@string/setting"
                                     style="@style/MyTitleMenuDashboard"
                                     android:id="@+id/autofitTextView3" />
@@ -191,15 +197,16 @@
                             android:id="@+id/menu_help"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:foreground="?android:attr/selectableItemBackground"
                             android:layout_weight="1"
-                            app:cardElevation="0dp"
+                            app:cardElevation="@dimen/cardview_default_elevation"
                             app:cardUseCompatPadding="true">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -212,6 +219,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="@string/support"
+                                    android:layout_weight="1"
                                     style="@style/MyTitleMenuDashboard"
                                     app:sizeToFit="true"
                                     android:id="@+id/autofitTextView5" />
@@ -232,6 +240,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
                             android:clickable="false"
                             app:cardElevation="0dp"
                             app:cardUseCompatPadding="true">
@@ -240,7 +249,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -253,6 +262,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="@string/dashboard_scan_qr"
+                                    android:layout_weight="1"
                                     style="@style/MyTitleMenuDashboard"
                                     android:textColor="#ccc"
                                     android:id="@+id/autofitTextView6" />
@@ -265,6 +275,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
                             app:cardElevation="0dp"
                             app:cardUseCompatPadding="true">
 
@@ -272,7 +283,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                >
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -284,6 +295,7 @@
                                 <me.grantland.widget.AutofitTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:text="@string/dashboard_my_qr"
                                     android:textColor="#ccc"
                                     style="@style/MyTitleMenuDashboard"
@@ -301,7 +313,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:cardUseCompatPadding="true"
-                        app:cardElevation="0dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardElevation="@dimen/cardview_default_elevation"
                         >
 
                         <LinearLayout

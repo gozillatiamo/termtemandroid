@@ -2,8 +2,10 @@ package com.worldwidewealth.wealthwallet.dashboard;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -59,7 +60,9 @@ public class ActivityDashboard extends AppCompatActivity{
     private APIServices services;
     private long userInteractionTime = 0;
     private static final String TAG = ActivityDashboard.class.getSimpleName();
-
+    private DialogHelp mDialogHelp;
+    private Dialog mDialogSetting;
+    private AlertDialog mAlertChangePass;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +71,7 @@ public class ActivityDashboard extends AppCompatActivity{
         services = APIServices.retrofit.create(APIServices.class);
         mHolder = new ViewHolder(this);
 
-
+        initDialog();
         initToolbar();
         initClickMainMenu();
 
@@ -81,10 +84,37 @@ public class ActivityDashboard extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 //        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
-        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
+        SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
+        boolean logout = sharedPref.getBoolean("LOGOUT", true);
+        if (!logout) {
+            Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
+        }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mDialogHelp.dismiss();
+        mDialogSetting.dismiss();
+        if (mAlertChangePass != null) {
+            mAlertChangePass.dismiss();
+        }
+    }
 
+    private void initDialog(){
+        mDialogHelp = new DialogHelp(ActivityDashboard.this);
+        mDialogSetting = new Dialog(ActivityDashboard.this);
+        mDialogSetting.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialogSetting.setContentView(R.layout.dialog_setting);
+        Button btnChangePassword = (Button)mDialogSetting.findViewById(R.id.btn_forgot_password);
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDialogChangePassword();
+            }
+        });
+
+    }
 
     private void initToolbar(){
         mHolder.mToolbar.setNavigationIcon(R.drawable.ic_power_settings_new);
@@ -93,7 +123,6 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "Logout click: true");
                 new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_logout),
                         getString(R.string.msg_logout),getString(R.string.title_logout),
                         new DialogInterface.OnClickListener() {
@@ -167,26 +196,14 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogHelp dialog = new DialogHelp(ActivityDashboard.this);
-                dialog.show();
+                mDialogHelp.show();
             }
         });
 
         mHolder.mMenuSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(ActivityDashboard.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_setting);
-                Button btnChangePassword = (Button)dialog.findViewById(R.id.btn_forgot_password);
-                btnChangePassword.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        initDialogChangePassword();
-                    }
-                });
-                dialog.show();
-
+                mDialogSetting.show();
             }
         });
 
@@ -206,12 +223,12 @@ public class ActivityDashboard extends AppCompatActivity{
         builder.setPositiveButton(R.string.confirm, null);
         builder.setNegativeButton(R.string.cancel, null);
 
-        final AlertDialog alertDialog = builder.create();
+        mAlertChangePass = builder.create();
 
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        mAlertChangePass.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button confirm = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button confirm = mAlertChangePass.getButton(AlertDialog.BUTTON_POSITIVE);
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -230,7 +247,7 @@ public class ActivityDashboard extends AppCompatActivity{
                                 @Override
                                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                         if (response.body().getStatus() == APIServices.SUCCESS){
-                                            alertDialog.dismiss();
+                                            mAlertChangePass.dismiss();
                                             new DialogCounterAlert(ActivityDashboard.this,
                                                     response.body().getMsg(),
                                                     getString(R.string.change_password_success),
@@ -253,7 +270,7 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
-        alertDialog.show();
+        mAlertChangePass.show();
 
     }
 
