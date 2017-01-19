@@ -1,7 +1,6 @@
 <resources>
 
     <string name="currentcy">THB</string>
-
     <string name="app_name">TermTem</string>
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
@@ -109,6 +108,7 @@
     <string name="add_credit">Add Credit Line</string>
     <string name="support">ช่วยเหลือ</string>
     <string name="title_topup">เติมเงินมือถือ</string>
+    <string name="title_mpay">mPay Station</string>
     <string name="title_report">Mobile Report</string>
     <string name="amount">ยอดชำระ :</string>
     <string name="paycode">Paycode :</string>
@@ -194,7 +194,8 @@
     <string name="msg_upload_success">กรุณาตรวจสอบยอดเงินของท่าน</string>
     <string name="title_upload_fail">อัพโหลดล้มเหลว</string>
     <string name="msg_upload_fail">กรุณาลองใหม่อีกครั้ง</string>
-    <string name="search_tutorial">หากท่านต้องการดูรายการย้อนหลัง\nโปรดเลือกเมนูค้นหา</string>
+    <string name="search_tutorial">สำหรับดูรายการย้อนหลัง</string>
+    <string name="other">อื่น ๆ</string>
 
 
     <string name="contact_phone_no">02-331-4788 , 095-162-8477 หรือ 095-162-0577 </string>

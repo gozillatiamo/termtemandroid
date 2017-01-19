@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -85,7 +86,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,35 +102,6 @@
                     <include
                         android:id="@+id/include_bank_start"
                         layout="@layout/layout_btn_choice_bank"/>
-                    <!--<LinearLayout-->
-                    <!--android:id="@+id/layout_bank_mt_start"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--style="@style/Widget.AppCompat.Button.Borderless.Colored">-->
-                    <!--<ImageView-->
-                    <!--android:id="@+id/icon_bank_start"-->
-                    <!--android:layout_width="@dimen/icon_size"-->
-                    <!--android:layout_height="@dimen/icon_size"-->
-                    <!--android:src="@drawable/ic_add_a_photo"-->
-                    <!--android:layout_marginRight="@dimen/activity_space"-->
-                    <!--android:visibility="gone"-->
-                    <!--/>-->
-                    <!--<TextView-->
-                    <!--android:id="@+id/txt_bank"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:text="@string/please_select"-->
-                    <!--android:gravity="center"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:textColor="@android:color/darker_gray"-->
-                    <!--style="@style/TextAppearance.AppCompat.Button" />-->
-
-                    <!--</LinearLayout>-->
-
-
-
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -190,6 +161,7 @@
             >
 
             <LinearLayout
+                android:id="@+id/layout_btn_add_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -218,11 +190,19 @@
 
             <ImageView
                 android:id="@+id/image_photo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
                 android:background="@android:color/transparent"
                 />
 
+            <ProgressBar
+                android:id="@+id/progress_loading_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
 
         <RelativeLayout

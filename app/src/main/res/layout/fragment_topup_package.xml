@@ -72,7 +72,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
-        app:cardElevation="0dp">
+
+        android:layout_marginLeft="@dimen/activity_small_space"
+        android:layout_marginRight="@dimen/activity_small_space"
+        app:cardElevation="@dimen/activity_small_space">
 
         <LinearLayout
             android:layout_width="match_parent"

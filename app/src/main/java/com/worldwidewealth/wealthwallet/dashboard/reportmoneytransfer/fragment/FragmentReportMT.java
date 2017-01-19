@@ -8,12 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.util.Base64;
@@ -26,6 +28,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import com.worldwidewealth.wealthwallet.model.NotiPayRequestModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import okhttp3.ResponseBody;
@@ -99,6 +103,8 @@ public class FragmentReportMT extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Uri uri = null;
+            mHolder.mLayoutBtnAddImage.setVisibility(View.GONE);
+            mHolder.mLoadingImage.setVisibility(View.VISIBLE);
 
             switch (requestCode){
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CAPTURE:
@@ -108,7 +114,6 @@ public class FragmentReportMT extends Fragment {
 
                     imgPath =  Until.getRealPathFromURI(uri);
 
-                    Log.e("ImgPathFromCapture", imgPath);
 
                     break;
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CHOOSE:
@@ -126,7 +131,6 @@ public class FragmentReportMT extends Fragment {
                         imgPath = Until.getRealPathFromURI(uri);
 
 //                    imgPath = Until.getRealPathFromURI(uri);
-                    Log.e("ImgPathFromChoose", imgPath);
 
                     break;
             }
@@ -136,16 +140,14 @@ public class FragmentReportMT extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 130, 130);
+                        Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 500, 500);
                         Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
                         Log.e(TAG, bitmapDecode.toString()+"");
                         mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
                         mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
-
                         mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
-
                     }
-                }, 2000);
+                }, 500);
             }
      }
     }
@@ -160,31 +162,38 @@ public class FragmentReportMT extends Fragment {
                 mStrBankEnd = "KBANK";
                 if (mStrAmount.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
+                    mHolder.mScrollView.smoothScrollTo(0, 0);
                     return;
                 }
 
                 if (mDateTime == 0){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_select_date_time), Toast.LENGTH_LONG).show();
+                    mHolder.mScrollView.smoothScrollTo(0, 0);
                     return;
                 }
 
                 if (mStrBankStart.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_select_bank_start), Toast.LENGTH_LONG).show();
+                    mHolder.mScrollView.smoothScrollTo(0, 0);
+
                     return;
                 }
 
                 if (mStrBankEnd.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_select_bank_end), Toast.LENGTH_LONG).show();
+                    mHolder.mScrollView.smoothScrollTo(0, 0);
+
                     return;
                 }
 
 
                 if (mBitmapEncode == null || mBitmapEncode.equals("")){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_add_image), Toast.LENGTH_LONG).show();
+                    mHolder.mScrollView.smoothScrollTo(0, 0);
+
                     return;
                 }
                 mHolder.mBtnNext.setEnabled(false);
-                Log.e("BitmapEncode", mBitmapEncode);
                 new DialogCounterAlert(getContext(), getString(R.string.dialog_alert_title), getString(R.string.msg_waiting_upload),
                         getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
@@ -196,15 +205,12 @@ public class FragmentReportMT extends Fragment {
                                         mBitmapEncode,
                                         mStrBankStart,
                                         mStrBankEnd)));
-                        Log.e(TAG, "0000");
                        MyApplication.showNotifyUpload();
-
                         APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                // Do Something
-//                                DialogCounterAlert.DialogProgress.dismiss();
-                                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                                Object responseValues = EncryptionData.getModel(null, call, response.body(), this);
 
                                 if (responseValues instanceof ResponseModel){
                                     MyApplication.uploadSuccess();
@@ -212,21 +218,12 @@ public class FragmentReportMT extends Fragment {
                                 } else {
                                     MyApplication.uploadFail();
                                 }
-
-/*
-                                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)) {
-                                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-                                    if (responseModel.getStatus() == APIServices.SUCCESS) {
-                                        return;
-                                    }
-                                }
-*/
-
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
+                                t.printStackTrace();
+                                //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
                                 MyApplication.uploadFail();
                             }
                         });
@@ -353,7 +350,10 @@ public class FragmentReportMT extends Fragment {
         private ImageButton mBtnTakePhoto;
         private ImageView mImagePhoto;
         private EditText mEditAmount;
-        private View mIncludeBankStart, mIncludeBankEnd;
+        private View mIncludeBankStart;
+        private NestedScrollView mScrollView;
+        private ProgressBar mLoadingImage;
+        private View mLayoutBtnAddImage;
 
         public ViewHolder(View itemview){
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
@@ -362,8 +362,27 @@ public class FragmentReportMT extends Fragment {
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
             mBtnTakePhoto = (ImageButton) itemview.findViewById(R.id.btn_take_photo);
             mImagePhoto = (ImageView) itemview.findViewById(R.id.image_photo);
+            mImagePhoto.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+
+                }
+            });
             mEditAmount = (EditText) itemview.findViewById(R.id.edit_amount);
             mIncludeBankStart = (View) itemview.findViewById(R.id.include_bank_start);
+            mScrollView = (NestedScrollView) itemview.findViewById(R.id.nested_scrollview);
+            mLoadingImage = (ProgressBar) itemview.findViewById(R.id.progress_loading_image);
+            mLayoutBtnAddImage = (View) itemview.findViewById(R.id.layout_btn_add_image);
+            mScrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (mImagePhoto.getDrawable() != null) {
+                        mLoadingImage.setVisibility(View.GONE);
+                        mLayoutBtnAddImage.setVisibility(View.VISIBLE);
+                        mScrollView.smoothScrollTo(0, bottom);
+                    }
+                }
+            });
 //            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
 
         }

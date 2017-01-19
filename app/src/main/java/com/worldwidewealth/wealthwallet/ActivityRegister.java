@@ -197,14 +197,6 @@ public class ActivityRegister extends AppCompatActivity {
                     }
                 });
 
-//                FragmentTransaction transaction = FragmentRegister.this.getActivity()
-//                        .getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.dialog_enter, R.anim.dialog_exit, R.anim.slide_in_left, R.anim.slide_out_right)
-//                        .replace(R.id.main_container, FragmentRegisterDone.newInstance())
-//                        .addToBackStack(null);
-//
-//                transaction.commit();
             }
         });
 

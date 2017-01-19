@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -19,9 +18,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.worldwidewealth.wealthwallet.dashboard.mPayStation.mPayStationActivity;
 import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
@@ -29,17 +28,13 @@ import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.R;
-import com.worldwidewealth.wealthwallet.dashboard.adapter.AdapterDashboard;
 import com.worldwidewealth.wealthwallet.dashboard.addcreditline.ActivityAddCreditLine;
 import com.worldwidewealth.wealthwallet.dashboard.billpayment.fragment.FragmentBillSlip;
-import com.worldwidewealth.wealthwallet.dashboard.creditlimit.fragment.FragmentSlipCreditLimit;
-import com.worldwidewealth.wealthwallet.dashboard.fragment.FragmentSlip;
 import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.wealthwallet.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
-import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.model.ChangePasswordRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
@@ -56,7 +51,6 @@ import retrofit2.Response;
 public class ActivityDashboard extends AppCompatActivity{
 
     private ViewHolder mHolder;
-    private AdapterDashboard mAdapter;
     private APIServices services;
     private long userInteractionTime = 0;
     private static final String TAG = ActivityDashboard.class.getSimpleName();
@@ -193,6 +187,16 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+        mHolder.mMenuMpay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityDashboard.this, mPayStationActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, 0);
+            }
+        });
+
+
         mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,10 +285,9 @@ public class ActivityDashboard extends AppCompatActivity{
 
         if (stackCount != 0) {
             Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
-            if (currentFragment instanceof FragmentSlipCreditLimit ||
+            if (
                     currentFragment instanceof FragmentBillSlip ||
-                    currentFragment instanceof FragmentTopupSlip ||
-                    currentFragment instanceof FragmentSlip) return;
+                    currentFragment instanceof FragmentTopupSlip) return;
         }
         new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
                 getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
@@ -301,7 +304,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
         private Toolbar mToolbar;
         private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine
-                , mMenuHelp, mMenuSetting;
+                , mMenuHelp, mMenuSetting, mMenuMpay;
 //        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
@@ -314,6 +317,7 @@ public class ActivityDashboard extends AppCompatActivity{
             mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
             mMenuHelp = (CardView) view.findViewById(R.id.menu_help);
             mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
+            mMenuMpay = (CardView) view.findViewById(R.id.menu_mpay_station);
             mMenuAddCreditLine = (CardView) view.findViewById(R.id.menu_add_credit_line);
         }
     }

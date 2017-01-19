@@ -22,13 +22,15 @@ android {
     defaultConfig {
         applicationId "com.worldwidewealth.wealthwallet"
         minSdkVersion 15
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0.0"
 //        multiDexEnabled true
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

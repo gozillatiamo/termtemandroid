@@ -3,6 +3,7 @@ package com.worldwidewealth.wealthwallet;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -185,6 +186,7 @@ public class EncryptionData {
 
         try {
             strRespone = response.string();
+            Log.e(TAG, "Response: "+strRespone);
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {

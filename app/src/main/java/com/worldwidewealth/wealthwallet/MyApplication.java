@@ -143,7 +143,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setContentTitle(getContext().getString(R.string.title_upload))
                 .setContentText(getContext().getString(R.string.msg_upload))
                 .setOngoing(true)
-                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo_app_without_text))
+                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_launcher_app))
                 .setSmallIcon(android.R.drawable.stat_sys_upload);
 
         mBuilder.setProgress(0, 0, true);

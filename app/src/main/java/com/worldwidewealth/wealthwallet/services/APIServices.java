@@ -46,10 +46,13 @@ public interface APIServices {
     public static final String ACTIONSALERPT = "SALERPT";
     public static final String ACTIONGETBALANCE = "GETBALANCE";
     public static final String ACTIONNOTIPAY = "NOTIPAY";
+    public static final String ACTIONGENBARCODE = "GENBARCODE";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
     public static final String DTAC = "HAPPY";
+    public static final String TAG = APIServices.class.getSimpleName();
+
 
     @GET("apifcm/online.aspx")
     Call<ResponseBody> online();
@@ -107,6 +110,10 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> notipay(@Body RequestModel requestModel);
 
+    @POST("service.ashx")
+    Call<ResponseBody> genBarcode(@Body RequestModel requestModel);
+
+
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     final OkHttpClient client = new OkHttpClient.Builder()
@@ -119,12 +126,12 @@ public interface APIServices {
                     Request originalRequest = chain.request();
                     Request.Builder builder = originalRequest.newBuilder();
                     if (originalRequest.method().equalsIgnoreCase("POST")){
+
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
-
-                    Response response = chain.proceed(builder.build());
-                    return  response;
+                    Log.e(TAG, originalRequest.method());
+                    return  chain.proceed(builder.build());
                 }
             }).build();
 
