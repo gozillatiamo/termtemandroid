@@ -2,22 +2,29 @@ package com.worldwidewealth.wealthwallet;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
@@ -151,6 +158,12 @@ public class ActivityRegister extends AppCompatActivity {
                         return;
                     }
                 }
+
+                if (!mHolder.mCheckService.isChecked()){
+                    Toast.makeText(ActivityRegister.this, getString(R.string.submit_service_please), Toast.LENGTH_LONG).show();
+                    return;
+
+                }
 /*
                 Log.e("RegisterData:", "E-mail:" + mEmail +"\n"+
                         "FirstName:" + mFirstName +"\n"+
@@ -176,8 +189,19 @@ public class ActivityRegister extends AppCompatActivity {
 
                         if(Msg.equals("Success")){
 
+                            final TextView message = new TextView(ActivityRegister.this);
+                            message.setPadding(20, 20, 20, 20);
+                            // i.e.: R.string.dialog_message =>
+                            // "Test this dialog following the link to dtmilano.blogspot.com"
+                            final SpannableString s =
+                                    new SpannableString(ActivityRegister.this.getText(R.string.register_done));
+                            Linkify.addLinks(s, Linkify.WEB_URLS);
+                            message.setText(s);
+                            message.setMovementMethod(LinkMovementMethod.getInstance());
+
                             AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
-                                    .setMessage(R.string.register_done)
+                                    .setView(message)
+                                    .setCancelable(false)
                                     .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -252,11 +276,12 @@ public class ActivityRegister extends AppCompatActivity {
 
     public class ViewHolder{
 
-        private Button mBtnNext;
+        private Button mBtnNext, mBtnCondition;
         private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification;
         private Spinner mSpinnerTypePeople;
         private Toolbar mToolbar;
         private AutofitTextView mBtnSignIn;
+        private CheckBox mCheckService;
         public ViewHolder(final Activity view){
 
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
@@ -277,10 +302,21 @@ public class ActivityRegister extends AppCompatActivity {
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mBtnSignIn = (AutofitTextView) view.findViewById(R.id.btn_signin);
+            mCheckService = (CheckBox) view.findViewById(R.id.check_submit);
             mBtnSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     view.finish();
+                }
+            });
+            mBtnCondition = (Button) view.findViewById(R.id.btn_condition_termtem);
+            mBtnCondition.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("http://180.128.21.81/wealthweb/terms.htm"));
+                    startActivity(i);
+
                 }
             });
         }

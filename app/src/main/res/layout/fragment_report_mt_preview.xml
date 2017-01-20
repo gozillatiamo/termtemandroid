@@ -248,7 +248,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:backgroundTint="@android:color/holo_orange_dark"
-                    android:text="@string/done"
+                    android:text="@string/back_to_main"
                     style="@style/MyButton"/>
             </RelativeLayout>
 

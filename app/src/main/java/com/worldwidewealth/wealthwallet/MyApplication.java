@@ -156,6 +156,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setSmallIcon(android.R.drawable.stat_sys_upload_done);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
+        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
     }
 
@@ -165,6 +167,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setSmallIcon(android.R.drawable.stat_notify_error);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
+        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
     }
 }

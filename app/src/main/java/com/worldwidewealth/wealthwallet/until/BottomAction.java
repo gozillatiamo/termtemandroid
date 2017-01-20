@@ -58,6 +58,11 @@ public class BottomAction {
        return mHolder.mTextPrice.getText().toString();
     }
 
+    public void setEnable(boolean enable){
+        mHolder.mBtnNext.setEnabled(enable);
+        mHolder.mBtnSubmit.setEnabled(enable);
+    }
+
     private class ViewHolder extends RecyclerView.ViewHolder{
 
         private Button mBtnNext, mBtnSubmit, mBtnCancel;

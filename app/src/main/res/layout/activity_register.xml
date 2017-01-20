@@ -195,6 +195,27 @@
                         android:background="@drawable/line_divider"/>
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <CheckBox
+                        android:id="@+id/check_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/small_text_size"
+                        android:text="@string/submit_service"/>
+                    <Button
+                        android:id="@+id/btn_condition_termtem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/small_text_size"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:text="@string/goto_service"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -219,7 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin"
+                android:padding="@dimen/activity_space"
                 android:gravity="center">
                 <me.grantland.widget.AutofitTextView
                     android:layout_width="wrap_content"

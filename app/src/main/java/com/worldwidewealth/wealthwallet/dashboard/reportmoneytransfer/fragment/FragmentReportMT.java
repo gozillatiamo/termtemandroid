@@ -194,7 +194,7 @@ public class FragmentReportMT extends Fragment {
                     return;
                 }
                 mHolder.mBtnNext.setEnabled(false);
-                new DialogCounterAlert(getContext(), getString(R.string.dialog_alert_title), getString(R.string.msg_waiting_upload),
+                new DialogCounterAlert(getContext(), getString(R.string.warning), getString(R.string.msg_waiting_upload),
                         getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

@@ -20,7 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.worldwidewealth.wealthwallet.dashboard.mPayStation.mPayStationActivity;
+import com.worldwidewealth.wealthwallet.dashboard.mPayStation.MPayStationActivity;
+import com.worldwidewealth.wealthwallet.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
@@ -190,7 +191,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuMpay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ActivityDashboard.this, mPayStationActivity.class);
+                Intent intent = new Intent(ActivityDashboard.this, SelectChoiceMpayActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
             }

@@ -152,33 +152,6 @@ public class EncryptionData {
 
 
     public static final Object getModel(Context context, Call call, ResponseBody response, Callback callback){
-/*
-        ContentValues resultvalues = new ContentValues();
-        ResponseModel responseModel = null;
-        Gson gson = new Gson();
-        String strRespone = null;
-
-        try {
-            strRespone = response.string();
-            responseModel = gson.fromJson(strRespone, ResponseModel.class);
-        }
-        catch (JsonSyntaxException e){}
-        catch (IOException e) {}
-
-        if (responseModel != null){
-            resultvalues.put(ASRESPONSEMODEL, true);
-            resultvalues.put(STRMODEL, strRespone);
-        } else {
-            String converted = Until.ConvertJsonEncode(strRespone);
-            String responDecode = Until.decode(converted);
-            resultvalues.put(ASRESPONSEMODEL, false);
-            resultvalues.put(STRMODEL, responDecode);
-
-        }
-
-
-        return resultvalues;
-*/
 
         ResponseModel responseModel = null;
         Gson gson = new Gson();
@@ -200,6 +173,7 @@ public class EncryptionData {
         } catch (JsonSyntaxException e){
             String converted = Until.ConvertJsonEncode(strRespone);
             String responDecode = Until.decode(converted);
+            Log.e(TAG, "responseDecode: "+responDecode);
             return responDecode;
 
         } catch (IOException e) {}

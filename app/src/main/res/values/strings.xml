@@ -18,7 +18,10 @@
     <string name="change_password">เปลี่ยนรหัสผ่าน</string>
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
-    <string name="register_done">ได้รับคำขอสมัครเรียบร้อยแล้ว\nบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
+    <string name="register_done"> - บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
+        \n\n - กรุณาส่งใบสมัครและเอกสารประกอบมายังบริษัท\nโดยดาว์โหลดเอกสารได้ที่ www.termtem.co
+        \n\n - รอรับ user/password เมื่อได้รัการอนุมัติจากบริษัท(ภายใน 7 วันทำการหลังได้รับเอกสาร)
+        \n\n - ห้าม!! โอนเงินเข้าบัญชีบริษัทก่อนได้รับการอนุมัติ</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
@@ -85,8 +88,8 @@
     <string name="dashboard_my_card">My Cards</string>
     <string name="dashboard_card_to_card">Card to Card</string>
     <string name="dashboard_loyalty">Loyalty</string>
-    <string name="dashboard_wallet">กระเป๋าเงิน</string>
-    <string name="dashboard_mtf">แจ้งโอนเงินเข้ากระเป๋า</string>
+    <string name="dashboard_wallet">บัญชี</string>
+    <string name="dashboard_mtf">แจ้งโอนเงินผ่านธนาคาร</string>
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>
@@ -149,7 +152,7 @@
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
     <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์มือถือ Agent</string>
     <string name="scan_qr_code">Scan QR Code</string>
-    <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการแลกเปลี่ยน</string>
+    <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการโอน</string>
     <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
     <string name="take_photo">ถ่ายรูป</string>
     <string name="choose_pic">เลือกรูปภาพ</string>
@@ -185,10 +188,8 @@
     <string name="title_branch">สาขา:</string>
     <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
     <string name="msg_upload">กรุณารอสักครู่.....</string>
-    <string name="msg_waiting_upload">ระบบจะใช้เวลาในการอัพโหลดและตรวจสอบการทำรายการของท่านสักครู่
-        \nในขณะนี้ท่านสามารถให้งานแอพพลิเคชั่นได้ปกติ
-        \nหากรายการของท่านได้รับการตรวจสอบเรียบร้อยแล้ว
-        \nระบบจะแจ้งให้ท่านทราบผ่านการแจ้งเตือนที่แถทสถานะด้านบนโทรศัพท์ของท่าน</string>
+    <string name="warning">เพื่อทราบ</string>
+    <string name="msg_waiting_upload">ระบบกำลังอัพโหลดและตรวจสอบรายการโอนเงิน\nท่านสามารถใช้งานเมนูอื่นได้ตามปกติ</string>
     <string name="dialog_alert_title">แจ้งเตือน!!</string>
     <string name="title_upload_success">อัพโหลดเสร็จสิ้น</string>
     <string name="msg_upload_success">กรุณาตรวจสอบยอดเงินของท่าน</string>
@@ -196,13 +197,21 @@
     <string name="msg_upload_fail">กรุณาลองใหม่อีกครั้ง</string>
     <string name="search_tutorial">สำหรับดูรายการย้อนหลัง</string>
     <string name="other">อื่น ๆ</string>
+    <string name="submit_service">ยอมรับเงื่อนไขบริการ</string>
+    <string name="goto_service">ที่มาเงื่อนไข</string>
+    <string name="submit_service_please">กรุณายืนยันเงื่อนไข</string>
+    <string name="menu_mpay">โอนเงินผ่าน MPay</string>
+    <string name="mpay_station">เอ็มเปย์สเตชั่น</string>
+    <string name="mpay_bank">ช่องทางธนาคาร</string>
 
-
-    <string name="contact_phone_no">02-331-4788 , 095-162-8477 หรือ 095-162-0577 </string>
+    <!-- Data In App -->
+    <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
     <string name="branch">สุขุมวิท 101</string>
     <string name="bank_account_type">ออมทรัพย์</string>
     <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
     <string name="config_bank_account_number">019-8-36814-8</string>
+    <string name="server_dev">http://180.128.21.31/wealthservice/</string>
+    <string name="server_pro">http://180.128.21.81/wealthservice/</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

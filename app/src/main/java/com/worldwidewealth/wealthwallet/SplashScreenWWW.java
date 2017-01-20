@@ -123,49 +123,61 @@ public class SplashScreenWWW extends AppCompatActivity{
         handler.removeCallbacks(runnable);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+
+    }
+
     protected void getDataDevice(){
         mAction = "PRE";
-        Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
-        String deviceId = Until.getDEVICEIDSharedPreferences();
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable(){
 
-        if (deviceId == null) {
-            TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (mngr.getDeviceId() != null) {
-                deviceId = mngr.getDeviceId();
-            } else {
-                deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+            @Override
+            public void run() {
+                Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
+                if (Global.getTOKEN() == null || Global.getTOKEN().equals("")){
+                    handler.removeCallbacks(this);
+                    handler.postDelayed(this, 1000);
+                }
+
+                String deviceId = Until.getDEVICEIDSharedPreferences();
+
+                if (deviceId == null) {
+                    TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                    if (mngr.getDeviceId() != null) {
+                        deviceId = mngr.getDeviceId();
+                    } else {
+                        deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+                    }
+                }
+
+                Global.setDEVICEID(deviceId);
+
+                GPSTracker gpsTracker = new GPSTracker(SplashScreenWWW.this);
+                if (gpsTracker.canGetLocation()){
+                    mLat = gpsTracker.getLatitude();
+                    mLong = gpsTracker.getLongitude();
+
+                    PreRequestModel mPreRequestModel = new PreRequestModel(mAction, new PreRequestModel.Data(
+                            Global.getTOKEN(),
+                            Global.getDEVICEID(),
+                            mLat,
+                            mLong,
+                            Configs.getPLATFORM()
+                    ));
+
+                    SendDataService(mPreRequestModel);
+                } else {
+                    gpsTracker.showSettingsAlert();
+                }
+
             }
-        }
+        };
 
-        Global.setDEVICEID(deviceId);
-
-        GPSTracker gpsTracker = new GPSTracker(this);
-        if (gpsTracker.canGetLocation()){
-            mLat = gpsTracker.getLatitude();
-            mLong = gpsTracker.getLongitude();
-
-/*
-            Log.e("InAppData", "action:" + mAction + "\n" +
-                    "token:" + Global.getTOKEN() + "\n" +
-                    "device_id:" + Global.getDEVICEID() + "\n" +
-                    "lat:" + mLat + "\n" +
-                    "long:" + mLong + "\n" +
-                    "platform:" + Configs.getPLATFORM());
-*/
-
-
-            PreRequestModel mPreRequestModel = new PreRequestModel(mAction, new PreRequestModel.Data(
-                    Global.getTOKEN(),
-                    Global.getDEVICEID(),
-                    mLat,
-                    mLong,
-                    Configs.getPLATFORM()
-            ));
-
-            SendDataService(mPreRequestModel);
-        } else {
-            gpsTracker.showSettingsAlert();
-        }
+        handler.postDelayed(runnable, 1000);
     }
 
     protected  void SendDataService(PreRequestModel model){

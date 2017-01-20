@@ -1,5 +1,6 @@
 package com.worldwidewealth.wealthwallet.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,10 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
     public static final int REQUEST_IMAGE_CHOOSE = 2;
     public static final String TAG = BottomSheetDialogChoicePhoto.class.getSimpleName();
 
+    public BottomSheetDialogChoicePhoto() {
+    }
+
+    @SuppressLint("ValidFragment")
     public BottomSheetDialogChoicePhoto(Fragment fragment) {
         this.mFragment = fragment;
     }

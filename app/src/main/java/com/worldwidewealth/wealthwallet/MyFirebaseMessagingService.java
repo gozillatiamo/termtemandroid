@@ -29,6 +29,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
+/*
+        Log.e(TAG, "Noti: "+ remoteMessage.getData().toString());
+        Log.e(TAG, "txt: "+txt+"\nbox: "+ box);
+*/
         if (box != null) {
             if (box.contains("*")) {
                 Global.setOTP(box.split("\\*")[0]);
@@ -53,9 +57,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher_app))
+                .setSmallIcon(R.drawable.ic_launcher_app)
                 .setContentTitle(txt)
                 .setContentText(box)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

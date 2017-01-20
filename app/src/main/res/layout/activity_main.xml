@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/login_logo_th"/>
+            android:src="@drawable/tertem_logo_signin_2"/>
 
     </RelativeLayout>
 
@@ -155,13 +155,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:gravity="center">
                 <me.grantland.widget.AutofitTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="@string/not_have_account"
+                    android:textSize="@dimen/small_text_size"
                     app:sizeToFit="true"
                     android:textAllCaps="true"
                     android:textColor="@android:color/darker_gray"/>
@@ -169,6 +170,7 @@
                     android:id="@+id/btn_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/small_text_size"
                     android:singleLine="true"
                     android:gravity="center"
                     android:text="@string/sign_up"
@@ -177,6 +179,16 @@
                     android:layout_marginLeft="@dimen/activity_space"
                     android:textColor="@android:color/black" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help"
+                android:gravity="center"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+
+                android:textSize="@dimen/small_text_size"/>
 
 
         </LinearLayout>

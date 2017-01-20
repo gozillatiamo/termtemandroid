@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.worldwidewealth.wealthwallet.dashboard.ActivityDashboard;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
+import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         mHolder = new ViewHolder(this);
         Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
-        mShared = MyApplication.getContext().getSharedPreferences(CACHEUSER, MyApplication.getContext().MODE_PRIVATE);
+        mShared = MyApplication.getContext().getSharedPreferences(CACHEUSER, Context.MODE_PRIVATE);
         initEditText();
         initBtn();
 //        initSpinner();
@@ -109,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
         if (mSetHistoryUser != null){
             mArrayHistoryUser = new String[mSetHistoryUser.size()];
             mSetHistoryUser.toArray(mArrayHistoryUser);
-
+            for (String user : mSetHistoryUser){
+                Log.e(TAG, "User: "+user);
+            }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mArrayHistoryUser);
             mHolder.mPhone.setAdapter(adapter);
             mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +209,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mHolder.mHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               new DialogHelp(MainActivity.this).show();
+            }
+        });
+
     }
 
     private void serviceLogin(){
@@ -265,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
                                     mSetHistoryUser = new HashSet<String>();
                                 }
                                 mSetHistoryUser.add(mHolder.mPhone.getText().toString());
+                                for (String string : mSetHistoryUser){
+                                    Log.e(TAG, "AddCashUser: "+string);
+                                }
                                 SharedPreferences.Editor editor = mShared.edit();
                                 editor.putStringSet(USER, mSetHistoryUser);
                                 editor.commit();
@@ -352,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
         private EditText mPassword;
         private AutoCompleteTextView mPhone;
         private Spinner mSpinnerPhoneCountry;
+        private Button mHelp;
 
         public ViewHolder(AppCompatActivity view){
 
@@ -360,6 +375,7 @@ public class MainActivity extends AppCompatActivity {
 
             mPhone = (AutoCompleteTextView) view.findViewById(R.id.edit_phone);
             mPassword = (EditText) view.findViewById(R.id.edit_password);
+            mHelp = (Button) view.findViewById(R.id.help);
 //            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
 
         }

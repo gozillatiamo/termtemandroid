@@ -84,34 +84,6 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/menu_mpay_station"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    app:cardUseCompatPadding="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardElevation="@dimen/cardview_default_elevation"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            style="@style/MyIconMenuDashboard"
-                            android:adjustViewBounds="true"
-                            android:scaleType="center"
-                            android:src="@drawable/menu_mpay"
-                             />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,7 +113,7 @@
                                 android:src="@drawable/ic_topup"
                                 android:id="@+id/imageView10" />
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -171,13 +143,13 @@
                                 style="@style/MyIconMenuDashboard"
                                 android:src="@drawable/ic_report"/>
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:text="@string/report_history"
                                 style="@style/MyTitleMenuDashboard"
-                                />
+                                android:id="@+id/autofitTextView7" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -211,7 +183,7 @@
                                 style="@style/MyIconMenuDashboard"
                                 android:src="@drawable/ic_setting" />
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -243,7 +215,7 @@
                                 android:src="@drawable/ic_support"
                                 android:id="@+id/imageView9" />
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:text="@string/support"
@@ -286,7 +258,7 @@
                                 android:tint="#ccc"
                                 />
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:text="@string/dashboard_scan_qr"
@@ -320,7 +292,7 @@
                                 android:tint="#ccc"
                                 />
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -358,7 +330,7 @@
                             android:src="@drawable/ic_report_money_tf"
                             android:id="@+id/imageView7" />
 
-                        <me.grantland.widget.AutofitTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             style="@style/MyTitleMenuDashboard"
@@ -367,19 +339,52 @@
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/menu_mpay_station"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    app:cardUseCompatPadding="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    >
 
-<!--
-                <Button
-                    android:id="@+id/btn_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:gravity="center"
-                    style="@style/MyButton"
-                    android:text="@string/change_password"
-                    android:backgroundTint="@android:color/holo_orange_dark"
-                    />
--->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            style="@style/MyIconMenuDashboard"
+                            android:src="@drawable/mpay_icon"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            style="@style/MyTitleMenuDashboard"
+                            android:text="@string/menu_mpay" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+                <!--
+                                <Button
+                                    android:id="@+id/btn_forgot_password"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:gravity="center"
+                                    style="@style/MyButton"
+                                    android:text="@string/change_password"
+                                    android:backgroundTint="@android:color/holo_orange_dark"
+                                    />
+                -->
             </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>

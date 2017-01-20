@@ -54,9 +54,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:gravity="right"
                 android:textSize="36sp"
                 app:minTextSize="4dp"
                 app:sizeToFit="true"
+                android:singleLine="true"
                 android:text="0"/>
 
             <me.grantland.widget.AutofitTextView

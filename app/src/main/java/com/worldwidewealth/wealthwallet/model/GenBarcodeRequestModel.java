@@ -6,8 +6,9 @@ package com.worldwidewealth.wealthwallet.model;
 
 public class GenBarcodeRequestModel extends DataRequestModel {
     private String AMT;
-
-    public GenBarcodeRequestModel(String AMT) {
+    private int TYPE;
+    public GenBarcodeRequestModel(String AMT, int TYPE) {
         this.AMT = AMT;
+        this.TYPE = TYPE;
     }
 }

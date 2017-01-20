@@ -10,9 +10,10 @@
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 -keepattributes Annotation
--keep class okhttp3.* { ; }
--keep interface okhttp3.* { ; }
+-keep class okhttp3.* { *; }
+-keep interface okhttp3.* { *; }
 -dontwarn okhttp3.
+-dontwarn okio.**
 
 
 #AVLoadingIndicatorView
@@ -27,7 +28,7 @@
   public *;
 }
 # for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 
 #zxing
@@ -42,8 +43,8 @@
 -dontskipnonpubliclibraryclasses
 -verbose
 # ADDED
--dontshrink
--dontobfuscate
+#-dontshrink
+#-dontobfuscate
 -keepattributes *Annotation*
 -keep public class com.google.vending.licensing.ILicensingService
 -keep public class com.android.vending.licensing.ILicensingService

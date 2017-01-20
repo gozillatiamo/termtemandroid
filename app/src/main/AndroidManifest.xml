@@ -117,9 +117,14 @@
             android:name="io.fabric.ApiKey"
             android:value="86a50ea19d46d8961ca0d04a7aa34cb5eae11ed0" />
 
-        <activity android:name=".dashboard.mPayStation.mPayStationActivity"
+        <activity
+            android:name=".dashboard.mPayStation.MPayStationActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" ></activity>
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".dashboard.mPayStation.SelectChoiceMpayActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

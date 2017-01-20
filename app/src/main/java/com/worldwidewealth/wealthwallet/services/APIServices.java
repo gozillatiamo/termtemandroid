@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.worldwidewealth.wealthwallet.MyApplication;
+import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
 import com.worldwidewealth.wealthwallet.model.RegisterRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
@@ -110,7 +112,7 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> notipay(@Body RequestModel requestModel);
 
-    @POST("service.ashx")
+    @POST("fundin.ashx")
     Call<ResponseBody> genBarcode(@Body RequestModel requestModel);
 
 
@@ -140,7 +142,7 @@ public interface APIServices {
             .create();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://180.128.21.31/wealthservice/").client(client)
+        .baseUrl(MyApplication.getContext().getString(R.string.server_pro)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 
