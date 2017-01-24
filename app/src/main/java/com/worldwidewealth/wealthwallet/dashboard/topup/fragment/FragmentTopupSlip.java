@@ -1,6 +1,5 @@
 package com.worldwidewealth.wealthwallet.dashboard.topup.fragment;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +9,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,17 +18,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
-import com.worldwidewealth.wealthwallet.EncryptionData;
-import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.game.ActivityGame;
-import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.EslipRequestModel;
-import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
@@ -207,7 +199,6 @@ public class FragmentTopupSlip extends Fragment {
         myDir.mkdirs();
 
         File file = new File(myDir, mFileName);
-        Log.e("file", "" + file);
         if (file.exists())
             file.delete();
         try {

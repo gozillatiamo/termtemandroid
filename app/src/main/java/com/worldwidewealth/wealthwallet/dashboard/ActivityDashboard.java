@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.worldwidewealth.wealthwallet.dashboard.mPayStation.MPayStationActivity;
 import com.worldwidewealth.wealthwallet.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.services.APIHelper;

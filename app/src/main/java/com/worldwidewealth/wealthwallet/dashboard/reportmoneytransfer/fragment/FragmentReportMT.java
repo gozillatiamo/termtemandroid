@@ -17,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
@@ -76,7 +74,7 @@ public class FragmentReportMT extends Fragment {
     private BottomSheetDialogChoicePhoto sheetDialogFragment;
     private String imgPath = null;
     private int id = 1;
-
+    private DialogCounterAlert mAlertConfirmUpload = null;
 
     public static Fragment newInstance(){
         FragmentReportMT fragment = new FragmentReportMT();
@@ -136,15 +134,13 @@ public class FragmentReportMT extends Fragment {
             }
 
          if (imgPath != null) {
-                Log.e(TAG, imgPath+"");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Bitmap bitmapDecode = Until.decodeSampledBitmapFromResource(imgPath, 500, 500);
+                        Bitmap bitmapDecode = Until.getBitmap(imgPath);
                         Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
-                        Log.e(TAG, bitmapDecode.toString()+"");
                         mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
-                        mImageByte = Base64.decode(mBitmapEncode, Base64.DEFAULT);
+                        mImageByte = Base64.decode(Until.encodeBitmapToUpload(bitmapFilp), Base64.DEFAULT);
                         mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
                     }
                 }, 500);
@@ -193,11 +189,17 @@ public class FragmentReportMT extends Fragment {
 
                     return;
                 }
-                mHolder.mBtnNext.setEnabled(false);
-                new DialogCounterAlert(getContext(), getString(R.string.warning), getString(R.string.msg_waiting_upload),
-                        getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                if (mAlertConfirmUpload != null) {
+
+                    if (!mAlertConfirmUpload.isShow()) mAlertConfirmUpload.show();
+
+                }else if (mAlertConfirmUpload == null) {
+                    mAlertConfirmUpload = new DialogCounterAlert(getContext(), getString(R.string.warning), getString(R.string.msg_waiting_upload),
+                            getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Log.e(TAG, "click");
                         final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
                                 APIServices.ACTIONNOTIPAY,
                                 new NotiPayRequestModel(mStrAmount,
@@ -242,13 +244,9 @@ public class FragmentReportMT extends Fragment {
                                         3))
                                 .addToBackStack(null);
                         fragmentTransaction.commit();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mHolder.mBtnNext.setEnabled(true);
-                    }
-                });
+                        }
+                    });
+                }
                 //new DialogCounterAlert.DialogProgress(getContext());
                 //MyApplication.LeavingOrEntering.currentActivity = null;
 
@@ -373,16 +371,27 @@ public class FragmentReportMT extends Fragment {
             mScrollView = (NestedScrollView) itemview.findViewById(R.id.nested_scrollview);
             mLoadingImage = (ProgressBar) itemview.findViewById(R.id.progress_loading_image);
             mLayoutBtnAddImage = (View) itemview.findViewById(R.id.layout_btn_add_image);
-            mScrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            mImagePhoto.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    if (mImagePhoto.getDrawable() != null) {
+                    if (mImagePhoto.getDrawable() != null){
+                        mBtnNext.setEnabled(true);
                         mLoadingImage.setVisibility(View.GONE);
                         mLayoutBtnAddImage.setVisibility(View.VISIBLE);
                         mScrollView.smoothScrollTo(0, bottom);
                     }
                 }
             });
+/*
+            mImagePhoto.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (mImagePhoto.getDrawable() != null) {
+
+                    }
+                }
+            });
+*/
 //            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
 
         }

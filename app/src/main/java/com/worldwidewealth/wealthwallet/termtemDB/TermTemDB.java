@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.wealthwallet.model.NotiPayRequestModel;
@@ -43,7 +42,6 @@ public class TermTemDB extends SQLiteOpenHelper{
 
     public long InsertLogCashIn(NotiPayRequestModel model){
         String request = new Gson().toJson(model);
-        Log.e(TAG, "cash in request: "+request);
         sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TermTemTable.UploadCashIn.Column.REQUEST, request);
@@ -56,7 +54,6 @@ public class TermTemDB extends SQLiteOpenHelper{
 
     public void UpdateResponseLogCashIn(long id, ResponseModel model){
         String request = new Gson().toJson(model);
-        Log.e(TAG, "cash in response: "+request);
         sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TermTemTable.UploadCashIn.Column.REQUEST, request);

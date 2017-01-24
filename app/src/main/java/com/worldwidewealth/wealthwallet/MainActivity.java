@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -42,7 +41,6 @@ import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import okhttp3.ResponseBody;
@@ -111,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
         if (mSetHistoryUser != null){
             mArrayHistoryUser = new String[mSetHistoryUser.size()];
             mSetHistoryUser.toArray(mArrayHistoryUser);
-            for (String user : mSetHistoryUser){
-                Log.e(TAG, "User: "+user);
-            }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mArrayHistoryUser);
             mHolder.mPhone.setAdapter(adapter);
             mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
@@ -123,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
                         mHolder.mPhone.showDropDown();
                 }
             });
-/*
-            for (String str:mArrayHistoryUser){
-                Log.e(TAG, "HistoryUser: "+str);
-            }
-*/
         }
 
 //        mHolder.mPhone.setText(mShared.getString(USER, ""));
@@ -153,14 +143,6 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-/*
-                Log.e("LoginData:", "action:LOGIN" + "\n"+
-                        "DEVICEID:" + Global.getDEVICEID() + "\n" +
-                        "PLATFORM:" + Configs.getPLATFORM() + "\n" +
-                        "USERNAME:" + mPhone.replace(" ", "") + "\n" +
-                        "PASSWORD:" + mPassword + "\n" +
-                        "TXIK:" + Global.getTXID());
-*/
                 mHolder.mBtnLogin.setEnabled(false);
                 new DialogCounterAlert.DialogProgress(MainActivity.this);
                 ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -224,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getDEVICEID(),
-                        Configs.getPLATFORM(),
+                        getString(R.string.platform),
                         EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
                         EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
                         Global.getTXID())));
@@ -244,40 +226,42 @@ public class MainActivity extends AppCompatActivity {
                             responseModel = gson.fromJson(jsonObject, ResponseModel.class);
 
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
 
                         if (responseModel != null){
 //                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
-                            String[] strRegisDevice = responseModel.getMsg().split(":");
-
-                            if (strRegisDevice.length == 4){
-                                registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
-                            } else{
-                                Toast.makeText(MainActivity.this, responseModel.getMsg(),
-                                        Toast.LENGTH_SHORT).show();
-
+                            String[] strRegisDevice = responseModel.getMsg().toString().split(":");
+                            if (strRegisDevice != null) {
+                                if (strRegisDevice.length == 4) {
+                                    registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
+                                } else {
+                                    Toast.makeText(MainActivity.this, responseModel.getMsg(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                         } else {
                             String responseStr = strResponse;
                             String converted = Until.ConvertJsonEncode(responseStr);
                             String responDecode = Until.decode(converted);
+                            Log.e(TAG, "ResposeLogIn: "+responDecode);
 
                             //String json = gson.toJson(responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
                             Global.setUSERID(loginResponseModel.getUSERID());
                             Global.setAGENTID(loginResponseModel.getAGENTID());
                             Global.setBALANCE(loginResponseModel.getBALANCE());
-
+                            String decode = EncryptionData.DecryptData(Global.getUSERID(), Global.getTXID());
+                            Log.e(TAG, "USERID: "+decode);
+                            String decodeagent = EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID());
+                            Log.e(TAG, "AGENTID: "+decodeagent);
                             if (mSetHistoryUser == null||!mSetHistoryUser.contains(mPhone)){
                                 if (mSetHistoryUser == null) {
                                     mSetHistoryUser = new HashSet<String>();
                                 }
                                 mSetHistoryUser.add(mHolder.mPhone.getText().toString());
                                 for (String string : mSetHistoryUser){
-                                    Log.e(TAG, "AddCashUser: "+string);
                                 }
                                 SharedPreferences.Editor editor = mShared.edit();
                                 editor.putStringSet(USER, mSetHistoryUser);

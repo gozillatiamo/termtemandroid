@@ -1,6 +1,5 @@
 package com.worldwidewealth.wealthwallet.services;
 
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -132,7 +131,6 @@ public interface APIServices {
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
-                    Log.e(TAG, originalRequest.method());
                     return  chain.proceed(builder.build());
                 }
             }).build();
@@ -142,7 +140,7 @@ public interface APIServices {
             .create();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl(MyApplication.getContext().getString(R.string.server_pro)).client(client)
+        .baseUrl(MyApplication.getContext().getString(R.string.server_dev)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 

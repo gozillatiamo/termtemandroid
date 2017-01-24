@@ -55,7 +55,7 @@ public class BottomAction {
     }
 
     public String getPrice(){
-       return mHolder.mTextPrice.getText().toString();
+       return mHolder.mTextPrice.getText().toString().replaceAll(",","");
     }
 
     public void setEnable(boolean enable){

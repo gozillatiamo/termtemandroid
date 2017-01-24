@@ -2,7 +2,6 @@ package com.worldwidewealth.wealthwallet.until;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import com.worldwidewealth.wealthwallet.MyApplication;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
@@ -60,7 +59,6 @@ public class ErrorNetworkThrowable extends Throwable {
                 // Make it, if it doesn't exit
                 path.mkdirs();
             }
-            Log.e("FilePath", path.getAbsolutePath());
             final File file = new File(path, "WealthCounterError.txt");
 
 
@@ -73,10 +71,8 @@ public class ErrorNetworkThrowable extends Throwable {
             OutputStreamWriter out = new OutputStreamWriter(MyApplication.getContext().openFileOutput("WealthCounterError.txt", Context.MODE_APPEND));
             out.append("\n\n" + error);
             out.close();
-            Log.e("TrackError", "Save Done");
         }
         catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.worldwidewealth.wealthwallet.model;
 
-import com.worldwidewealth.wealthwallet.Configs;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.Global;
+import com.worldwidewealth.wealthwallet.MyApplication;
+import com.worldwidewealth.wealthwallet.R;
 
 /**
  * Created by MyNet on 15/11/2559.
@@ -11,7 +12,7 @@ import com.worldwidewealth.wealthwallet.Global;
 public class DataRequestModel {
 
     private String DEVICEID = Global.getDEVICEID();
-    private String PLATFORM = Configs.getPLATFORM();
+    private String PLATFORM = MyApplication.getContext().getString(R.string.platform);
     private String TXID = Global.getTXID();
     private String AGENTID = EncryptionData.EncryptData(
             EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()),

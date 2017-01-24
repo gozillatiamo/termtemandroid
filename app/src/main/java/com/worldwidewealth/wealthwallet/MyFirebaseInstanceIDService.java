@@ -1,7 +1,5 @@
 package com.worldwidewealth.wealthwallet;
 
-import android.util.Log;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -20,6 +18,5 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String token) {
-        Log.e("Token", token);
     }
 }

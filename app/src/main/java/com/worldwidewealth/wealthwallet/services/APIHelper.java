@@ -1,20 +1,5 @@
 package com.worldwidewealth.wealthwallet.services;
 
-import android.content.ContentValues;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.worldwidewealth.wealthwallet.EncryptionData;
-import com.worldwidewealth.wealthwallet.model.ResponseModel;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import okhttp3.internal.http.RealResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

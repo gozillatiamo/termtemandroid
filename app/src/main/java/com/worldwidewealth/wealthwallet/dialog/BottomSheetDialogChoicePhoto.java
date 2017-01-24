@@ -2,14 +2,11 @@ package com.worldwidewealth.wealthwallet.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -97,7 +94,6 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
     }
 
     public Uri getImageUri(){
-        Log.e(TAG, photoURI.getPath());
         return  photoURI;
     }
 

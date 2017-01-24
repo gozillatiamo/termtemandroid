@@ -1,6 +1,5 @@
 package com.worldwidewealth.wealthwallet.model;
 
-import android.util.Log;
 
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.Global;
@@ -18,13 +17,6 @@ public class SubmitTopupRequestModel extends DataRequestModel{
     private String BUTTONID;
 
     public SubmitTopupRequestModel(String AMT, String CARRIER, String OTP, String PHONENO, String TRANID, String BUTTONID) {
-        Log.e("SubmitTopupRequest",
-                "AMT: " + AMT + "\n" +
-                "CARRIER: " + CARRIER + "\n" +
-                "OTP: " + OTP + "\n" +
-                "PHONENO: " + PHONENO + "\n" +
-                "TRANID: " + TRANID
-        );
         this.AMT = EncryptionData.EncryptData(AMT, Global.getDEVICEID()+TRANID);
 
         this.CARRIER = EncryptionData.EncryptData(CARRIER, Global.getDEVICEID()+TRANID);

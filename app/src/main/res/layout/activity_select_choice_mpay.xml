@@ -69,7 +69,6 @@
                 android:padding="36dp"
                 android:textColor="@android:color/holo_orange_dark"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:backgroundTint="@android:color/holo_orange_dark"
                 android:textSize="@dimen/my_text_large"
                 android:text="@string/mpay_bank"/>
 

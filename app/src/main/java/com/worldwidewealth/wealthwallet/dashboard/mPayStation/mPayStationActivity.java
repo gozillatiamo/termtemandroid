@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -14,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,17 +27,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.worldwidewealth.wealthwallet.EncryptionData;
 import com.worldwidewealth.wealthwallet.R;
-import com.worldwidewealth.wealthwallet.SplashScreenWWW;
-import com.worldwidewealth.wealthwallet.dashboard.topup.adapter.BtnTopupAdapter;
-import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentAirtimeVAS;
-import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentChoiceTopup;
-import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.GenBarcodeRequestModel;
-import com.worldwidewealth.wealthwallet.model.LoadButtonResponseModel;
 import com.worldwidewealth.wealthwallet.model.MPayStationResponse;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
-import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.BottomAction;
@@ -126,7 +117,7 @@ public class MPayStationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 double amt = 0;
-                if (!s.toString().equals("")) {
+                if (!s.toString().equals("") && !s.toString().equals(".")) {
                    amt = Double.parseDouble(s.toString());
                 }
                 mBottomAction.updatePrice(amt);

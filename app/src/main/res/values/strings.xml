@@ -1,10 +1,20 @@
 <resources>
-
-    <string name="currentcy">THB</string>
+    <!-- Config In App -->
     <string name="app_name">TermTem</string>
+    <string name="platform">android</string>
+    <string name="server_dev">http://180.128.21.31/wealthservice/</string>
+    <string name="server_pro">http://180.128.21.81/wealthservice/</string>
+    <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
+    <string name="branch">สุขุมวิท 101</string>
+    <string name="bank_account_type">ออมทรัพย์</string>
+    <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
+    <string name="config_bank_account_number">019-8-36814-8</string>
+
+
+    <string name="content_version">เวอร์ชั่น:</string>
+    <string name="currentcy">THB</string>
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
-    <string name="version">เวอร์ชั่น: 1.0.0</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -204,14 +214,6 @@
     <string name="mpay_station">เอ็มเปย์สเตชั่น</string>
     <string name="mpay_bank">ช่องทางธนาคาร</string>
 
-    <!-- Data In App -->
-    <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
-    <string name="branch">สุขุมวิท 101</string>
-    <string name="bank_account_type">ออมทรัพย์</string>
-    <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
-    <string name="config_bank_account_number">019-8-36814-8</string>
-    <string name="server_dev">http://180.128.21.31/wealthservice/</string>
-    <string name="server_pro">http://180.128.21.81/wealthservice/</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

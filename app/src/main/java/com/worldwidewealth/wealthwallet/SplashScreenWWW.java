@@ -1,26 +1,23 @@
 package com.worldwidewealth.wealthwallet;
 
-import android.content.ContentValues;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
-import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
-import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.model.DataRequestModel;
 import com.worldwidewealth.wealthwallet.model.PreRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
@@ -49,6 +46,7 @@ public class SplashScreenWWW extends AppCompatActivity{
     private APIServices services;
     private Runnable runnable;
     private Handler handler;
+    private int mRetryToken = 0;
     public static final String TAG = SplashScreenWWW.class.getSimpleName();
 
     @Override
@@ -132,15 +130,45 @@ public class SplashScreenWWW extends AppCompatActivity{
 
     protected void getDataDevice(){
         mAction = "PRE";
+
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable(){
 
             @Override
             public void run() {
                 Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
+
                 if (Global.getTOKEN() == null || Global.getTOKEN().equals("")){
                     handler.removeCallbacks(this);
-                    handler.postDelayed(this, 1000);
+                    mRetryToken++;
+                    if (mRetryToken == 10){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SplashScreenWWW.this)
+                                .setMessage(R.string.network_error_message)
+                                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SplashScreenWWW.this.recreate();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SplashScreenWWW.this.finish();
+                                    }
+                                });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                                        .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                            }
+                        });
+                    }else {
+                        handler.postDelayed(this, 1000);
+                    }
+                    return;
                 }
 
                 String deviceId = Until.getDEVICEIDSharedPreferences();
@@ -166,7 +194,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                             Global.getDEVICEID(),
                             mLat,
                             mLong,
-                            Configs.getPLATFORM()
+                            getString(R.string.platform)
                     ));
 
                     SendDataService(mPreRequestModel);
@@ -228,7 +256,6 @@ public class SplashScreenWWW extends AppCompatActivity{
 
             String txt = getIntent().getExtras().getString("txt");
             String box = getIntent().getExtras().getString("box");
-//            Log.e(TAG, "txt: " +  txt + "\nbox: " + box);
             getIntent().replaceExtras(new Bundle());
             if (txt != null && box != null) {
                 Intent intent = new Intent(this, ActivityShowNotify.class);
@@ -237,12 +264,6 @@ public class SplashScreenWWW extends AppCompatActivity{
                 startActivity(intent);
                 return true;
             }
-/*
-            for (String key : getIntent().getExtras().keySet()) {
-                String value = getIntent().getExtras().getString(key);
-                Log.d(TAG, "Key: " + key + " Value: " + value);
-            }
-*/
         }
 
 //        writeToFile(FirebaseInstanceId.getInstance().getToken());
@@ -284,7 +305,6 @@ public class SplashScreenWWW extends AppCompatActivity{
         catch (IOException e)
         {
             e.printStackTrace();
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 */

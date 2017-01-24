@@ -14,7 +14,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.worldwidewealth.wealthwallet.dashboard.report.ActivityReport;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
@@ -33,7 +30,6 @@ import com.worldwidewealth.wealthwallet.FragmentTopupPreview;
 import com.worldwidewealth.wealthwallet.Global;
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
-import com.worldwidewealth.wealthwallet.dialog.DialogNetworkError;
 import com.worldwidewealth.wealthwallet.model.EslipRequestModel;
 import com.worldwidewealth.wealthwallet.model.GetOTPRequestModel;
 import com.worldwidewealth.wealthwallet.model.LoadButtonRequestModel;
@@ -45,7 +41,6 @@ import com.worldwidewealth.wealthwallet.model.TopupResponseModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 
 import okhttp3.ResponseBody;
@@ -53,7 +48,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static java.lang.Thread.sleep;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -131,7 +125,6 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void initPageTopup(){
 
-        Log.e("initPageTopup", "true");
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -367,7 +360,6 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void run() {
                 mTimeout++;
-                Log.e("Time", mTimeout+"");
                 if (mTimeout == 10){
                     new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.topup_time_out), new DialogInterface.OnClickListener() {
                         @Override
@@ -378,7 +370,6 @@ public class FragmentTopupPackage extends  Fragment{
                     mHandler.removeCallbacks(mRunnableSubmit);
                     return;
                 }
-                Log.e("OTP", Global.getOTP()+"");
 
                 if (Global.getOTP() == null){
                     mHandler.removeCallbacks(mRunnableSubmit);

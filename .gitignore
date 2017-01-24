@@ -12,3 +12,7 @@ gradle.properties
 .gradle/2.14.1/taskArtifacts/cache.properties.lock
 .gradle/2.14.1/taskArtifacts/cache.properties
 .idea/inspectionProfiles/Project_Default.xml
+.gradle/2.14.1/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin
+.gradle/2.14.1/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock
+.gradle/2.14.1/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin
+.gradle/2.14.1/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock

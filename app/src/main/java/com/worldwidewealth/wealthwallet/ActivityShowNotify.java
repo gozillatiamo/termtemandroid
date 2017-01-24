@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -21,7 +20,6 @@ public class ActivityShowNotify extends AppCompatActivity {
         if (bundle != null){
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
             mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
-            Log.e("Box", mStrBox);
         }
         setContentView(R.layout.activity_show_notify);
         setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
@@ -29,9 +27,6 @@ public class ActivityShowNotify extends AppCompatActivity {
 
         mHolder.mTextTitle.setText(mStrTitle);
         mHolder.mTextBox.setText(mStrBox);
-//        Log.e("message", getIntent().getExtras().getString("message"));
-//        TextView txt_box = (TextView) findViewById(R.id.txt_box);
-//        txt_box.setText(this.getIntent().getExtras().getString("message"));
     }
 
     private class ViewHolder{

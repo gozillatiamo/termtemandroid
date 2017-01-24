@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +66,6 @@ public class FragmentAddCreditChoice extends Fragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("backpress", "true");
                 if (keyCode == KeyEvent.KEYCODE_BACK){
                     if (event.getAction() == KeyEvent.ACTION_UP){
                         mHolder.mBtnNext.setVisibility(View.VISIBLE);

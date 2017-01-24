@@ -15,7 +15,6 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -164,14 +163,6 @@ public class ActivityRegister extends AppCompatActivity {
                     return;
 
                 }
-/*
-                Log.e("RegisterData:", "E-mail:" + mEmail +"\n"+
-                        "FirstName:" + mFirstName +"\n"+
-                        "LastName:" + mLastName +"\n"+
-                        "Tel:" + mTel +"\n"+
-                        "Iden:" + mIden +"\n"+
-                        "People:" + mPerson);
-*/
                 new DialogCounterAlert.DialogProgress(ActivityRegister.this);
                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                         mFirstName,

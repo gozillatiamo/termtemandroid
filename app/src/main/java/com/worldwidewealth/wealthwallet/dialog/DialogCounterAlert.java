@@ -15,7 +15,7 @@ import com.worldwidewealth.wealthwallet.model.ResponseModel;
 
 public class DialogCounterAlert {
 
-    private AlertDialog alertDialog;
+    private static AlertDialog alertDialog;
     public DialogCounterAlert(final Context context,
                               String title,
                               String msg,
@@ -81,9 +81,19 @@ public class DialogCounterAlert {
 
         alertDialog.show();
 
-
     }
 
+    public void show(){
+        alertDialog.show();
+    }
+
+    public void dismiss(){
+        alertDialog.dismiss();
+    }
+
+    public boolean isShow(){
+        return alertDialog.isShowing();
+    }
 
         public static class DialogFromResponse{
         public DialogFromResponse(Context context, String response){

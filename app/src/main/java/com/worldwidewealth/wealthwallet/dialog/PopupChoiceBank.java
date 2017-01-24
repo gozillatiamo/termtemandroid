@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.worldwidewealth.wealthwallet.R;
-import com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.fragment.FragmentReportMT;
 
 /**
  * Created by user on 21-Dec-16.

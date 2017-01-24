@@ -2,7 +2,6 @@ package com.worldwidewealth.wealthwallet.game;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -47,7 +46,6 @@ public class ActivityGame extends AppCompatActivity {
         mWebGame.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.e("Url", url);
                 return  true;
 
             }

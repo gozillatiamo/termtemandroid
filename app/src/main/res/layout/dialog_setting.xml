@@ -11,13 +11,27 @@
         android:src="@drawable/ic_launcher_app"
         android:adjustViewBounds="true"
         android:padding="@dimen/activity_vertical_margin"/>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="@dimen/my_text_size"
-        android:textStyle="bold"
-        android:text="@string/version"/>
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_text_size"
+            android:text="@string/content_version"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/activity_space"
+            android:textSize="@dimen/my_text_size"
+            android:textStyle="bold"
+            android:text="@string/versionName"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_forgot_password"

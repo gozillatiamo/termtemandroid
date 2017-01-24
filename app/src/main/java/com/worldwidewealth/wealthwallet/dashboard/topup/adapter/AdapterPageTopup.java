@@ -2,7 +2,6 @@ package com.worldwidewealth.wealthwallet.dashboard.topup.adapter;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,12 +43,6 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
     private void transferDataTopup(){
 
-/*
-        String converted = Until.ConvertJsonEncode(mData);
-        String responDecode = Until.decode(converted);
-        Log.e("strResponse", converted);
-*/
-        Log.e("strDecode", mData);
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
         Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
         List<LoadButtonResponseModel> modelList = gson.fromJson(mData, listType);

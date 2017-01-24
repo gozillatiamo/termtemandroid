@@ -4,11 +4,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -29,10 +27,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
-/*
-        Log.e(TAG, "Noti: "+ remoteMessage.getData().toString());
-        Log.e(TAG, "txt: "+txt+"\nbox: "+ box);
-*/
         if (box != null) {
             if (box.contains("*")) {
                 Global.setOTP(box.split("\\*")[0]);
@@ -49,7 +43,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, ActivityShowNotify.class);
         intent.putExtra(TEXT, txt);
         intent.putExtra(BOX, box);
-//        Log.e("notiBox", box);
 
         int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
 

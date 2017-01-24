@@ -1,7 +1,8 @@
 package com.worldwidewealth.wealthwallet.model;
 
-import com.worldwidewealth.wealthwallet.Configs;
 import com.worldwidewealth.wealthwallet.Global;
+import com.worldwidewealth.wealthwallet.MyApplication;
+import com.worldwidewealth.wealthwallet.R;
 
 /**
  * Created by MyNet on 10/11/2559.
@@ -23,7 +24,7 @@ public class RegisterRequestModel {
         private String AGENTID = "";
         private String USERID = "";
         private String DEVICEID = Global.getDEVICEID();
-        private String PLATFORM = Configs.getPLATFORM();
+        private String PLATFORM = MyApplication.getContext().getString(R.string.platform);;
         private String TXID = Global.getTXID();
         private String FIRSTNAME;
         private String LASTNAME;
