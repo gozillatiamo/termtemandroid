@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.worldwidewealth.wealthwallet.R;
 
 import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * Created by MyNet on 17/10/2559.
@@ -34,11 +34,11 @@ public class FragmentReportMtPreview extends Fragment {
     private static final String TIME = "time";
     private static final String BANKSTART = "bankstart";
     private static final String BANKEND = "bankend";
-    public static Fragment newInstance(double amountMt, byte[] imageSlip, String date, String time, int bankstart, int bankend){
+    public static Fragment newInstance(double amountMt, String imageSlip, String date, String time, int bankstart, int bankend){
         FragmentReportMtPreview fragment = new FragmentReportMtPreview();
         Bundle bundle = new Bundle();
         bundle.putDouble(AMOUNTMT, amountMt);
-        bundle.putByteArray(IMAGESLIP, imageSlip);
+        bundle.putString(IMAGESLIP, imageSlip);
         bundle.putString(DATE, date);
         bundle.putString(TIME, time);
         bundle.putInt(BANKSTART, bankstart);
@@ -88,7 +88,6 @@ public class FragmentReportMtPreview extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-
                 return false;
             }
         });
@@ -101,8 +100,9 @@ public class FragmentReportMtPreview extends Fragment {
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         mHolder.mTextAmoutMT.setText(format.format(getArguments().getDouble(AMOUNTMT)));
-        byte[] byteImage = getArguments().getByteArray(IMAGESLIP);
-        mHolder.mImageSlip.setImageBitmap(BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length));
+        String base64Image = getArguments().getString(IMAGESLIP);
+        byte[] bytesImage = Base64.decode(base64Image, Base64.DEFAULT);
+        mHolder.mImageSlip.setImageBitmap(BitmapFactory.decodeByteArray(bytesImage, 0, bytesImage.length));
         mHolder.mTextDate.setText(getArguments().getString(DATE));
         mHolder.mTextTime.setText(getArguments().getString(TIME));
         mHolder.mTextBankStart.setText(mListCodeBank[getArguments().getInt(BANKSTART)]);

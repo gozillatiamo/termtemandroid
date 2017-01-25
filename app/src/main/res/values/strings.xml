@@ -213,6 +213,8 @@
     <string name="menu_mpay">โอนเงินผ่าน MPay</string>
     <string name="mpay_station">เอ็มเปย์สเตชั่น</string>
     <string name="mpay_bank">ช่องทางธนาคาร</string>
+    <string name="has_upload">ท่านมีรายการทำอัพโหลดอยู่ กรุณาทำรายการภายหลัง</string>
+    <string name="data_outofmemory">ข้อมูลของท่านมีขนาดที่ใหญ่เกินไป กรุณาลองใหม่อีกครั้ง</string>
 
 
     <string-array name="str_list_dashboard">

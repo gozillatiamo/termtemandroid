@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 
 import com.crashlytics.android.Crashlytics;
@@ -25,6 +26,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
     private static final int NOTIUPLOAD = 1;
+    private static boolean isUpload = false;
 
     @Override
     public void onCreate() {
@@ -148,6 +150,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         mBuilder.setProgress(0, 0, true);
         mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+        isUpload = true;
     }
 
     public static void uploadSuccess(){
@@ -159,6 +162,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+        isUpload = false;
     }
 
     public static void uploadFail(){
@@ -170,5 +174,17 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+        isUpload = false;
+    }
+
+    public static boolean isUpload(Context context){
+        if (isUpload) {
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setMessage(R.string.has_upload)
+                    .setPositiveButton(R.string.confirm, null)
+                    .setCancelable(false)
+                    .show();
+        }
+        return isUpload;
     }
 }

@@ -42,7 +42,6 @@ import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.dialog.PopupChoiceBank;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.NotiPayRequestModel;
-import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
 import java.io.IOException;
@@ -64,12 +63,11 @@ public class FragmentReportMT extends Fragment {
     private ViewHolder mHolder;
     private String mStrAmount, mStrBankStart = "", mStrBankEnd = "";
     private APIServices services;
-    private String mBitmapEncode;
+    private Bitmap mBitmapImage;
     private DatePickerDialog mDateDialog;
     private TimePickerDialog mTimeDialog;
     private static long mDateTime = 0;
     private Calendar mCalender = Calendar.getInstance();
-    private byte[] mImageByte;
     private PopupChoiceBank mPopupBankStart, mPopupBankEnd;
     private BottomSheetDialogChoicePhoto sheetDialogFragment;
     private String imgPath = null;
@@ -137,11 +135,14 @@ public class FragmentReportMT extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+/*
                         Bitmap bitmapDecode = Until.getBitmap(imgPath);
                         Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
-                        mBitmapEncode = Until.encodeBitmapToUpload(bitmapFilp);
-                        mImageByte = Base64.decode(Until.encodeBitmapToUpload(bitmapFilp), Base64.DEFAULT);
-                        mHolder.mImagePhoto.setImageBitmap(bitmapFilp);
+*/
+                        mBitmapImage = Until.flip(Until.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+//                        mBitmapEncode = Until.encodeBitmapToUpload(Bitmap.createScaledBitmap(bitmapFilp, 300, 300, true));
+                        mHolder.mImagePhoto.setImageBitmap(mBitmapImage);
+                        System.gc();
                     }
                 }, 500);
             }
@@ -183,7 +184,7 @@ public class FragmentReportMT extends Fragment {
                 }
 
 
-                if (mBitmapEncode == null || mBitmapEncode.equals("")){
+                if (mBitmapImage == null){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_add_image), Toast.LENGTH_LONG).show();
                     mHolder.mScrollView.smoothScrollTo(0, 0);
 
@@ -199,51 +200,56 @@ public class FragmentReportMT extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Log.e(TAG, "click");
-                        final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
-                                APIServices.ACTIONNOTIPAY,
-                                new NotiPayRequestModel(mStrAmount,
-                                        mDateTime,
-                                        mBitmapEncode,
-                                        mStrBankStart,
-                                        mStrBankEnd)));
-                       MyApplication.showNotifyUpload();
-                        APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (!MyApplication.isUpload(getContext())) {
+                                final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
+                                        APIServices.ACTIONNOTIPAY,
+                                        new NotiPayRequestModel(mStrAmount,
+                                                mDateTime,
+                                                Until.encodeBitmapToUpload(mBitmapImage),
+                                                mStrBankStart,
+                                                mStrBankEnd)));
+                                MyApplication.showNotifyUpload();
+                                APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                                Object responseValues = EncryptionData.getModel(null, call, response.body(), this);
+                                        Object responseValues = EncryptionData.getModel(null, call, response.body(), this);
 
-                                if (responseValues instanceof ResponseModel){
-                                    MyApplication.uploadSuccess();
+                                        if (responseValues instanceof ResponseModel) {
+                                            MyApplication.uploadSuccess();
 
-                                } else {
-                                    MyApplication.uploadFail();
+                                        } else {
+                                            MyApplication.uploadFail();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        t.printStackTrace();
+                                        //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
+                                        MyApplication.uploadFail();
+                                    }
+                                });
+
+                                FragmentTransaction fragmentTransaction = FragmentReportMT.this.getActivity()
+                                        .getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                        .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance(
+                                                Double.parseDouble(mStrAmount),
+                                                Until.encodeBitmapToUpload(mBitmapImage),
+                                                mHolder.mBtnDateTransfer.getText().toString(),
+                                                mHolder.mBtnTimeTransfer.getText().toString(),
+                                                mPopupBankStart.getPositionSelect(),
+                                                3))
+                                        .addToBackStack(null);
+                                fragmentTransaction.commit();
+
+                                if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
+                                    mBitmapImage.recycle();
+                                    mBitmapImage = null;
                                 }
                             }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                t.printStackTrace();
-                                //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                MyApplication.uploadFail();
-                            }
-                        });
-
-                        mHolder.mBtnNext.setEnabled(true);
-                        FragmentTransaction fragmentTransaction = FragmentReportMT.this.getActivity()
-                                .getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                                .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance(
-                                        Double.parseDouble(mStrAmount),
-                                        mImageByte,
-                                        mHolder.mBtnDateTransfer.getText().toString(),
-                                        mHolder.mBtnTimeTransfer.getText().toString(),
-                                        mPopupBankStart.getPositionSelect(),
-                                        3))
-                                .addToBackStack(null);
-                        fragmentTransaction.commit();
                         }
                     });
                 }

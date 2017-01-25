@@ -1,6 +1,8 @@
 package com.worldwidewealth.wealthwallet.services;
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.worldwidewealth.wealthwallet.MyApplication;
@@ -118,22 +120,25 @@ public interface APIServices {
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     final OkHttpClient client = new OkHttpClient.Builder()
-            .addInterceptor(interceptor)
             .connectTimeout(5, TimeUnit.MINUTES)
             .readTimeout(5, TimeUnit.MINUTES)
+            .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request originalRequest = chain.request();
+
                     Request.Builder builder = originalRequest.newBuilder();
                     if (originalRequest.method().equalsIgnoreCase("POST")){
 
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
+
                     return  chain.proceed(builder.build());
                 }
-            }).build();
+            })
+            .build();
 
     public static final Gson gson = new GsonBuilder()
             .setLenient()

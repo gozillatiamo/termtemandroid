@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -106,13 +107,19 @@ public class Until {
 
             @Override
             public void writeTo(BufferedSink sink) throws IOException {
-                Buffer buffer = new Buffer();
-                body.writeTo(buffer);
-                String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
-                byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
-                sink.write(converted);
-                buffer.close();
-                sink.close();
+                try {
+                    Buffer buffer = new Buffer();
+                    body.writeTo(buffer);
+                    String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
+                    byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
+                    System.gc();
+                    sink.write(converted);
+                    buffer.close();
+                    sink.close();
+                }catch (OutOfMemoryError e){
+                    /*AlertDialog alertDialog = new AlertDialog.Builder(MyApplication.getContext())
+                            .*/
+                }
             }
         };
     }
@@ -305,7 +312,7 @@ public class Until {
 
 
     public static void logoutAPI(){
-        if (Global.getAGENTID() == null) return;
+        if (Global.getTXID() == null || Global.getTXID().equals("")) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
@@ -510,10 +517,8 @@ public class Until {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageData = baos.toByteArray();
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageData, Base64.NO_WRAP);
+        System.gc();
         return encodedImage;
     }
 

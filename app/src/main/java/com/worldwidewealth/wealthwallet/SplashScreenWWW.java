@@ -62,9 +62,11 @@ public class SplashScreenWWW extends AppCompatActivity{
             public void run() {
                 SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
                 boolean logout = sharedPref.getBoolean("LOGOUT", true);
+                Global.setTXID(sharedPref.getString("TXID", ""));
+                if (Global.getTXID().equals("")) logout = true;
+
                 if (!logout) {
 
-                    Global.setTXID(sharedPref.getString("TXID", ""));
                     Global.setAGENTID(sharedPref.getString("AGENTID", ""));
                     Global.setUSERID(sharedPref.getString("USERID", ""));
                     Global.setDEVICEID(sharedPref.getString("DEVICEID", ""));

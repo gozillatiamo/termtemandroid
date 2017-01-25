@@ -69,7 +69,7 @@ public class ActivityDashboard extends AppCompatActivity{
         initToolbar();
         initClickMainMenu();
 
-        if (Global.getAGENTID() != null) {
+        if (Global.getTXID() != null || Global.getTXID().equals("")) {
             Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
         }
     }
