@@ -168,8 +168,8 @@ public class EncryptionData {
             }
 
         } catch (JsonSyntaxException e){
-            String converted = Until.ConvertJsonEncode(strRespone);
-            String responDecode = Until.decode(converted);
+//            String converted = Until.ConvertJsonEncode(strRespone);
+            String responDecode = Until.decode(strRespone);
             return responDecode;
 
         } catch (IOException e) {}

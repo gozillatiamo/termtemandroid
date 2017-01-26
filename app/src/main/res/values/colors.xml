@@ -15,6 +15,7 @@
     <color name="colorTabAirtime">#2274A5</color>
     <color name="colorTabVAS">#F1C40F</color>
     <color name="color_bg_card">#009688</color>
+    <color name="disable_btn_color">#ccccccd0</color>
 
     <array name="color_list_dashboard">
         <item>#32b7b3</item>

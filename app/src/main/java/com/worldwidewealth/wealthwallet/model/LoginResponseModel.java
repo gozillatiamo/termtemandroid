@@ -1,5 +1,7 @@
 package com.worldwidewealth.wealthwallet.model;
 
+import java.util.List;
+
 /**
  * Created by MyNet on 9/11/2559.
  */
@@ -9,6 +11,7 @@ public class LoginResponseModel {
     private String AGENTID;
     private String USERID;
     private Double BALANCE;
+    private List<UserMenuModel> usermenu;
 
     public Double getBALANCE() {
         return BALANCE;
@@ -40,5 +43,9 @@ public class LoginResponseModel {
 
     public void setUSERID(String USERID) {
         this.USERID = USERID;
+    }
+
+    public List<UserMenuModel> getUsermenu() {
+        return usermenu;
     }
 }

@@ -28,12 +28,6 @@
                     app:titleTextColor="#38686A"
                     >
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:src="@drawable/ic_notifications_none"/>
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -42,350 +36,350 @@
                         />
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:padding="@dimen/activity_space"
                 >
-
-                <include
-                    android:id="@+id/include_my_wallet"
-                    layout="@layout/card_my_wallet"/>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/menu_add_credit_line"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:layout_weight="1"
-                    app:cardElevation="0dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_space"
+                    >
+
+                    <include
+                        android:id="@+id/include_my_wallet"
+                        layout="@layout/card_my_wallet" />
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/menu_add_credit_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:layout_weight="1"
+                        app:cardElevation="0dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/MyIconMenuDashboard"
+                                android:src="@drawable/ic_add_credit"/>
+
+                            <me.grantland.widget.AutofitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/add_credit"
+                                android:singleLine="true"
+                                app:sizeToFit="true"
+                                android:id="@+id/autofitTextView" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/MyIconMenuDashboard"
-                            android:src="@drawable/ic_add_credit"/>
+                        android:layout_height="@dimen/menu_size"
+                        android:orientation="horizontal">
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_topup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                >
 
-                        <me.grantland.widget.AutofitTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/add_credit"
-                            android:singleLine="true"
-                            app:sizeToFit="true"
-                            android:id="@+id/autofitTextView" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_topup"
+                                    android:id="@+id/imageView10" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:text="@string/topup"
+                                    android:id="@+id/autofitTextView4" />
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_report"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_report"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/report_history"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:id="@+id/autofitTextView7" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_topup"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:clickable="true"
+                        android:layout_height="@dimen/menu_size"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_setting"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:layout_weight="1"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_setting" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/setting"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:id="@+id/autofitTextView3" />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_help"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:layout_weight="1"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+
+                                >
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_support"
+                                    android:id="@+id/imageView9" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/support"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:id="@+id/autofitTextView5" />
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/menu_size"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_scan_qr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardUseCompatPadding="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_scan_qr"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/dashboard_scan_qr"
+                                    style="@style/MyTitleMenuDashboard"
+                                    android:id="@+id/autofitTextView6" />
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/menu_my_qr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    style="@style/MyIconMenuDashboard"
+                                    android:src="@drawable/ic_my_qr"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="@string/dashboard_my_qr"
+                                    style="@style/MyTitleMenuDashboard"
+
+                                    />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/menu_report_mtf"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/menu_size"
                         app:cardUseCompatPadding="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         app:cardElevation="@dimen/cardview_default_elevation"
                         >
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            >
+                            android:gravity="center">
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_topup"
-                                android:id="@+id/imageView10" />
+                                android:src="@drawable/ic_report_money_tf"
+                                android:id="@+id/imageView7" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
                                 style="@style/MyTitleMenuDashboard"
-                                android:text="@string/topup"
-                                android:id="@+id/autofitTextView4" />
+                                android:text="@string/dashboard_mtf"
+                                android:id="@+id/autofitTextView2" />
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
                     <android.support.v7.widget.CardView
-                        android:id="@+id/menu_report"
+                        android:id="@+id/menu_mpay_station"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_height="@dimen/menu_size"
+                        android:visibility="visible"
+                        app:cardUseCompatPadding="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardElevation="@dimen/cardview_default_elevation"
-                        app:cardUseCompatPadding="true">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_report"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:text="@string/report_history"
-                                style="@style/MyTitleMenuDashboard"
-                                android:id="@+id/autofitTextView7" />
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_setting"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:layout_weight="1"
-                        app:cardElevation="@dimen/cardview_default_elevation"
-                        app:cardUseCompatPadding="true">
+                        >
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_setting" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:text="@string/setting"
-                                style="@style/MyTitleMenuDashboard"
-                                android:id="@+id/autofitTextView3" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_help"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:layout_weight="1"
-                        app:cardElevation="@dimen/cardview_default_elevation"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            >
+                            android:gravity="center">
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_support"
-                                android:id="@+id/imageView9" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="@string/support"
-                                android:layout_weight="1"
-                                style="@style/MyTitleMenuDashboard"
-                                app:sizeToFit="true"
-                                android:id="@+id/autofitTextView5" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:clickable="false"
-                        app:cardElevation="0dp"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_scan_qr"
-                                android:tint="#ccc"
+                                android:src="@drawable/mpay_icon"
                                 />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="@string/dashboard_scan_qr"
-                                android:layout_weight="1"
                                 style="@style/MyTitleMenuDashboard"
-                                android:textColor="#ccc"
-                                android:id="@+id/autofitTextView6" />
-                        </LinearLayout>
+                                android:text="@string/menu_mpay" />
 
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_my_qr"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardElevation="0dp"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_my_qr"
-                                android:tint="#ccc"
-                                />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:text="@string/dashboard_my_qr"
-                                android:textColor="#ccc"
-                                style="@style/MyTitleMenuDashboard"
-
-                                />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
 
+                    <!--
+                                    <Button
+                                        android:id="@+id/btn_forgot_password"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:gravity="center"
+                                        style="@style/MyButton"
+                                        android:text="@string/change_password"
+                                        android:backgroundTint="@android:color/holo_orange_dark"
+                                        />
+                    -->
                 </LinearLayout>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/menu_report_mtf"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:cardUseCompatPadding="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardElevation="@dimen/cardview_default_elevation"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            style="@style/MyIconMenuDashboard"
-                            android:src="@drawable/ic_report_money_tf"
-                            android:id="@+id/imageView7" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            style="@style/MyTitleMenuDashboard"
-                            android:text="@string/dashboard_mtf"
-                            android:id="@+id/autofitTextView2" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:id="@+id/menu_mpay_station"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    app:cardUseCompatPadding="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardElevation="@dimen/cardview_default_elevation"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            style="@style/MyIconMenuDashboard"
-                            android:src="@drawable/mpay_icon"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            style="@style/MyTitleMenuDashboard"
-                            android:text="@string/menu_mpay" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-
-                <!--
-                                <Button
-                                    android:id="@+id/btn_forgot_password"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="right"
-                                    android:gravity="center"
-                                    style="@style/MyButton"
-                                    android:text="@string/change_password"
-                                    android:backgroundTint="@android:color/holo_orange_dark"
-                                    />
-                -->
-            </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>

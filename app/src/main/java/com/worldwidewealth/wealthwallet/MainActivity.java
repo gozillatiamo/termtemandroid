@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +36,14 @@ import com.worldwidewealth.wealthwallet.model.LoginResponseModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.model.SignInRequestModel;
+import com.worldwidewealth.wealthwallet.model.UserMenuModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -243,8 +247,8 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             String responseStr = strResponse;
-                            String converted = Until.ConvertJsonEncode(responseStr);
-                            String responDecode = Until.decode(converted);
+//                            String converted = Until.ConvertJsonEncode(responseStr);
+                            String responDecode = Until.decode(responseStr);
                             Log.e(TAG, "ResposeLogIn: "+responDecode);
 
                             //String json = gson.toJson(responDecode);
@@ -278,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
 */
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
+                            intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             finish();

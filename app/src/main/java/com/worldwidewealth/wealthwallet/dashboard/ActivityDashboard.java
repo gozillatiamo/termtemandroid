@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -22,6 +28,7 @@ import android.widget.Toast;
 
 import com.worldwidewealth.wealthwallet.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
+import com.worldwidewealth.wealthwallet.model.UserMenuModel;
 import com.worldwidewealth.wealthwallet.services.APIHelper;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.EncryptionData;
@@ -41,6 +48,9 @@ import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,6 +67,7 @@ public class ActivityDashboard extends AppCompatActivity{
     private DialogHelp mDialogHelp;
     private Dialog mDialogSetting;
     private AlertDialog mAlertChangePass;
+    private ArrayList<UserMenuModel> mUserMenuList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +75,7 @@ public class ActivityDashboard extends AppCompatActivity{
         setContentView(R.layout.activity_dashboard);
         services = APIServices.retrofit.create(APIServices.class);
         mHolder = new ViewHolder(this);
+        mUserMenuList = (ArrayList<UserMenuModel>) getIntent().getSerializableExtra(UserMenuModel.KEY_MODEL);
 
         initDialog();
         initToolbar();
@@ -78,6 +90,8 @@ public class ActivityDashboard extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 //        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+        setEnableBtn(true);
+        initBtnMenu();
         SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
         boolean logout = sharedPref.getBoolean("LOGOUT", true);
         if (!logout) {
@@ -93,6 +107,43 @@ public class ActivityDashboard extends AppCompatActivity{
         if (mAlertChangePass != null) {
             mAlertChangePass.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        int stackCount = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (stackCount != 0) {
+            Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
+            if (
+                    currentFragment instanceof FragmentBillSlip ||
+                            currentFragment instanceof FragmentTopupSlip) return;
+        }
+        new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
+                getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_meun, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.in_box:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initDialog(){
@@ -129,12 +180,14 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
+
     }
 
     private void initClickMainMenu(){
         mHolder.mMenuTopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityTopup.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
@@ -144,6 +197,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -153,6 +207,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuReMT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReportMT.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -181,6 +236,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuAddCreditLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditLine.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
@@ -190,6 +246,7 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuMpay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, SelectChoiceMpayActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
@@ -200,14 +257,28 @@ public class ActivityDashboard extends AppCompatActivity{
         mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 mDialogHelp.show();
+                mDialogHelp.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        setEnableBtn(true);
+                    }
+                });
             }
         });
 
         mHolder.mMenuSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEnableBtn(false);
                 mDialogSetting.show();
+                mDialogSetting.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        setEnableBtn(true);
+                    }
+                });
             }
         });
 
@@ -278,33 +349,71 @@ public class ActivityDashboard extends AppCompatActivity{
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        int stackCount = getSupportFragmentManager().getBackStackEntryCount();
-
-        if (stackCount != 0) {
-            Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
-            if (
-                    currentFragment instanceof FragmentBillSlip ||
-                    currentFragment instanceof FragmentTopupSlip) return;
-        }
-        new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
-                getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
-                new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
+    private void initBtnMenu(){
+        for (UserMenuModel model : mUserMenuList){
+            CardView cardMenu = null;
+            switch (model.getBUTTON()){
+                case UserMenuModel.CASHIN_BUTTON:
+                    cardMenu = mHolder.mMenuMpay;
+                    break;
+                case UserMenuModel.HISTORY_BUTTON:
+                    cardMenu = mHolder.mMenuReport;
+                    break;
+                case UserMenuModel.NOTIPAY_BUTTON:
+                    cardMenu = mHolder.mMenuReMT;
+                    break;
+                case UserMenuModel.QR_BUTTON:
+                    cardMenu = mHolder.mMenuMyQR;
+                    break;
+                case UserMenuModel.SCAN_BUTTON:
+                    cardMenu = mHolder.mMenuScanQR;
+                    break;
+                case UserMenuModel.SETUP_BUTTON:
+                    cardMenu = mHolder.mMenuSetting;
+                    break;
+                case UserMenuModel.SUPPORT_BUTTON:
+                    cardMenu = mHolder.mMenuHelp;
+                    break;
+                case UserMenuModel.TOPUP_BUTTON:
+                    cardMenu = mHolder.mMenuTopup;
+                    break;
             }
-        });
+            setStatusMenu(cardMenu, model.getSTATUS());
+        }
+    }
 
+    private void setEnableBtn(boolean enableBtn){
+        mHolder.mMenuScanQR.setEnabled(enableBtn);
+        mHolder.mMenuMyQR.setEnabled(enableBtn);
+        mHolder.mMenuMpay.setEnabled(enableBtn);
+        mHolder.mMenuSetting.setEnabled(enableBtn);
+        mHolder.mMenuHelp.setEnabled(enableBtn);
+        mHolder.mMenuReMT.setEnabled(enableBtn);
+        mHolder.mMenuReport.setEnabled(enableBtn);
+        mHolder.mMenuTopup.setEnabled(enableBtn);
+    }
+    private void setStatusMenu(CardView view, String status){
+
+        switch (status){
+            case UserMenuModel.HIDE:
+                view.setVisibility(View.GONE);
+                break;
+            case UserMenuModel.DISABLE:
+                view.setEnabled(false);
+                view.setVisibility(View.VISIBLE);
+                view.setForeground(new ColorDrawable(getResources().getColor(R.color.disable_btn_color)));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.setElevation(0);
+                }
+                break;
+        }
     }
 
     public class ViewHolder{
 
         private Toolbar mToolbar;
         private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine
-                , mMenuHelp, mMenuSetting, mMenuMpay;
+                , mMenuHelp, mMenuSetting, mMenuMpay, mMenuScanQR;
 //        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
@@ -314,11 +423,13 @@ public class ActivityDashboard extends AppCompatActivity{
 //            mBtnForgotPassword = (TextView) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
+            mMenuScanQR = (CardView) view.findViewById(R.id.menu_scan_qr);
             mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
             mMenuHelp = (CardView) view.findViewById(R.id.menu_help);
             mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
             mMenuMpay = (CardView) view.findViewById(R.id.menu_mpay_station);
             mMenuAddCreditLine = (CardView) view.findViewById(R.id.menu_add_credit_line);
+
         }
     }
 }

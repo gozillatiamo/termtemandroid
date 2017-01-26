@@ -15,6 +15,7 @@
     <string name="currentcy">THB</string>
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
+    <string name="in_box">กล่องข้อความ</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>

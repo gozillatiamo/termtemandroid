@@ -124,19 +124,25 @@ public class Until {
         };
     }
 
+/*
     public static String ConvertJsonEncode(String encode){
-        String jsonconvert = "";
+*/
+/*
         int cnt = encode.length()-1;
         while (cnt >= 0)
         {
             jsonconvert += encode.substring(cnt, cnt+1);
             cnt--;
         }
+*//*
+
         return jsonconvert;
     }
+*/
 
     public static String decode(String strEncode){
-        byte[] decode = Base64.decode(strEncode, Base64.DEFAULT);
+        String jsonconvert = new StringBuilder(strEncode).reverse().toString();
+        byte[] decode = Base64.decode(jsonconvert, Base64.DEFAULT);
         return new String(decode);
     }
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
