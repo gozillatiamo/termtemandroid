@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.LoginEvent;
+import com.worldwidewealth.wealthwallet.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.wealthwallet.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.wealthwallet.dialog.DialogHelp;
 import com.worldwidewealth.wealthwallet.model.UserMenuModel;
@@ -45,6 +49,7 @@ import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
 import com.worldwidewealth.wealthwallet.model.ChangePasswordRequestModel;
 import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
+import com.worldwidewealth.wealthwallet.until.BadgeDrawable;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
 import com.worldwidewealth.wealthwallet.until.Until;
 
@@ -84,6 +89,7 @@ public class ActivityDashboard extends AppCompatActivity{
         if (Global.getTXID() != null || Global.getTXID().equals("")) {
             Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
         }
+
     }
 
     @Override
@@ -133,6 +139,9 @@ public class ActivityDashboard extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
+        MenuItem itemCart = menu.findItem(R.id.action_in_box);
+        LayerDrawable icon = (LayerDrawable) itemCart.getIcon();
+        BadgeDrawable.setBadgeCount(this, icon, "9");
         return true;
     }
 
@@ -140,7 +149,11 @@ public class ActivityDashboard extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
-            case R.id.in_box:
+            case R.id.action_in_box:
+                Intent intent = new Intent(ActivityDashboard.this, InboxActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent);
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -189,8 +202,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityTopup.class);
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
             }
         });
 
@@ -199,8 +212,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent);
             }
         });
 
@@ -209,8 +222,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReportMT.class);
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent);
             }
         });
 
@@ -238,8 +251,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditLine.class);
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
             }
         });
 
@@ -248,8 +261,8 @@ public class ActivityDashboard extends AppCompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, SelectChoiceMpayActivity.class);
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
             }
         });
 

@@ -3,9 +3,12 @@ package com.worldwidewealth.wealthwallet.dialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.util.TypedValue;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.worldwidewealth.wealthwallet.R;
 import com.worldwidewealth.wealthwallet.SplashScreenWWW;
@@ -25,9 +28,10 @@ public class DialogNetworkError {
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback){
         this.mContext = context;
         if (mContext == null) return;
-        builder = new AlertDialog.Builder(mContext)
-                .setTitle(mContext.getString(R.string.network_error_title))
-                .setMessage(mContext.getString(R.string.network_error_message))
+        if (msg == null) msg = mContext.getString(R.string.network_error_message);
+        builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialog)
+                .setTitle(mContext.getString(R.string.error))
+                .setMessage(msg)
                 .setCancelable(false)
                 .setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
@@ -61,6 +65,17 @@ public class DialogNetworkError {
                 ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
                         .setTextColor(mContext.getResources()
                                 .getColor(android.R.color.holo_red_dark));
+                ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setTextColor(mContext.getResources()
+                                .getColor(R.color.colorPrimary));
+                TextView msgTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.message);
+                msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
+/*
+                TextView msgTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.message);
+                TextView titleTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.title);
+                msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, R.dimen.my_text_size);
+                titleTxt.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+*/
             }
         });
 

@@ -39,7 +39,7 @@ public class ErrorNetworkThrowable extends Throwable {
     }
 
     public void networkError(Context context, Call call, Callback callback){
-        networkError(context, "", call, callback);
+        networkError(context, null, call, callback);
     }
 
     @Override

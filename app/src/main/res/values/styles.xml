@@ -101,5 +101,10 @@
     <style name="MyTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyTabTextStyle</item>
     </style>
+    
+    <style name="MyAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:labelTextSize">@dimen/small_text_size</item>
+    </style>
 
 </resources>

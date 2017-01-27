@@ -22,10 +22,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:titleTextColor="#38686A"
+                    app:theme="@style/ToolbarColored"
                     >
 
                     <TextView
@@ -36,6 +33,17 @@
                         />
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/inbox_recyclear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+            </FrameLayout>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>

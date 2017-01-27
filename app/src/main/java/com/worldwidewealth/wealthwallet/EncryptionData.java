@@ -1,11 +1,19 @@
 package com.worldwidewealth.wealthwallet;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.worldwidewealth.wealthwallet.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentChoiceTopup;
+import com.worldwidewealth.wealthwallet.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.wealthwallet.dialog.DialogCounterAlert;
+import com.worldwidewealth.wealthwallet.model.RequestModel;
 import com.worldwidewealth.wealthwallet.model.ResponseModel;
 import com.worldwidewealth.wealthwallet.services.APIServices;
 import com.worldwidewealth.wealthwallet.until.ErrorNetworkThrowable;
@@ -153,16 +161,34 @@ public class EncryptionData {
 
         ResponseModel responseModel = null;
         Gson gson = new Gson();
+        String msg = null;
         String strRespone = null;
-
         try {
             strRespone = response.string();
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
+                if (context instanceof ActivityTopup) {
+                    Fragment currentFragment = ((AppCompatActivity) context).getSupportFragmentManager()
+                            .findFragmentById(R.id.container_topup)
+                            .getChildFragmentManager()
+                            .findFragmentById(R.id.container_topup_package);
+                    if (currentFragment instanceof FragmentTopupPreview){
+                        msg = context.getString(R.string.alert_topup_fail);
+                    }
+/*
+                    Log.e(TAG, "Fragmet: "+currentFragment.toString());
+                    if (currentFragment instanceof FragmentTopupPackage){
+                        currentFragment = currentFragment.getChildFragmentManager().findFragmentById(R.id.container_topup_package);
+                        Log.e(TAG, "Fragmet: "+currentFragment.toString());
+
+                    }
+*/
+                }
+
                 new ErrorNetworkThrowable(null).networkError(context,
-                        null, call, callback);
+                        msg, call, callback);
             } else{
                 return responseModel;
             }

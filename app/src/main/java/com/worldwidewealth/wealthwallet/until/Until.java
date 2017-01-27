@@ -212,6 +212,8 @@ public class Until {
 
     public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
         APIServices services = APIServices.retrofit.create(APIServices.class);
+        boolean logout =  context.getSharedPreferences(KEYPF, Context.MODE_PRIVATE).getBoolean("LOGOUT", true);
+        if (logout) return;
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override

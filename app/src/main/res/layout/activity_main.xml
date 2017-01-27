@@ -74,6 +74,7 @@
                             ></TextView>
 
                         <com.worldwidewealth.wealthwallet.until.InstantAutoComplete
+
                             android:id="@+id/edit_phone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -84,7 +85,10 @@
                             android:hint="xxx-xxx-xxxx"
                             android:digits="0123456789-"
                             android:textColorHint="@android:color/secondary_text_dark_nodisable"
-                            android:imeOptions="actionNext"/>
+                            android:imeOptions="actionNext"
+                            >
+                            <requestFocus/>
+                        </com.worldwidewealth.wealthwallet.until.InstantAutoComplete>
 
                     </LinearLayout>
                     <View

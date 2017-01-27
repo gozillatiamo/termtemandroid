@@ -33,6 +33,7 @@
         \n\n - กรุณาส่งใบสมัครและเอกสารประกอบมายังบริษัท\nโดยดาว์โหลดเอกสารได้ที่ www.termtem.co
         \n\n - รอรับ user/password เมื่อได้รัการอนุมัติจากบริษัท(ภายใน 7 วันทำการหลังได้รับเอกสาร)
         \n\n - ห้าม!! โอนเงินเข้าบัญชีบริษัทก่อนได้รับการอนุมัติ</string>
+    <string name="register_device_done">ลงทะเบียนเสร็จสิ้น ทางบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
@@ -216,6 +217,7 @@
     <string name="mpay_bank">ช่องทางธนาคาร</string>
     <string name="has_upload">ท่านมีรายการทำอัพโหลดอยู่ กรุณาทำรายการภายหลัง</string>
     <string name="data_outofmemory">ข้อมูลของท่านมีขนาดที่ใหญ่เกินไป กรุณาลองใหม่อีกครั้ง</string>
+    <string name="alert_topup_fail">เติมเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
 
 
     <string-array name="str_list_dashboard">

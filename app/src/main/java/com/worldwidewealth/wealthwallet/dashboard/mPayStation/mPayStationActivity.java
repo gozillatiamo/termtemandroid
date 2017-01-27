@@ -3,6 +3,7 @@ package com.worldwidewealth.wealthwallet.dashboard.mPayStation;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -301,6 +303,9 @@ public class MPayStationActivity extends AppCompatActivity {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
+                                    mEditAmountOther.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(mEditAmountOther, InputMethodManager.SHOW_IMPLICIT);
                                 }
                             });
                 }

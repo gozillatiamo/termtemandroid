@@ -32,7 +32,10 @@
                 android:gravity="center"
                 android:textSize="@dimen/my_text_size"
                 android:padding="@dimen/activity_space"
-                />
+                >
+                <requestFocus/>
+
+            </EditText>
 
             <LinearLayout
                 android:layout_width="match_parent"

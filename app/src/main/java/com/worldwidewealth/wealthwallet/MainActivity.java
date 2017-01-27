@@ -16,7 +16,9 @@ import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private APIServices services;
     private String mPhone, mPassword;
     private SharedPreferences mShared;
-    private String[] mArrayHistoryUser;
     private Set<String> mSetHistoryUser;
     public static final String CACHEUSER = "cacheuser";
     public static final String USER = "user";
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         mHolder = new ViewHolder(this);
         Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
-        mShared = MyApplication.getContext().getSharedPreferences(CACHEUSER, Context.MODE_PRIVATE);
         initEditText();
         initBtn();
 //        initSpinner();
@@ -107,13 +107,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mSetHistoryUser = mShared.getStringSet(USER, null);
 
+        mHolder.mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO){
+                    login();
+                }
+                return false;
+            }
+        });
 
-        if (mSetHistoryUser != null){
-            mArrayHistoryUser = new String[mSetHistoryUser.size()];
-            mSetHistoryUser.toArray(mArrayHistoryUser);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mArrayHistoryUser);
+        mShared = getSharedPreferences(CACHEUSER, Context.MODE_PRIVATE);
+        mSetHistoryUser = new HashSet<>(mShared.getStringSet(USER, new HashSet<String>()));
+
+        if (mSetHistoryUser.size() > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
+                    mSetHistoryUser.toArray(new String[mSetHistoryUser.size()]));
             mHolder.mPhone.setAdapter(adapter);
             mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-//        mHolder.mPhone.setText(mShared.getString(USER, ""));
     }
 
     private void initSpinner(){
@@ -135,55 +143,66 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void login(){
+        mPhone = mHolder.mPhone.getText().toString().replaceAll("-", "");
+        mPassword = mHolder.mPassword.getText().toString();
+        if (mPhone.equals("") || mPassword.equals("")) {
+            Toast.makeText(MainActivity.this, getString(R.string.please_enter_data), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mHolder.mBtnLogin.setEnabled(false);
+
+
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                    .setMessage(R.string.alert_sure_connect_wifi)
+                    .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new DialogCounterAlert.DialogProgress(MainActivity.this);
+                            serviceLogin();
+                        }
+                    })
+                    .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            DialogCounterAlert.DialogProgress.dismiss();
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                            .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                }
+            });
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    mHolder.mBtnLogin.setEnabled(true);
+                }
+            });
+            alertDialog.show();
+//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
+//                    return;
+        } else {
+            new DialogCounterAlert.DialogProgress(MainActivity.this);
+            serviceLogin();
+        }
+
+    }
+
     private void initBtn(){
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mPhone = mHolder.mPhone.getText().toString().replaceAll("-", "");
-                mPassword = mHolder.mPassword.getText().toString();
-                if (mPhone.equals("") || mPassword.equals("")) {
-                    Toast.makeText(MainActivity.this, getString(R.string.please_enter_data), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                mHolder.mBtnLogin.setEnabled(false);
-                new DialogCounterAlert.DialogProgress(MainActivity.this);
-                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                if (mWifi.isConnected()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                            .setMessage(R.string.alert_sure_connect_wifi)
-                            .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    serviceLogin();
-                                }
-                            })
-                            .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                                    DialogCounterAlert.DialogProgress.dismiss();
-                                }
-                            })
-                            .setCancelable(false);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                                    .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                        }
-                    });
-                    alertDialog.show();
-//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
-//                    return;
-                } else {
-                    serviceLogin();
-                }
-
+                login();
             }
         });
 
@@ -260,26 +279,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.e(TAG, "USERID: "+decode);
                             String decodeagent = EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID());
                             Log.e(TAG, "AGENTID: "+decodeagent);
-                            if (mSetHistoryUser == null||!mSetHistoryUser.contains(mPhone)){
-                                if (mSetHistoryUser == null) {
-                                    mSetHistoryUser = new HashSet<String>();
-                                }
+
+                            if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
+
                                 mSetHistoryUser.add(mHolder.mPhone.getText().toString());
-                                for (String string : mSetHistoryUser){
-                                }
                                 SharedPreferences.Editor editor = mShared.edit();
                                 editor.putStringSet(USER, mSetHistoryUser);
                                 editor.commit();
                             }
-
-/*
-                            SharedPreferences.Editor editor = mShared.edit();
-                            List<String> list = null;
-                            Set<String> set = null;
-//                            set.
-                            editor.putStringSet(USER, set);
-                            editor.commit();
-*/
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
                             intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
@@ -326,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                                         DialogCounterAlert.DialogProgress.dismiss();
                                         new DialogCounterAlert(MainActivity.this,
                                                 getString(R.string.register),
-                                                getString(R.string.register_done),
+                                                getString(R.string.register_device_done),
                                                 null);
                                     }
 
@@ -363,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
             mBtnLogin = (Button) view.findViewById(R.id.btn_login);
 
             mPhone = (AutoCompleteTextView) view.findViewById(R.id.edit_phone);
+
             mPassword = (EditText) view.findViewById(R.id.edit_password);
             mHelp = (Button) view.findViewById(R.id.help);
 //            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);

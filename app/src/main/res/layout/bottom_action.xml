@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
-    android:layout_marginLeft="@dimen/activity_small_space"
-    android:layout_marginRight="@dimen/activity_small_space"
-    app:cardElevation="@dimen/activity_small_space"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    app:cardElevation="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout

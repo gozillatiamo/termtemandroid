@@ -95,6 +95,7 @@ public class FragmentTopupPackage extends  Fragment{
         initPageTopup();
         initData();
         initBtn();
+        mHolder.mEditPhone.requestFocus();
 
         return rootView;
     }
@@ -306,6 +307,7 @@ public class FragmentTopupPackage extends  Fragment{
             mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_PHONE);
             mHolder.mBtnNext.setVisibility(View.VISIBLE);
             mHolder.mLayoutBtnTopup.setVisibility(View.GONE);
+            mHolder.mEditPhone.requestFocus();
         } else {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
             mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
@@ -447,7 +449,7 @@ public class FragmentTopupPackage extends  Fragment{
                     byte[] imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
 
@@ -509,6 +511,7 @@ public class FragmentTopupPackage extends  Fragment{
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
+
 //            mEditPhone.setOnFocusChangeListener(Until.onFocusEditText());
             mEditPhone.addTextChangedListener(new TextWatcher() {
                 @Override
