@@ -10,7 +10,19 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="background">@color/colorBackground</item>
         <item name="actionModeBackground">@color/colorAccent</item>
+<!--
+        <item name="android:textAppearance">@style/CustomFontStyle</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:buttonStyle">@style/CustomFontStyle</item>
+        <item name="android:textAppearanceListItem">@style/CustomFontStyle</item>
+-->
     </style>
+
+<!--
+    <style name="CustomFontStyle">
+        <item name="android:typeface">monospace</item>
+    </style>
+-->
 
     <style name="MyEditTextStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -67,6 +79,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
+        <!--<item name="android:typeface">monospace</item>-->
     </style>
 
     <style name="MyIconMenuDashboard">

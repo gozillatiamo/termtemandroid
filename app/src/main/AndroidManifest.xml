@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.worldwidewealth.wealthwallet">
+    package="com.worldwidewealth.termtem">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,18 +15,18 @@
         android:required="true" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.worldwidewealth.termtem.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/termtem_launcher"
+        android:icon="@drawable/ic_launcher_2"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="com.worldwidewealth.termtem.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".MyFirebaseInstanceIDService">
+        <service android:name="com.worldwidewealth.termtem.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -34,7 +34,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.worldwidewealth.wealthwallet"
+            android:authorities="com.worldwidewealth.termtem"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -43,7 +43,7 @@
         </provider>
 
         <activity
-            android:name=".SplashScreenWWW"
+            android:name="com.worldwidewealth.termtem.SplashScreenWWW"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -53,59 +53,66 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.worldwidewealth.termtem.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.ActivityDashboard"
+            android:name="com.worldwidewealth.termtem.dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ActivityShowNotify"
+            android:name="com.worldwidewealth.termtem.ActivityShowNotify"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="com.worldwidewealth.wealthwallet.click.notification"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivitySettingAlert"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.billpayment.ActivitySettingAlert"
+            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityOneBill"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.billpayment.ActivityOneBill"
+            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityBillDetail"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.billpayment.ActivityBillDetail"
+            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityBillHistory"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.billpayment.ActivityBillHistory"
+            android:name="com.worldwidewealth.termtem.game.ActivityGame"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".game.ActivityGame"
+            android:name="com.worldwidewealth.termtem.ActivityRegister"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ActivityRegister"
+            android:name="com.worldwidewealth.termtem.dashboard.topup.ActivityTopup"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.topup.ActivityTopup"
+            android:name="com.worldwidewealth.termtem.dashboard.report.ActivityReport"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.report.ActivityReport"
+            android:name="com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.myqrcode.ActivityMyQrCode"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
+            android:name="com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dashboard.addcreditline.ActivityAddCreditLine"
+            android:name="com.worldwidewealth.termtem.dashboard.addcreditline.ActivityAddCreditLine"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
@@ -114,14 +121,14 @@
             android:value="86a50ea19d46d8961ca0d04a7aa34cb5eae11ed0" />
 
         <activity
-            android:name=".dashboard.mPayStation.MPayStationActivity"
+            android:name="com.worldwidewealth.termtem.dashboard.mPayStation.MPayStationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".dashboard.mPayStation.SelectChoiceMpayActivity"
+            android:name="com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".dashboard.inbox.InboxActivity"></activity>
+        <activity android:name="com.worldwidewealth.termtem.dashboard.inbox.InboxActivity"></activity>
     </application>
 
 </manifest>

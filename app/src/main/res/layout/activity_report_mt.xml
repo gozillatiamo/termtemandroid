@@ -5,7 +5,7 @@
     android:id="@+id/activity_report_mt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.worldwidewealth.wealthwallet.dashboard.reportmoneytransfer.ActivityReportMT">
+    tools:context="com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -14,6 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             app:theme="@style/ToolbarColored"
+            android:background="@drawable/background_primary"
             android:layout_height="?attr/actionBarSize">
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"

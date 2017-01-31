@@ -22,7 +22,8 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
+
+                    android:background="@drawable/background_primary"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     >
@@ -108,6 +109,7 @@
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
                                     android:src="@drawable/ic_topup"
+                                    android:tint="@color/colorPrimary"
                                     android:id="@+id/imageView10" />
 
                                 <TextView
@@ -139,6 +141,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
+                                    android:tint="@color/colorPrimary"
                                     android:src="@drawable/ic_report"/>
 
                                 <TextView
@@ -179,6 +182,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
+                                    android:tint="@color/colorPrimary"
                                     android:src="@drawable/ic_setting" />
 
                                 <TextView
@@ -212,6 +216,7 @@
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
                                     android:src="@drawable/ic_support"
+                                    android:tint="@color/colorPrimary"
                                     android:id="@+id/imageView9" />
 
                                 <TextView
@@ -251,6 +256,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
+                                    android:tint="@color/colorPrimary"
                                     android:src="@drawable/ic_scan_qr"
                                     />
 
@@ -285,6 +291,7 @@
                                     android:layout_height="match_parent"
                                     style="@style/MyIconMenuDashboard"
                                     android:src="@drawable/ic_my_qr"
+                                    android:tint="@color/colorPrimary"
                                     />
 
                                 <TextView
@@ -319,6 +326,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 style="@style/MyIconMenuDashboard"
+                                android:tint="@color/colorPrimary"
                                 android:src="@drawable/ic_report_money_tf"
                                 android:id="@+id/imageView7" />
 

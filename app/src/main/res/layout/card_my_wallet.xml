@@ -23,8 +23,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dashboard_wallet"
-                style="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/black"
+                android:textSize="@dimen/my_text_large"
                 app:sizeToFit="true"
                 app:minTextSize="4dp"
                 android:id="@+id/textView17" />

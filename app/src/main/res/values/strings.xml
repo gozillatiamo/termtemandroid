@@ -3,6 +3,7 @@
     <string name="app_name">TermTem</string>
     <string name="platform">android</string>
     <string name="server_dev">http://180.128.21.31/wealthservice/</string>
+    <string name="server_test">http://180.128.21.30/wealthservice/</string>
     <string name="server_pro">http://180.128.21.81/wealthservice/</string>
     <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
     <string name="branch">สุขุมวิท 101</string>
@@ -18,7 +19,7 @@
     <string name="in_box">กล่องข้อความ</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
-    <string name="phone_number">หมายเลขโทรศัพท์</string>
+    <string name="phone_number">เบอร์โทรศัพท์</string>
     <string name="hint_phone_number">กรอกหมายเลขโทรศัพท์</string>
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>

@@ -26,7 +26,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion '24.0.3'
     defaultConfig {
-        applicationId "com.worldwidewealth.wealthwallet"
+        applicationId "com.worldwidewealth.termtem"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 2
@@ -81,5 +81,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 }
 apply plugin: 'com.google.gms.google-services'

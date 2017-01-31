@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "717799341790",
-    "firebase_url": "https://weathwallet.firebaseio.com",
-    "project_id": "weathwallet",
-    "storage_bucket": "weathwallet.appspot.com"
+    "project_number": "226969355297",
+    "firebase_url": "https://termtem-c54c6.firebaseio.com",
+    "project_id": "termtem-c54c6",
+    "storage_bucket": "termtem-c54c6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:717799341790:android:5b1ed2561536253c",
+        "mobilesdk_app_id": "1:226969355297:android:14fa3a15848147c7",
         "android_client_info": {
-          "package_name": "com.worldwidewealth.wealthwallet"
+          "package_name": "com.worldwidewealth.termtem"
         }
       },
       "oauth_client": [
         {
-          "client_id": "717799341790-sfrimtons9du8ljel653a5dhq3l3ci3d.apps.googleusercontent.com",
+          "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCgXreb-4qwsoDbKGgu22-H3uKHijZbHrA"
+          "current_key": "AIzaSyB_h4amMGOEArRR_W-TDuB1-_3nGtt6uMQ"
         }
       ],
       "services": {
