@@ -22,15 +22,19 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:theme="@style/ToolbarColored"
+                    android:background="@drawable/background_primary"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     >
 
+<!--
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/in_box"
                         style="@style/MyTitleActionBar"
                         />
+-->
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
             <FrameLayout

@@ -55,7 +55,7 @@ public class SplashScreenWWW extends AppCompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
-
+        Log.e(TAG, Until.decode("=0XfiIiOElkUFNVVsIiI6QUSU5URHFELiIiOElEWUxiIz9WaioTTS9kRUFETQxiIioDRJV0QJZVREtnOhRXYkxiIElEROV0RiojbvlGdjF2e"));
         handler = new Handler();
         runnable = new Runnable() {
             @Override

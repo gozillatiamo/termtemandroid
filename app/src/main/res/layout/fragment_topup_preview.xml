@@ -213,7 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="Balance"
+                    android:text="@string/balance_toup_preview"
                     android:id="@+id/textView9" />
 
                 <LinearLayout

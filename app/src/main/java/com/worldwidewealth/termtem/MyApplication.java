@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.AppCompatTextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -38,6 +39,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Mitr-Regular.ttf")
+                .addCustomStyle(AppCompatTextView.class, android.R.attr.textViewStyle)
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
@@ -139,7 +141,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     private boolean canUseLeaving(Activity activity){
         return !(activity instanceof SplashScreenWWW |
-                activity instanceof ActivityShowNotify |
+//                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister);
     }

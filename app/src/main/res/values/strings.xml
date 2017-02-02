@@ -31,13 +31,14 @@
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
     <string name="register_done"> - บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
-        \n\n - กรุณาส่งใบสมัครและเอกสารประกอบมายังบริษัท\nโดยดาว์โหลดเอกสารได้ที่ www.termtem.co
+        \n\n - กรุณาส่งใบสมัครและเอกสารประกอบมายังบริษัท\nโดยดาวน์โหลดเอกสารได้ที่เว็บไซต์ TermTem
         \n\n - รอรับ user/password เมื่อได้รัการอนุมัติจากบริษัท(ภายใน 7 วันทำการหลังได้รับเอกสาร)
         \n\n - ห้าม!! โอนเงินเข้าบัญชีบริษัทก่อนได้รับการอนุมัติ</string>
     <string name="register_device_done">ลงทะเบียนเสร็จสิ้น ทางบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
+    <string name="balance_toup_preview">บัญชีคงเหลือ</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>
@@ -142,6 +143,7 @@
     <string name="success">สำเร็จ</string>
     <string name="change_password_success">เปลี่ยนรหัสผ่านสำเร็จ</string>
     <string name="please_choice_topup">กรุณาเลือกจำรวนที่ท่านต้องการจะเติม</string>
+    <string name="balance_not_enough">ยอดเงินคงเหลือของทe่านไม่พอที่จะทำรายการ</string>
     <string name="register">ลงทะเบียน</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
     <string name="please_phone_topup_error">หมายเลขโทรศัพท์ไม่ถูกต้อง</string>
@@ -162,6 +164,9 @@
     <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น</string>
     <string name="fill_money_amount">ระบุยอดเงินโอน</string>
     <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
+    <string name="alert_amount_mpay_over">กรุณาใส่ยอดเงินขั้นต่ำ 1 บาท สูงสุด 49,000 บาท</string>
+    <string name="title_mpay_station">Mpay ช่องทางเอ็มเปย์สเตชั่น</string>
+    <string name="title_mpay_bank">Mpay ช่องทางธนาคาร</string>
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
     <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์มือถือ Agent</string>
     <string name="scan_qr_code">Scan QR Code</string>
@@ -219,6 +224,8 @@
     <string name="has_upload">ท่านมีรายการทำอัพโหลดอยู่ กรุณาทำรายการภายหลัง</string>
     <string name="data_outofmemory">ข้อมูลของท่านมีขนาดที่ใหญ่เกินไป กรุณาลองใหม่อีกครั้ง</string>
     <string name="alert_topup_fail">เติมเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
+    <string name="message_get_slip_again">รายการของท่าน ดำเนินการเสร็จสิ้น\nกด "ยืนยัน" เพื่อรับหลักฐานการชำระ</string>
+    <string name="search_hint">ค้นหา...</string>
 
 
     <string-array name="str_list_dashboard">

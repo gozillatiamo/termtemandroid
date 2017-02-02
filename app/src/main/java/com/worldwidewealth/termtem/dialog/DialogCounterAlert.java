@@ -37,20 +37,27 @@ public class DialogCounterAlert {
 
 
     public DialogCounterAlert(final Context context,
-                                  String title,
-                                  String msg,
-                                  final String txtBtn,
-                                  DialogInterface.OnClickListener doneListener,
-                                  DialogInterface.OnClickListener cancelListener){
+                              final String title,
+                              String msg,
+                              final String txtBtn,
+                              DialogInterface.OnClickListener doneListener,
+                              DialogInterface.OnClickListener cancelListener){
 
         if (DialogProgress.isShow()){
             DialogProgress.dismiss();
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(msg)
-                .setCancelable(false);
+        AlertDialog.Builder builder;
+
+        if (title.equals(context.getString(R.string.error))){
+            builder = new AlertDialog.Builder(context, R.style.MyAlertDialogError);
+        } else {
+            builder = new AlertDialog.Builder(context);
+        }
+
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setCancelable(false);
 
         if (txtBtn != null) {
             builder.setPositiveButton(txtBtn, doneListener);
@@ -75,6 +82,9 @@ public class DialogCounterAlert {
                 } else if (alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE) != null) {
                     alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources()
                             .getColor(android.R.color.holo_red_dark));
+                } else {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources()
+                            .getColor(R.color.colorPrimary));
                 }
             }
         });

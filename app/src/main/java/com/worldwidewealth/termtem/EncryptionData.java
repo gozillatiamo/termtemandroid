@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
@@ -26,7 +28,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -155,23 +159,41 @@ public class EncryptionData {
     public static final Object getModel(Context context, Call call, ResponseBody response, Callback callback){
 
         ResponseModel responseModel = null;
+        RequestModel requestModel = null;
         Gson gson = new Gson();
         String msg = null;
         String strRespone = null;
+        String strRequest = Until.convertToStringRequest(call.request().body());
+        if (strRequest != null){
+            requestModel = new Gson().fromJson(strRequest, RequestModel.class);
+        }
         try {
             strRespone = response.string();
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
+
+                switch (requestModel.getAction()){
+                    case APIServices.ACTIONGETOTP:
+                    case APIServices.ACTIONSUBMITTOPUP:
+                        msg = context.getString(R.string.alert_topup_fail);
+                        new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+                        return null;
+
+                }
+
+/*
                 if (context instanceof ActivityTopup) {
                     Fragment currentFragment = ((AppCompatActivity) context).getSupportFragmentManager()
                             .findFragmentById(R.id.container_topup)
                             .getChildFragmentManager()
                             .findFragmentById(R.id.container_topup_package);
+
                     if (currentFragment instanceof FragmentTopupPreview){
-                        msg = context.getString(R.string.alert_topup_fail);
+
                     }
+*/
 /*
                     Log.e(TAG, "Fragmet: "+currentFragment.toString());
                     if (currentFragment instanceof FragmentTopupPackage){
@@ -179,8 +201,10 @@ public class EncryptionData {
                         Log.e(TAG, "Fragmet: "+currentFragment.toString());
 
                     }
-*/
+*//*
+
                 }
+*/
 
                 new ErrorNetworkThrowable(null).networkError(context,
                         msg+"\n"+responseModel.getMsg(), call, callback, true);

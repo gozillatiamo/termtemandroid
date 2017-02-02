@@ -313,6 +313,22 @@ public class Until {
         return preferences.getString(KEYDEVICEID, null);
     }
 
+    public static String convertToStringRequest(RequestBody body){
+        try {
+            final RequestBody copy = body;
+            final Buffer buffer = new Buffer();
+            if (copy != null)
+                copy.writeTo(buffer);
+            else
+                return null;
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return null;
+        }
+
+    }
+
+
 
     public static void logoutAPI(){
         if (Global.getTXID() == null || Global.getTXID().equals("")) return;

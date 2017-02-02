@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,11 +51,13 @@ public class MPayStationActivity extends AppCompatActivity {
     private RecyclerView mRecyclerAmount;
     private View mIncludeBottomAction, mLayoutEditAmountOther;
     private BottomAction mBottomAction;
+    private TextView mToolbarTitle;
     private EditText mEditAmountOther;
     private WebView mWebView;
     private String[] mListAmount;
     private APIServices services;
     private Toolbar mToolbar;
+    private int mType;
     private static final String TAG = MPayStationActivity.class.getSimpleName();
 
     @Override
@@ -66,17 +69,24 @@ public class MPayStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m_pay_station);
         services = APIServices.retrofit.create(APIServices.class);
+        mType = getIntent().getExtras().getInt("type");
         mListAmount = new String[]{
-                "50",
                 "100",
                 "150",
                 "200",
-                "250",
                 "300",
+                "400",
                 "500",
+                "600",
+                "700",
+                "800",
+                "900",
                 "1000",
                 getString(R.string.other)
         };
+
+
+
 
         initWidgets();
         initToolbar();
@@ -94,16 +104,25 @@ public class MPayStationActivity extends AppCompatActivity {
 
 
     private void initToolbar(){
+        switch (mType){
+            case SelectChoiceMpayActivity.MPAY_STATION:
+                mToolbarTitle.setText(getString(R.string.title_mpay_station));
+                break;
+            case SelectChoiceMpayActivity.MPAY_BANK:
+                mToolbarTitle.setText(getString(R.string.title_mpay_bank));
+                break;
+        }
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     }
 
 
     private void initWidgets(){
         mRecyclerAmount = (RecyclerView) findViewById(R.id.recycler_mpay_amount);
+        mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mIncludeBottomAction = (View) findViewById(R.id.include_bottom_action);
         mLayoutEditAmountOther = (View) findViewById(R.id.layout_edit_amount_other);
         mEditAmountOther = (EditText) findViewById(R.id.edit_amount_other);
@@ -134,7 +153,7 @@ public class MPayStationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String AMT = (mBottomAction.getPrice());
-                if (Double.parseDouble(AMT) == 0){
+                if (Double.parseDouble(AMT) < 1 || Double.parseDouble(AMT) > 49000){
                     Toast.makeText(MPayStationActivity.this, getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -142,8 +161,7 @@ public class MPayStationActivity extends AppCompatActivity {
                 new DialogCounterAlert.DialogProgress(MPayStationActivity.this);
                 Call<ResponseBody> call = services.genBarcode(
                         new RequestModel(APIServices.ACTIONGENBARCODE,
-                                new GenBarcodeRequestModel(AMT.replaceAll("\\.", ""),
-                                        getIntent().getExtras().getInt("type"))));
+                                new GenBarcodeRequestModel(AMT.replaceAll("\\.", ""), mType)));
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -157,12 +175,14 @@ public class MPayStationActivity extends AppCompatActivity {
                             DialogCounterAlert.DialogProgress.dismiss();
                             MPayStationResponse mPayStationResponse = new Gson().fromJson((String)responseValues, MPayStationResponse.class);
 
-                            if (APIServices.retrofit.baseUrl().toString().equals(getString(R.string.server_dev))) {
+                            /*if (APIServices.retrofit.baseUrl().toString().equals(getString(R.string.server_dev))) {
                                 Intent i = new Intent(Intent.ACTION_VIEW);
                                 i.setData(Uri.parse(mPayStationResponse.getURL()));
                                 startActivity(i);
-                            } else {
-                                Log.e(TAG, "mPay Url: "+mPayStationResponse.getURL());
+                            } else {*/
+                            Log.e(TAG, "mPay Url: "+mPayStationResponse.getURL());
+
+                            if (mPayStationResponse.getURL() != null && !mPayStationResponse.getURL().equals("")){
                                 mWebView.setVisibility(View.VISIBLE);
                                 mWebView.getSettings().setJavaScriptEnabled(true);
 
@@ -174,9 +194,23 @@ public class MPayStationActivity extends AppCompatActivity {
                                         MPayStationActivity.this.setProgress(progress * 1000);
                                     }
                                 });
+
                                 mWebView.setWebViewClient(new WebViewClient() {
+                                    @Override
+                                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                        super.onPageStarted(view, url, favicon);
+                                        new DialogCounterAlert.DialogProgress(MPayStationActivity.this);
+                                    }
+
+                                    @Override
+                                    public void onPageFinished(WebView view, String url) {
+                                        super.onPageFinished(view, url);
+                                        DialogCounterAlert.DialogProgress.dismiss();
+                                    }
+
+
                                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                                        Toast.makeText(MPayStationActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+                                        DialogCounterAlert.DialogProgress.dismiss();
                                     }
                                 });
 

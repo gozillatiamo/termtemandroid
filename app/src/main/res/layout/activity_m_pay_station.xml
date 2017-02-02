@@ -14,12 +14,16 @@
             android:id="@+id/toolbar_mpay"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/background_primary"
             app:theme="@style/ToolbarColored">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/menu_mpay"
+                android:text=""
+                app:sizeToFit="true"
+                android:singleLine="true"
                 style="@style/MyTitleActionBar"
                 />
         </android.support.v7.widget.Toolbar>

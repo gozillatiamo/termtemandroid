@@ -9,9 +9,13 @@ import android.util.TypedValue;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.SplashScreenWWW;
+import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
+import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.until.Until;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,15 +29,41 @@ public class DialogNetworkError {
     private Context mContext;
     private AlertDialog.Builder builder;
     private static AlertDialog alertDialog;
+    private String positiveBtn;
+    private int styleAlert;
+    private RequestModel requestModel = null;
+    private String strRequest;
+    private String title;
+
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback , boolean canCancel){
         this.mContext = context;
         if (mContext == null) return;
-        if (msg == null) msg = mContext.getString(R.string.network_error_message);
-        builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialog)
-                .setTitle(mContext.getString(R.string.error))
+        strRequest = Until.convertToStringRequest(call.request().body());
+
+        if (strRequest != null){
+            requestModel = new Gson().fromJson(strRequest, RequestModel.class);
+        }
+
+        switch (requestModel.getAction()){
+            case APIServices.ACTIONESLIP:
+                msg = requestModel.getAction()+"\n"+context.getString(R.string.message_get_slip_again);
+                positiveBtn = context.getString(R.string.confirm);
+                styleAlert = R.style.MyAlertDialogWarning;
+                title = mContext.getString(R.string.warning);
+                break;
+            default:
+                msg = requestModel.getAction()+"\n"+mContext.getString(R.string.network_error_message);
+                positiveBtn = context.getString(R.string.try_again);
+                styleAlert = R.style.MyAlertDialogError;
+                title = mContext.getString(R.string.error);
+
+        }
+
+        builder = new AlertDialog.Builder(mContext, styleAlert)
+                .setTitle(title)
                 .setMessage(msg)
                 .setCancelable(false)
-                .setPositiveButton(mContext.getString(R.string.try_again), new DialogInterface.OnClickListener() {
+                .setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         new DialogCounterAlert.DialogProgress(mContext);
@@ -73,12 +103,6 @@ public class DialogNetworkError {
                                 .getColor(R.color.colorPrimary));
                 TextView msgTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.message);
                 msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
-/*
-                TextView msgTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.message);
-                TextView titleTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.title);
-                msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, R.dimen.my_text_size);
-                titleTxt.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
-*/
             }
         });
 

@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="background">@color/colorBackground</item>
         <item name="actionModeBackground">@color/colorAccent</item>
+        <item name="android:actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 <!--
         <item name="android:textAppearance">@style/CustomFontStyle</item>
         <item name="android:typeface">monospace</item>
@@ -17,12 +18,11 @@
         <item name="android:textAppearanceListItem">@style/CustomFontStyle</item>
 -->
     </style>
-
-<!--
-    <style name="CustomFontStyle">
-        <item name="android:typeface">monospace</item>
-    </style>
--->
+    <!--
+        <style name="CustomFontStyle">
+            <item name="android:typeface">monospace</item>
+        </style>
+    -->
 
     <style name="MyEditTextStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -115,9 +115,15 @@
         <item name="tabTextAppearance">@style/MyTabTextStyle</item>
     </style>
     
-    <style name="MyAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="MyAlertDialogError" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@android:color/holo_red_dark</item>
         <item name="android:labelTextSize">@dimen/small_text_size</item>
     </style>
+
+    <style name="MyAlertDialogWarning" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@android:color/holo_orange_dark</item>
+        <item name="android:labelTextSize">@dimen/small_text_size</item>
+    </style>
+
 
 </resources>

@@ -240,6 +240,17 @@ public class FragmentTopupPackage extends  Fragment{
             return;
         }
 
+        if (Global.getBALANCE() < mAmt){
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.balance_not_enough)
+                    .setPositiveButton(R.string.confirm, null)
+                    .show();
+            setEnabledBtn(true);
+
+            return;
+        }
+
+
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
         setEnabledBtn(true);
         Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,

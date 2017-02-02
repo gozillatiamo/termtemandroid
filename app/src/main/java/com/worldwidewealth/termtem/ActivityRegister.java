@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.common.StringUtils;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.RegisterRequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
@@ -54,10 +57,12 @@ public class ActivityRegister extends AppCompatActivity {
     private static final int TEL = 2;
     private static final int IDEN = 3;
     private static final int PEOPLE = 4;
+    private static final int EMAIL = 5;
     private String mEmail, mFirstName, mLastName, mTel, mIden;
     private int mPerson;
-    private boolean[] mDataCheck = new boolean[5];
+    private boolean[] mDataCheck = new boolean[6];
     private APIServices services;
+    public static final String TAG = ActivityRegister.class.getSimpleName();
 
 //    public static Fragment newInstance(){
 //        FragmentRegister fragment = new FragmentRegister();
@@ -75,6 +80,7 @@ public class ActivityRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mHolder = new ViewHolder(this);
+        mDataCheck[EMAIL] = true;
         Until.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
@@ -145,6 +151,7 @@ public class ActivityRegister extends AppCompatActivity {
             public void onClick(View v) {
 
                 for (boolean check: mDataCheck){
+                    Log.e(TAG, ""+check);
                     if (!check){
                         Toast.makeText(ActivityRegister.this, "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
                         return;
@@ -183,9 +190,8 @@ public class ActivityRegister extends AppCompatActivity {
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                     @Override
                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                        String Msg = response.body().getMsg();
 
-                        if(Msg.equals("Success")){
+                        if(response.body().getStatus() == APIServices.SUCCESS){
 
                             final TextView message = new TextView(ActivityRegister.this);
                             message.setPadding(20, 20, 20, 20);
@@ -207,7 +213,7 @@ public class ActivityRegister extends AppCompatActivity {
                                         }
                                     }).show();
                         } else {
-                            Toast.makeText(ActivityRegister.this, Msg,
+                            Toast.makeText(ActivityRegister.this, response.body().getMsg(),
                                     Toast.LENGTH_SHORT).show();
                         }
                         DialogCounterAlert.DialogProgress.dismiss();
@@ -238,17 +244,31 @@ public class ActivityRegister extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                boolean check = false;
 
+                String result = s.toString().replaceAll(" ", "");
+                if (!s.toString().equals(result)) {
+                    editText.setText(result);
+                    editText.setSelection(result.length());
+                    return;
+                    // alert the user
+                }
+
+                boolean check = false;
                 switch (type){
 
                     case TEL:
-                        check = s.length() == 10;
+                        check = CheckSyntaxData.isPhoneValid(s.toString());
                         break;
                     case IDEN:
                         if (s.length() == 13){
                             check = CheckSyntaxData.isIdentificationValid(s.toString());
                         }
+                        break;
+                    case EMAIL:
+                        if (s.toString().equals(""))
+                            check = true;
+                        else
+                            check = CheckSyntaxData.isEmailValid(s.toString());
                         break;
                     default:
                         if (s.toString().equals("")){
@@ -262,6 +282,10 @@ public class ActivityRegister extends AppCompatActivity {
                     imgCheck = getResources().getDrawable( R.drawable.ic_check_circle );
                 else
                     imgCheck = getResources().getDrawable( R.drawable.ic_cancel );
+
+                if (type == EMAIL && s.toString().equals(""))
+                    imgCheck = null;
+
 
                 editText.setCompoundDrawablesWithIntrinsicBounds(null, null, imgCheck, null);
 
@@ -285,6 +309,8 @@ public class ActivityRegister extends AppCompatActivity {
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
             mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
+            mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
+
 //            mEditEmail.setOnFocusChangeListener(Until.onFocusEditText());
             mEditFristName = (EditText) view.findViewById(R.id.edit_name);
 //            mEditFristName.setOnFocusChangeListener(Until.onFocusEditText());
