@@ -13,7 +13,6 @@ import android.support.v7.widget.AppCompatTextView;
 import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
-import com.worldwidewealth.termtem.until.FontsOverride;
 import com.worldwidewealth.termtem.until.Until;
 import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -35,7 +34,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
-//        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Mitr-Regular.ttf");
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Mitr-Regular.ttf")

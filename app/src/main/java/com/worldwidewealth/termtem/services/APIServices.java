@@ -52,6 +52,7 @@ public interface APIServices {
     public static final String ACTIONGETBALANCE = "GETBALANCE";
     public static final String ACTIONNOTIPAY = "NOTIPAY";
     public static final String ACTIONGENBARCODE = "GENBARCODE";
+    public static final String ACTIONACCPWIFI = "ACCPWIFI";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -115,6 +116,10 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> notipay(@Body RequestModel requestModel);
 
+    @POST("service.ashx")
+    Call<ResponseBody> service(@Body RequestModel requestModel);
+
+
     @POST("fundin.ashx")
     Call<ResponseBody> genBarcode(@Body RequestModel requestModel);
 
@@ -150,7 +155,7 @@ public interface APIServices {
             .create();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl(MyApplication.getContext().getString(R.string.server_test)).client(client)
+        .baseUrl(MyApplication.getContext().getString(R.string.server_dev)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 

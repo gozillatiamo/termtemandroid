@@ -85,14 +85,6 @@ public class Until {
     public static final String LOGOUT = "LOGOUT";
     public static final String TAG = Until.class.getSimpleName();
 
-    public static void initSpinnerCurrency(Context context, Spinner spinner) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-
-    }
-
     public static RequestBody encode(final RequestBody body){
         return new RequestBody() {
             @Override
@@ -118,22 +110,6 @@ public class Until {
             }
         };
     }
-
-/*
-    public static String ConvertJsonEncode(String encode){
-*/
-/*
-        int cnt = encode.length()-1;
-        while (cnt >= 0)
-        {
-            jsonconvert += encode.substring(cnt, cnt+1);
-            cnt--;
-        }
-*//*
-
-        return jsonconvert;
-    }
-*/
 
     public static String decode(String strEncode){
         String jsonconvert = new StringBuilder(strEncode).reverse().toString();
@@ -180,14 +156,6 @@ public class Until {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
-
-    public static void setWindow(Activity activity){
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = activity.getWindow(); // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
     }
 
     public static void setBalanceWallet(View myWallet){
@@ -328,8 +296,6 @@ public class Until {
 
     }
 
-
-
     public static void logoutAPI(){
         if (Global.getTXID() == null || Global.getTXID().equals("")) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
@@ -361,13 +327,6 @@ public class Until {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         activity.finish();
-    }
-
-    public static Uri getImageUri(Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(MyApplication.getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 
     public static File createImageFile() throws IOException {
@@ -456,8 +415,7 @@ public class Until {
         }
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -479,8 +437,7 @@ public class Until {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(String imgPath,
-                                                         int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(String imgPath, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -573,63 +530,4 @@ public class Until {
 
     }
 
-    public static Bitmap getBitmap(String path) {
-
-        Uri uri = Uri.fromFile(new File(path));
-        InputStream in = null;
-        try {
-            final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
-            in = MyApplication.getContext().getContentResolver().openInputStream(uri);
-
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(in, null, o);
-            in.close();
-
-            int scale = 1;
-            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
-                    IMAGE_MAX_SIZE) {
-                scale++;
-            }
-            Log.d(TAG, "scale = " + scale + ", orig-width: " + o.outWidth + ", orig-height: " + o.outHeight);
-
-            Bitmap bitmap = null;
-            in = MyApplication.getContext().getContentResolver().openInputStream(uri);
-            if (scale > 1) {
-                scale--;
-                // scale to max possible inSampleSize that still yields an image
-                // larger than target
-                o = new BitmapFactory.Options();
-                o.inSampleSize = scale;
-                bitmap = BitmapFactory.decodeStream(in, null, o);
-
-                // resize to desired dimensions
-                int height = bitmap.getHeight();
-                int width = bitmap.getWidth();
-                Log.d(TAG, "1th scale operation dimenions - width: " + width + ", height: " + height);
-
-                double y = Math.sqrt(IMAGE_MAX_SIZE
-                        / (((double) width) / height));
-                double x = (y / height) * width;
-
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int) x,
-                        (int) y, true);
-                bitmap.recycle();
-                bitmap = scaledBitmap;
-
-                System.gc();
-            } else {
-                bitmap = BitmapFactory.decodeStream(in);
-            }
-            in.close();
-
-            Log.d(TAG, "bitmap size - width: " + bitmap.getWidth() + ", height: " +
-                    bitmap.getHeight());
-            return bitmap;
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-            return null;
-        }
-    }
 }

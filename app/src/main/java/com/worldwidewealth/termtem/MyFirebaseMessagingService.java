@@ -30,11 +30,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String box = remoteMessage.getData().get("box");
         String click_action = remoteMessage.getNotification().getClickAction();
         if (box != null) {
+            sendNotification(txt, box, click_action);
+
+/*
             if (box.contains("*")) {
                 Global.setOTP(box.split("\\*")[0]);
             } else {
                 sendNotification(txt, box, click_action);
             }
+*/
         }
     }
 

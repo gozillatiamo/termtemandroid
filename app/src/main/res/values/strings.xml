@@ -226,6 +226,8 @@
     <string name="alert_topup_fail">เติมเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
     <string name="message_get_slip_again">รายการของท่าน ดำเนินการเสร็จสิ้น\nกด "ยืนยัน" เพื่อรับหลักฐานการชำระ</string>
     <string name="search_hint">ค้นหา...</string>
+    <string name="update">อัพเดทแอพพลิเคชั่น</string>
+    <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ ท่านต้องการอัพเดทเดี๋ยวนี้หรือไม่?</string>
 
 
     <string-array name="str_list_dashboard">

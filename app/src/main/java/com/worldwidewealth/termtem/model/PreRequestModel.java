@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.model;
 
+import com.worldwidewealth.termtem.BuildConfig;
+
 /**
  * Created by MyNet on 4/11/2559.
  */
@@ -20,6 +22,7 @@ public class PreRequestModel {
         private String PLATFORM;
         private String AGENTID = "";
         private String USERID = "";
+        private String VERSION = BuildConfig.VERSION_NAME;
 
         public Data(String token, String device_id, double latitude, double longitude, String platfrom) {
             this.PUSHTOKEN = token;

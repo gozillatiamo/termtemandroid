@@ -52,12 +52,8 @@ public class EncryptionData {
     private static final Charset characterSet = Charset.forName("ASCII");
 
     static public String EncryptData(String strData, String key) {
-//        String key = null;
-//        if (type == null){
-//            key = DEFAULTKEY;
-//        } else {
-//            key = OTPKEY;
-//        }
+
+        if (strData == null || strData.equals("")) return "";
 
         String strResult = strData + ";" ;
 //        if (strData.length() > 92160)
@@ -106,7 +102,8 @@ public class EncryptionData {
     }
 
     static public String DecryptData(String strData, String key) {
-        if (strData == null) return null;
+        if (strData == null || strData.equals("")) return "";
+
         String strResult = strData.replace("%2B", "+");
 
         byte[] bb = key.getBytes(characterSet);
@@ -207,7 +204,7 @@ public class EncryptionData {
 */
 
                 new ErrorNetworkThrowable(null).networkError(context,
-                        msg+"\n"+responseModel.getMsg(), call, callback, true);
+                        msg/*+"\n"+responseModel.getMsg()*/, call, callback, true);
             } else{
                 return responseModel;
             }

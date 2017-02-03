@@ -71,22 +71,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivitySettingAlert"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityOneBill"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityBillDetail"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.worldwidewealth.termtem.dashboard.billpayment.ActivityBillHistory"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
             android:name="com.worldwidewealth.termtem.game.ActivityGame"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />

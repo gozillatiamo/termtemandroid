@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings.Secure;
@@ -55,7 +56,6 @@ public class SplashScreenWWW extends AppCompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
-        Log.e(TAG, Until.decode("=0XfiIiOElkUFNVVsIiI6QUSU5URHFELiIiOElEWUxiIz9WaioTTS9kRUFETQxiIioDRJV0QJZVREtnOhRXYkxiIElEROV0RiojbvlGdjF2e"));
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -112,7 +112,7 @@ public class SplashScreenWWW extends AppCompatActivity{
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
-        handler.postDelayed(runnable, 3000);
+            handler.postDelayed(runnable, 3000);
 
 /*
         if (!initFCM()) {
@@ -226,26 +226,27 @@ public class SplashScreenWWW extends AppCompatActivity{
                     if (responseValues == null) return;
 
                     if (responseValues instanceof ResponseModel){
-                        Until.setTXIDSharedPreferences(((ResponseModel)responseValues).getTXID(), Global.getDEVICEID());
-                        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        finish();
+                        ResponseModel responseModel = (ResponseModel)responseValues;
 
-                    }
-/*
-                    if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                        ResponseModel model = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
+                        if (responseModel.getShow() == APIServices.SUCCESS) {
 
-                        if (model.getStatus() == APIServices.SUCCESS) {
+                            if (checkVersionApp(responseModel.getVersion(), responseModel.getTXID())) {
+                                startLogin(responseModel.getTXID());
+                            }
                         } else {
-                            new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this,
-                                    model.getMsg(), call, this);
+                            AlertDialog builder = new AlertDialog.Builder(SplashScreenWWW.this, R.style.MyAlertDialogWarning)
+                                    .setCancelable(false)
+                                    .setTitle(R.string.warning)
+                                    .setMessage(responseModel.getDesc())
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    }).show();
                         }
 
                     }
-*/
-
                 }
 
                 @Override
@@ -254,6 +255,44 @@ public class SplashScreenWWW extends AppCompatActivity{
                 }
             });
         }
+
+    }
+
+    private void startLogin(String txid){
+        Until.setTXIDSharedPreferences(txid, Global.getDEVICEID());
+        Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+
+    }
+
+    private boolean checkVersionApp(String version, final String txid){
+
+        if (!version.equals("0.1.0")) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.MyAlertDialogWarning);
+            alertDialog.setTitle(getString(R.string.update));
+//                alertDialog.setMessage("You are using "+ExistingVersionName+" version\n"+MarketVersionName+" version is availble\nDo you which to download it?");
+            alertDialog.setMessage(getString(R.string.update_message));
+            alertDialog.setCancelable(false);
+            alertDialog.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id" + BuildConfig.APPLICATION_ID)));
+                    }
+                }
+            });
+            alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startLogin(txid);
+                }
+            });
+            alertDialog.show();
+            return false;
+        }
+        return true;
 
     }
 

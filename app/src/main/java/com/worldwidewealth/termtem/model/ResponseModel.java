@@ -5,10 +5,14 @@ package com.worldwidewealth.termtem.model;
  */
 
 public class ResponseModel{
+
     private int Status;
     private String Msg;
     private String TXID;
     private String ff;
+    private String version;
+    private int show;
+    private String desc;
 
     public String getFf() {
         return ff;
@@ -27,7 +31,19 @@ public class ResponseModel{
         return TXID;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
     public int getStatus() {
         return Status;
+    }
+
+    public int getShow() {
+        return show;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

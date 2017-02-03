@@ -36,7 +36,6 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.addcreditline.ActivityAddCreditLine;
-import com.worldwidewealth.termtem.dashboard.billpayment.fragment.FragmentBillSlip;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
@@ -122,9 +121,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
         if (stackCount != 0) {
             Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
-            if (
-                    currentFragment instanceof FragmentBillSlip ||
-                            currentFragment instanceof FragmentTopupSlip) return;
+            if (currentFragment instanceof FragmentTopupSlip) return;
         }
         new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
                 getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
@@ -137,6 +134,7 @@ public class ActivityDashboard extends AppCompatActivity{
 
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
@@ -159,6 +157,7 @@ public class ActivityDashboard extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+*/
 
     private void initDialog(){
         mDialogHelp = new DialogHelp(ActivityDashboard.this);

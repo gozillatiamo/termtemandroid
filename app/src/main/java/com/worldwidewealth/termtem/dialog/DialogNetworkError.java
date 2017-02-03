@@ -46,13 +46,13 @@ public class DialogNetworkError {
 
         switch (requestModel.getAction()){
             case APIServices.ACTIONESLIP:
-                msg = requestModel.getAction()+"\n"+context.getString(R.string.message_get_slip_again);
+                msg = /*requestModel.getAction()+"\n"+*/context.getString(R.string.message_get_slip_again);
                 positiveBtn = context.getString(R.string.confirm);
                 styleAlert = R.style.MyAlertDialogWarning;
                 title = mContext.getString(R.string.warning);
                 break;
             default:
-                msg = requestModel.getAction()+"\n"+mContext.getString(R.string.network_error_message);
+                msg = /*requestModel.getAction()+"\n"+*/mContext.getString(R.string.network_error_message);
                 positiveBtn = context.getString(R.string.try_again);
                 styleAlert = R.style.MyAlertDialogError;
                 title = mContext.getString(R.string.error);

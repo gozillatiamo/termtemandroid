@@ -370,6 +370,7 @@ public class FragmentTopupPackage extends  Fragment{
         mRunnableSubmit = new Runnable() {
             @Override
             public void run() {
+/*
                 mTimeout++;
                 if (mTimeout == 10){
                     new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.topup_time_out), new DialogInterface.OnClickListener() {
@@ -387,16 +388,17 @@ public class FragmentTopupPackage extends  Fragment{
                     mHandler.postDelayed(mRunnableSubmit, postDelay);
                     return;
                 }
+*/
 
                 Call<ResponseBody> callSubmit = services.submitTopup(
                         new RequestModel(APIServices.ACTIONSUBMITTOPUP,
                                 new SubmitTopupRequestModel(String.valueOf(getmAmt()),
                                         mCarrier,
-                                        Global.getOTP(),
+//                                        Global.getOTP(),
                                         mPhone,
                                         model.getTranid(),
                                         mButtonID)));
-                Global.setOTP(null);
+//                Global.setOTP(null);
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

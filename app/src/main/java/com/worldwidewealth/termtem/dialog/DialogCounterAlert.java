@@ -52,7 +52,7 @@ public class DialogCounterAlert {
         if (title.equals(context.getString(R.string.error))){
             builder = new AlertDialog.Builder(context, R.style.MyAlertDialogError);
         } else {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.MyAlertDialogWarning);
         }
 
         builder.setTitle(title);

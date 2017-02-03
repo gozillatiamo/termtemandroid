@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             new DialogCounterAlert.DialogProgress(MainActivity.this);
-                            serviceLogin();
+                            serviceAcceptWIFI();
                         }
                     })
                     .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
@@ -205,6 +205,24 @@ public class MainActivity extends AppCompatActivity {
             serviceLogin();
         }
 
+    }
+
+    private void serviceAcceptWIFI(){
+        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
+                new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(MainActivity.this, call, response.body(), this);
+                if (responseValues != null) serviceLogin();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
+            }
+        });
     }
 
     private void initBtn(){
