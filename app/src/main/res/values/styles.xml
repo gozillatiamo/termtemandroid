@@ -11,18 +11,7 @@
         <item name="background">@color/colorBackground</item>
         <item name="actionModeBackground">@color/colorAccent</item>
         <item name="android:actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-<!--
-        <item name="android:textAppearance">@style/CustomFontStyle</item>
-        <item name="android:typeface">monospace</item>
-        <item name="android:buttonStyle">@style/CustomFontStyle</item>
-        <item name="android:textAppearanceListItem">@style/CustomFontStyle</item>
--->
     </style>
-    <!--
-        <style name="CustomFontStyle">
-            <item name="android:typeface">monospace</item>
-        </style>
-    -->
 
     <style name="MyEditTextStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -39,12 +28,6 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>
-    </style>
-
-    <style name="BtnSubmit" parent="Base.Widget.AppCompat.Button">
-        <item name="android:background">@drawable/ripple_green</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="StyleSlip" parent="Base.CardView">

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer-array name="ic_list_credit_limit">
-        <item>@drawable/book_bank</item>
-        <item>@drawable/debit_card</item>
-        <item>@drawable/receipt</item>
-    </integer-array>
-
     <integer-array name="ic_list_bank">
         <item>@drawable/bbl</item>
         <item>@drawable/ktb</item>
@@ -26,28 +20,6 @@
         <item>@drawable/gsb</item>
         <item>@drawable/ghb</item>
         <item>@drawable/baac</item>
-    </integer-array>
-    
-    <integer-array name="ic_bill">
-        <item>@drawable/ic_light_128</item>
-        <item>@drawable/ic_water_128</item>
-        <item>@drawable/ic_internet_128</item>
-        <item>@drawable/ic_telephone_128</item>
-    </integer-array>
-
-    <integer-array name="ic_list_dashboard">
-        <item>@drawable/ic_my_card_64</item>
-        <item>@drawable/ic_card_to_card_64</item>
-        <item>@drawable/ic_gift_64</item>
-        <item>@drawable/ic_bag_wallet_64</item>
-        <item>@drawable/ic_web_passport_64</item>
-        <item>@drawable/ic_credit_64</item>
-        <item>@drawable/ic_service_64</item>
-        <item>@drawable/ic_my_profile_64</item>
-        <item>@drawable/ic_settings_64</item>
-        <item>@drawable/ic_time_line_64</item>
-        <item>@drawable/ic_vouchers_64</item>
-        <item>@drawable/ic_qr_code_scan_64</item>
     </integer-array>
 
 </resources>

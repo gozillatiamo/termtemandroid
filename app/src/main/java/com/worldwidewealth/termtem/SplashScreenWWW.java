@@ -268,14 +268,15 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     private boolean checkVersionApp(String version, final String txid){
-
-        if (!version.equals("0.1.0")) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.MyAlertDialogWarning);
-            alertDialog.setTitle(getString(R.string.update));
+        Log.e(TAG, "version: "+version);
+        Log.e(TAG, "VERSION: "+BuildConfig.VERSION_NAME);
+        if (!version.equals(BuildConfig.VERSION_NAME)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogWarning);
+            builder.setTitle(getString(R.string.update_app_title));
 //                alertDialog.setMessage("You are using "+ExistingVersionName+" version\n"+MarketVersionName+" version is availble\nDo you which to download it?");
-            alertDialog.setMessage(getString(R.string.update_message));
-            alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
+            builder.setMessage(getString(R.string.update_message));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
@@ -284,12 +285,23 @@ public class SplashScreenWWW extends AppCompatActivity{
                     }
                 }
             });
-            alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     startLogin(txid);
                 }
             });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
+                            .setTextColor(getResources()
+                                    .getColor(android.R.color.holo_orange_dark));
+                }
+            });
             alertDialog.show();
+
             return false;
         }
         return true;

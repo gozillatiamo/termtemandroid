@@ -29,7 +29,7 @@ android {
         applicationId "com.worldwidewealth.termtem"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 2
+        versionCode 1
         versionName "1.0.0"
 //        multiDexEnabled true
     }

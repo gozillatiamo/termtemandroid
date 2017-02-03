@@ -220,13 +220,15 @@
     <string name="submit_service_please">กรุณายืนยันเงื่อนไข</string>
     <string name="menu_mpay">โอนเงินผ่าน MPay</string>
     <string name="mpay_station">เอ็มเปย์สเตชั่น</string>
-    <string name="mpay_bank">ช่องทางธนาคาร</string>
+    <string name="mpay_bank">ช่องทางธนาคNาร</string>
     <string name="has_upload">ท่านมีรายการทำอัพโหลดอยู่ กรุณาทำรายการภายหลัง</string>
     <string name="data_outofmemory">ข้อมูลของท่านมีขนาดที่ใหญ่เกินไป กรุณาลองใหม่อีกครั้ง</string>
     <string name="alert_topup_fail">เติมเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
     <string name="message_get_slip_again">รายการของท่าน ดำเนินการเสร็จสิ้น\nกด "ยืนยัน" เพื่อรับหลักฐานการชำระ</string>
     <string name="search_hint">ค้นหา...</string>
-    <string name="update">อัพเดทแอพพลิเคชั่น</string>
+    <string name="update">อัพเดท</string>
+    <string name="update_app_title">อัพเดทแอพพลิเคชั่น</string>
+    <string name="later">ไว้ภายหลัง</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ ท่านต้องการอัพเดทเดี๋ยวนี้หรือไม่?</string>
 
 
