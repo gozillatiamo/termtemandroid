@@ -143,7 +143,7 @@
     <string name="success">สำเร็จ</string>
     <string name="change_password_success">เปลี่ยนรหัสผ่านสำเร็จ</string>
     <string name="please_choice_topup">กรุณาเลือกจำรวนที่ท่านต้องการจะเติม</string>
-    <string name="balance_not_enough">ยอดเงินคงเหลือของทe่านไม่พอที่จะทำรายการ</string>
+    <string name="balance_not_enough">ยอดเงินคงเหลือของท่านไม่พอที่จะทำรายการ</string>
     <string name="register">ลงทะเบียน</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
     <string name="please_phone_topup_error">หมายเลขโทรศัพท์ไม่ถูกต้อง</string>
