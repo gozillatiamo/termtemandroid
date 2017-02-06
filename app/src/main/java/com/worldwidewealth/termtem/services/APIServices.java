@@ -152,7 +152,7 @@ public interface APIServices {
     .create();
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl(MyApplication.getContext().getString(R.string.server_test)).client(client)
+        .baseUrl(MyApplication.getContext().getString(R.string.server_pro)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
 

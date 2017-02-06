@@ -243,7 +243,10 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:foreground="?android:attr/selectableItemBackground"
-                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardElevation="0dp"
+                            android:clickable="false"
+                            app:cardBackgroundColor="@android:color/darker_gray"
+                            android:alpha="0.2"
                             app:cardUseCompatPadding="true">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -276,7 +279,10 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:foreground="?android:attr/selectableItemBackground"
-                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:cardElevation="0dp"
+                            android:clickable="false"
+                            app:cardBackgroundColor="@android:color/darker_gray"
+                            android:alpha="0.2"
                             app:cardUseCompatPadding="true">
 
                             <LinearLayout
@@ -343,7 +349,7 @@
                         android:id="@+id/menu_mpay_station"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_size"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:cardUseCompatPadding="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardElevation="@dimen/cardview_default_elevation"
