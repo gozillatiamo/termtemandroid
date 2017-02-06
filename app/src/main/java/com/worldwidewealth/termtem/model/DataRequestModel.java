@@ -11,36 +11,27 @@ import com.worldwidewealth.termtem.R;
 
 public class DataRequestModel {
 
-    private String DEVICEID = Global.getDEVICEID();
+    private String DEVICEID = Global.getInstance().getDEVICEID();
     private String PLATFORM = MyApplication.getContext().getString(R.string.platform);
-    private String TXID = Global.getTXID();
+    private String TXID = Global.getInstance().getTXID();
     private String AGENTID = EncryptionData.EncryptData(
-            EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID()),
-            Global.getDEVICEID()+Global.getTXID());
+            EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID()),
+            Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
     private String USERID = EncryptionData.EncryptData(
-            EncryptionData.DecryptData(Global.getUSERID(), Global.getTXID()),
-            Global.getDEVICEID()+Global.getTXID());
+            EncryptionData.DecryptData(Global.getInstance().getUSERID(), Global.getInstance().getTXID()),
+            Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-
-
-    public void setAGENTID(String AGENTID) {
-        this.AGENTID = AGENTID;
+    public DataRequestModel() {
     }
 
-    public void setDEVICEID(String DEVICEID) {
-        this.DEVICEID = DEVICEID;
-    }
+    public DataRequestModel(String agentid, String userid) {
+        AGENTID = EncryptionData.EncryptData(
+                EncryptionData.DecryptData(agentid, Global.getInstance().getTXID()),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        USERID = EncryptionData.EncryptData(
+                EncryptionData.DecryptData(userid, Global.getInstance().getTXID()),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-    public void setPLATFORM(String PLATFORM) {
-        this.PLATFORM = PLATFORM;
-    }
-
-    public void setTXID(String TXID) {
-        this.TXID = TXID;
-    }
-
-    public void setUSERID(String USERID) {
-        this.USERID = USERID;
     }
 
     public String getDEVICEID() {
@@ -62,4 +53,6 @@ public class DataRequestModel {
     public String getUSERID() {
         return USERID;
     }
+
+
 }

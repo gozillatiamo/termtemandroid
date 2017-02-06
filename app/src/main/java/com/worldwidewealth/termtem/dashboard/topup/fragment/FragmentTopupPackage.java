@@ -104,6 +104,12 @@ public class FragmentTopupPackage extends  Fragment{
         setEnabledBtn(true);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Until.hideSoftKeyboard(mHolder.mEditPhone);
+    }
+
     public void setEnabledBtn(boolean enabled){
         mHolder.mBtnTopup.setEnabled(enabled);
         mHolder.mBtnNext.setEnabled(enabled);
@@ -240,7 +246,7 @@ public class FragmentTopupPackage extends  Fragment{
             return;
         }
 
-        if (Global.getBALANCE() < mAmt){
+        if (Global.getInstance().getBALANCE() < mAmt){
             AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                     .setMessage(R.string.balance_not_enough)
                     .setPositiveButton(R.string.confirm, null)

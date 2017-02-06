@@ -33,7 +33,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/icon_size"
             android:adjustViewBounds="true"
-            android:src="@drawable/termtem_logo_2"
+            android:src="@drawable/termtem_logo"
             android:id="@+id/imageView3"
              />
 

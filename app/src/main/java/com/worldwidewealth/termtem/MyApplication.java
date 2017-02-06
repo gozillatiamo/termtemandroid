@@ -43,7 +43,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         );
     }
 
-
     public static Context getContext(){
         return mContext;
     }
@@ -59,6 +58,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
+
         if (canUseLeaving(activity)){
 
             LeavingOrEntering.activityResumed(activity);
@@ -104,7 +104,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         public static void activityResumed( Activity activity )
         {
 
-            if (currentActivity == activity || Global.getAGENTID() == null){
+            if (currentActivity == activity || Global.getInstance().getTXID() == null){
                 Until.backToSignIn(activity);
                 currentActivity = null;
             } else {

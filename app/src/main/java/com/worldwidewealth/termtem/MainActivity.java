@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
         initBtn();
-//        initSpinner();
 
     }
 
@@ -91,12 +90,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mHolder.mBtnLogin.setEnabled(true);
-        Global.setTXID(Until.getTXIDSharedPreferences());
-        Global.setDEVICEID(Until.getDEVICEIDSharedPreferences());
     }
 
     private boolean mFormatting;
-    private String lastChar = " ";
     private void initEditText(){
         mHolder.mPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,14 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private void initSpinner(){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.phone_country, R.layout.text_spinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mHolder.mSpinnerPhoneCountry.setAdapter(adapter);
-        mHolder.mSpinnerPhoneCountry.setSelection(0);
-
     }
 
     private void login(){
@@ -198,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             alertDialog.show();
-//                    new DialogCounterAlert(MainActivity.this, null, getString(R.string.alert_connect_wifi), null);
-//                    return;
         } else {
             new DialogCounterAlert.DialogProgress(MainActivity.this);
             serviceLogin();
@@ -255,11 +241,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
-                        Global.getDEVICEID(),
+                        Global.getInstance().getDEVICEID(),
                         getString(R.string.platform),
-                        EncryptionData.EncryptData(mPhone.replace(" ", ""), Global.getDEVICEID()+Global.getTXID()),
-                        EncryptionData.EncryptData(mPassword, Global.getDEVICEID()+Global.getTXID()),
-                        Global.getTXID())));
+                        EncryptionData.EncryptData(mPhone.replace(" ", ""),
+                                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()),
+                        EncryptionData.EncryptData(mPassword,
+                                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()),
+                        Global.getInstance().getTXID())));
 
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                     @Override
@@ -279,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (responseModel != null){
-//                            "Msg":"002:Please register your device first.:bb4e2a11-52c8-42fe-aa00-5df68125e61c:4d10edee-c7b8-4a36-abc1-b58fa5784398"
 
                             String[] strRegisDevice = responseModel.getMsg().toString().split(":");
                             if (strRegisDevice != null) {
@@ -293,19 +280,12 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             String responseStr = strResponse;
-//                            String converted = Until.ConvertJsonEncode(responseStr);
                             String responDecode = Until.decode(responseStr);
-                            Log.e(TAG, "ResposeLogIn: "+responDecode);
 
-                            //String json = gson.toJson(responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                            Global.setUSERID(loginResponseModel.getUSERID());
-                            Global.setAGENTID(loginResponseModel.getAGENTID());
-                            Global.setBALANCE(loginResponseModel.getBALANCE());
-                            String decode = EncryptionData.DecryptData(Global.getUSERID(), Global.getTXID());
-                            Log.e(TAG, "USERID: "+decode);
-                            String decodeagent = EncryptionData.DecryptData(Global.getAGENTID(), Global.getTXID());
-                            Log.e(TAG, "AGENTID: "+decodeagent);
+                            Global.getInstance().setUSERID(loginResponseModel.getUSERID());
+                            Global.getInstance().setAGENTID(loginResponseModel.getAGENTID());
+                            Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
 
                             if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
 
@@ -328,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        t.printStackTrace();
                         new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
                     }
                 });
@@ -339,10 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void registerDevice(String msg, String agantId, String userId){
-        //final DataRequestModel dataRequestModel = new DataRequestModel();
-        Global.setAGENTID(agantId);
-        Global.setUSERID(userId);
+    private void registerDevice(String msg, final String agantId, final String userId){
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(msg)
                 .setNegativeButton(R.string.cancel, null)
@@ -353,7 +329,11 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Call<ResponseModel> call = services.registerDevice(new RequestModel(APIServices.ACTIONREGISTERDEVICE, new DataRequestModel()));
+
+                                Call<ResponseModel> call = services.registerDevice(
+                                        new RequestModel(APIServices.ACTIONREGISTERDEVICE,
+                                                new DataRequestModel(agantId, userId)));
+
                                 APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                                     @Override
                                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
@@ -388,7 +368,6 @@ public class MainActivity extends AppCompatActivity {
         private Button mBtnLogin;
         private EditText mPassword;
         private AutoCompleteTextView mPhone;
-        private Spinner mSpinnerPhoneCountry;
         private TextView mHelp;
 
         public ViewHolder(AppCompatActivity view){
@@ -400,7 +379,6 @@ public class MainActivity extends AppCompatActivity {
 
             mPassword = (EditText) view.findViewById(R.id.edit_password);
             mHelp = (TextView) view.findViewById(R.id.help);
-//            mSpinnerPhoneCountry = (Spinner) view.findViewById(R.id.spinner_phone_country);
 
         }
     }

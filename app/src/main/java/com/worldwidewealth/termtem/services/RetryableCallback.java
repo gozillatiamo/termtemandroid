@@ -14,7 +14,7 @@ import retrofit2.Response;
  */
 
 public abstract class RetryableCallback<T> implements Callback<T> {
-    private int totalRetries = 3;
+    private int totalRetries = 0;
     private static final String TAG = RetryableCallback.class.getSimpleName();
     private final Call<T> call;
     private int retryCount = 0;
@@ -63,6 +63,6 @@ public abstract class RetryableCallback<T> implements Callback<T> {
             public void run() {
                 call.clone().enqueue(RetryableCallback.this);
             }
-        }, 3000);
+        }, 5000);
     }
 }

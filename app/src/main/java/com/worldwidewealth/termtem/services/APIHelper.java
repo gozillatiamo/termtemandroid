@@ -10,7 +10,7 @@ import retrofit2.Response;
 
 public class APIHelper {
 
-    public static final int DEFAULT_RETIES = 3;
+    public static final int DEFAULT_RETIES = 0;
     public static final String TAG = APIHelper.class.getSimpleName();
 
     public static <T> void enqueueWithRetry(Call<T> call, final int retryCount, final Callback<T> callback){

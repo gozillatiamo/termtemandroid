@@ -154,7 +154,7 @@ public class MPayStationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String AMT = (mBottomAction.getPrice());
                 if (Double.parseDouble(AMT) < 1 || Double.parseDouble(AMT) > 49000){
-                    Toast.makeText(MPayStationActivity.this, getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MPayStationActivity.this, getString(R.string.alert_amount_mpay_over), Toast.LENGTH_LONG).show();
                     return;
                 }
                 mBottomAction.setEnable(false);

@@ -142,9 +142,6 @@ public interface APIServices {
                                 .method(originalRequest.method(), Until.encode(originalRequest.body()));
                     }
                     Response response = chain.proceed(builder.build());
-                    Log.e(TAG, "isSuccessful: "+response.isSuccessful());
-                    Log.e(TAG, "message: "+response.message());
-
                     return  response;
                 }
             })
@@ -158,7 +155,6 @@ public interface APIServices {
         .baseUrl(MyApplication.getContext().getString(R.string.server_test)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
-
 
 }
 

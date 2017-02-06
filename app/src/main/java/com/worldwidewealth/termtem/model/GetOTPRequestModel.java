@@ -7,5 +7,5 @@ import com.worldwidewealth.termtem.Global;
  */
 
 public class GetOTPRequestModel extends DataRequestModel{
-    private String PUSHTOKEN = Global.getTOKEN();
+    private String PUSHTOKEN = Global.getInstance().getTOKEN();
 }

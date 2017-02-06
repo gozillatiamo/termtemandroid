@@ -17,12 +17,12 @@ public class SubmitTopupRequestModel extends DataRequestModel{
     private String BUTTONID;
 
     public SubmitTopupRequestModel(String AMT, String CARRIER, String PHONENO, String TRANID, String BUTTONID) {
-        this.AMT = EncryptionData.EncryptData(AMT, Global.getDEVICEID()+TRANID);
+        this.AMT = EncryptionData.EncryptData(AMT, Global.getInstance().getDEVICEID()+TRANID);
 
-        this.CARRIER = EncryptionData.EncryptData(CARRIER, Global.getDEVICEID()+TRANID);
+        this.CARRIER = EncryptionData.EncryptData(CARRIER, Global.getInstance().getDEVICEID()+TRANID);
 
 
-        this.PHONENO = EncryptionData.EncryptData(PHONENO, Global.getDEVICEID()+TRANID);
+        this.PHONENO = EncryptionData.EncryptData(PHONENO, Global.getInstance().getDEVICEID()+TRANID);
 
         this.TRANID = TRANID;
         this.BUTTONID = BUTTONID;

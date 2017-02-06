@@ -78,11 +78,6 @@ import retrofit2.Response;
  */
 
 public class Until {
-
-    public static final String KEYPF = "data";
-    public static final String KEYTXID = "txid";
-    public static final String KEYDEVICEID = "deviceid";
-    public static final String LOGOUT = "LOGOUT";
     public static final String TAG = Until.class.getSimpleName();
 
     public static RequestBody encode(final RequestBody body){
@@ -104,8 +99,6 @@ public class Until {
                     buffer.close();
                     sink.close();
                 }catch (OutOfMemoryError e){
-                    /*AlertDialog alertDialog = new AlertDialog.Builder(MyApplication.getContext())
-                            .*/
                 }
             }
         };
@@ -116,58 +109,18 @@ public class Until {
         byte[] decode = Base64.decode(jsonconvert, Base64.DEFAULT);
         return new String(decode);
     }
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listView);
-                item.measure(0, 0);
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listView.getDividerHeight() *
-                    (numberOfItems - 1);
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight;
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-
-            return true;
-
-        } else {
-            return false;
-        }
-
-    }
-
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     public static void setBalanceWallet(View myWallet){
-        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(LOGOUT, true)) return;
+
+        if (Global.getInstance().getTXID() == null) return;
 
         TextView balanceDecimal = (TextView) myWallet.findViewById(R.id.txt_balance_decimal);
         TextView balanceInteger = (TextView) myWallet.findViewById(R.id.txt_balance_integer);
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
-        String[] balance = format.format(Global.getBALANCE()).split("\\.");
+        String[] balance = format.format(Global.getInstance().getBALANCE()).split("\\.");
         balanceInteger.setText(balance[0]);
         balanceDecimal.setText("."+balance[1]);
 
@@ -175,8 +128,7 @@ public class Until {
 
     public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
         APIServices services = APIServices.retrofit.create(APIServices.class);
-        boolean logout =  context.getSharedPreferences(KEYPF, Context.MODE_PRIVATE).getBoolean("LOGOUT", true);
-        if (logout) return;
+        if (Global.getInstance().getTXID() == null) return;
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -185,7 +137,7 @@ public class Until {
 
                 if (values instanceof String){
                     LoginResponseModel loginResponseModel = new Gson().fromJson((String)values, LoginResponseModel.class);
-                    Global.setBALANCE(loginResponseModel.getBALANCE());
+                    Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
                     setBalanceWallet(includeMywallet);
                 }
 
@@ -195,7 +147,6 @@ public class Until {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                new ErrorNetworkThrowable(t).networkError(context, call, this);
             }
         });
 
@@ -241,46 +192,6 @@ public class Until {
         return "android:switcher:" + viewId + ":" + index;
     }
 
-    public static void setLogoutSharedPreferences(Context context, boolean remove){
-
-        SharedPreferences sharedPref = context.getSharedPreferences(KEYPF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        if (!remove) {
-            editor.putBoolean("LOGOUT", false);
-            editor.putString("AGENTID", Global.getAGENTID());
-            editor.putString("DEVICEID", Global.getDEVICEID());
-            editor.putString("TXID", Global.getTXID());
-            editor.putString("USERID", Global.getUSERID());
-        } else {
-            editor.putBoolean("LOGOUT", true);
-            editor.putString("AGENTID", null);
-            editor.putString("DEVICEID", null);
-            editor.putString("TXID", null);
-            editor.putString("USERID", null);
-        }
-
-        editor.commit();
-
-    }
-
-    public static void setTXIDSharedPreferences(String txid, String deviceid){
-        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(KEYTXID, txid);
-        editor.putString(KEYDEVICEID, deviceid);
-        editor.commit();
-    }
-
-    public static String getTXIDSharedPreferences(){
-        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
-        return preferences.getString(KEYTXID, null);
-    }
-
-    public static String getDEVICEIDSharedPreferences(){
-        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences(KEYTXID, Context.MODE_PRIVATE);
-        return preferences.getString(KEYDEVICEID, null);
-    }
-
     public static String convertToStringRequest(RequestBody body){
         try {
             final RequestBody copy = body;
@@ -297,21 +208,20 @@ public class Until {
     }
 
     public static void logoutAPI(){
-        if (Global.getTXID() == null || Global.getTXID().equals("")) return;
+        if (Global.getInstance().getTXID() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
+
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null) return;
-                Global.setAGENTID("");
-                Global.setUSERID("");
-                Global.setBALANCE(0.00);
-                Global.setTXID("");
-                Global.setDEVICEID("");
-                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
+                Global.getInstance().setAGENTID(null);
+                Global.getInstance().setUSERID(null);
+                Global.getInstance().setBALANCE(0);
+                Global.getInstance().setTXID(null);
             }
 
             @Override
@@ -340,8 +250,6 @@ public class Until {
                 storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        //mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -363,12 +271,6 @@ public class Until {
 
         // for other file managers
         return uri.getPath();
-/*
-        Cursor cursor = MyApplication.getContext().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-*/
     }
 
     public static String getPicasaImage(Uri imageUri) {
@@ -399,7 +301,6 @@ public class Until {
 
             OutputStream os = new FileOutputStream(f);
 
-            //Utils.InputToOutputStream(is, os);
 
             byte[] buffer = new byte[1024];
             int len;

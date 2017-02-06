@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <drawable name="ic_launcher_app">@drawable/termtem_logo_2</drawable>
+    <drawable name="ic_launcher_app">@drawable/termtem_logo</drawable>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

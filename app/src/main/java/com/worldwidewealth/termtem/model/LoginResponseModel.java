@@ -10,14 +10,14 @@ public class LoginResponseModel {
     private boolean CASHSERVICE;
     private String AGENTID;
     private String USERID;
-    private Double BALANCE;
+    private float BALANCE;
     private List<UserMenuModel> usermenu;
 
-    public Double getBALANCE() {
+    public float getBALANCE() {
         return BALANCE;
     }
 
-    public void setBALANCE(Double BALANCE) {
+    public void setBALANCE(float BALANCE) {
         this.BALANCE = BALANCE;
     }
 

@@ -86,23 +86,16 @@ public class ActivityDashboard extends AppCompatActivity{
         initToolbar();
         initClickMainMenu();
 
-        if (Global.getTXID() != null || Global.getTXID().equals("")) {
-            Until.setLogoutSharedPreferences(MyApplication.getContext(), false);
-        }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
         setEnableBtn(true);
         initBtnMenu();
-        SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
-        boolean logout = sharedPref.getBoolean("LOGOUT", true);
-        if (!logout) {
-            Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
-        }
+
+        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
+
     }
 
     @Override
@@ -133,8 +126,8 @@ public class ActivityDashboard extends AppCompatActivity{
                 });
 
     }
-
 /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
@@ -157,8 +150,8 @@ public class ActivityDashboard extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-*/
 
+*/
     private void initDialog(){
         mDialogHelp = new DialogHelp(ActivityDashboard.this);
         mDialogSetting = new Dialog(ActivityDashboard.this);
@@ -226,25 +219,6 @@ public class ActivityDashboard extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-
-/*
-        mHolder.mBtnForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-*/
-
-/*
-        mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ActivityDashboard.this, ActivityMyQrCode.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        });
-*/
 
         mHolder.mMenuAddCreditLine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,7 +302,9 @@ public class ActivityDashboard extends AppCompatActivity{
                             Toast.makeText(ActivityDashboard.this, R.string.password_not_same, Toast.LENGTH_LONG).show();
                         } else {
                             Call<ResponseModel> call = services.CHANGEPASSWORD(new RequestModel(APIServices.ACTIONCHANGEPASSWORD,
-                                    new ChangePasswordRequestModel(EncryptionData.EncryptData(editNewPass.getText().toString(), Global.getDEVICEID()+Global.getTXID()))
+                                    new ChangePasswordRequestModel(
+                                            EncryptionData.EncryptData(editNewPass.getText().toString(),
+                                                    Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()))
                             ));
 
                             APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
@@ -340,10 +316,7 @@ public class ActivityDashboard extends AppCompatActivity{
                                                     response.body().getMsg(),
                                                     getString(R.string.change_password_success),
                                                     null);
-                                        }/* else {
-                                            new DialogNetworkError(ActivityDashboard.this);
-
-                                        }*/
+                                        }
                                 }
 
                                 @Override

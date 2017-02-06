@@ -1,82 +1,95 @@
 package com.worldwidewealth.termtem;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 /**
  * Created by MyNet on 11/10/2559.
  */
 
 public class Global {
-    private static int page;
-    private static String DEVICEID;
-    private static String USERID;
-    private static String AGENTID;
-    private static String TOKEN;
-    private static String TXID;
-    private static double BALANCE;
-//    private static String OTP = null;
+    private static Global mGlobal;
+    private static final String KEY_GLOBAL = Global.class.getSimpleName();
+    private static SharedPreferences mPreferences;
+    private static SharedPreferences.Editor mEditor;
+    private static final String PAGE = "page";
+    private static final String DEVICEID = "deviceid";
+    private static final String USERID = "userid";
+    private static final String AGENTID = "agentid";
+    private static final String TOKEN = "token";
+    private static final String TXID = "txid";
+    private static final String BALANCE = "balance";
 
-/*
-    public static String getOTP() {
-        return OTP;
+    public static Global getInstance(){
+        if (mGlobal == null){
+            mGlobal = new Global();
+            mPreferences = MyApplication.getContext().getSharedPreferences(KEY_GLOBAL, Context.MODE_PRIVATE);
+            mEditor = mPreferences.edit();
+        }
+
+        return mGlobal;
     }
 
-    public static void setOTP(String OTP) {
-        Global.OTP = OTP;
-    }
-*/
-
-    public static double getBALANCE() {
-        return BALANCE;
+    public Global() {
     }
 
-    public static void setBALANCE(Double BALANCE) {
-        Global.BALANCE = BALANCE;
+    public float getBALANCE() {
+        return mPreferences.getFloat(BALANCE, 0);
     }
 
-    public static String getUSERID() {
-        return USERID;
+    public void setBALANCE(float balance) {
+        mEditor.putFloat(BALANCE, balance);
+        mEditor.commit();
     }
 
-    public static void setUSERID(String USERID) {
-        Global.USERID = USERID;
+    public String getUSERID() {
+        return mPreferences.getString(USERID, null);
     }
 
-    public static String getAGENTID() {
-        return AGENTID;
+    public void setUSERID(String userid) {
+        if ("".equals(userid)) userid = null;
+        mEditor.putString(USERID, userid);
+        mEditor.commit();
     }
 
-    public static void setAGENTID(String AGENTID) {
-        Global.AGENTID = AGENTID;
+    public String getAGENTID() {
+        return mPreferences.getString(AGENTID, null);
     }
 
-    public static String getTXID() {
-        return TXID;
+    public void setAGENTID(String agentid) {
+        if ("".equals(agentid)) agentid = null;
+        mEditor.putString(AGENTID, agentid);
+        mEditor.commit();
     }
 
-    public static void setTXID(String TXID) {
-        Global.TXID = TXID;
+    public String getTXID() {
+        return mPreferences.getString(TXID, null);
     }
 
-    public static String getDEVICEID() {
-        return DEVICEID;
+    public void setTXID(String txid) {
+        if ("".equals(txid)) txid = null;
+        mEditor.putString(TXID, txid);
+        mEditor.commit();
     }
 
-    public static void setDEVICEID(String DEVICEID) {
-        Global.DEVICEID = DEVICEID;
+    public String getDEVICEID() {
+        return mPreferences.getString(DEVICEID, null);
     }
 
-    public static String getTOKEN() {
-        return TOKEN;
+    public void setDEVICEID(String deviceid) {
+        if ("".equals(getUSERID())) deviceid = null;
+        mEditor.putString(DEVICEID, deviceid);
+        mEditor.commit();
     }
 
-    public static void setTOKEN(String TOKEN) {
-        Global.TOKEN = TOKEN;
+    public String getTOKEN() {
+        return mPreferences.getString(TOKEN, null);
     }
 
-    public static int getPage() {
-        return page;
+    public void setTOKEN(String token) {
+        if ("".equals(token)) token = null;
+        mEditor.putString(TOKEN, token);
+        mEditor.commit();
     }
 
-    public static void setPage(int page) {
-        Global.page = page;
-    }
 }

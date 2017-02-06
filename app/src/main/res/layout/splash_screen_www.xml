@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:padding="@dimen/icon_large_size"
-        android:src="@drawable/termtem_logo_2"
+        android:src="@drawable/termtem_logo"
         android:id="@+id/imageView6" />
 
     <com.wang.avi.AVLoadingIndicatorView

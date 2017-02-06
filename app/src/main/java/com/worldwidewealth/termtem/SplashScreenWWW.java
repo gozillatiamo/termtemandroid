@@ -3,7 +3,6 @@ package com.worldwidewealth.termtem;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.until.GPSTracker;
-import com.worldwidewealth.termtem.until.Until;
 
 import java.util.Locale;
 
@@ -40,7 +38,6 @@ import retrofit2.Response;
  */
 public class SplashScreenWWW extends AppCompatActivity{
 
-//    private static final String TAG = "FCM";
     protected String mAction;
     protected double mLat, mLong;
     private APIServices services;
@@ -60,16 +57,9 @@ public class SplashScreenWWW extends AppCompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
-                SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
-                boolean logout = sharedPref.getBoolean("LOGOUT", true);
-                Global.setTXID(sharedPref.getString("TXID", ""));
-                if (Global.getTXID().equals("")) logout = true;
 
-                if (!logout) {
+                if (Global.getInstance().getAGENTID() != null) {
 
-                    Global.setAGENTID(sharedPref.getString("AGENTID", ""));
-                    Global.setUSERID(sharedPref.getString("USERID", ""));
-                    Global.setDEVICEID(sharedPref.getString("DEVICEID", ""));
 
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -79,12 +69,10 @@ public class SplashScreenWWW extends AppCompatActivity{
                             if (responseValues == null) return;
 
                             if (responseValues instanceof ResponseModel){
-                                Global.setAGENTID("");
-                                Global.setUSERID("");
-                                Global.setBALANCE(0.00);
-                                Global.setTXID("");
-                                Global.setDEVICEID("");
-                                Until.setLogoutSharedPreferences(MyApplication.getContext(), true);
+                                Global.getInstance().setAGENTID(null);
+                                Global.getInstance().setUSERID(null);
+                                Global.getInstance().setBALANCE(0);
+                                Global.getInstance().setTXID(null);
                                 getDataDevice();
 
                             }
@@ -114,11 +102,6 @@ public class SplashScreenWWW extends AppCompatActivity{
                 getBaseContext().getResources().getDisplayMetrics());
             handler.postDelayed(runnable, 3000);
 
-/*
-        if (!initFCM()) {
-            handler.postDelayed(runnable, 3000);
-        }
-*/
     }
 
     @Override
@@ -142,9 +125,9 @@ public class SplashScreenWWW extends AppCompatActivity{
 
             @Override
             public void run() {
-                Global.setTOKEN(FirebaseInstanceId.getInstance().getToken());
+                Global.getInstance().setTOKEN(FirebaseInstanceId.getInstance().getToken());
 
-                if (Global.getTOKEN() == null || Global.getTOKEN().equals("")){
+                if (Global.getInstance().getTOKEN() == null){
                     handler.removeCallbacks(this);
                     mRetryToken++;
                     if (mRetryToken == 10){
@@ -177,7 +160,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                     return;
                 }
 
-                String deviceId = Until.getDEVICEIDSharedPreferences();
+                String deviceId = Global.getInstance().getDEVICEID();
 
                 if (deviceId == null) {
                     TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -188,7 +171,7 @@ public class SplashScreenWWW extends AppCompatActivity{
                     }
                 }
 
-                Global.setDEVICEID(deviceId);
+                Global.getInstance().setDEVICEID(deviceId);
 
                 GPSTracker gpsTracker = new GPSTracker(SplashScreenWWW.this);
                 if (gpsTracker.canGetLocation()){
@@ -196,8 +179,8 @@ public class SplashScreenWWW extends AppCompatActivity{
                     mLong = gpsTracker.getLongitude();
 
                     PreRequestModel mPreRequestModel = new PreRequestModel(mAction, new PreRequestModel.Data(
-                            Global.getTOKEN(),
-                            Global.getDEVICEID(),
+                            Global.getInstance().getTOKEN(),
+                            Global.getInstance().getDEVICEID(),
                             mLat,
                             mLong,
                             getString(R.string.platform)
@@ -259,7 +242,7 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     private void startLogin(String txid){
-        Until.setTXIDSharedPreferences(txid, Global.getDEVICEID());
+        Global.getInstance().setTXID(txid);
         Intent intent = new Intent(SplashScreenWWW.this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -268,12 +251,9 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     private boolean checkVersionApp(String version, final String txid){
-        Log.e(TAG, "version: "+version);
-        Log.e(TAG, "VERSION: "+BuildConfig.VERSION_NAME);
         if (!version.equals(BuildConfig.VERSION_NAME)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogWarning);
             builder.setTitle(getString(R.string.update_app_title));
-//                alertDialog.setMessage("You are using "+ExistingVersionName+" version\n"+MarketVersionName+" version is availble\nDo you which to download it?");
             builder.setMessage(getString(R.string.update_message));
             builder.setCancelable(false);
             builder.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
@@ -307,64 +287,4 @@ public class SplashScreenWWW extends AppCompatActivity{
         return true;
 
     }
-
-    private boolean initFCM(){
-        if (getIntent().getExtras() != null) {
-
-            String txt = getIntent().getExtras().getString("txt");
-            String box = getIntent().getExtras().getString("box");
-            getIntent().replaceExtras(new Bundle());
-            if (txt != null && box != null) {
-                Intent intent = new Intent(this, ActivityShowNotify.class);
-                intent.putExtra(MyFirebaseMessagingService.TEXT, txt);
-                intent.putExtra(MyFirebaseMessagingService.BOX, box);
-                startActivity(intent);
-                Log.e(TAG, "txt: "+ txt +"\nbox: "+box);
-                return true;
-            }
-        }
-
-//        writeToFile(FirebaseInstanceId.getInstance().getToken());
-
-        return false;
-    }
-
-/*
-    public void writeToFile(String data) {
-        // Get the directory for the user's public pictures directory.
-        final File path =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-        // Make sure the path directory exists.
-        if(!path.exists())
-        {
-            // Make it, if it doesn't exit
-            path.mkdirs();
-        }
-
-        final File file = new File(path, "token.txt");
-
-        // Save your stream, don't forget to flush() it before closing it.
-
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(data);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-            Toast.makeText(this, "SAVE", Toast.LENGTH_SHORT).show();
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-*/
-
 }

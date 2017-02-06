@@ -23,9 +23,9 @@ public class RegisterRequestModel {
     public static class Data{
         private String AGENTID = "";
         private String USERID = "";
-        private String DEVICEID = Global.getDEVICEID();
-        private String PLATFORM = MyApplication.getContext().getString(R.string.platform);;
-        private String TXID = Global.getTXID();
+        private String DEVICEID = Global.getInstance().getDEVICEID();
+        private String PLATFORM = MyApplication.getContext().getString(R.string.platform);
+        private String TXID = Global.getInstance().getTXID();
         private String FIRSTNAME;
         private String LASTNAME;
         private String EMAIL;
