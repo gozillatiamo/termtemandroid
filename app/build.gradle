@@ -78,7 +78,7 @@ dependencies {
     compile 'com.daimajia.androidanimations:library:1.1.3@aar'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.7.0'
     testCompile 'junit:junit:4.12'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
