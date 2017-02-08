@@ -177,34 +177,10 @@ public class EncryptionData {
                         msg = context.getString(R.string.alert_topup_fail);
                         new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
                         return null;
-
+                    default:
+                        new ErrorNetworkThrowable(null).networkError(context,
+                                responseModel.getMsg(), call, callback, true);
                 }
-
-/*
-                if (context instanceof ActivityTopup) {
-                    Fragment currentFragment = ((AppCompatActivity) context).getSupportFragmentManager()
-                            .findFragmentById(R.id.container_topup)
-                            .getChildFragmentManager()
-                            .findFragmentById(R.id.container_topup_package);
-
-                    if (currentFragment instanceof FragmentTopupPreview){
-
-                    }
-*/
-/*
-                    Log.e(TAG, "Fragmet: "+currentFragment.toString());
-                    if (currentFragment instanceof FragmentTopupPackage){
-                        currentFragment = currentFragment.getChildFragmentManager().findFragmentById(R.id.container_topup_package);
-                        Log.e(TAG, "Fragmet: "+currentFragment.toString());
-
-                    }
-*//*
-
-                }
-*/
-
-                new ErrorNetworkThrowable(null).networkError(context,
-                        msg/*+"\n"+responseModel.getMsg()*/, call, callback, true);
             } else{
                 return responseModel;
             }

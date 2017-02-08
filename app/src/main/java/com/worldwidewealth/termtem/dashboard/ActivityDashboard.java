@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,9 +31,8 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
-import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.addcreditline.ActivityAddCreditLine;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
@@ -126,8 +123,8 @@ public class ActivityDashboard extends AppCompatActivity{
                 });
 
     }
-/*
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
@@ -150,8 +147,8 @@ public class ActivityDashboard extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-
 */
+
     private void initDialog(){
         mDialogHelp = new DialogHelp(ActivityDashboard.this);
         mDialogSetting = new Dialog(ActivityDashboard.this);
@@ -220,11 +217,11 @@ public class ActivityDashboard extends AppCompatActivity{
             }
         });
 
-        mHolder.mMenuAddCreditLine.setOnClickListener(new View.OnClickListener() {
+        mHolder.mMenuAddCreditAgent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditLine.class);
+                Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditAgent.class);
                 overridePendingTransition(R.anim.slide_in_right, 0);
                 startActivity(intent);
             }
@@ -399,7 +396,7 @@ public class ActivityDashboard extends AppCompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditLine
+        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditAgent
                 , mMenuHelp, mMenuSetting, mMenuMpay, mMenuScanQR;
 //        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
@@ -415,7 +412,7 @@ public class ActivityDashboard extends AppCompatActivity{
             mMenuHelp = (CardView) view.findViewById(R.id.menu_help);
             mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
             mMenuMpay = (CardView) view.findViewById(R.id.menu_mpay_station);
-            mMenuAddCreditLine = (CardView) view.findViewById(R.id.menu_add_credit_line);
+            mMenuAddCreditAgent = (CardView) view.findViewById(R.id.menu_add_credit_agent);
 
         }
     }

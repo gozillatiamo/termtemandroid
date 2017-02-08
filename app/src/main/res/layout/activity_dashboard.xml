@@ -53,13 +53,15 @@
                         layout="@layout/card_my_wallet" />
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/menu_add_credit_line"
+                        android:id="@+id/menu_add_credit_agent"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/menu_size"
                         android:visibility="gone"
                         android:layout_weight="1"
-                        app:cardElevation="0dp"
-                        app:cardUseCompatPadding="true">
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        app:cardUseCompatPadding="true"
+                        app:cardElevation="@dimen/cardview_default_elevation">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -70,14 +72,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_add_credit"/>
+                                android:src="@drawable/ic_add_credit_agent"
+                                android:tint="@color/colorPrimary"/>
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/add_credit"
-                                android:singleLine="true"
-                                app:sizeToFit="true"
+                                android:text="@string/add_credit_agent"
+                                style="@style/MyTitleMenuDashboard"
                                 android:id="@+id/autofitTextView" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
@@ -243,11 +245,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:foreground="?android:attr/selectableItemBackground"
-                            app:cardElevation="0dp"
-                            android:clickable="false"
-                            app:cardBackgroundColor="@android:color/darker_gray"
-                            android:alpha="0.2"
                             app:cardUseCompatPadding="true">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -279,10 +278,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:foreground="?android:attr/selectableItemBackground"
-                            app:cardElevation="0dp"
-                            android:clickable="false"
-                            app:cardBackgroundColor="@android:color/darker_gray"
-                            android:alpha="0.2"
                             app:cardUseCompatPadding="true">
 
                             <LinearLayout
@@ -349,10 +344,9 @@
                         android:id="@+id/menu_mpay_station"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:cardUseCompatPadding="true"
                         android:foreground="?android:attr/selectableItemBackground"
-                        app:cardElevation="@dimen/cardview_default_elevation"
                         >
 
                         <LinearLayout

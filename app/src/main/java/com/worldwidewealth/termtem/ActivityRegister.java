@@ -340,7 +340,6 @@ public class ActivityRegister extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse("http://180.128.21.81/wealthweb/terms.htm"));
                     startActivity(i);
-
                 }
             });
         }

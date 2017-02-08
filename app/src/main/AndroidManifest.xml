@@ -32,6 +32,7 @@
             </intent-filter>
         </service>
 
+<!--
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.worldwidewealth.termtem"
@@ -41,6 +42,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+-->
 
         <activity
             android:name="com.worldwidewealth.termtem.SplashScreenWWW"
@@ -95,7 +97,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.addcreditline.ActivityAddCreditLine"
+            android:name="com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 

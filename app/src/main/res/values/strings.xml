@@ -2,9 +2,7 @@
     <!-- Config In App -->
     <string name="app_name">TermTem</string>
     <string name="platform">android</string>
-    <string name="server_dev">http://180.128.21.31/wealthservice/</string>
-    <string name="server_test">http://180.128.21.30/wealthservice/</string>
-    <string name="server_pro">http://180.128.21.81/wealthservice/</string>
+    <string name="server">http://180.128.21.31/wealthservice/</string>
     <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
     <string name="branch">สุขุมวิท 101</string>
     <string name="bank_account_type">ออมทรัพย์</string>
@@ -122,7 +120,7 @@
     <string name="person_type">ประเภทบุคคล</string>
     <string name="create">สร้าง</string>
     <string name="already_have_account">คุณมีบัญชีผู้ใช้งานอยู่แล้ว</string>
-    <string name="add_credit">Add Credit Line</string>
+    <string name="add_credit_agent">โอนเงินให้ Agent</string>
     <string name="support">ช่วยเหลือ</string>
     <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_mpay">mPay Station</string>

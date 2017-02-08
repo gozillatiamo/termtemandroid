@@ -94,6 +94,8 @@ public class Until {
                     body.writeTo(buffer);
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
+                    String decoded = Until.decode(new StringBuilder(encoded).reverse().toString());
+
                     System.gc();
                     sink.write(converted);
                     buffer.close();

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.MainActivity;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;

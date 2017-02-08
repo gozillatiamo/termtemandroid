@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class FragmentTopupSlip extends Fragment {
     private APIServices services;
     private String mTransID;
     private String mFileName;
+    public static final String TAG = FragmentTopupSlip.class.getSimpleName();
 
     private static final String IMAGE = "image";
     private static final String TRANSID = "transid";
@@ -195,7 +197,12 @@ public class FragmentTopupSlip extends Fragment {
 
     private boolean saveImage(){
         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        File myDir = new File(root + "/WealthCounterSlip");
+        File myDirOld = new File(root + "/WealthCounterSlip");
+        File myDir = new File(root + "/TermTemSlip");
+        if(myDirOld.exists()){
+            Log.e(TAG, "isHasOldDir");
+            myDirOld.renameTo(myDir);
+        }
         myDir.mkdirs();
 
         File file = new File(myDir, mFileName);

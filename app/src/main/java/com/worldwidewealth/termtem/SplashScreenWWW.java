@@ -12,11 +12,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.PreRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -25,7 +27,9 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.until.GPSTracker;
+import com.worldwidewealth.termtem.until.Until;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -52,6 +56,8 @@ public class SplashScreenWWW extends AppCompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
+        Log.e(TAG, "package: "+getApplicationContext().getPackageName());
+        Log.e(TAG, "VersionName: "+BuildConfig.VERSION_NAME);
         services = APIServices.retrofit.create(APIServices.class);
         handler = new Handler();
         runnable = new Runnable() {
@@ -251,7 +257,9 @@ public class SplashScreenWWW extends AppCompatActivity{
     }
 
     private boolean checkVersionApp(String version, final String txid){
-        if (!version.equals(BuildConfig.VERSION_NAME)) {
+
+        String currentVersion = (BuildConfig.VERSION_NAME).split("-")[0];
+        if (!version.equals(currentVersion)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogWarning);
             builder.setTitle(getString(R.string.update_app_title));
             builder.setMessage(getString(R.string.update_message));
