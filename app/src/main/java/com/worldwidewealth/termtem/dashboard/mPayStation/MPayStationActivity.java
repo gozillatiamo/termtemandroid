@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -67,6 +69,7 @@ public class MPayStationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_m_pay_station);
         services = APIServices.retrofit.create(APIServices.class);
         mType = getIntent().getExtras().getInt("type");
@@ -208,10 +211,12 @@ public class MPayStationActivity extends AppCompatActivity {
                                         DialogCounterAlert.DialogProgress.dismiss();
                                     }
 
-
                                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                                         DialogCounterAlert.DialogProgress.dismiss();
                                     }
+
+
+
                                 });
 
                                 mWebView.loadUrl(mPayStationResponse.getURL());

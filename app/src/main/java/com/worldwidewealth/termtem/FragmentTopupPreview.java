@@ -37,14 +37,18 @@ public class FragmentTopupPreview extends Fragment {
 
     public class ViewHolder{
 
-        private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance;
-        private View mLayoutCommission;
+        private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
+        mTextMarkup, mTextTotal;
+        private View mLayoutCommission, mLayoutMarkup;
         public ViewHolder(View itemview){
             mTextAmount = (TextView) itemview.findViewById(R.id.txt_amount);
             mTextCommissionRate = (TextView) itemview.findViewById(R.id.txt_commission_rate);
             mTextCommissionAmout = (TextView) itemview.findViewById(R.id.txt_commission_amount);
+            mTextMarkup = (TextView) itemview.findViewById(R.id.txt_markup);
             mTextBalance = (TextView) itemview.findViewById(R.id.txt_balance);
+            mTextTotal = (TextView) itemview.findViewById(R.id.txt_total);
             mLayoutCommission = (View) itemview.findViewById(R.id.layout_commission);
+            mLayoutMarkup = (View) itemview.findViewById(R.id.layout_markup);
         }
     }
 
@@ -71,7 +75,7 @@ public class FragmentTopupPreview extends Fragment {
         super.onPause();
         FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
         parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
-        parentFragment.setEnabledBtn(true);
+//        parentFragment.setEnabledBtn(true);
     }
 
     @Override
@@ -146,11 +150,18 @@ public class FragmentTopupPreview extends Fragment {
         if (mModel.getCOMMISSION_AMOUNT() != 0) {
             mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
             mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
-            mHolder.mLayoutCommission.setVisibility(View.VISIBLE);
+//            mHolder.mLayoutCommission.setVisibility(View.VISIBLE);
         } else {
             mHolder.mLayoutCommission.setVisibility(View.GONE);
         }
+
+        if (mModel.getMARKUP() == 0)
+            mHolder.mLayoutMarkup.setVisibility(View.GONE);
+        else
+            mHolder.mTextMarkup.setText(format.format(mModel.getMARKUP()));
+
         mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
+        mHolder.mTextTotal.setText(format.format(mModel.getTOTAL()));
     }
 
     public boolean canTopup(){

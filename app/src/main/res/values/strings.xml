@@ -37,6 +37,7 @@
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
     <string name="balance_toup_preview">บัญชีคงเหลือ</string>
+    <string name="markup">ค่าดำเนินการ</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>
@@ -75,7 +76,7 @@
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
-    <string name="total">จำนวนเงิน:</string>
+    <string name="total">ยอดที่ชำระ</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
@@ -125,7 +126,7 @@
     <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_mpay">mPay Station</string>
     <string name="title_report">Mobile Report</string>
-    <string name="amount">ยอดชำระ :</string>
+    <string name="amount">ยอดเติม :</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
     <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>

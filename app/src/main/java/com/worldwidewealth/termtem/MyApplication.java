@@ -119,8 +119,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             if (currentActivity == null) return;
 
-            if ( currentActivity == activity )
-            {
+            if ( currentActivity == activity ) {
                 // We were stopped and no-one else has been started.
                 Until.logoutAPI();
 /*
@@ -139,7 +138,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     private boolean canUseLeaving(Activity activity){
         return !(activity instanceof SplashScreenWWW |
-                activity instanceof ActivityShowNotify |
+//                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister);
     }

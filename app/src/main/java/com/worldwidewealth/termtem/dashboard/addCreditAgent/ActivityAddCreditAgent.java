@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentScanCraditAgent;
+import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 
 public class ActivityAddCreditAgent extends AppCompatActivity {
 
@@ -23,6 +23,22 @@ public class ActivityAddCreditAgent extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        try {
+            if (!getSupportFragmentManager()
+                    .findFragmentById(R.id.container_add_credit)
+                    .getChildFragmentManager()
+                    .popBackStackImmediate()) {
+
+                super.onBackPressed();
+            }
+        } catch (NullPointerException e){
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
@@ -30,18 +46,6 @@ public class ActivityAddCreditAgent extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (!getSupportFragmentManager()
-                .findFragmentById(R.id.container_add_credit)
-                .getChildFragmentManager()
-                .popBackStackImmediate()){
-
-            super.onBackPressed();
-        }
     }
 
     private void initToolbar(){
@@ -52,10 +56,12 @@ public class ActivityAddCreditAgent extends AppCompatActivity {
     }
 
     private void initFragment(){
+/*
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container_add_credit, new FragmentScanCraditAgent());
+                .replace(R.id.container_add_credit, new ActivityScan());
         transaction.commit();
+*/
     }
 
     private class ViewHolder{

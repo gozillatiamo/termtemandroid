@@ -45,8 +45,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(String txt, String box, String click_action) {
 
-        Log.e(TAG, "SetNotivication");
-        Intent intent = new Intent(click_action);
+        Intent intent = new Intent(this, ActivityShowNotify.class);
         intent.putExtra(TEXT, txt);
         intent.putExtra(BOX, box);
 

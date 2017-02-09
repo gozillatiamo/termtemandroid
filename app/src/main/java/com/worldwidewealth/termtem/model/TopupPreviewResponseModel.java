@@ -10,6 +10,7 @@ public class TopupPreviewResponseModel {
     private double COMMISSION_AMOUNT;
     private double BALANCE;
     private double TOTAL;
+    private float MARKUP;
 
     public double getAMOUNT() {
         return AMOUNT;
@@ -29,5 +30,9 @@ public class TopupPreviewResponseModel {
 
     public double getTOTAL() {
         return TOTAL;
+    }
+
+    public float getMARKUP() {
+        return MARKUP;
     }
 }

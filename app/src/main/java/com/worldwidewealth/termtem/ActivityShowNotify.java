@@ -34,27 +34,11 @@ public class ActivityShowNotify extends AppCompatActivity {
         }
         setContentView(R.layout.activity_show_notify);
         setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        MyApplication.LeavingOrEntering.currentActivity = null;
         mHolder = new ViewHolder(this);
-
         mHolder.mTextTitle.setText(mStrTitle);
         mHolder.mTextBox.setText(mStrBox);
         Log.e(TAG, "onCreate");
-    }
-
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "onRestart");
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
-            mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
-            mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
-            Log.e(TAG, "txt: "+ mStrTitle +"\nbox: "+mStrBox);
-
-        }
-
     }
 
     @Override
@@ -63,6 +47,7 @@ public class ActivityShowNotify extends AppCompatActivity {
         Log.e(TAG, "onNewIntent");
         Bundle bundle = intent.getExtras();
         if (bundle != null){
+            MyApplication.LeavingOrEntering.currentActivity = null;
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
             mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
             Log.e(TAG, "txt: "+ mStrTitle +"\nbox: "+mStrBox);

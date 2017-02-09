@@ -6,7 +6,7 @@
     <dimen name="small_text_size">12sp</dimen>
     <dimen name="my_text_size">14sp</dimen>
     <dimen name="icon_big_size">80dp</dimen>
-    <dimen name="my_text_large">18sp</dimen>
+    <dimen name="my_text_large">24sp</dimen>
 
 
 </resources>

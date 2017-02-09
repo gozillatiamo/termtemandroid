@@ -19,35 +19,46 @@ public class BottomAction {
 
     private ViewHolder mHolder;
     private  NumberFormat mFormat;
+    private Context mContext;
     public static final int NEXT = 0;
     public static final int SUBMIT = 1;
 
     public BottomAction(final Context context, View view, int type , View.OnClickListener listener){
         mHolder = new ViewHolder(view);
+        this.mContext = context;
         mFormat = NumberFormat.getInstance();
         mFormat.setMaximumFractionDigits(2);
         mFormat.setMinimumFractionDigits(2);
 
         mHolder.mTextPrice.setText(mFormat.format(0));
 
+        swichType(type, listener);
+    }
+
+    public void swichType(int type, View.OnClickListener listener){
         switch (type){
             case NEXT:
                 mHolder.mBtnNext.setVisibility(View.VISIBLE);
                 mHolder.mLayoutSubmit.setVisibility(View.GONE);
+                mHolder.mLayoutAmountPreview.setVisibility(View.VISIBLE);
                 mHolder.mBtnNext.setOnClickListener(listener);
                 break;
             case SUBMIT:
                 mHolder.mBtnNext.setVisibility(View.GONE);
+                mHolder.mLayoutAmountPreview.setVisibility(View.GONE);
                 mHolder.mLayoutSubmit.setVisibility(View.VISIBLE);
                 mHolder.mBtnSubmit.setOnClickListener(listener);
                 mHolder.mBtnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((Activity)context).finish();
+                        ((Activity)mContext).finish();
                     }
                 });
                 break;
         }
+
+        setEnable(true);
+
     }
 
     public void updatePrice(double price){
@@ -67,7 +78,7 @@ public class BottomAction {
 
         private Button mBtnNext, mBtnSubmit, mBtnCancel;
         private TextView mTextPrice;
-        private View mLayoutSubmit;
+        private View mLayoutSubmit, mLayoutAmountPreview;
         public ViewHolder(View itemView) {
             super(itemView);
             mBtnNext = (Button) itemView.findViewById(R.id.btn_next);
@@ -75,6 +86,7 @@ public class BottomAction {
             mBtnCancel = (Button) itemView.findViewById(R.id.btn_cancel);
             mTextPrice = (TextView) itemView.findViewById(R.id.text_price);
             mLayoutSubmit = (View) itemView.findViewById(R.id.layout_btn_submit);
+            mLayoutAmountPreview = (View) itemView.findViewById(R.id.layout_amout_preview);
         }
     }
 }

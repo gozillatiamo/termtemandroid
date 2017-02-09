@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
+import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
+import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -263,6 +265,24 @@ public class ActivityDashboard extends AppCompatActivity{
                         setEnableBtn(true);
                     }
                 });
+            }
+        });
+        mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnableBtn(false);
+                Intent intent = new Intent(ActivityDashboard.this, ActivityMyQrCode.class);
+                overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
+            }
+        });
+        mHolder.mMenuScanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnableBtn(false);
+                Intent intent = new Intent(ActivityDashboard.this, ActivityScan.class);
+                overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
             }
         });
 

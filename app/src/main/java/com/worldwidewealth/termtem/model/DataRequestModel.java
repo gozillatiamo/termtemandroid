@@ -34,6 +34,20 @@ public class DataRequestModel {
 
     }
 
+    public DataRequestModel(String deviceid, String platform, String txid, String agentid, String userid) {
+        DEVICEID = deviceid;
+        PLATFORM = platform;
+        TXID = txid;
+        AGENTID = EncryptionData.EncryptData(
+                EncryptionData.DecryptData(agentid, TXID),
+                DEVICEID+TXID);
+        USERID = EncryptionData.EncryptData(
+                EncryptionData.DecryptData(userid, TXID),
+                DEVICEID+TXID);
+
+    }
+
+
     public String getDEVICEID() {
         return DEVICEID;
     }

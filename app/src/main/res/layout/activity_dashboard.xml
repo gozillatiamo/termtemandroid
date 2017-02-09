@@ -56,7 +56,7 @@
                         android:id="@+id/menu_add_credit_agent"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_weight="1"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:clickable="true"

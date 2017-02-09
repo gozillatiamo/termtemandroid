@@ -15,6 +15,7 @@
         android:padding="@dimen/activity_space"
         android:orientation="vertical">
         <LinearLayout
+            android:id="@+id/layout_amout_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

@@ -36,6 +36,7 @@ import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.model.TopupPreviewRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.TopupResponseModel;
+import com.worldwidewealth.termtem.until.BottomAction;
 import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.until.Until;
 
@@ -63,6 +64,7 @@ public class FragmentTopupPackage extends  Fragment{
     private int mTimeout = 0;
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
+    private BottomAction mBottomAction;
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -101,7 +103,8 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        setEnabledBtn(true);
+        if (mBottomAction != null)
+            mBottomAction.setEnable(true);
     }
 
     @Override
@@ -110,10 +113,12 @@ public class FragmentTopupPackage extends  Fragment{
         Until.hideSoftKeyboard(mHolder.mEditPhone);
     }
 
+/*
     public void setEnabledBtn(boolean enabled){
         mHolder.mBtnTopup.setEnabled(enabled);
         mHolder.mBtnNext.setEnabled(enabled);
     }
+*/
 
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
@@ -166,7 +171,7 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
-                        setEnabledBtn(true);
+//                        setEnabledBtn(true);
                     }
                 });
 
@@ -190,6 +195,14 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initBtn(){
+        mBottomAction = new BottomAction(getContext(), mHolder.mIncludeBottomAction, BottomAction.NEXT, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomAction.setEnable(false);
+                servicePreview();
+            }
+        });
+/*
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,7 +210,9 @@ public class FragmentTopupPackage extends  Fragment{
                 servicePreview();
             }
         });
+*/
 
+/*
         mHolder.mBtnTopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,13 +229,16 @@ public class FragmentTopupPackage extends  Fragment{
 
             }
         });
+*/
 
+/*
         mHolder.mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
+*/
     }
 
     private void servicePreview(){
@@ -231,7 +249,7 @@ public class FragmentTopupPackage extends  Fragment{
                     .setMessage(R.string.please_phone_topup_error)
                     .setPositiveButton(R.string.confirm, null)
                     .show();
-            setEnabledBtn(true);
+            mBottomAction.setEnable(true);
 
             return;
         }
@@ -241,7 +259,7 @@ public class FragmentTopupPackage extends  Fragment{
                     .setMessage(R.string.please_choice_topup)
                     .setPositiveButton(R.string.confirm, null)
                     .show();
-            setEnabledBtn(true);
+            mBottomAction.setEnable(true);
 
             return;
         }
@@ -251,14 +269,14 @@ public class FragmentTopupPackage extends  Fragment{
                     .setMessage(R.string.balance_not_enough)
                     .setPositiveButton(R.string.confirm, null)
                     .show();
-            setEnabledBtn(true);
+            mBottomAction.setEnable(true);
 
             return;
         }
 
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
-        setEnabledBtn(true);
+
         Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -282,6 +300,25 @@ public class FragmentTopupPackage extends  Fragment{
                                     .newInstance((String)modelValues))
                             .addToBackStack(null)
                             .commit();
+/*
+                    mBottomAction.swichType(BottomAction.SUBMIT, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mBottomAction.setEnable(false);
+                            if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
+                                FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
+                                if (!fragmentTopupPreview.canTopup()) {
+                                    mBottomAction.setEnable(true);
+                                    return;
+                                }
+                            }
+
+                            serviceTopup();
+
+
+                        }
+                    });
+*/
                     setEnableEditPhone(false);
 
                 }
@@ -310,7 +347,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), call, this);
-                setEnabledBtn(true);
+                mBottomAction.setEnable(true);
             }
         });
 
@@ -320,20 +357,49 @@ public class FragmentTopupPackage extends  Fragment{
         if (enable){
             mHolder.mEditPhone.setBackgroundResource(android.R.drawable.editbox_background_normal);
             mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+/*
             mHolder.mBtnNext.setVisibility(View.VISIBLE);
             mHolder.mLayoutBtnTopup.setVisibility(View.GONE);
+*/
+            mBottomAction.swichType(BottomAction.NEXT, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBottomAction.setEnable(false);
+                    servicePreview();
+
+                }
+            });
             mHolder.mEditPhone.requestFocus();
         } else {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
             mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
+/*
             mHolder.mBtnNext.setVisibility(View.GONE);
             mHolder.mLayoutBtnTopup.setVisibility(View.VISIBLE);
+*/
+            mBottomAction.swichType(BottomAction.SUBMIT, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBottomAction.setEnable(false);
+                    if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
+                        FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
+                        if (!fragmentTopupPreview.canTopup()) {
+                            mBottomAction.setEnable(true);
+                            return;
+                        }
+                    }
+
+                    serviceTopup();
+
+
+                }
+            });
+
         }
     }
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
-        setEnabledBtn(true);
         Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                 new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -361,7 +427,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
-                setEnabledBtn(true);
+                mBottomAction.setEnable(true);
             }
         });
 
@@ -430,7 +496,7 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                        setEnabledBtn(true);
+                        mBottomAction.setEnable(true);
                     }
                 });
 
@@ -501,7 +567,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                setEnabledBtn(true);
+                mBottomAction.setEnable(true);
             }
         });
 
@@ -514,21 +580,24 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     public class ViewHolder{
-        private Button mBtnNext, mBtnTopup, mBtnCancel;
+//        private Button mBtnNext, mBtnTopup, mBtnCancel;
         private TextView mTextPrice;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
-        private View mLayoutBtnTopup;
+//        private View mLayoutBtnTopup;
+        private View mIncludeBottomAction;
         public ViewHolder(View itemview){
+/*
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
             mBtnTopup = (Button) itemview.findViewById(R.id.btn_topup);
             mBtnCancel = (Button) itemview.findViewById(R.id.btn_cancel);
             mLayoutBtnTopup = (View) itemview.findViewById(R.id.layout_btn_topup);
+*/
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
-
+            mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
 //            mEditPhone.setOnFocusChangeListener(Until.onFocusEditText());
             mEditPhone.addTextChangedListener(new TextWatcher() {
                 @Override
