@@ -5,26 +5,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentEnterAgentPhone;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ActivityScan extends AppCompatActivity {
+public class ActivityScan extends MyAppcompatActivity {
 
     private DecoratedBarcodeView mBarcodeView;
     private Toolbar mToolbar;
@@ -40,7 +37,7 @@ public class ActivityScan extends AppCompatActivity {
                                 R.anim.slide_out_left,
                                 R.anim.slide_in_left,
                                 R.anim.slide_out_right)
-                        .replace(R.id.container_add_credit, new FragmentEnterAgentPhone())
+                        .replace(R.id.container_add_credit, new FragmentAddCreditChoice())
                         .addToBackStack(null);
                 transaction.commit();
             }

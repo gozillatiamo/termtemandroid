@@ -5,7 +5,7 @@
     android:id="@+id/activity_add_credit_line"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent">
+    >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,5 +30,24 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_vertical_margin"
+                android:gravity="center"
+                android:layout_margin="@dimen/activity_space"
+                android:background="@android:drawable/picture_frame"
+                android:text="@string/select_agent_add_credit"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_agent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
     </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

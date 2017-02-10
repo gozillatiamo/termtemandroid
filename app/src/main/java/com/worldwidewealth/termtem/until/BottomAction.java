@@ -20,6 +20,7 @@ public class BottomAction {
     private ViewHolder mHolder;
     private  NumberFormat mFormat;
     private Context mContext;
+    private int mCurrentType = 0;
     public static final int NEXT = 0;
     public static final int SUBMIT = 1;
 
@@ -36,7 +37,8 @@ public class BottomAction {
     }
 
     public void swichType(int type, View.OnClickListener listener){
-        switch (type){
+        mCurrentType = type;
+        switch (mCurrentType){
             case NEXT:
                 mHolder.mBtnNext.setVisibility(View.VISIBLE);
                 mHolder.mLayoutSubmit.setVisibility(View.GONE);
@@ -58,7 +60,25 @@ public class BottomAction {
         }
 
         setEnable(true);
+    }
 
+    public void toggleType(){
+        switch (getType()){
+            case NEXT:
+                mHolder.mBtnNext.setVisibility(View.GONE);
+                mHolder.mLayoutSubmit.setVisibility(View.VISIBLE);
+                mHolder.mLayoutAmountPreview.setVisibility(View.GONE);
+                break;
+            case SUBMIT:
+                mHolder.mBtnNext.setVisibility(View.VISIBLE);
+                mHolder.mLayoutSubmit.setVisibility(View.GONE);
+                mHolder.mLayoutAmountPreview.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    public int getType(){
+        return mCurrentType;
     }
 
     public void updatePrice(double price){

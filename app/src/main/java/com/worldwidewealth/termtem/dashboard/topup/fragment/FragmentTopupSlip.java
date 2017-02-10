@@ -23,7 +23,6 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.game.ActivityGame;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
@@ -176,17 +175,6 @@ public class FragmentTopupSlip extends Fragment {
             }
         });
 
-        mHolder.mBtnGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FragmentTopupSlip.this.getContext(), ActivityGame.class);
-                startActivity(intent);
-                getActivity().finish();
-//                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
-//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
-            }
-        });
 
         mHolder.mBtnSavePic.setOnClickListener(new View.OnClickListener() {
             @Override

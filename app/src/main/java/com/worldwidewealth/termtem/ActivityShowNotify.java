@@ -15,15 +15,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by MyNet on 11/10/2559.
  */
 
-public class ActivityShowNotify extends AppCompatActivity {
+public class ActivityShowNotify extends MyAppcompatActivity {
     private String mStrTitle, mStrBox;
     private ViewHolder mHolder;
     public static final String TAG = ActivityShowNotify.class.getSimpleName();
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

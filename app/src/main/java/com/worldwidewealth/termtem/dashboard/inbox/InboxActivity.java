@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,27 +24,27 @@ import android.widget.TextView;
 
 import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.MainActivity;
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
+import com.worldwidewealth.termtem.services.APIServices;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class InboxActivity extends AppCompatActivity {
+public class InboxActivity extends MyAppcompatActivity {
 
     private RecyclerView mInboxRecycler;
     private Toolbar mToolbar;
     private TermTemDialog.SearchDateRangeDialog mSearchDateRange;
+    private APIServices services;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
+        services = APIServices.retrofit.create(APIServices.class);
         initWidgets();
         initToolbar();
         initListInbox();
@@ -132,7 +133,7 @@ public class InboxActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             if ((position%2) == 0){
-                holder.itemView.setBackgroundColor(getResources().getColor(R.color.colorSelector));
+                ((CardView)holder.itemView).setCardBackgroundColor(getResources().getColor(android.R.color.holo_orange_light));
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -154,9 +155,13 @@ public class InboxActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-
+            private ImageView mIconNotify;
+            private TextView mTitleNotify, mDesNotify;
             public ViewHolder(View itemView) {
                 super(itemView);
+                mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
+                mTitleNotify = (TextView) itemView.findViewById(R.id.title_notify);
+                mDesNotify = (TextView) itemView.findViewById(R.id.des_notify);
             }
         }
     }

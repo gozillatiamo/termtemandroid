@@ -15,7 +15,7 @@
     <dimen name="small_text_size">14sp</dimen>
     <dimen name="icon_big_size">120dp</dimen>
     <dimen name="menu_size">120dp</dimen>
-    <dimen name="my_text_large">28sp</dimen>
+    <dimen name="my_text_large">24sp</dimen>
 
 
 </resources>

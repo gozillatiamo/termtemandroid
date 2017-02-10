@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
@@ -57,7 +58,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityDashboard extends AppCompatActivity{
+public class ActivityDashboard extends MyAppcompatActivity{
 
     private ViewHolder mHolder;
     private APIServices services;
@@ -68,10 +69,6 @@ public class ActivityDashboard extends AppCompatActivity{
     private AlertDialog mAlertChangePass;
     private ArrayList<UserMenuModel> mUserMenuList;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,7 +123,6 @@ public class ActivityDashboard extends AppCompatActivity{
 
     }
 
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
@@ -149,7 +145,6 @@ public class ActivityDashboard extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-*/
 
     private void initDialog(){
         mDialogHelp = new DialogHelp(ActivityDashboard.this);

@@ -40,7 +40,7 @@ import retrofit2.Response;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class SplashScreenWWW extends AppCompatActivity{
+public class SplashScreenWWW extends MyAppcompatActivity{
 
     protected String mAction;
     protected double mLat, mLong;

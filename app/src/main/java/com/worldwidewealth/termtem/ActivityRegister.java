@@ -48,7 +48,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityRegister extends AppCompatActivity {
+public class ActivityRegister extends MyAppcompatActivity {
 
     private View rootView;
     private ViewHolder mHolder;
@@ -63,17 +63,6 @@ public class ActivityRegister extends AppCompatActivity {
     private boolean[] mDataCheck = new boolean[6];
     private APIServices services;
     public static final String TAG = ActivityRegister.class.getSimpleName();
-
-//    public static Fragment newInstance(){
-//        FragmentRegister fragment = new FragmentRegister();
-//        return fragment;
-//    }
-
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

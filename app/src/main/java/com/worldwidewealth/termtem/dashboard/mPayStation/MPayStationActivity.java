@@ -31,7 +31,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.GenBarcodeRequestModel;
 import com.worldwidewealth.termtem.model.MPayStationResponse;
@@ -48,13 +50,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MPayStationActivity extends AppCompatActivity {
+public class MPayStationActivity extends MyAppcompatActivity {
 
-    private RecyclerView mRecyclerAmount;
-    private View mIncludeBottomAction, mLayoutEditAmountOther;
+    private View mIncludeBottomAction;
     private BottomAction mBottomAction;
     private TextView mToolbarTitle;
-    private EditText mEditAmountOther;
     private WebView mWebView;
     private String[] mListAmount;
     private APIServices services;
@@ -62,10 +62,6 @@ public class MPayStationActivity extends AppCompatActivity {
     private int mType;
     private static final String TAG = MPayStationActivity.class.getSimpleName();
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +89,7 @@ public class MPayStationActivity extends AppCompatActivity {
 
         initWidgets();
         initToolbar();
-        initListAmount();
+        initGrid();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,6 +101,13 @@ public class MPayStationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void initGrid(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container_select_amount, SelectAmountAndOtherFragment.newInstance(mBottomAction, mListAmount))
+                .commit();
+
+    }
 
     private void initToolbar(){
         switch (mType){
@@ -124,14 +127,15 @@ public class MPayStationActivity extends AppCompatActivity {
 
 
     private void initWidgets(){
-        mRecyclerAmount = (RecyclerView) findViewById(R.id.recycler_mpay_amount);
+//        mRecyclerAmount = (RecyclerView) findViewById(R.id.recycler_mpay_amount);
         mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mIncludeBottomAction = (View) findViewById(R.id.include_bottom_action);
-        mLayoutEditAmountOther = (View) findViewById(R.id.layout_edit_amount_other);
-        mEditAmountOther = (EditText) findViewById(R.id.edit_amount_other);
+//        mLayoutEditAmountOther = (View) findViewById(R.id.layout_edit_amount_other);
+//        mEditAmountOther = (EditText) findViewById(R.id.edit_amount_other);
         mWebView = (WebView) findViewById(R.id.webview);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_mpay);
 
+/*
         mEditAmountOther.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,6 +156,7 @@ public class MPayStationActivity extends AppCompatActivity {
                 mBottomAction.updatePrice(amt);
             }
         });
+*/
         mBottomAction = new BottomAction(this, mIncludeBottomAction, BottomAction.NEXT, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,10 +226,7 @@ public class MPayStationActivity extends AppCompatActivity {
 
                                 mWebView.loadUrl(mPayStationResponse.getURL());
                             }
-
                         }
-
-
                     }
 
                     @Override
@@ -235,145 +237,5 @@ public class MPayStationActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void initListAmount(){
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
-        mRecyclerAmount.setLayoutManager(gridLayoutManager);
-        mRecyclerAmount.setAdapter(new AmountBtnAdapter());
-
-    }
-
-
-    private class AmountBtnAdapter extends RecyclerView.Adapter<AmountBtnAdapter.ViewHolder>{
-
-        public int previousSelectedPosition = -1;
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View rootView = LayoutInflater.from(MPayStationActivity.this).inflate(R.layout.item_topup, parent, false);
-            Until.setupUI(rootView);
-
-            return new ViewHolder(rootView);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mTextProductItem.setText(getItem(position));
-
-            holder.mTextProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-            holder.mTextCurency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-            holder.mBtnChoice.setCardBackgroundColor(getResources().getColor(android.R.color.white));
-
-            if (position == previousSelectedPosition)
-                setBackgroundSelect(holder, position);
-
-
-            holder.mBtnChoice.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setClickChoiceTopup(holder, position);
-
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mListAmount.length;
-        }
-
-        public String getItem(int position){
-            return mListAmount[position];
-        }
-
-        private void setBackgroundSelect(ViewHolder holder, int position){
-            holder.mTextProductItem.setTextColor(getResources().getColor(android.R.color.white));
-            holder.mTextCurency.setTextColor(getResources().getColor(android.R.color.white));
-            holder.mBtnChoice.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
-
-            if (previousSelectedPosition == position) return;
-
-            clearSelected();
-        }
-
-        public void clearSelected(){
-
-            if (previousSelectedPosition != -1){
-                ViewHolder holder = (ViewHolder)
-                        mRecyclerAmount.findViewHolderForAdapterPosition(previousSelectedPosition);
-                if (holder == null) return;
-                holder.mTextProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-                holder.mTextCurency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-                holder.mBtnChoice.setCardBackgroundColor(getResources().getColor(android.R.color.white));
-
-                mLayoutEditAmountOther.animate()
-                        .alpha(0.0f)
-                        .setDuration(300)
-                        .setListener(new AnimatorListenerAdapter() {
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mLayoutEditAmountOther.setVisibility(View.INVISIBLE);
-                                mRecyclerAmount.setFocusable(true);
-                                mRecyclerAmount.requestFocus();
-                            }
-                        });
-
-//            mAdapter.previousSelectedPosition = -1;
-            }
-
-        }
-
-        private void setClickChoiceTopup(ViewHolder holder, int position){
-
-            String nowAmt = "0";
-            if (position != -1) {
-                if (previousSelectedPosition == position) return;
-                setBackgroundSelect(holder, position);
-                if (position != getItemCount()-1) {
-                    nowAmt = getItem(position);
-                } else {
-                    mEditAmountOther.setText("");
-                    mLayoutEditAmountOther.setVisibility(View.VISIBLE);
-                    mLayoutEditAmountOther.setAlpha(0.0f);
-                    mLayoutEditAmountOther.animate()
-                            .alpha(1.0f)
-                            .setDuration(300)
-                            .setListener(new AnimatorListenerAdapter() {
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    mEditAmountOther.requestFocus();
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.showSoftInput(mEditAmountOther, InputMethodManager.SHOW_IMPLICIT);
-                                }
-                            });
-                }
-            }
-            previousSelectedPosition = position;
-            mBottomAction.updatePrice(Double.parseDouble(nowAmt));
-//        clearSelected();
-
-
-        }
-
-
-        public class ViewHolder extends RecyclerView.ViewHolder{
-
-            private TextView mTextProductItem, mTextCurency;
-            private CardView mBtnChoice;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                mTextProductItem = (TextView) itemView.findViewById(R.id.txt_product_item);
-                mTextCurency = (TextView) itemView.findViewById(R.id.txt_currency);
-                mBtnChoice = (CardView) itemView.findViewById(R.id.btn_choice);
-            }
-        }
-
     }
 }

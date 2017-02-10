@@ -13,7 +13,7 @@
     <dimen name="icon_big_size">100dp</dimen>
     <dimen name="padding_column_list">8dp</dimen>
     <dimen name="elevation_cardview">4dp</dimen>
-    <dimen name="my_text_large">22sp</dimen>
+    <dimen name="my_text_large">18sp</dimen>
     <dimen name="menu_size">80dp</dimen>
 
 </resources>

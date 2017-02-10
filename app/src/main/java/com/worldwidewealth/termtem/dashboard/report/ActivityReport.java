@@ -23,6 +23,7 @@ import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -51,7 +52,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivityReport extends AppCompatActivity {
+public class ActivityReport extends MyAppcompatActivity {
 
     private ViewHolder mHolder;
     private ReportAdapter mAdapter;
@@ -66,11 +67,6 @@ public class ActivityReport extends AppCompatActivity {
     private static final int TO = 1;
    // private Date mDate = new Date(mPreviousDateFrom);
 
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

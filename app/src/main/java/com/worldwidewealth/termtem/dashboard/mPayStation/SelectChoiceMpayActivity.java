@@ -9,11 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SelectChoiceMpayActivity extends AppCompatActivity {
+public class SelectChoiceMpayActivity extends MyAppcompatActivity {
 
     private Button mBtnMpayStation, mBtnMpayBank;
     private Toolbar mToolbar;
@@ -21,10 +22,6 @@ public class SelectChoiceMpayActivity extends AppCompatActivity {
     public static final int MPAY_STATION = 2;
     public static final int MPAY_BANK = 3;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

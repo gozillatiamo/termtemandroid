@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.model;
 
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**

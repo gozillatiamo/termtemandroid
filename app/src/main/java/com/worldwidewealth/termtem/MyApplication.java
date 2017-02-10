@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.AppCompatTextView;
 
@@ -25,6 +26,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Context mContext;
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
+    public static boolean clickable = true;
     private static final int NOTIUPLOAD = 1;
     private static boolean isUpload = false;
 

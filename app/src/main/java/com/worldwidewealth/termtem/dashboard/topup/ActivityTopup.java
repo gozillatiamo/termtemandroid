@@ -8,20 +8,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivityTopup extends AppCompatActivity {
+public class ActivityTopup extends MyAppcompatActivity {
 
     private FrameLayout mContainerTopup;
     private Toolbar mToolbar;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

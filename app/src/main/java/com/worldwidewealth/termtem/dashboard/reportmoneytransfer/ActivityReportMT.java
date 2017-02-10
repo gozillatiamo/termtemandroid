@@ -8,19 +8,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.reportmoneytransfer.fragment.FragmentReportMT;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivityReportMT extends AppCompatActivity {
+public class ActivityReportMT extends MyAppcompatActivity {
 
     private ViewHolder mHolder;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

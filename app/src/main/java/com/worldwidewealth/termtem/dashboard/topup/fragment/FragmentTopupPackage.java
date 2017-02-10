@@ -284,7 +284,10 @@ public class FragmentTopupPackage extends  Fragment{
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 Object modelValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-                if (modelValues == null) return;
+                if (modelValues == null) {
+                    mBottomAction.setEnable(true);
+                    return;
+                }
 
                 if (modelValues instanceof ResponseModel){
                     DialogCounterAlert.DialogProgress.dismiss();
@@ -406,7 +409,10 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-                if (responseValues == null) return;
+                if (responseValues == null){
+                    mBottomAction.setEnable(true);
+                    return;
+                }
 
                 if (responseValues instanceof String){
                     serviceSubmitToup((String)responseValues);
@@ -475,7 +481,10 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-                        if (responseValues == null) return;
+                        if (responseValues == null) {
+                            mBottomAction.setEnable(true);
+                            return;
+                        }
 
                         if (responseValues instanceof ResponseModel){
                             serviceEslip(model.getTranid());

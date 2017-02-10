@@ -73,25 +73,31 @@ public class FragmentTopupPreview extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
-        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        if (getParentFragment() instanceof FragmentTopupPackage) {
+            FragmentTopupPackage parentFragment = ((FragmentTopupPackage) getParentFragment());
+            parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        }
 //        parentFragment.setEnabledBtn(true);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
-        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        if (getParentFragment() instanceof FragmentTopupPackage) {
 
+            FragmentTopupPackage parentFragment = ((FragmentTopupPackage) getParentFragment());
+            parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        FragmentTopupPackage parentFragment = ((FragmentTopupPackage)getParentFragment());
-        parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        if (getParentFragment() instanceof FragmentTopupPackage) {
 
+            FragmentTopupPackage parentFragment = ((FragmentTopupPackage) getParentFragment());
+            parentFragment.mHandler.removeCallbacks(parentFragment.mRunnableSubmit);
+        }
     }
 
     /*

@@ -55,7 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MyAppcompatActivity {
 
     private ViewHolder mHolder;
     private String TAG = "Main";
@@ -65,11 +65,6 @@ public class MainActivity extends AppCompatActivity {
     private Set<String> mSetHistoryUser;
     public static final String CACHEUSER = "cacheuser";
     public static final String USER = "user";
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
