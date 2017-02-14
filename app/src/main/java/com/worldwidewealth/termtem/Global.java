@@ -19,6 +19,7 @@ public class Global {
     private static final String TOKEN = "token";
     private static final String TXID = "txid";
     private static final String BALANCE = "balance";
+    private static final String MSGREAD = "msg_read";
 
     public static Global getInstance(){
         if (mGlobal == null){
@@ -39,6 +40,15 @@ public class Global {
 
     public void setBALANCE(float balance) {
         mEditor.putFloat(BALANCE, balance);
+        mEditor.commit();
+    }
+
+    public String getMSGREAD() {
+        return mPreferences.getString(MSGREAD, "0");
+    }
+
+    public void setMSGREAD(String msgread) {
+        mEditor.putString(MSGREAD, msgread);
         mEditor.commit();
     }
 

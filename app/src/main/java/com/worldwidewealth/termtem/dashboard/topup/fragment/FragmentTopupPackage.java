@@ -61,7 +61,6 @@ public class FragmentTopupPackage extends  Fragment{
     private double mAmt = 0.00;
     private String mButtonID = null;
     public Handler mHandler;
-    private int mTimeout = 0;
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
     private BottomAction mBottomAction;
@@ -417,17 +416,6 @@ public class FragmentTopupPackage extends  Fragment{
                 if (responseValues instanceof String){
                     serviceSubmitToup((String)responseValues);
                 }
-/*
-                String responseStr = null;
-                try {
-                    responseStr = response.body().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-*/
-
-
-
             }
 
             @Override
@@ -441,42 +429,19 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceSubmitToup(final String responseStr){
 
-        /*String converted = Until.ConvertJsonEncode(responseStr);
-        final String responDecode = Until.decode(converted);*/
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        mTimeout = 0;
         mRunnableSubmit = new Runnable() {
             @Override
             public void run() {
-/*
-                mTimeout++;
-                if (mTimeout == 10){
-                    new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.topup_time_out), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            serviceTopup();
-                        }
-                    });
-                    mHandler.removeCallbacks(mRunnableSubmit);
-                    return;
-                }
-
-                if (Global.getOTP() == null){
-                    mHandler.removeCallbacks(mRunnableSubmit);
-                    mHandler.postDelayed(mRunnableSubmit, postDelay);
-                    return;
-                }
-*/
 
                 Call<ResponseBody> callSubmit = services.submitTopup(
                         new RequestModel(APIServices.ACTIONSUBMITTOPUP,
                                 new SubmitTopupRequestModel(String.valueOf(getmAmt()),
                                         mCarrier,
-//                                        Global.getOTP(),
                                         mPhone,
                                         model.getTranid(),
-                                        mButtonID)));
-//                Global.setOTP(null);
+                                        mButtonID,
+                                        null)));
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -489,18 +454,6 @@ public class FragmentTopupPackage extends  Fragment{
                         if (responseValues instanceof ResponseModel){
                             serviceEslip(model.getTranid());
                         }
-/*
-                        if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                            ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL),
-                                    ResponseModel.class);
-                            if (responseModel.getStatus() == APIServices.SUCCESS) {
-                            } else {
-                                if (responseModel.getStatus() != APIServices.SUCCESS)
-                                    new ErrorNetworkThrowable(null).networkError(getContext(),
-                                            responseModel.getMsg(), call, this);
-                            }
-                        }
-*/
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -513,19 +466,6 @@ public class FragmentTopupPackage extends  Fragment{
         };
 
         mHandler.postDelayed(mRunnableSubmit, postDelay);
-
-/*
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-
-            }
-        };
-
-        thread.start();
-
-*/
-
     }
 
     private void serviceEslip(final String transid){

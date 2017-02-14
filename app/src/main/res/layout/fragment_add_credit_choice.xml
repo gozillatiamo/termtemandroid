@@ -17,24 +17,40 @@
         android:background="@android:color/white"
         android:padding="@dimen/activity_space"
         >
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/agent_phone_number"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/agent"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txt_agent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/my_text_size"
+                android:text="Thiraput Sangkum"
+                android:layout_marginLeft="@dimen/activity_space"/>
 
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:id="@+id/textView18" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_space">
             <ImageView
                 android:id="@+id/logo_service"
-                android:layout_width="64dp"
-                android:layout_height="48dp"
-                android:src="@drawable/logo_ais"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@android:color/darker_gray"
+                android:alpha="0.5"
+                android:src="@drawable/ic_smartphone"/>
             <TextView
                 android:id="@+id/edit_phone"
                 android:layout_width="wrap_content"
@@ -42,6 +58,7 @@
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textStyle="bold"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary"
                 android:text="086-025-4055"/>

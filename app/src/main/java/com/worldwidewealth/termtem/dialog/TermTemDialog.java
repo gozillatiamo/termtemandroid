@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem.dialog;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.widget.DatePicker;
 
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
+import com.worldwidewealth.termtem.until.Until;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,6 +28,8 @@ public class TermTemDialog {
         private Calendar mCalendar = Calendar.getInstance();
         private DatePickerDialog mDatePickerDialog;
         private Context mContext;
+        public static final String DATEFROM = "from";
+        public static final String DATETO = "to";
         private long mPreviousDateFrom;
         private long mPeviousDateTo;
         private AlertDialog mChoiceDialog;
@@ -36,8 +40,8 @@ public class TermTemDialog {
 
         public SearchDateRangeDialog(Context context, DialogInterface.OnClickListener submitListener){
             this.mContext = context;
-            mPreviousDateFrom = getTimestamp(System.currentTimeMillis(), 0);
-            mPeviousDateTo = getTimestamp(System.currentTimeMillis(), 23);
+            mPreviousDateFrom = Until.getTimestamp(System.currentTimeMillis(), 0);
+            mPeviousDateTo = Until.getTimestamp(System.currentTimeMillis(), 23);
             LayoutInflater inflater = LayoutInflater.from(context);
             View dialogView  = inflater.inflate(R.layout.dialog_search_report, null);
 
@@ -104,6 +108,13 @@ public class TermTemDialog {
 
         }
 
+        public ContentValues getDateFromTo(){
+            ContentValues values = new ContentValues();
+            values.put(DATEFROM, mPreviousDateFrom);
+            values.put(DATETO, mPeviousDateTo);
+            return values;
+        }
+
         private void initDatePickerDialog(long longdate, final Button btn, final int type){
             mCalendar.setTimeInMillis(longdate);
             mDatePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
@@ -127,10 +138,10 @@ public class TermTemDialog {
                     btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                     switch (type){
                         case FORM:
-                            mPreviousDateFrom = getTimestamp(calendar.getTimeInMillis(), 0);
+                            mPreviousDateFrom = Until.getTimestamp(calendar.getTimeInMillis(), 0);
                             break;
                         case TO:
-                            mPeviousDateTo = getTimestamp(calendar.getTimeInMillis(), 23);
+                            mPeviousDateTo = Until.getTimestamp(calendar.getTimeInMillis(), 23);
                             break;
                     }
 
@@ -145,11 +156,6 @@ public class TermTemDialog {
             mDatePickerDialog.show();
         }
 
-        private long getTimestamp(long timestamp, int hourOfDay){
-            mCalendar.setTimeInMillis(timestamp);
-            mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            return mCalendar.getTimeInMillis();
-        }
 
 
     }

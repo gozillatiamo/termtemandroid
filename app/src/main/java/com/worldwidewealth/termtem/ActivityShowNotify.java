@@ -9,6 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.worldwidewealth.termtem.model.ReadMsgRequest;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.services.APIServices;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -16,8 +24,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 
 public class ActivityShowNotify extends MyAppcompatActivity {
-    private String mStrTitle, mStrBox;
+    private String mStrTitle, mStrBox, mMsgid;
     private ViewHolder mHolder;
+    private APIServices services;
     public static final String TAG = ActivityShowNotify.class.getSimpleName();
 
 
@@ -25,17 +34,11 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
-            mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
-            mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
-        }
         setContentView(R.layout.activity_show_notify);
         setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
-        MyApplication.LeavingOrEntering.currentActivity = null;
         mHolder = new ViewHolder(this);
-        mHolder.mTextTitle.setText(mStrTitle);
-        mHolder.mTextBox.setText(mStrBox);
-        Log.e(TAG, "onCreate");
+        services = APIServices.retrofit.create(APIServices.class);
+        initData(bundle);
     }
 
     @Override
@@ -43,16 +46,35 @@ public class ActivityShowNotify extends MyAppcompatActivity {
         super.onNewIntent(intent);
         Log.e(TAG, "onNewIntent");
         Bundle bundle = intent.getExtras();
-        if (bundle != null){
+        initData(bundle);
+    }
+
+    private void initData(Bundle bundle){
+        if (bundle != null) {
             MyApplication.LeavingOrEntering.currentActivity = null;
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
             mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
-            Log.e(TAG, "txt: "+ mStrTitle +"\nbox: "+mStrBox);
+            mMsgid = bundle.getString(MyFirebaseMessagingService.MSGID);
+            if (mMsgid != null && !mMsgid.equals("")) {
+                Call<ResponseBody> call = services.service(
+                        new RequestModel(APIServices.ACTIONREADMSG,
+                                new ReadMsgRequest(mMsgid)));
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+            Log.e(TAG, "txt: " + mStrTitle + "\nbox: " + mStrBox + "\nmsgid: " + mMsgid);
             mHolder.mTextTitle.setText(mStrTitle);
             mHolder.mTextBox.setText(mStrBox);
-
         }
-
 
     }
 

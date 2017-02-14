@@ -276,11 +276,12 @@ public class MainActivity extends MyAppcompatActivity {
                         } else {
                             String responseStr = strResponse;
                             String responDecode = Until.decode(responseStr);
-
+                            Log.e(TAG, "ResponseLogin: "+responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
                             Global.getInstance().setUSERID(loginResponseModel.getUSERID());
                             Global.getInstance().setAGENTID(loginResponseModel.getAGENTID());
                             Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
+                            Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
 
                             if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
 

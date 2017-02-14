@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +69,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
     private Dialog mDialogSetting;
     private AlertDialog mAlertChangePass;
     private ArrayList<UserMenuModel> mUserMenuList;
+    private LayerDrawable mIconNoti;
+
 
 
     @Override
@@ -89,9 +92,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         super.onResume();
         setEnableBtn(true);
         initBtnMenu();
-
-        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet);
-
+        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
     }
 
     @Override
@@ -127,8 +128,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_meun, menu);
         MenuItem itemCart = menu.findItem(R.id.action_in_box);
-        LayerDrawable icon = (LayerDrawable) itemCart.getIcon();
-        BadgeDrawable.setBadgeCount(this, icon, "9");
+        mIconNoti = (LayerDrawable) itemCart.getIcon();
+        BadgeDrawable.setBadgeCount(this, mIconNoti, Global.getInstance().getMSGREAD());
         return true;
     }
 

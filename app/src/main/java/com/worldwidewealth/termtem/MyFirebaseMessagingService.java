@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,17 +22,26 @@ import java.util.Random;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "Message";
-    public static final String TEXT = "text";
+    public static final String TEXT = "txt";
     public static final String BOX = "box";
+    public static final String MSGID = "msgid";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+/*
         String txt = remoteMessage.getData().get("txt");
         String box = remoteMessage.getData().get("box");
-        String click_action = remoteMessage.getNotification().getClickAction();
-        if (box != null) {
-            sendNotification(txt, box, click_action);
+*/
+//        String click_action = remoteMessage.getNotification().getClickAction();
+        if (remoteMessage.getData() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(TEXT, remoteMessage.getData().get(TEXT));
+            bundle.putString(BOX, remoteMessage.getData().get(BOX));
+            bundle.putString(MSGID, remoteMessage.getData().get(MSGID));
 
+            sendNotification(bundle);
+
+            Log.e(TAG, remoteMessage.getData().toString());
 /*
             if (box.contains("*")) {
                 Global.setOTP(box.split("\\*")[0]);
@@ -43,11 +53,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    private void sendNotification(String txt, String box, String click_action) {
+    private void sendNotification(Bundle bundle) {
 
         Intent intent = new Intent(this, ActivityShowNotify.class);
-        intent.putExtra(TEXT, txt);
-        intent.putExtra(BOX, box);
+        intent.putExtras(bundle);
 
         int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
 
@@ -56,8 +65,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher_2)
-                .setContentTitle(txt)
-                .setContentText(box)
+                .setContentTitle(bundle.getString(TEXT))
+                .setContentText(bundle.getString(BOX))
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true)

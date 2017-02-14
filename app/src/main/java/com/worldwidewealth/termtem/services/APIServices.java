@@ -53,6 +53,13 @@ public interface APIServices {
     public static final String ACTIONNOTIPAY = "NOTIPAY";
     public static final String ACTIONGENBARCODE = "GENBARCODE";
     public static final String ACTIONACCPWIFI = "ACCPWIFI";
+    public static final String ACTIONLOADINBOX = "LOADINBOX";
+    public static final String ACTIONREADMSG = "READMSG";
+    public static final String ACTIONGETAGENTLIST = "GETAGENTLIST";
+    public static final String ACTION_PREVIEW_AGENT_CASHIN = "PREVIEWAGENTCASHIN";
+    public static final String ACTION_GETOTP_AGENT_CASHIN = "GETOTPAGENTCASHIN";
+    public static final String ACTION_SUBMIT_TOPUP_AGENT_CASHIN= "SUBMITTOPUPAGENTCASHIN";
+    public static final String ACTION_ESLIP_AGENT_CASHIN= "ESLIPAGENTCASHIN";
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";
@@ -119,6 +126,8 @@ public interface APIServices {
     @POST("service.ashx")
     Call<ResponseBody> service(@Body RequestModel requestModel);
 
+    @POST("topupservice.ashx")
+    Call<ResponseBody> topupService(@Body RequestModel requestModel);
 
     @POST("fundin.ashx")
     Call<ResponseBody> genBarcode(@Body RequestModel requestModel);

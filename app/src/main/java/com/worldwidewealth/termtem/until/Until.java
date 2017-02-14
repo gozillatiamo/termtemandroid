@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.LayerDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -62,6 +63,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.MediaType;
@@ -128,7 +130,7 @@ public class Until {
 
     }
 
-    public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
+    public static void  updateMyBalanceWallet(final Context context, final View includeMywallet, final LayerDrawable iconNoti){
         APIServices services = APIServices.retrofit.create(APIServices.class);
         if (Global.getInstance().getTXID() == null) return;
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
@@ -140,7 +142,13 @@ public class Until {
                 if (values instanceof String){
                     LoginResponseModel loginResponseModel = new Gson().fromJson((String)values, LoginResponseModel.class);
                     Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
+                    Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
                     setBalanceWallet(includeMywallet);
+
+                    if (iconNoti != null){
+                        Log.e(TAG, "MSGREAD: "+loginResponseModel.getMSGREAD());
+                        BadgeDrawable.setBadgeCount(context, iconNoti, loginResponseModel.getMSGREAD());
+                    }
                 }
 
                 DialogCounterAlert.DialogProgress.dismiss();
@@ -172,6 +180,10 @@ public class Until {
             }
         });
 
+    }
+
+    public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
+        updateMyBalanceWallet(context, includeMywallet, null);
     }
 
 
@@ -432,5 +444,13 @@ public class Until {
         }
 
     }
+
+    public static long getTimestamp(long timestamp, int hourOfDay){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        return calendar.getTimeInMillis();
+    }
+
 
 }
