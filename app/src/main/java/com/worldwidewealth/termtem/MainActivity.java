@@ -293,8 +293,8 @@ public class MainActivity extends MyAppcompatActivity {
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
                             intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
-                            startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                            startActivity(intent);
                             finish();
 
                         }

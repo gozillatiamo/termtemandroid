@@ -30,6 +30,7 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     public static final String TAG = ActivityShowNotify.class.getSimpleName();
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +51,9 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     }
 
     private void initData(Bundle bundle){
+        MyApplication.LeavingOrEntering.currentActivity = null;
+
         if (bundle != null) {
-            MyApplication.LeavingOrEntering.currentActivity = null;
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
             mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
             mMsgid = bundle.getString(MyFirebaseMessagingService.MSGID);

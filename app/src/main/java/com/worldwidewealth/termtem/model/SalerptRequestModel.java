@@ -7,9 +7,11 @@ package com.worldwidewealth.termtem.model;
 public class SalerptRequestModel extends DataRequestModel {
     private String FROM;
     private String TO;
+    private String TYPE;
 
-    public SalerptRequestModel(String FROM, String TO) {
+    public SalerptRequestModel(String FROM, String TO, String TYPE) {
         this.FROM = FROM;
         this.TO = TO;
+        this.TYPE = TYPE;
     }
 }

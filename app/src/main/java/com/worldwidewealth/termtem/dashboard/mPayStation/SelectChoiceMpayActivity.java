@@ -78,8 +78,8 @@ public class SelectChoiceMpayActivity extends MyAppcompatActivity {
     private void onclick(int type){
         Intent intent = new Intent(SelectChoiceMpayActivity.this, MPayStationActivity.class);
         intent.putExtra("type", type);
-        startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, 0);
+        startActivity(intent);
 
     }
 }

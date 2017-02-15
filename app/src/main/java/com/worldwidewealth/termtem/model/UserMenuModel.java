@@ -12,6 +12,7 @@ public class UserMenuModel implements Serializable {
     public static final String DISABLE = "DISABLE";
     public static final String HIDE = "HIDE";
     public static final String CASHIN_BUTTON = "CASHIN";
+    public static final String CASHIN_AGENT = "AGENTCASHIN";
     public static final String SCAN_BUTTON = "SCAN";
     public static final String TOPUP_BUTTON = "TOPUP";
     public static final String SETUP_BUTTON = "SETUP";

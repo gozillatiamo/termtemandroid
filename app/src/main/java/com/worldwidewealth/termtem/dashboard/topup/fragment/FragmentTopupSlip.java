@@ -205,7 +205,7 @@ public class FragmentTopupSlip extends Fragment {
             Toast.makeText(getContext(), getString(R.string.save_eslip_success), Toast.LENGTH_LONG).show();
             Call<ResponseBody> call = services.saveSlip(
                     new RequestModel(APIServices.ACTIONSAVESLIP,
-                            new EslipRequestModel(mTransID)));
+                            new EslipRequestModel(mTransID, null)));
 
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                 @Override

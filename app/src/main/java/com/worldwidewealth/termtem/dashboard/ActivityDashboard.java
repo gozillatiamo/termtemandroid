@@ -70,6 +70,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     private AlertDialog mAlertChangePass;
     private ArrayList<UserMenuModel> mUserMenuList;
     private LayerDrawable mIconNoti;
+    private boolean canCashIn = false;
 
 
 
@@ -200,6 +201,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
+                intent.putExtra(ActivityReport.CASHIN_REPORT, canCashIn);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent);
             }
@@ -376,6 +378,13 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 case UserMenuModel.TOPUP_BUTTON:
                     cardMenu = mHolder.mMenuTopup;
                     break;
+                case UserMenuModel.CASHIN_AGENT:
+                    cardMenu = mHolder.mMenuAddCreditAgent;
+                        if (model.getSTATUS().equals(UserMenuModel.SHOW))
+                            canCashIn = true;
+                        else canCashIn = false;
+                    break;
+
             }
             setStatusMenu(cardMenu, model.getSTATUS());
         }
@@ -405,6 +414,9 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     view.setElevation(0);
                 }
+                break;
+            case UserMenuModel.SHOW:
+                view.setVisibility(View.VISIBLE);
                 break;
         }
     }

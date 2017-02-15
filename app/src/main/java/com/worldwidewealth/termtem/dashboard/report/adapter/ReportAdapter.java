@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.SalerptResponseModel;
 
 import java.text.Format;
@@ -59,10 +60,21 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.mTextComAmount.setText(format.format(getItem(position).getCOMM_AMT()));
             holder.mLayoutCommisstion.setVisibility(View.VISIBLE);
         }
+        switch (getItem(position).getTYPE()){
+            case ActivityReport.CASHIN_REPORT:
+                holder.mTextTiltle.setText(mContext.getString(R.string.title_report_cashin));
+                holder.mLayoutBiller.setVisibility(View.GONE);
+                holder.mTextAgentName.setText(getItem(position).getAGENTNAME());
+                holder.mLayoutAgentName.setVisibility(View.VISIBLE);
+                break;
+            default:
+                holder.mTextBiller.setText(getItem(position).getBILLER());
+                holder.mLayoutBiller.setVisibility(View.VISIBLE);
+                holder.mLayoutAgentName.setVisibility(View.GONE);
+                holder.mTextTiltle.setText(mContext.getString(R.string.topup) + " " + getItem(position).getTYPE());
+        }
         holder.mTextAmount.setText(format.format(getItem(position).getAMOUNT()));
-        holder.mTextBiller.setText(getItem(position).getBILLER());
         holder.mTextPhoneNum.setText(getItem(position).getPHONENO());
-        holder.mTextTiltle.setText(mContext.getString(R.string.topup) + " " + getItem(position).getTYPE());
     }
 
     @Override
@@ -79,8 +91,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     }
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mTextCheckTotal, mTextPayCode, mTextBiller, mTextPhoneNum, mTextAmount
-                , mTextComAmount, mTextDatePayment, mTextTiltle;
-        private View mLayoutCommisstion;
+                , mTextComAmount, mTextDatePayment, mTextTiltle, mTextAgentName;
+        private View mLayoutCommisstion, mLayoutBiller, mLayoutAgentName;
         public ViewHolder(View itemView) {
             super(itemView);
             mTextAmount = (TextView) itemView.findViewById(R.id.txt_amount);
@@ -91,7 +103,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             mTextPayCode = (TextView) itemView.findViewById(R.id.txt_pay_code);
             mTextPhoneNum = (TextView) itemView.findViewById(R.id.txt_phone_number);
             mTextTiltle = (TextView) itemView.findViewById(R.id.title_item);
+            mTextAgentName = (TextView) itemView.findViewById(R.id.txt_agent_name);
             mLayoutCommisstion = (View) itemView.findViewById(R.id.layout_commission);
+            mLayoutBiller = (View) itemView.findViewById(R.id.layout_biller);
+            mLayoutAgentName = (View) itemView.findViewById(R.id.layout_agent_name);
         }
     }
 }

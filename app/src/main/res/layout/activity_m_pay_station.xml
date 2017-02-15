@@ -14,7 +14,6 @@
             android:id="@+id/toolbar_mpay"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/background_primary"
             app:theme="@style/ToolbarColored">
 
             <me.grantland.widget.AutofitTextView

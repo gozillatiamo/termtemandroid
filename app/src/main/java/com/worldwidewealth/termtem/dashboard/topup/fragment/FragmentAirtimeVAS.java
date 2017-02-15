@@ -3,6 +3,7 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -100,6 +101,7 @@ public class FragmentAirtimeVAS extends Fragment {
             }
         });
         mHolder.mTab.setupWithViewPager(mHolder.mPager);
+/*
         mHolder.mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -119,6 +121,7 @@ public class FragmentAirtimeVAS extends Fragment {
             }
 
         });
+*/
 
         for(int i=0; i < mHolder.mTab.getTabCount(); i++) {
             View tab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(i);

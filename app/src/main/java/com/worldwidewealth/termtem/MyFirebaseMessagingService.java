@@ -35,6 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        String click_action = remoteMessage.getNotification().getClickAction();
         if (remoteMessage.getData() != null) {
             Bundle bundle = new Bundle();
+
             bundle.putString(TEXT, remoteMessage.getData().get(TEXT));
             bundle.putString(BOX, remoteMessage.getData().get(BOX));
             bundle.putString(MSGID, remoteMessage.getData().get(MSGID));
@@ -68,7 +69,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(bundle.getString(TEXT))
                 .setContentText(bundle.getString(BOX))
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

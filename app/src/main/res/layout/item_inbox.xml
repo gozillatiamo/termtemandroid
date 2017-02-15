@@ -5,6 +5,7 @@
     android:foreground="?attr/selectableItemBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true">
+
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_space"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/small_text_size"
+                android:text="11/11/11"
+                android:gravity="right"
+                android:alpha="0.4"
+                android:singleLine="true"/>
+
             <TextView
                 android:id="@+id/title_notify"
                 android:layout_width="match_parent"

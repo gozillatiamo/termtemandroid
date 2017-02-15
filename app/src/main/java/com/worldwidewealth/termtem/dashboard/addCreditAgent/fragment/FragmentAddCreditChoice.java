@@ -219,7 +219,7 @@ public class FragmentAddCreditChoice extends Fragment {
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
         Call<ResponseBody> callSubmit = services.submitTopup(
-                new RequestModel(APIServices.ACTION_SUBMIT_TOPUP_AGENT_CASHIN,
+                new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
                         new SubmitTopupRequestModel(mBottomAction.getPrice(),
                                 null,
                                 mAgent.getPhoneno(),
@@ -250,7 +250,7 @@ public class FragmentAddCreditChoice extends Fragment {
 
     private void serviceEslip(final String transid){
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid)));
+        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid, mAgent.getPhoneno())));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -262,7 +262,7 @@ public class FragmentAddCreditChoice extends Fragment {
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) getActivity();
                     activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                            .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
                 }
             }
 

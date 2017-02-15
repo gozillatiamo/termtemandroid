@@ -89,7 +89,9 @@ public class DialogCounterAlert {
             }
         });
 
-        alertDialog.show();
+        try {
+            alertDialog.show();
+        }catch (Exception e){}
 
     }
 

@@ -120,9 +120,11 @@ public class DialogNetworkError {
     }
 */
 
-        public static void dismiss(){
+    public static void dismiss(){
         if (alertDialog != null){
-            alertDialog.dismiss();
+            try {
+                alertDialog.dismiss();
+            } catch (RuntimeException e){}
         }
     }
 }

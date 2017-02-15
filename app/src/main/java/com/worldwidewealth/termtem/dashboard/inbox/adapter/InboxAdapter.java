@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,9 @@ import com.worldwidewealth.termtem.dashboard.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.InboxResponse;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by user on 14-Feb-17.
@@ -32,12 +35,12 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final int VIEW_TYPE_LOADING = 1;
     private OnLoadMoreListener mOnLoadMoreListener;
     private boolean isLoading;
-    private int visibleThreshold = 2;
+    private int visibleThreshold = 1;
     private int lastVisibleItem,totalItemCount;
     private List<InboxResponse> mListInbox;
     private Context mContext;
     public boolean maxInbox = false;
-
+    public static final String TAG = InboxAdapter.class.getSimpleName();
 
 
     public InboxAdapter(Context context, RecyclerView recyclerView, List<InboxResponse> listdata) {
@@ -52,12 +55,14 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
+                if (lastVisibleItem <= 0) return;
+
                 if (!isLoading&&totalItemCount <= (lastVisibleItem+visibleThreshold)&&!isMaxInbox()){
+
+                    isLoading = true;
                     if (mOnLoadMoreListener != null){
                         mOnLoadMoreListener.onLoadMore();
                     }
-
-                    isLoading = true;
                 }
             }
         });
@@ -95,6 +100,11 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             ((InboxViewHolder) holder).mTitleNotify.setText(getItem(position).getTitle());
             ((InboxViewHolder) holder).mDesNotify.setText(getItem(position).getMsg());
+
+            SimpleDateFormat dest = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+
+            String resultDate = dest.format(getItem(position).getCreate_Date());
+            ((InboxViewHolder) holder).mTextDate.setText(resultDate);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,12 +161,13 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public class InboxViewHolder extends RecyclerView.ViewHolder{
         private ImageView mIconNotify;
-        private TextView mTitleNotify, mDesNotify;
+        private TextView mTitleNotify, mDesNotify, mTextDate;
         public InboxViewHolder(View itemView) {
             super(itemView);
             mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
             mTitleNotify = (TextView) itemView.findViewById(R.id.title_notify);
             mDesNotify = (TextView) itemView.findViewById(R.id.des_notify);
+            mTextDate = (TextView) itemView.findViewById(R.id.txt_date);
         }
     }
 

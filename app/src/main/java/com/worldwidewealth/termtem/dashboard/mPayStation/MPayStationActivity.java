@@ -112,10 +112,10 @@ public class MPayStationActivity extends MyAppcompatActivity {
     private void initToolbar(){
         switch (mType){
             case SelectChoiceMpayActivity.MPAY_STATION:
-                mToolbarTitle.setText(getString(R.string.title_mpay_station));
+                mToolbarTitle.setText(getString(R.string.mpay_station));
                 break;
             case SelectChoiceMpayActivity.MPAY_BANK:
-                mToolbarTitle.setText(getString(R.string.title_mpay_bank));
+                mToolbarTitle.setText(getString(R.string.mpay_bank));
                 break;
         }
 

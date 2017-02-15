@@ -95,7 +95,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
                 FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS) mFragment.getParentFragment();
                 holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.white));
                 holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.white));
-                holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(fragmentAirtimeVAS.getsTabColor()));
+                holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
             }
 
 

@@ -83,7 +83,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView mIconNotify;
-        private TextView mTitleNotify, mDesNotify;
+        private TextView mTitleNotify, mDesNotify, mTextDate;
         public ViewHolder(View itemView) {
             super(itemView);
             mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
@@ -91,6 +91,8 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
             mTitleNotify = (TextView) itemView.findViewById(R.id.title_notify);
             mDesNotify = (TextView) itemView.findViewById(R.id.des_notify);
             mDesNotify.setVisibility(View.GONE);
+            mTextDate = (TextView) itemView.findViewById(R.id.txt_date);
+            mTextDate.setVisibility(View.GONE);
         }
     }
 }

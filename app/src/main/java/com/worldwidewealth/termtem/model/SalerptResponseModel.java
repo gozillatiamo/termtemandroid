@@ -15,6 +15,22 @@ public class SalerptResponseModel {
     private String BILLER;
     private String TYPE;
     private String PHONENO;
+    private float MARKUP_AMT;
+    private String AGENTNAME;
+    private String AGENTCASHINID;
+
+
+    public String getAGENTCASHINID() {
+        return AGENTCASHINID;
+    }
+
+    public String getAGENTNAME() {
+        return AGENTNAME;
+    }
+
+    public float getMARKUP_AMT() {
+        return MARKUP_AMT;
+    }
 
     public String getBILLER() {
         return BILLER;

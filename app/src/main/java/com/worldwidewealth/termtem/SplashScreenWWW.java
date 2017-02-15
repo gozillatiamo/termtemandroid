@@ -321,7 +321,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                                     .getColor(android.R.color.holo_orange_dark));
                 }
             });
-            alertDialog.show();
+            try {
+                alertDialog.show();
+            } catch (WindowManager.BadTokenException e){}
 
             return false;
         }

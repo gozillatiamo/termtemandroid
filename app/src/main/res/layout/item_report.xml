@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,19 +33,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/my_text_size"
+                android:textStyle="bold"
                 android:text="TopUp Airtime"/>
             <TextView
                 android:id="@+id/txt_check_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/my_text_size"
                 android:textStyle="bold"
-                style="@style/TextAppearance.AppCompat.Subhead"
                 android:text="100"/>
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_paycode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -50,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
                 android:text="@string/pay_code"
                 android:gravity="right"/>
             <me.grantland.widget.AutofitTextView
@@ -57,14 +64,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:sizeToFit="true"
+                android:layout_marginLeft="@dimen/activity_space"
+                android:textSize="@dimen/small_text_size"
                 android:singleLine="true"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="AIS"/>
 
         </LinearLayout>
-
         <LinearLayout
+            android:id="@+id/layout_agent_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -72,12 +81,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
+                android:text="@string/agent_name"
+                android:gravity="right"/>
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/txt_agent_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/small_text_size"
+                android:layout_weight="1"
+                app:sizeToFit="true"
+                android:singleLine="true"
+                android:gravity="right"
+                android:text="AIS"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_biller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
                 android:text="@string/carrier"
                 android:gravity="right"/>
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_biller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/small_text_size"
                 android:layout_weight="1"
                 app:sizeToFit="true"
                 android:singleLine="true"
@@ -86,6 +122,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_phoneno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -94,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:text="@string/phone_num_second"
+                android:textSize="@dimen/small_text_size"
                 android:gravity="right"/>
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/txt_phone_number"
@@ -101,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
+                android:textSize="@dimen/small_text_size"
                 app:sizeToFit="true"
                 android:singleLine="true"
                 android:text="0860254055"/>
@@ -109,6 +148,7 @@
 
 
         <LinearLayout
+            android:id="@+id/layout_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -116,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
                 android:text="@string/amount"
                 android:gravity="right"/>
             <LinearLayout
@@ -126,10 +167,12 @@
                 android:layout_weight="1">
                 <TextView
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/small_text_size"
                     android:layout_height="wrap_content"
                     android:text="@string/currentcy"/>
                 <TextView
                     android:id="@+id/txt_amount"
+                    android:textSize="@dimen/small_text_size"
                     android:layout_marginLeft="@dimen/activity_small_space"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,6 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
                 android:text="@string/commission"
                 android:gravity="right"/>
             <LinearLayout
@@ -159,17 +203,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/small_text_size"
                     android:text="@string/currentcy"/>
                 <TextView
                     android:id="@+id/txt_commission_amount"
                     android:layout_marginLeft="@dimen/activity_small_space"
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/small_text_size"
                     android:layout_height="wrap_content"
                     android:text="0.18"/>
 
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -177,6 +224,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
                 android:text="@string/date"
                 android:gravity="right"/>
 
@@ -187,6 +235,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 app:sizeToFit="true"
+                android:textSize="@dimen/small_text_size"
                 android:singleLine="true"
                 android:text="11/11/16"/>
 
@@ -195,3 +244,4 @@
 
     </LinearLayout>
 </LinearLayout>
+</android.support.v7.widget.CardView>

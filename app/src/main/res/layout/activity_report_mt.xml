@@ -14,7 +14,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             app:theme="@style/ToolbarColored"
-            android:background="@drawable/background_primary"
             android:layout_height="?attr/actionBarSize">
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"

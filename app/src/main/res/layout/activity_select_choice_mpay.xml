@@ -14,13 +14,12 @@
             android:id="@+id/toolbar_mpay"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/background_primary"
             app:theme="@style/ToolbarColored">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/menu_mpay"
+                android:text="@string/title_mpay"
                 style="@style/MyTitleActionBar"
                 />
         </android.support.v7.widget.Toolbar>

@@ -51,6 +51,7 @@ import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.until.Until;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -67,8 +68,7 @@ public class InboxActivity extends MyAppcompatActivity {
     private TermTemDialog.SearchDateRangeDialog mSearchDateRange;
     private APIServices services;
     private List<InboxResponse> mListInbox;
-    private long mDateFrom = Until.getTimestamp(System.currentTimeMillis(), 0),
-            mDateTo = Until.getTimestamp(System.currentTimeMillis(), 23);
+    private long mDateFrom, mDateTo;
     private String mText = "";
     private InboxAdapter mAdapter;
     private int mPage = 1;
@@ -81,6 +81,10 @@ public class InboxActivity extends MyAppcompatActivity {
         setContentView(R.layout.activity_inbox);
         services = APIServices.retrofit.create(APIServices.class);
         Until.setupUI(findViewById(R.id.layout_parent));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2016, 1, 1);
+        mDateFrom = Until.getTimestamp(calendar.getTimeInMillis(), 0);
+        mDateTo = Until.getTimestamp(System.currentTimeMillis(), 23);
         initWidgets();
         initToolbar();
         loadDataInbox();
@@ -119,7 +123,7 @@ public class InboxActivity extends MyAppcompatActivity {
             View searchEdit = searchView.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
             searchEdit.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.editbox_background_normal));
 
-            EditText txt = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            final EditText txt = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             txt.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
             txt.setTextColor(getResources().getColor(android.R.color.black));
             ImageView close = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
@@ -137,6 +141,7 @@ public class InboxActivity extends MyAppcompatActivity {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    if (mText.equals(newText)) return true;
                     mText = newText;
                     if (newText.equals("")){
                         mPage = 1;
@@ -213,7 +218,7 @@ public class InboxActivity extends MyAppcompatActivity {
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setLoaded();
                             }
-                        }, 5000);
+                        }, 1000);
                     }
                 }
             }

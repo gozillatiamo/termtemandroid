@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.dashboard.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -62,15 +63,22 @@ public class ActivityReport extends MyAppcompatActivity {
     private APIServices services;
     private DatePickerDialog mDatePickerDialog;
     private AlertDialog mChoiceDialog;
+    private BottomSheetTypeReport mBottomSheet;
+    private String mCurrentType;
+    private boolean mCanCashIn;
 
     private static final int FORM = 0;
     private static final int TO = 1;
+    public static final String TOPUP_REPORT = "TOPUP";
+    public static final String CASHIN_REPORT = "CASHIN";
    // private Date mDate = new Date(mPreviousDateFrom);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+        mCurrentType = TOPUP_REPORT;
+        mCanCashIn = getIntent().getExtras().getBoolean(CASHIN_REPORT);
         mHolder = new ViewHolder(this);
         services = APIServices.retrofit.create(APIServices.class);
         mPreviousDateFrom = getTimestamp(System.currentTimeMillis(), 0);
@@ -91,7 +99,37 @@ public class ActivityReport extends MyAppcompatActivity {
                         .dimColor(android.R.color.black)
                         .drawShadow(true)
                         .transparentTarget(true)
-                        .targetCircleColor(android.R.color.black));
+                        .targetCircleColor(android.R.color.black),
+                new TapTargetView.Listener(){
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        super.onTargetDismissed(view, userInitiated);
+                        if (mCanCashIn) {
+                            mBottomSheet = new BottomSheetTypeReport(ActivityReport.this);
+                            mBottomSheet.setOnClick(BottomSheetTypeReport.TOPUP_REPORT_MENU, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mCurrentType = TOPUP_REPORT;
+                                    salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+                                    mBottomSheet.dismiss();
+                                }
+                            });
+                            mBottomSheet.setOnClick(BottomSheetTypeReport.CASHIN_AGENT_REPORT_MENU, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mCurrentType = CASHIN_REPORT;
+                                    salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+                                    mBottomSheet.dismiss();
+                                }
+                            });
+
+                            mBottomSheet.show();
+                        } else {
+                            salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+                            findViewById(R.id.action_swich_mode).setVisibility(View.GONE);
+                        }
+                    }
+                });
 
     }
 
@@ -109,6 +147,9 @@ public class ActivityReport extends MyAppcompatActivity {
                 break;
             case R.id.action_search:
                 initSearchDialog();
+                break;
+            case R.id.action_swich_mode:
+                mBottomSheet.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -133,8 +174,7 @@ public class ActivityReport extends MyAppcompatActivity {
         mAdapter = new ReportAdapter(this, null);
         mHolder.mListReport.setLayoutManager(layoutManager);
         mHolder.mListReport.setAdapter(new AlphaInAnimationAdapter(mAdapter));
-        mHolder.mListReport.addItemDecoration(new SimpleDividerItemDecoration(this));
-        salerptService(mPreviousDateFrom+"", mPeviousDateTo+"");
+//        mHolder.mListReport.addItemDecoration(new SimpleDividerItemDecoration(this));
     }
 
     private void initSearchDialog(){
@@ -205,7 +245,7 @@ public class ActivityReport extends MyAppcompatActivity {
         new DialogCounterAlert.DialogProgress(this);
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
-                        new SalerptRequestModel(timeFrom, timeTo)));
+                        new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

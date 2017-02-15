@@ -58,7 +58,7 @@ public interface APIServices {
     public static final String ACTIONGETAGENTLIST = "GETAGENTLIST";
     public static final String ACTION_PREVIEW_AGENT_CASHIN = "PREVIEWAGENTCASHIN";
     public static final String ACTION_GETOTP_AGENT_CASHIN = "GETOTPAGENTCASHIN";
-    public static final String ACTION_SUBMIT_TOPUP_AGENT_CASHIN= "SUBMITTOPUPAGENTCASHIN";
+    public static final String ACTION_SUBMIT_AGENT_CASHIN= "SUBMITAGENTCASHIN";
     public static final String ACTION_ESLIP_AGENT_CASHIN= "ESLIPAGENTCASHIN";
 
     public static final String AIS = "12CALL";
