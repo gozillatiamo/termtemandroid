@@ -3,6 +3,7 @@ package com.worldwidewealth.termtem.dashboard.widgets;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,6 +43,8 @@ public class SelectAmountAndOtherFragment extends Fragment {
     private ViewHolder mHolder;
     private BottomAction mBottomAction;
     private View rootView;
+
+    @SuppressLint("ValidFragment")
     public SelectAmountAndOtherFragment(BottomAction bottomAction) {
         this.mBottomAction = bottomAction;
     }

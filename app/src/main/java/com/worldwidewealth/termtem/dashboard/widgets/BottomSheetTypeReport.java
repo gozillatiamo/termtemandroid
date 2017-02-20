@@ -24,14 +24,16 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
     public BottomSheetTypeReport(@NonNull Context context) {
         super(context);
-        setContentView(R.layout.bottomsheet_type_report);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        setContentView(R.layout.bottomsheet_type_report);
         initWidgets();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void show() {
+        super.show();
+        this.setCancelable(false);
+        this.setCanceledOnTouchOutside(false);
     }
 
     private void initWidgets(){

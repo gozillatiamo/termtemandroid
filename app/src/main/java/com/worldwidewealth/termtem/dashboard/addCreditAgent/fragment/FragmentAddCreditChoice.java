@@ -127,6 +127,7 @@ public class FragmentAddCreditChoice extends Fragment {
 
                 if (Double.parseDouble(mBottomAction.getPrice()) < 1 || Double.parseDouble(mBottomAction.getPrice()) > 49000){
                     Toast.makeText(getContext(), getString(R.string.alert_amount_mpay_over), Toast.LENGTH_LONG).show();
+                    mBottomAction.setEnable(true);
                     return;
                 }
 

@@ -58,6 +58,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
 
+
 /*
         Log.e(TAG, "package: "+getApplicationContext().getPackageName());
         Log.e(TAG, "VersionName: "+BuildConfig.VERSION_NAME);
@@ -299,6 +300,14 @@ public class SplashScreenWWW extends MyAppcompatActivity{
             builder.setCancelable(false);
             builder.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+
+                    String server = getString(R.string.server);
+
+                    if (!server.contains("180.128.21.81")) {
+                        startLogin(txid);
+                        return;
+                    }
+
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
                     } catch (android.content.ActivityNotFoundException anfe) {
@@ -306,9 +315,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                     }
                 }
             });
-            builder.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    startLogin(txid);
+                    finish();
                 }
             });
 
@@ -319,6 +328,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                     ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
                             .setTextColor(getResources()
                                     .getColor(android.R.color.holo_orange_dark));
+                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                            .setTextColor(getResources()
+                                    .getColor(android.R.color.holo_red_dark));
                 }
             });
             try {

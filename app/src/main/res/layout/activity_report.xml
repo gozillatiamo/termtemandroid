@@ -38,6 +38,7 @@
                 android:id="@+id/txt_not_found_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/not_found_report"
                 android:layout_centerInParent="true"
                 style="@style/TextAppearance.AppCompat.Title"

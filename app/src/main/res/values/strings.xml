@@ -234,7 +234,7 @@
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
     <string name="report_cashin_agent">ประวัติการเติมเงิน Agent</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
-    <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ ท่านต้องการอัพเดทเดี๋ยวนี้หรือไม่?</string>
+    <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>
 
 

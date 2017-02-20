@@ -201,6 +201,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
+                Log.e(TAG, "Dashboard Can CashIn: "+canCashIn);
                 intent.putExtra(ActivityReport.CASHIN_REPORT, canCashIn);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent);
@@ -380,9 +381,10 @@ public class ActivityDashboard extends MyAppcompatActivity{
                     break;
                 case UserMenuModel.CASHIN_AGENT:
                     cardMenu = mHolder.mMenuAddCreditAgent;
-                        if (model.getSTATUS().equals(UserMenuModel.SHOW))
+                    Log.e(TAG, "CashIn_Agent: "+model.getSTATUS());
+                        if (model.getSTATUS().equals(UserMenuModel.SHOW)) {
                             canCashIn = true;
-                        else canCashIn = false;
+                        } else canCashIn = false;
                     break;
 
             }
@@ -401,6 +403,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         mHolder.mMenuTopup.setEnabled(enableBtn);
     }
     private void setStatusMenu(CardView view, String status){
+        if (view == null) return;
 
         switch (status){
             case UserMenuModel.HIDE:
