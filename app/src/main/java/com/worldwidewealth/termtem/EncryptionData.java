@@ -1,20 +1,17 @@
 package com.worldwidewealth.termtem;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -28,9 +25,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -160,7 +155,7 @@ public class EncryptionData {
         Gson gson = new Gson();
         String msg = null;
         String strRespone = null;
-        String strRequest = Until.convertToStringRequest(call.request().body());
+        String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
         }
@@ -186,8 +181,8 @@ public class EncryptionData {
             }
 
         } catch (JsonSyntaxException e){
-//            String converted = Until.ConvertJsonEncode(strRespone);
-            String responDecode = Until.decode(strRespone);
+//            String converted = Util.ConvertJsonEncode(strRespone);
+            String responDecode = Util.decode(strRespone);
             Log.e(TAG, requestModel.getAction()+"Response: "+responDecode);
             return responDecode;
 

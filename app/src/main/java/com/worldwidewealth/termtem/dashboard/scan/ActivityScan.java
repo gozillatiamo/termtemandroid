@@ -1,20 +1,28 @@
 package com.worldwidewealth.termtem.dashboard.scan;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
+import com.worldwidewealth.termtem.model.AgentResponse;
 
 import java.util.List;
 
@@ -31,15 +39,11 @@ public class ActivityScan extends MyAppcompatActivity {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if (result.getText() != null) {
-                FragmentTransaction transaction = getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right,
-                                R.anim.slide_out_left,
-                                R.anim.slide_in_left,
-                                R.anim.slide_out_right)
-                        .replace(R.id.container_add_credit, new FragmentAddCreditChoice())
-                        .addToBackStack(null);
-                transaction.commit();
+                String strResult = result.getText();
+                AgentResponse agentResponse = new Gson().fromJson(strResult, AgentResponse.class);
+                if (agentResponse != null){
+                    addCreditAgent(agentResponse);
+                }
             }
         }
 
@@ -91,5 +95,20 @@ public class ActivityScan extends MyAppcompatActivity {
     private void initWidgets(){
         mBarcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    private void addCreditAgent(AgentResponse agentResponse){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AgentAdapter.AGENTDATA, agentResponse);
+        bundle.writeToParcel(Parcel.obtain(), 0);
+
+        Intent intent = new Intent(this, ActivityAddCreditAgent.class);
+        intent.putExtra("type", ActivityAddCreditAgent.SCAN);
+        intent.putExtra("data", bundle);
+        overridePendingTransition(R.anim.slide_in_right, 0);
+        startActivity(intent);
+        finish();
+
+
     }
 }

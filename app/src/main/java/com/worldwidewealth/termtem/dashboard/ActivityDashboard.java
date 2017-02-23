@@ -2,7 +2,6 @@ package com.worldwidewealth.termtem.dashboard;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,16 +43,15 @@ import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.ChangePasswordRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
-import com.worldwidewealth.termtem.until.BadgeDrawable;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.BadgeDrawable;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -93,7 +90,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         super.onResume();
         setEnableBtn(true);
         initBtnMenu();
-        Until.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
+        Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
     }
 
     @Override
@@ -175,8 +172,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Until.logoutAPI();
-                        Until.backToSignIn(ActivityDashboard.this);
+                        Util.logoutAPI();
+                        Util.backToSignIn(ActivityDashboard.this);
                     }
                 });
             }
@@ -223,6 +220,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             public void onClick(View v) {
                 setEnableBtn(false);
                 Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditAgent.class);
+                intent.putExtra("type", ActivityAddCreditAgent.DEFAULT);
                 overridePendingTransition(R.anim.slide_in_right, 0);
                 startActivity(intent);
             }
@@ -410,7 +408,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 view.setVisibility(View.GONE);
                 break;
             case UserMenuModel.DISABLE:
-                view.setEnabled(false);
+                view.setClickable(false);
                 view.setVisibility(View.VISIBLE);
                 view.setCardBackgroundColor(getResources().getColor(android.R.color.darker_gray));
                 view.setAlpha(0.2f);

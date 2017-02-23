@@ -1,31 +1,15 @@
 package com.worldwidewealth.termtem.dashboard.mPayStation;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,9 +24,8 @@ import com.worldwidewealth.termtem.model.MPayStationResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.BottomAction;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.BottomAction;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

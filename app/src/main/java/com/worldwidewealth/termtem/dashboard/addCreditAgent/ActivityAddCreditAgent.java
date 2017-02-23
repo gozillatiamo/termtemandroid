@@ -1,37 +1,30 @@
 package com.worldwidewealth.termtem.dashboard.addCreditAgent;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.os.Parcel;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
-import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.AgentResponse;
 import com.worldwidewealth.termtem.model.DataRequestModel;
-import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,15 +40,33 @@ public class ActivityAddCreditAgent extends MyAppcompatActivity {
     private ViewHolder mHolder;
     private APIServices services;
     private AgentAdapter mAdapter;
+    private int mType;
+
+    public static final int DEFAULT = 0;
+    public static final int SCAN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_credit_to_agent);
         mHolder = new ViewHolder(this);
+        mType = getIntent().getExtras().getInt("type");
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
-        initData();
+
+        switch (mType){
+            case SCAN:
+                FragmentTransaction transaction = getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container_add_credit,
+                                FragmentAddCreditChoice.newInstance(getIntent()
+                                        .getBundleExtra("data")));
+                transaction.commit();
+                break;
+            default:
+                initData();
+                break;
+        }
 
     }
 
@@ -95,7 +106,7 @@ public class ActivityAddCreditAgent extends MyAppcompatActivity {
                 Object objectResponse = EncryptionData.getModel(ActivityAddCreditAgent.this,
                         call, response.body(), this);
                 if (objectResponse instanceof String){
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     final List<AgentResponse> listagent = gson
                             .fromJson((String)objectResponse,
                                     new TypeToken<ArrayList<AgentResponse>>(){}.getType());

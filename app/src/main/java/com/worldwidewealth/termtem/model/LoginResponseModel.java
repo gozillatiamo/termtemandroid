@@ -12,6 +12,10 @@ public class LoginResponseModel {
     private String USERID;
     private float BALANCE;
     private String MSGREAD;
+    private String FirstName;
+    private String LastName;
+    private String TelNo;
+    private String AgentCode;
 
     public String getMSGREAD() {
         return MSGREAD;
@@ -37,5 +41,21 @@ public class LoginResponseModel {
 
     public List<UserMenuModel> getUsermenu() {
         return usermenu;
+    }
+
+    public String getAgentCode() {
+        return AgentCode;
+    }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public String getTelNo() {
+        return TelNo;
     }
 }

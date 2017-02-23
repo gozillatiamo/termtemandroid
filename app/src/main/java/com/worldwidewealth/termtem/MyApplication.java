@@ -7,14 +7,14 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.AppCompatTextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
+
 import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -107,7 +107,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         {
 
             if (currentActivity == activity || Global.getInstance().getTXID() == null){
-                Until.backToSignIn(activity);
+                Util.backToSignIn(activity);
                 currentActivity = null;
             } else {
                 currentActivity = activity;
@@ -123,17 +123,17 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             if ( currentActivity == activity ) {
                 // We were stopped and no-one else has been started.
-                Until.logoutAPI();
+                Util.logoutAPI();
 /*
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences(Until.KEYPF, Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences(Util.KEYPF, Context.MODE_PRIVATE);
                 if (sharedPreferences.getBoolean("LOGOUT", true)){
-                    Until.backToSignIn(activity);
+                    Util.backToSignIn(activity);
                     currentActivity = null;
                 } else {
-                    Until.logoutAPI();
+                    Util.logoutAPI();
                 }
 */
-                //Until.backToSignIn(activity);
+                //Util.backToSignIn(activity);
             }
         }
     }

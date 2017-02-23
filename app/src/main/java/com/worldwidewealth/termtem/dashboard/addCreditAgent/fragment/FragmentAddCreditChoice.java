@@ -1,25 +1,15 @@
 package com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment;
 
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
 import android.util.Base64;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +18,6 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.FragmentTopupPreview;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
-import com.worldwidewealth.termtem.dashboard.mPayStation.MPayStationActivity;
-import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dashboard.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -43,11 +31,8 @@ import com.worldwidewealth.termtem.model.TopupPreviewRequestModel;
 import com.worldwidewealth.termtem.model.TopupResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.BottomAction;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-
-import java.text.NumberFormat;
-import java.util.Locale;
+import com.worldwidewealth.termtem.util.BottomAction;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

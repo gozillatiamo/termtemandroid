@@ -13,7 +13,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.until.BottomAction;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.BottomAction;
+import com.worldwidewealth.termtem.util.Util;
 
 
 /**
@@ -153,7 +152,7 @@ public class SelectAmountAndOtherFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View rootView = LayoutInflater.from(getContext()).inflate(R.layout.item_topup, parent, false);
-            Until.setupUI(rootView);
+            Util.setupUI(rootView);
 
             return new ViewHolder(rootView);
         }

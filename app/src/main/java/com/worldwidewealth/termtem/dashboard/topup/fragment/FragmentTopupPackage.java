@@ -1,6 +1,5 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,9 +34,9 @@ import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.model.TopupPreviewRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.TopupResponseModel;
-import com.worldwidewealth.termtem.until.BottomAction;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.BottomAction;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.text.NumberFormat;
 
@@ -88,7 +86,7 @@ public class FragmentTopupPackage extends  Fragment{
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        Until.setupUI(rootView);
+        Util.setupUI(rootView);
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
 //        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
         initPageTopup();
@@ -109,7 +107,7 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onPause() {
         super.onPause();
-        Until.hideSoftKeyboard(mHolder.mEditPhone);
+        Util.hideSoftKeyboard(mHolder.mEditPhone);
     }
 
 /*
@@ -547,7 +545,7 @@ public class FragmentTopupPackage extends  Fragment{
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
-//            mEditPhone.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditPhone.setOnFocusChangeListener(Util.onFocusEditText());
             mEditPhone.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

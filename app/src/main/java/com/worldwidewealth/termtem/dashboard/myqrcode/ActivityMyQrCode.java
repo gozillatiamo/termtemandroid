@@ -8,13 +8,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.model.AgentResponse;
+import com.worldwidewealth.termtem.util.Util;
 
 public class ActivityMyQrCode extends MyAppcompatActivity {
 
@@ -48,6 +53,16 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
     }
 
     private void initQRCode(){
+        AgentResponse agentResponse = new AgentResponse(
+                EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID()),
+                Global.getInstance().getAGENTCODE(),
+                Global.getInstance().getFIRSTNAME(),
+                Global.getInstance().getLASTNAME(),
+                Global.getInstance().getPHONENO()
+        );
+
+        mHolder.mMyQRCode.setImageBitmap(Util.generateQR(new Gson().toJson(agentResponse, AgentResponse.class)));
+/*
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
             BitMatrix bitMatrix = qrCodeWriter.encode("https://www.google.com", BarcodeFormat.QR_CODE, 1024, 1024);
@@ -57,6 +72,7 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+*/
 
     }
 

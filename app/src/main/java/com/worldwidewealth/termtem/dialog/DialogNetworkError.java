@@ -15,7 +15,7 @@ import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +38,7 @@ public class DialogNetworkError {
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback , boolean canCancel){
         this.mContext = context;
         if (mContext == null) return;
-        strRequest = Until.convertToStringRequest(call.request().body());
+        strRequest = Util.convertToStringRequest(call.request().body());
 
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);

@@ -1,6 +1,5 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -25,8 +24,8 @@ import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -97,7 +96,7 @@ public class FragmentTopupSlip extends Fragment {
 
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
-        Until.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
+        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
         initBtn();
         if (mImageBitmap != null || mTransID != null) {
             initEslip();
@@ -124,7 +123,7 @@ public class FragmentTopupSlip extends Fragment {
                 } else {
                     LoginResponseModel loginResponseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), LoginResponseModel.class);
                     Global.setBALANCE(loginResponseModel.getBALANCE());
-                    Until.setBalanceWallet(mHolder.mIncludeMyWallet);
+                    Util.setBalanceWallet(mHolder.mIncludeMyWallet);
 
                 }
 

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.AdapterPageTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +56,7 @@ public class FragmentAirtimeVAS extends Fragment {
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_airtime_vas, container, false);
             mHolder = new ViewHolder(rootView);
-            Until.setupUI(rootView);
+            Util.setupUI(rootView);
             rootView.setTag(mHolder);
         } else {
             mHolder = (ViewHolder) rootView.getTag();
@@ -85,7 +85,7 @@ public class FragmentAirtimeVAS extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 FragmentChoiceTopup fragmentChoiceTopup = (FragmentChoiceTopup)
-                        Until.getFragmentFromViewpager(getChildFragmentManager(),
+                        Util.getFragmentFromViewpager(getChildFragmentManager(),
                                 mHolder.mPager,
                                 position);
                 fragmentChoiceTopup.clearSelected();

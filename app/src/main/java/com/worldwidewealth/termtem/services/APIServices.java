@@ -1,8 +1,6 @@
 package com.worldwidewealth.termtem.services;
 
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.worldwidewealth.termtem.MyApplication;
@@ -12,7 +10,7 @@ import com.worldwidewealth.termtem.model.RegisterRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SignInRequestModel;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -20,11 +18,9 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -148,7 +144,7 @@ public interface APIServices {
                     if (originalRequest.method().equalsIgnoreCase("POST")){
 
                         builder = originalRequest.newBuilder()
-                                .method(originalRequest.method(), Until.encode(originalRequest.body()));
+                                .method(originalRequest.method(), Util.encode(originalRequest.body()));
                     }
                     Response response = chain.proceed(builder.build());
                     return  response;

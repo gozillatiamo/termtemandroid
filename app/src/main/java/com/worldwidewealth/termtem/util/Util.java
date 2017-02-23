@@ -1,17 +1,16 @@
-package com.worldwidewealth.termtem.until;
+package com.worldwidewealth.termtem.util;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.LayerDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -23,17 +22,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -41,6 +34,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
@@ -79,8 +76,8 @@ import retrofit2.Response;
  * Created by MyNet on 17/10/2559.
  */
 
-public class Until {
-    public static final String TAG = Until.class.getSimpleName();
+public class Util {
+    public static final String TAG = Util.class.getSimpleName();
 
     public static RequestBody encode(final RequestBody body){
         return new RequestBody() {
@@ -96,7 +93,7 @@ public class Until {
                     body.writeTo(buffer);
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
-                    String decoded = Until.decode(new StringBuilder(encoded).reverse().toString());
+                    String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
 
                     System.gc();
                     sink.write(converted);
@@ -233,6 +230,10 @@ public class Until {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null) return;
                 Global.getInstance().setAGENTID(null);
+                Global.getInstance().setAGENTCODE(null);
+                Global.getInstance().setFIRSTNAME(null);
+                Global.getInstance().setLASTNAME(null);
+                Global.getInstance().setPHONENO(null);
                 Global.getInstance().setUSERID(null);
                 Global.getInstance().setBALANCE(0);
                 Global.getInstance().setTXID(null);
@@ -450,6 +451,27 @@ public class Until {
         calendar.setTimeInMillis(timestamp);
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         return calendar.getTimeInMillis();
+    }
+
+    public static Bitmap generateQR(String data){
+
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, 512, 512);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            return bmp;
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

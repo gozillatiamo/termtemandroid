@@ -1,4 +1,4 @@
-package com.worldwidewealth.termtem.until;
+package com.worldwidewealth.termtem.util;
 
 import android.app.Activity;
 import android.content.Context;

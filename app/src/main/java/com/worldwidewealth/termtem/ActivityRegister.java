@@ -1,16 +1,13 @@
 package com.worldwidewealth.termtem;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -29,21 +26,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.common.StringUtils;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.RegisterRequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.CheckSyntaxData;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.CheckSyntaxData;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import me.grantland.widget.AutofitTextView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -70,7 +65,7 @@ public class ActivityRegister extends MyAppcompatActivity {
         setContentView(R.layout.activity_register);
         mHolder = new ViewHolder(this);
         mDataCheck[EMAIL] = true;
-        Until.setupUI(findViewById(R.id.layout_parent));
+        Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
         initPeople();
@@ -300,18 +295,18 @@ public class ActivityRegister extends MyAppcompatActivity {
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
             mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
 
-//            mEditEmail.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditEmail.setOnFocusChangeListener(Util.onFocusEditText());
             mEditFristName = (EditText) view.findViewById(R.id.edit_name);
-//            mEditFristName.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditFristName.setOnFocusChangeListener(Util.onFocusEditText());
             mEditFristName.addTextChangedListener(onTextChanged(mEditFristName, FIRSTNAME));
             mEditLastName = (EditText) view.findViewById(R.id.edit_last_name);
-//            mEditLastName.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditLastName.setOnFocusChangeListener(Util.onFocusEditText());
             mEditLastName.addTextChangedListener(onTextChanged(mEditLastName, LASTNAME));
             mEditTel = (EditText) view.findViewById(R.id.edit_tel);
-//            mEditTel.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditTel.setOnFocusChangeListener(Util.onFocusEditText());
             mEditTel.addTextChangedListener(onTextChanged(mEditTel, TEL));
             mEditIdentification = (EditText) view.findViewById(R.id.edit_identification);
-//            mEditIdentification.setOnFocusChangeListener(Until.onFocusEditText());
+//            mEditIdentification.setOnFocusChangeListener(Util.onFocusEditText());
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mBtnSignIn = (AutofitTextView) view.findViewById(R.id.btn_signin);

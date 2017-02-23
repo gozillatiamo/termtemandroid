@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +41,8 @@ import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,7 +52,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends MyAppcompatActivity {
 
@@ -74,7 +72,7 @@ public class MainActivity extends MyAppcompatActivity {
 
         setContentView(R.layout.activity_main);
         mHolder = new ViewHolder(this);
-        Until.setupUI(findViewById(R.id.layout_parent));
+        Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
         initBtn();
@@ -275,11 +273,15 @@ public class MainActivity extends MyAppcompatActivity {
 
                         } else {
                             String responseStr = strResponse;
-                            String responDecode = Until.decode(responseStr);
+                            String responDecode = Util.decode(responseStr);
                             Log.e(TAG, "ResponseLogin: "+responDecode);
                             LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
                             Global.getInstance().setUSERID(loginResponseModel.getUSERID());
                             Global.getInstance().setAGENTID(loginResponseModel.getAGENTID());
+                            Global.getInstance().setAGENTCODE(loginResponseModel.getAgentCode());
+                            Global.getInstance().setFIRSTNAME(loginResponseModel.getFirstName());
+                            Global.getInstance().setLASTNAME(loginResponseModel.getLastName());
+                            Global.getInstance().setPHONENO(loginResponseModel.getTelNo());
                             Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
                             Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
 

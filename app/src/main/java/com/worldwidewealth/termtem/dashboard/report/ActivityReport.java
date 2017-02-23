@@ -2,10 +2,8 @@ package com.worldwidewealth.termtem.dashboard.report;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +34,8 @@ import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SalerptRequestModel;
 import com.worldwidewealth.termtem.model.SalerptResponseModel;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.SimpleDividerItemDecoration;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -52,7 +49,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityReport extends MyAppcompatActivity {
 
@@ -278,7 +274,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
                 if (!(responseValues instanceof ResponseModel)){
                     DialogCounterAlert.DialogProgress.dismiss();
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     List<SalerptResponseModel> modelList = gson
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());

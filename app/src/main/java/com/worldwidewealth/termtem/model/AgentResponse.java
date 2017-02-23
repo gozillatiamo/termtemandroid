@@ -4,6 +4,9 @@ package com.worldwidewealth.termtem.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.encoder.QRCode;
+
 /**
  * Created by user on 14-Feb-17.
  */
@@ -16,7 +19,12 @@ public class AgentResponse implements Parcelable {
     private String LastName;
     private String Phoneno;
 
-    public AgentResponse() {
+    public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno) {
+        this.AgentId = agentid;
+        this.AgentCode = agentcode;
+        this.FirstName = firstname;
+        this.LastName = lastname;
+        this.Phoneno = phoneno;
     }
 
     protected AgentResponse(Parcel in) {

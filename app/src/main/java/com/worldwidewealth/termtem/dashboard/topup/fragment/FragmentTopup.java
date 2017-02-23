@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -80,8 +80,8 @@ public class FragmentTopup extends Fragment {
     }
 
     private void initData(){
-//        Until.setBalanceWallet(mHolder.mIncludeMyWallet);
-        Until.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
+//        Util.setBalanceWallet(mHolder.mIncludeMyWallet);
+        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
     }
 
     private void startFragmentService(String service){

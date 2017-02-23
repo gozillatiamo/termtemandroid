@@ -10,26 +10,20 @@ import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.PreRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.GPSTracker;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.GPSTracker;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -110,6 +104,10 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                             if (responseValues instanceof ResponseModel){
                                 Global.getInstance().setAGENTID(null);
+                                Global.getInstance().setAGENTCODE(null);
+                                Global.getInstance().setFIRSTNAME(null);
+                                Global.getInstance().setLASTNAME(null);
+                                Global.getInstance().setPHONENO(null);
                                 Global.getInstance().setUSERID(null);
                                 Global.getInstance().setBALANCE(0);
                                 Global.getInstance().setTXID(null);

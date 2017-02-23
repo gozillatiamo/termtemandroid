@@ -36,7 +36,7 @@ import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.PopupChoiceBank;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.NotiPayRequestModel;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.Calendar;
 
@@ -82,7 +82,7 @@ public class FragmentReportMT extends Fragment {
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
-        Until.setupUI(rootView);
+        Util.setupUI(rootView);
         initBtn();
         return rootView;
     }
@@ -98,28 +98,28 @@ public class FragmentReportMT extends Fragment {
             switch (requestCode){
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CAPTURE:
 //                    Bundle extras = data.getExtras();
-//                    uri = Until.getImageUri((Bitmap) extras.get("data"));
+//                    uri = Util.getImageUri((Bitmap) extras.get("data"));
                     uri = sheetDialogFragment.getImageUri();
 
-                    imgPath =  Until.getRealPathFromURI(uri);
+                    imgPath =  Util.getRealPathFromURI(uri);
 
 
                     break;
                 case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CHOOSE:
                     uri = data.getData();
-                    imgPath = Until.getRealPathFromURI(uri);
+                    imgPath = Util.getRealPathFromURI(uri);
 
                     uri.toString().replace("com.android.gallery3d","com.google.android.gallery3d");
 
                     if (uri.toString().startsWith("content://com.google.android.gallery3d")
                             || uri.toString().startsWith("content://com.sec.android.gallery3d.provider") ) {
 
-                        imgPath = Until.getPicasaImage(uri);
+                        imgPath = Util.getPicasaImage(uri);
                     }
                     else
-                        imgPath = Until.getRealPathFromURI(uri);
+                        imgPath = Util.getRealPathFromURI(uri);
 
-//                    imgPath = Until.getRealPathFromURI(uri);
+//                    imgPath = Util.getRealPathFromURI(uri);
 
                     break;
             }
@@ -129,11 +129,11 @@ public class FragmentReportMT extends Fragment {
                     @Override
                     public void run() {
 /*
-                        Bitmap bitmapDecode = Until.getBitmap(imgPath);
-                        Bitmap bitmapFilp = Until.flip(bitmapDecode, imgPath);
+                        Bitmap bitmapDecode = Util.getBitmap(imgPath);
+                        Bitmap bitmapFilp = Util.flip(bitmapDecode, imgPath);
 */
-                        mBitmapImage = Until.flip(Until.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-//                        mBitmapEncode = Until.encodeBitmapToUpload(Bitmap.createScaledBitmap(bitmapFilp, 300, 300, true));
+                        mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+//                        mBitmapEncode = Util.encodeBitmapToUpload(Bitmap.createScaledBitmap(bitmapFilp, 300, 300, true));
                         mHolder.mImagePhoto.setImageBitmap(mBitmapImage);
                         System.gc();
                     }
@@ -198,7 +198,7 @@ public class FragmentReportMT extends Fragment {
                                         APIServices.ACTIONNOTIPAY,
                                         new NotiPayRequestModel(mStrAmount,
                                                 mDateTime,
-                                                Until.encodeBitmapToUpload(mBitmapImage),
+                                                Util.encodeBitmapToUpload(mBitmapImage),
                                                 mStrBankStart,
                                                 mStrBankEnd)));
                                 MyApplication.showNotifyUpload();
@@ -230,7 +230,7 @@ public class FragmentReportMT extends Fragment {
                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                                         .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance(
                                                 Double.parseDouble(mStrAmount),
-                                                Until.encodeBitmapToUpload(mBitmapImage),
+                                                Util.encodeBitmapToUpload(mBitmapImage),
                                                 mHolder.mBtnDateTransfer.getText().toString(),
                                                 mHolder.mBtnTimeTransfer.getText().toString(),
                                                 mPopupBankStart.getPositionSelect(),

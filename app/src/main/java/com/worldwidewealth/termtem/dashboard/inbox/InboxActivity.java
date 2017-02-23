@@ -4,51 +4,37 @@ import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.EncryptionData;
-import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
-import com.worldwidewealth.termtem.MyApplication;
-import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 import com.worldwidewealth.termtem.dashboard.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
 import com.worldwidewealth.termtem.model.InboxRepuest;
 import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
-import com.worldwidewealth.termtem.model.SalerptResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.until.ErrorNetworkThrowable;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +45,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class InboxActivity extends MyAppcompatActivity {
 
@@ -80,11 +65,11 @@ public class InboxActivity extends MyAppcompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
         services = APIServices.retrofit.create(APIServices.class);
-        Until.setupUI(findViewById(R.id.layout_parent));
+        Util.setupUI(findViewById(R.id.layout_parent));
         Calendar calendar = Calendar.getInstance();
         calendar.set(2016, 1, 1);
-        mDateFrom = Until.getTimestamp(calendar.getTimeInMillis(), 0);
-        mDateTo = Until.getTimestamp(System.currentTimeMillis(), 23);
+        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
+        mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
         initWidgets();
         initToolbar();
         loadDataInbox();
@@ -183,7 +168,7 @@ public class InboxActivity extends MyAppcompatActivity {
                         InboxActivity.this, call, response.body(), this);
 
                 if (objectResponse instanceof String){
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     final List<InboxResponse> listinbox = gson
                             .fromJson((String)objectResponse,
                                     new TypeToken<ArrayList<InboxResponse>>(){}.getType());

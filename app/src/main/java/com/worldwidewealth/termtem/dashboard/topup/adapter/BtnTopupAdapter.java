@@ -15,7 +15,7 @@ import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentAirtimeVAS;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentChoiceTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.item_topup, parent, false);
-        Until.setupUI(rootView);
+        Util.setupUI(rootView);
 
         return new ViewHolder(rootView);
     }

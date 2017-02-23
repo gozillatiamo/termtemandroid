@@ -20,6 +20,10 @@ public class Global {
     private static final String TXID = "txid";
     private static final String BALANCE = "balance";
     private static final String MSGREAD = "msg_read";
+    private static final String FIRSTNAME = "firstname";
+    private static final String LASTNAME = "lastname";
+    private static final String PHONENO = "phoneno";
+    private static final String AGENTCODE = "agentcode";
 
     public static Global getInstance(){
         if (mGlobal == null){
@@ -101,5 +105,46 @@ public class Global {
         mEditor.putString(TOKEN, token);
         mEditor.commit();
     }
+
+    public String getAGENTCODE() {
+        return mPreferences.getString(AGENTCODE, null);
+    }
+
+    public String getPHONENO() {
+        return mPreferences.getString(PHONENO, null);
+    }
+
+    public String getFIRSTNAME() {
+        return mPreferences.getString(FIRSTNAME, null);
+    }
+
+    public String getLASTNAME() {
+        return mPreferences.getString(LASTNAME, null);
+    }
+
+    public void setAGENTCODE(String agentcode) {
+        if ("".equals(agentcode)) agentcode = null;
+        mEditor.putString(AGENTCODE, agentcode);
+        mEditor.commit();
+    }
+
+    public void setPHONENO(String phoneno) {
+        if ("".equals(phoneno)) phoneno = null;
+        mEditor.putString(PHONENO, phoneno);
+        mEditor.commit();
+    }
+
+    public void setFIRSTNAME(String firstname) {
+        if ("".equals(firstname)) firstname = null;
+        mEditor.putString(FIRSTNAME, firstname);
+        mEditor.commit();
+    }
+
+    public void setLASTNAME(String lastname) {
+        if ("".equals(lastname)) lastname = null;
+        mEditor.putString(LASTNAME, lastname);
+        mEditor.commit();
+    }
+
 
 }

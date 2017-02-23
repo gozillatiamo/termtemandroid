@@ -10,7 +10,7 @@ import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentChoiceTopup;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
     private void transferDataTopup(){
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Until.JsonDateDeserializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
         Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
         List<LoadButtonResponseModel> modelList = gson.fromJson(mData, listType);
         for (LoadButtonResponseModel model : modelList){

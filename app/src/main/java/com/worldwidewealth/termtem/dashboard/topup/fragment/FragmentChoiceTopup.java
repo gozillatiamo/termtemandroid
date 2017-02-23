@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.BtnTopupAdapter;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class FragmentChoiceTopup extends Fragment{
 
         mRecyclerBtnTopup = new RecyclerView(getActivity());
         initGrid();
-        Until.setupUI(mRecyclerBtnTopup);
+        Util.setupUI(mRecyclerBtnTopup);
         return mRecyclerBtnTopup;
     }
 

@@ -99,7 +99,7 @@
                             android:text="+66"
                             ></TextView>
 
-                        <com.worldwidewealth.termtem.until.InstantAutoComplete
+                        <com.worldwidewealth.termtem.util.InstantAutoComplete
 
                             android:id="@+id/edit_phone"
                             android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                             android:imeOptions="actionNext"
                             >
                             <requestFocus/>
-                        </com.worldwidewealth.termtem.until.InstantAutoComplete>
+                        </com.worldwidewealth.termtem.util.InstantAutoComplete>
 
                     </LinearLayout>
 

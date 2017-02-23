@@ -11,8 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -40,8 +39,8 @@ public class TermTemDialog {
 
         public SearchDateRangeDialog(Context context, DialogInterface.OnClickListener submitListener){
             this.mContext = context;
-            mPreviousDateFrom = Until.getTimestamp(System.currentTimeMillis(), 0);
-            mPeviousDateTo = Until.getTimestamp(System.currentTimeMillis(), 23);
+            mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0);
+            mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
             LayoutInflater inflater = LayoutInflater.from(context);
             View dialogView  = inflater.inflate(R.layout.dialog_search_report, null);
 
@@ -138,10 +137,10 @@ public class TermTemDialog {
                     btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                     switch (type){
                         case FORM:
-                            mPreviousDateFrom = Until.getTimestamp(calendar.getTimeInMillis(), 0);
+                            mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
                             break;
                         case TO:
-                            mPeviousDateTo = Until.getTimestamp(calendar.getTimeInMillis(), 23);
+                            mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23);
                             break;
                     }
 

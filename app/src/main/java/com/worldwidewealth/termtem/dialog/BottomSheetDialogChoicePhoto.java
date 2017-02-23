@@ -12,7 +12,7 @@ import android.widget.Button;
 
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.until.Until;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
                     // Create the File where the photo should go
                     File photoFile = null;
                     try {
-                        photoFile = Until.createImageFile();
+                        photoFile = Util.createImageFile();
                     } catch (IOException ex) {
                         // Error occurred while creating the File
                         ex.printStackTrace();
