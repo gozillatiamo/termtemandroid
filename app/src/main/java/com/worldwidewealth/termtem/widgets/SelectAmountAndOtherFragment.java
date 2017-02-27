@@ -1,4 +1,4 @@
-package com.worldwidewealth.termtem.dashboard.widgets;
+package com.worldwidewealth.termtem.widgets;
 
 
 import android.animation.Animator;

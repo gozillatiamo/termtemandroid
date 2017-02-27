@@ -15,37 +15,32 @@
         android:required="true" />
 
     <application
-        android:name="com.worldwidewealth.termtem.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher_2"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="com.worldwidewealth.termtem.MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="com.worldwidewealth.termtem.MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-<!--
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.worldwidewealth.termtem"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
--->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.worldwidewealth.termtem.SplashScreenWWW"
+            android:name=".SplashScreenWWW"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -55,45 +50,46 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.worldwidewealth.termtem.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.ActivityDashboard"
+            android:name=".dashboard.ActivityDashboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.ActivityShowNotify"
+            android:name=".ActivityShowNotify"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="com.worldwidewealth.wealthwallet.click.notification"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.worldwidewealth.wealthwallet.click.notification" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.worldwidewealth.termtem.ActivityRegister"
+            android:name=".ActivityRegister"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.topup.ActivityTopup"
+            android:name=".dashboard.topup.ActivityTopup"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.report.ActivityReport"
+            android:name=".dashboard.report.ActivityReport"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode"
+            android:name=".dashboard.myqrcode.ActivityMyQrCode"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT"
+            android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent"
+            android:name=".dashboard.addCreditAgent.ActivityAddCreditAgent"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
@@ -102,23 +98,21 @@
             android:value="86a50ea19d46d8961ca0d04a7aa34cb5eae11ed0" />
 
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.mPayStation.MPayStationActivity"
+            android:name=".dashboard.mPayStation.MPayStationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity"
+            android:name=".dashboard.mPayStation.SelectChoiceMpayActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".dashboard.scan.ActivityScan"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name="com.worldwidewealth.termtem.dashboard.inbox.InboxActivity"
+        <activity
+            android:name=".dashboard.inbox.InboxActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -130,6 +124,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".dashboard.maps.MapsActivity"></activity>
     </application>
 
 </manifest>

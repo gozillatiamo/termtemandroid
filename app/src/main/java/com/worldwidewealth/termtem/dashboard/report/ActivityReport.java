@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
-import com.worldwidewealth.termtem.dashboard.widgets.BottomSheetTypeReport;
+import com.worldwidewealth.termtem.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;

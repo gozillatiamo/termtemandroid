@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
+import com.worldwidewealth.termtem.dashboard.maps.MapsActivity;
 import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
 import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
@@ -46,6 +47,7 @@ import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.util.BadgeDrawable;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.MenuButtonView;
 
 import java.util.ArrayList;
 
@@ -89,7 +91,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onResume() {
         super.onResume();
         setEnableBtn(true);
-        initBtnMenu();
+//        initBtnMenu();
         Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
     }
 
@@ -283,6 +285,19 @@ public class ActivityDashboard extends MyAppcompatActivity{
             }
         });
 
+        mHolder.mMenuMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnableBtn(false);
+                Intent intent = new Intent(ActivityDashboard.this, MapsActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
+            }
+        });
+
+//        mHolder.mMenuTest.setType(UserMenuModel.CASHIN_AGENT);
+
+
     }
 
     private void initDialogChangePassword(){
@@ -349,46 +364,46 @@ public class ActivityDashboard extends MyAppcompatActivity{
 
     }
 
-    private void initBtnMenu(){
-        for (UserMenuModel model : mUserMenuList){
-            CardView cardMenu = null;
-            switch (model.getBUTTON()){
-                case UserMenuModel.CASHIN_BUTTON:
-                    cardMenu = mHolder.mMenuMpay;
-                    break;
-                case UserMenuModel.HISTORY_BUTTON:
-                    cardMenu = mHolder.mMenuReport;
-                    break;
-                case UserMenuModel.NOTIPAY_BUTTON:
-                    cardMenu = mHolder.mMenuReMT;
-                    break;
-                case UserMenuModel.QR_BUTTON:
-                    cardMenu = mHolder.mMenuMyQR;
-                    break;
-                case UserMenuModel.SCAN_BUTTON:
-                    cardMenu = mHolder.mMenuScanQR;
-                    break;
-                case UserMenuModel.SETUP_BUTTON:
-                    cardMenu = mHolder.mMenuSetting;
-                    break;
-                case UserMenuModel.SUPPORT_BUTTON:
-                    cardMenu = mHolder.mMenuHelp;
-                    break;
-                case UserMenuModel.TOPUP_BUTTON:
-                    cardMenu = mHolder.mMenuTopup;
-                    break;
-                case UserMenuModel.CASHIN_AGENT:
-                    cardMenu = mHolder.mMenuAddCreditAgent;
-                    Log.e(TAG, "CashIn_Agent: "+model.getSTATUS());
-                        if (model.getSTATUS().equals(UserMenuModel.SHOW)) {
-                            canCashIn = true;
-                        } else canCashIn = false;
-                    break;
-
-            }
-            setStatusMenu(cardMenu, model.getSTATUS());
-        }
-    }
+//    private void initBtnMenu(){
+//        for (UserMenuModel model : mUserMenuList){
+//            CardView cardMenu = null;
+//            switch (model.getBUTTON()){
+//                case UserMenuModel.CASHIN_BUTTON:
+//                    cardMenu = mHolder.mMenuMpay;
+//                    break;
+//                case UserMenuModel.HISTORY_BUTTON:
+//                    cardMenu = mHolder.mMenuReport;
+//                    break;
+//                case UserMenuModel.NOTIPAY_BUTTON:
+//                    cardMenu = mHolder.mMenuReMT;
+//                    break;
+//                case UserMenuModel.QR_BUTTON:
+//                    cardMenu = mHolder.mMenuMyQR;
+//                    break;
+//                case UserMenuModel.SCAN_BUTTON:
+//                    cardMenu = mHolder.mMenuScanQR;
+//                    break;
+//                case UserMenuModel.SETUP_BUTTON:
+//                    cardMenu = mHolder.mMenuSetting;
+//                    break;
+//                case UserMenuModel.SUPPORT_BUTTON:
+//                    cardMenu = mHolder.mMenuHelp;
+//                    break;
+//                case UserMenuModel.TOPUP_BUTTON:
+//                    cardMenu = mHolder.mMenuTopup;
+//                    break;
+//                case UserMenuModel.CASHIN_AGENT:
+//                    cardMenu = mHolder.mMenuAddCreditAgent;
+//                    Log.e(TAG, "CashIn_Agent: "+model.getSTATUS());
+//                        if (model.getSTATUS().equals(UserMenuModel.SHOW)) {
+//                            canCashIn = true;
+//                        } else canCashIn = false;
+//                    break;
+//
+//            }
+//            setStatusMenu(cardMenu, model.getSTATUS());
+//        }
+//    }
 
     private void setEnableBtn(boolean enableBtn){
         mHolder.mMenuScanQR.setEnabled(enableBtn);
@@ -400,6 +415,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         mHolder.mMenuReport.setEnabled(enableBtn);
         mHolder.mMenuTopup.setEnabled(enableBtn);
     }
+/*
     private void setStatusMenu(CardView view, String status){
         if (view == null) return;
 
@@ -421,12 +437,14 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 break;
         }
     }
+*/
 
     public class ViewHolder{
 
         private Toolbar mToolbar;
         private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditAgent
-                , mMenuHelp, mMenuSetting, mMenuMpay, mMenuScanQR;
+                , mMenuHelp, mMenuSetting, mMenuMpay, mMenuScanQR, mMenuMaps;
+        private MenuButtonView mMenuTest;
 //        private TextView mBtnForgotPassword;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
@@ -442,6 +460,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
             mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
             mMenuMpay = (CardView) view.findViewById(R.id.menu_mpay_station);
             mMenuAddCreditAgent = (CardView) view.findViewById(R.id.menu_add_credit_agent);
+            mMenuMaps = (CardView) view.findViewById(R.id.menu_maps);
+            mMenuTest = (MenuButtonView) view.findViewById(R.id.mbv_test);
 
         }
     }

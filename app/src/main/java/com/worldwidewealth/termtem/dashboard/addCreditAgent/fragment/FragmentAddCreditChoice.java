@@ -19,7 +19,7 @@ import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.FragmentTopupPreview;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
-import com.worldwidewealth.termtem.dashboard.widgets.SelectAmountAndOtherFragment;
+import com.worldwidewealth.termtem.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.AgentResponse;
 import com.worldwidewealth.termtem.model.EslipRequestModel;

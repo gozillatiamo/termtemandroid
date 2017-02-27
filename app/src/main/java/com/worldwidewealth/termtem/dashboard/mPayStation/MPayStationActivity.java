@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.widgets.SelectAmountAndOtherFragment;
+import com.worldwidewealth.termtem.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.GenBarcodeRequestModel;
 import com.worldwidewealth.termtem.model.MPayStationResponse;
@@ -31,7 +31,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MPayStationActivity extends MyAppcompatActivity {
 

@@ -15,7 +15,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-
     }
 }
 
@@ -28,7 +27,7 @@ ext {
 
     // dependencies versions
     supportLibraryVersion = '23.4.0'
-    playServicesVersion = '9.2.1'
+    playServicesVersion = '10.2.0'
 }
 
 task clean(type: Delete) {

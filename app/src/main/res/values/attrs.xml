@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MenuButtonView">
+        <attr name="mbv_title" format="string"/>
+        <attr name="mbv_icon" format="integer" />
+        <attr name="mbv_type" format="string"/>
+        <attr name="mbv_visibility" format="string"/>
+    </declare-styleable>
+</resources>

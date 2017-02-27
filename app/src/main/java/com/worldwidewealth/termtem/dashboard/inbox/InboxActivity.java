@@ -25,7 +25,7 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
-import com.worldwidewealth.termtem.dashboard.widgets.OnLoadMoreListener;
+import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
 import com.worldwidewealth.termtem.model.InboxRepuest;

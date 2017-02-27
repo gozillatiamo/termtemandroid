@@ -1,7 +1,6 @@
-package com.worldwidewealth.termtem.dashboard.widgets;
+package com.worldwidewealth.termtem.widgets;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.AppCompatButton;
