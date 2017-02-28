@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.google.zxing.ResultPoint;
@@ -22,6 +24,7 @@ import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
+import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
 import com.worldwidewealth.termtem.model.AgentResponse;
 
 import java.util.List;
@@ -33,6 +36,7 @@ public class ActivityScan extends MyAppcompatActivity {
 
     private DecoratedBarcodeView mBarcodeView;
     private Toolbar mToolbar;
+    private Button mBtnMyQR;
 
 
     private BarcodeCallback barcodeCallback = new BarcodeCallback() {
@@ -60,6 +64,15 @@ public class ActivityScan extends MyAppcompatActivity {
         initWidgets();
         initToolbar();
         mBarcodeView.decodeSingle(barcodeCallback);
+        mBtnMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityScan.this, ActivityMyQrCode.class);
+                overridePendingTransition(R.anim.slide_in_right, 0);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -95,6 +108,7 @@ public class ActivityScan extends MyAppcompatActivity {
     private void initWidgets(){
         mBarcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mBtnMyQR = (Button) mBarcodeView.findViewById(R.id.btn_my_qr);
     }
 
     private void addCreditAgent(AgentResponse agentResponse){

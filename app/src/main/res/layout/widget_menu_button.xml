@@ -4,7 +4,6 @@
     android:id="@+id/menu_button"
     android:layout_width="match_parent"
     android:layout_height="@dimen/menu_size"
-    android:layout_weight="1"
     android:visibility="visible"
     app:cardUseCompatPadding="true"
     android:foreground="?android:attr/selectableItemBackground"

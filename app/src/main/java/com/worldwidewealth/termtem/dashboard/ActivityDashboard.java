@@ -61,15 +61,9 @@ import retrofit2.Response;
 public class ActivityDashboard extends MyAppcompatActivity{
 
     private ViewHolder mHolder;
-    private APIServices services;
-    private long userInteractionTime = 0;
     private static final String TAG = ActivityDashboard.class.getSimpleName();
-    private DialogHelp mDialogHelp;
-    private Dialog mDialogSetting;
-    private AlertDialog mAlertChangePass;
     private ArrayList<UserMenuModel> mUserMenuList;
     private LayerDrawable mIconNoti;
-    private boolean canCashIn = false;
 
 
 
@@ -77,32 +71,25 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        services = APIServices.retrofit.create(APIServices.class);
         mHolder = new ViewHolder(this);
         mUserMenuList = (ArrayList<UserMenuModel>) getIntent().getSerializableExtra(UserMenuModel.KEY_MODEL);
 
-        initDialog();
         initToolbar();
-        initClickMainMenu();
+        initBtnMenu();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setEnableBtn(true);
-//        initBtnMenu();
         Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mDialogHelp.dismiss();
-        mDialogSetting.dismiss();
-        if (mAlertChangePass != null) {
-            mAlertChangePass.dismiss();
-        }
+        mHolder.mMenuSupport.dismiss();
+        mHolder.mMenuSetUp.dismiss();
     }
 
     @Override
@@ -147,21 +134,6 @@ public class ActivityDashboard extends MyAppcompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private void initDialog(){
-        mDialogHelp = new DialogHelp(ActivityDashboard.this);
-        mDialogSetting = new Dialog(ActivityDashboard.this);
-        mDialogSetting.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialogSetting.setContentView(R.layout.dialog_setting);
-        Button btnChangePassword = (Button)mDialogSetting.findViewById(R.id.btn_forgot_password);
-        btnChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initDialogChangePassword();
-            }
-        });
-
-    }
-
     private void initToolbar(){
         mHolder.mToolbar.setNavigationIcon(R.drawable.ic_power_settings_new);
         setSupportActionBar(mHolder.mToolbar);
@@ -184,285 +156,66 @@ public class ActivityDashboard extends MyAppcompatActivity{
 
     }
 
-    private void initClickMainMenu(){
-        mHolder.mMenuTopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityTopup.class);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
+    private void initBtnMenu(){
+        for (UserMenuModel model : mUserMenuList){
+            MenuButtonView.TYPE type = MenuButtonView.TYPE.asTYPE(model.getBUTTON());
+            if (type != null) {
 
-        mHolder.mMenuReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityReport.class);
-                Log.e(TAG, "Dashboard Can CashIn: "+canCashIn);
-                intent.putExtra(ActivityReport.CASHIN_REPORT, canCashIn);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                startActivity(intent);
-            }
-        });
+                switch (type) {
+                    case CASHIN:
+                        mHolder.mMenuCashIn.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case HISTORY:
+                        mHolder.mMenuHistory.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case NOTIPAY:
+                        mHolder.mMenuNotiPay.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case SCAN:
+                        mHolder.mMenuScan.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case SETUP:
+                        mHolder.mMenuSetUp.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case SUPPORT:
+                        mHolder.mMenuSupport.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case TOPUP:
+                        mHolder.mMenuTopup.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+                    case AGENTCASHIN:
+                        mHolder.mMenuAgentCashIn.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
 
-        mHolder.mMenuReMT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityReportMT.class);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                startActivity(intent);
-            }
-        });
-
-        mHolder.mMenuAddCreditAgent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityAddCreditAgent.class);
-                intent.putExtra("type", ActivityAddCreditAgent.DEFAULT);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
-
-        mHolder.mMenuMpay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, SelectChoiceMpayActivity.class);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
-
-
-        mHolder.mMenuHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                mDialogHelp.show();
-                mDialogHelp.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        setEnableBtn(true);
-                    }
-                });
-            }
-        });
-
-        mHolder.mMenuSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                mDialogSetting.show();
-                mDialogSetting.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        setEnableBtn(true);
-                    }
-                });
-            }
-        });
-        mHolder.mMenuMyQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityMyQrCode.class);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
-        mHolder.mMenuScanQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, ActivityScan.class);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
-
-        mHolder.mMenuMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnableBtn(false);
-                Intent intent = new Intent(ActivityDashboard.this, MapsActivity.class);
-                overridePendingTransition(R.anim.slide_in_right, 0);
-                startActivity(intent);
-            }
-        });
-
-//        mHolder.mMenuTest.setType(UserMenuModel.CASHIN_AGENT);
-
-
-    }
-
-    private void initDialogChangePassword(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityDashboard.this);
-
-        LayoutInflater inflater = ActivityDashboard.this.getLayoutInflater();
-        View dialogView  = inflater.inflate(R.layout.dialog_change_password, null);
-
-        final EditText editNewPass = (EditText) dialogView.findViewById(R.id.edit_new_password);
-        final EditText editNewPassAgain = (EditText) dialogView.findViewById(R.id.edit_new_password_again);
-
-        builder.setView(dialogView);
-        builder.setTitle(R.string.change_password);
-        builder.setPositiveButton(R.string.confirm, null);
-        builder.setNegativeButton(R.string.cancel, null);
-
-        mAlertChangePass = builder.create();
-
-        mAlertChangePass.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button confirm = mAlertChangePass.getButton(AlertDialog.BUTTON_POSITIVE);
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (editNewPass.getText().length() < 8 || editNewPassAgain.length() < 8 ){
-                            Toast.makeText(ActivityDashboard.this, R.string.please_enter_data, Toast.LENGTH_LONG).show();
-                        } else if (!editNewPass.getText().toString()
-                                .equals(editNewPassAgain.getText().toString())){
-                            Toast.makeText(ActivityDashboard.this, R.string.password_not_same, Toast.LENGTH_LONG).show();
-                        } else {
-                            Call<ResponseModel> call = services.CHANGEPASSWORD(new RequestModel(APIServices.ACTIONCHANGEPASSWORD,
-                                    new ChangePasswordRequestModel(
-                                            EncryptionData.EncryptData(editNewPass.getText().toString(),
-                                                    Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()))
-                            ));
-
-                            APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
-                                @Override
-                                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                                        if (response.body().getStatus() == APIServices.SUCCESS){
-                                            mAlertChangePass.dismiss();
-                                            new DialogCounterAlert(ActivityDashboard.this,
-                                                    response.body().getMsg(),
-                                                    getString(R.string.change_password_success),
-                                                    null);
-                                        }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseModel> call, Throwable t) {
-                                    new ErrorNetworkThrowable(t).networkError(ActivityDashboard.this, call, this);
-                                }
-                            });
-                        }
-
-                    }
-                });
-            }
-        });
-
-        mAlertChangePass.show();
-
-    }
-
-//    private void initBtnMenu(){
-//        for (UserMenuModel model : mUserMenuList){
-//            CardView cardMenu = null;
-//            switch (model.getBUTTON()){
-//                case UserMenuModel.CASHIN_BUTTON:
-//                    cardMenu = mHolder.mMenuMpay;
-//                    break;
-//                case UserMenuModel.HISTORY_BUTTON:
-//                    cardMenu = mHolder.mMenuReport;
-//                    break;
-//                case UserMenuModel.NOTIPAY_BUTTON:
-//                    cardMenu = mHolder.mMenuReMT;
-//                    break;
-//                case UserMenuModel.QR_BUTTON:
-//                    cardMenu = mHolder.mMenuMyQR;
-//                    break;
-//                case UserMenuModel.SCAN_BUTTON:
-//                    cardMenu = mHolder.mMenuScanQR;
-//                    break;
-//                case UserMenuModel.SETUP_BUTTON:
-//                    cardMenu = mHolder.mMenuSetting;
-//                    break;
-//                case UserMenuModel.SUPPORT_BUTTON:
-//                    cardMenu = mHolder.mMenuHelp;
-//                    break;
-//                case UserMenuModel.TOPUP_BUTTON:
-//                    cardMenu = mHolder.mMenuTopup;
-//                    break;
-//                case UserMenuModel.CASHIN_AGENT:
-//                    cardMenu = mHolder.mMenuAddCreditAgent;
-//                    Log.e(TAG, "CashIn_Agent: "+model.getSTATUS());
-//                        if (model.getSTATUS().equals(UserMenuModel.SHOW)) {
-//                            canCashIn = true;
-//                        } else canCashIn = false;
-//                    break;
-//
-//            }
-//            setStatusMenu(cardMenu, model.getSTATUS());
-//        }
-//    }
-
-    private void setEnableBtn(boolean enableBtn){
-        mHolder.mMenuScanQR.setEnabled(enableBtn);
-        mHolder.mMenuMyQR.setEnabled(enableBtn);
-        mHolder.mMenuMpay.setEnabled(enableBtn);
-        mHolder.mMenuSetting.setEnabled(enableBtn);
-        mHolder.mMenuHelp.setEnabled(enableBtn);
-        mHolder.mMenuReMT.setEnabled(enableBtn);
-        mHolder.mMenuReport.setEnabled(enableBtn);
-        mHolder.mMenuTopup.setEnabled(enableBtn);
-    }
-/*
-    private void setStatusMenu(CardView view, String status){
-        if (view == null) return;
-
-        switch (status){
-            case UserMenuModel.HIDE:
-                view.setVisibility(View.GONE);
-                break;
-            case UserMenuModel.DISABLE:
-                view.setClickable(false);
-                view.setVisibility(View.VISIBLE);
-                view.setCardBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-                view.setAlpha(0.2f);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    view.setElevation(0);
                 }
-                break;
-            case UserMenuModel.SHOW:
-                view.setVisibility(View.VISIBLE);
-                break;
+            }
         }
     }
-*/
-
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private CardView mMenuTopup, mMenuReport, mMenuMyQR, mMenuReMT, mMenuAddCreditAgent
-                , mMenuHelp, mMenuSetting, mMenuMpay, mMenuScanQR, mMenuMaps;
-        private MenuButtonView mMenuTest;
-//        private TextView mBtnForgotPassword;
+        private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuScan, mMenuTopup, mMenuSetUp,
+                                mMenuSupport, mMenuNotiPay, mMenuHistory;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-            mMenuTopup = (CardView) view.findViewById(R.id.menu_topup);
-            mMenuReport = (CardView) view.findViewById(R.id.menu_report);
-//            mBtnForgotPassword = (TextView) view.findViewById(R.id.btn_forgot_password);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
-            mMenuMyQR = (CardView) view.findViewById(R.id.menu_my_qr);
-            mMenuScanQR = (CardView) view.findViewById(R.id.menu_scan_qr);
-            mMenuReMT = (CardView) view.findViewById(R.id.menu_report_mtf);
-            mMenuHelp = (CardView) view.findViewById(R.id.menu_help);
-            mMenuSetting = (CardView) view.findViewById(R.id.menu_setting);
-            mMenuMpay = (CardView) view.findViewById(R.id.menu_mpay_station);
-            mMenuAddCreditAgent = (CardView) view.findViewById(R.id.menu_add_credit_agent);
-            mMenuMaps = (CardView) view.findViewById(R.id.menu_maps);
-            mMenuTest = (MenuButtonView) view.findViewById(R.id.mbv_test);
-
+            mMenuCashIn = (MenuButtonView) view.findViewById(R.id.mbv_cashin);
+            mMenuScan = (MenuButtonView) view.findViewById(R.id.mbv_scan);
+            mMenuAgentCashIn = (MenuButtonView) view.findViewById(R.id.mbv_agentcashin);
+            mMenuTopup = (MenuButtonView) view.findViewById(R.id.mbv_topup);
+            mMenuSetUp = (MenuButtonView) view.findViewById(R.id.mbv_setup);
+            mMenuSupport = (MenuButtonView) view.findViewById(R.id.mbv_support);
+            mMenuNotiPay = (MenuButtonView) view.findViewById(R.id.mbv_notipay);
+            mMenuHistory = (MenuButtonView) view.findViewById(R.id.mbv_history);
         }
     }
 }

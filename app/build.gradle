@@ -30,11 +30,10 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "1.1.1"
+        versionName "1.2.0"
 
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
-//        multiDexEnabled true
     }
 
     applicationVariants.all { variant ->
@@ -98,6 +97,7 @@ dependencies {
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.7.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     testCompile 'junit:junit:4.12'
-    compile "com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"
+    //    compile "com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"
+    compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesVersion"
 }
 apply plugin: 'com.google.gms.google-services'

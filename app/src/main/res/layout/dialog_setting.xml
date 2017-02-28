@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/padding_icon_dashboard"
     android:gravity="center">
@@ -32,6 +34,17 @@
             android:text="@string/versionName"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_my_qr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="center"
+        style="@style/MyButton"
+        android:text="@string/dashboard_my_qr"
+        android:drawableTop="@drawable/qr_code"
+        />
 
     <Button
         android:id="@+id/btn_forgot_password"

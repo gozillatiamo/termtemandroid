@@ -2,8 +2,22 @@
 <resources>
     <declare-styleable name="MenuButtonView">
         <attr name="mbv_title" format="string"/>
-        <attr name="mbv_icon" format="integer" />
-        <attr name="mbv_type" format="string"/>
-        <attr name="mbv_visibility" format="string"/>
+        <attr name="mbv_icon" format="reference" />
+        <attr name="mbv_type" format="enum">
+            <enum name="cashin" value="0"/>
+            <enum name="agentcashin" value="1"/>
+            <enum name="scan" value="2"/>
+            <enum name="topup" value="3"/>
+            <enum name="setup" value="4"/>
+            <enum name="support" value="5"/>
+            <enum name="notipay" value="6"/>
+            <enum name="history" value="7"/>
+        </attr>
+        <attr name="mbv_visibility" format="enum">
+            <enum name="show" value="0"/>
+            <enum name="disable" value="1"/>
+            <enum name="hide" value="2"/>
+        </attr>
+
     </declare-styleable>
 </resources>

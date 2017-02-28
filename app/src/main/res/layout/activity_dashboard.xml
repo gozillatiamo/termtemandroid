@@ -50,112 +50,94 @@
                         android:id="@+id/include_my_wallet"
                         layout="@layout/card_my_wallet" />
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_add_credit_agent"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                android:id="@+id/mbv_agentcashin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mbv_icon="@drawable/ic_agent_cashin_primary"
+                                app:mbv_visibility="hide"
+                                app:mbv_type="agentcashin"
+                                app:mbv_title="@string/add_credit_agent"
+                                >
+                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
+                    </LinearLayout>
+                    <com.worldwidewealth.termtem.widgets.MenuButtonView
+                        android:id="@+id/mbv_scan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:clickable="true"
-                        app:cardUseCompatPadding="true"
+                        app:mbv_icon="@drawable/ic_scan_primary"
+                        app:mbv_visibility="hide"
+                        app:mbv_type="scan"
+                        app:mbv_title="@string/dashboard_scan_qr"
+                        >
+                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
-                        app:cardElevation="@dimen/cardview_default_elevation">
 
-                        <LinearLayout
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                            android:id="@+id/mbv_topup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_add_credit_agent"
-                                android:tint="@color/colorPrimary"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/add_credit_agent"
-                                style="@style/MyTitleMenuDashboard"
-                                android:id="@+id/autofitTextView" />
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_topup"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
-                            android:visibility="gone"
                             android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            app:cardUseCompatPadding="true"
-                            app:cardElevation="@dimen/cardview_default_elevation"
+                            app:mbv_icon="@drawable/ic_topup_primary"
+                            app:mbv_visibility="hide"
+                            app:mbv_type="topup"
+                            app:mbv_title="@string/topup"
                             >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                >
+                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_topup"
-                                    android:tint="@color/colorPrimary"
-                                    android:id="@+id/imageView10" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyTitleMenuDashboard"
-                                    android:text="@string/topup"
-                                    android:id="@+id/autofitTextView4" />
-
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_report"
+                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                            android:id="@+id/mbv_history"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="gone"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            app:cardElevation="@dimen/cardview_default_elevation"
-                            app:cardUseCompatPadding="true">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
+                            app:mbv_icon="@drawable/ic_history_primary"
+                            app:mbv_visibility="hide"
+                            app:mbv_type="history"
+                            app:mbv_title="@string/report_history"
+                            >
+                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
-                                >
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:tint="@color/colorPrimary"
-                                    android:src="@drawable/ic_report"/>
+                    </LinearLayout>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/report_history"
-                                    style="@style/MyTitleMenuDashboard"
-                                    android:id="@+id/autofitTextView7" />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                            android:id="@+id/mbv_setup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:mbv_icon="@drawable/ic_setup_primary"
+                            app:mbv_visibility="hide"
+                            app:mbv_type="setup"
+                            app:mbv_title="@string/setting"
+                            >
+                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
+                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                            android:id="@+id/mbv_support"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:mbv_icon="@drawable/ic_support_primary"
+                            app:mbv_visibility="hide"
+                            app:mbv_type="support"
+                            app:mbv_title="@string/support"
+                            >
+                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
                     </LinearLayout>
 
@@ -164,223 +146,36 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_setting"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
-                            android:visibility="gone"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:layout_weight="1"
-                            app:cardElevation="@dimen/cardview_default_elevation"
-                            app:cardUseCompatPadding="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-
-                                >
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:tint="@color/colorPrimary"
-                                    android:src="@drawable/ic_setting" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/setting"
-                                    style="@style/MyTitleMenuDashboard"
-                                    android:id="@+id/autofitTextView3" />
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_help"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
-                            android:visibility="gone"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:layout_weight="1"
-                            app:cardElevation="@dimen/cardview_default_elevation"
-                            app:cardUseCompatPadding="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-
-                                >
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_support"
-                                    android:tint="@color/colorPrimary"
-                                    android:id="@+id/imageView9" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/support"
-                                    style="@style/MyTitleMenuDashboard"
-                                    android:id="@+id/autofitTextView5" />
-
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
                     </LinearLayout>
 
-                    <LinearLayout
+                    <com.worldwidewealth.termtem.widgets.MenuButtonView
+                        android:id="@+id/mbv_notipay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_scan_qr"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
-                            android:visibility="gone"
-                            android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            app:cardUseCompatPadding="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-
-                                >
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:tint="@color/colorPrimary"
-                                    android:src="@drawable/ic_scan_qr"
-                                    />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/dashboard_scan_qr"
-                                    style="@style/MyTitleMenuDashboard"
-                                    android:id="@+id/autofitTextView6" />
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/menu_my_qr"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_size"
-                            android:visibility="gone"
-                            android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            app:cardUseCompatPadding="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-
-                                >
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    style="@style/MyIconMenuDashboard"
-                                    android:src="@drawable/ic_my_qr"
-                                    android:tint="@color/colorPrimary"
-                                    />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/dashboard_my_qr"
-                                    style="@style/MyTitleMenuDashboard"
-
-                                    />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-
-                    </LinearLayout>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_report_mtf"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
-                        app:cardUseCompatPadding="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardElevation="@dimen/cardview_default_elevation"
+                        android:layout_weight="1"
+                        app:mbv_icon="@drawable/ic_notipay_primary"
+                        app:mbv_visibility="hide"
+                        app:mbv_type="notipay"
+                        app:mbv_title="@string/dashboard_mtf"
                         >
+                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:tint="@color/colorPrimary"
-                                android:src="@drawable/ic_report_money_tf"
-                                android:id="@+id/imageView7" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyTitleMenuDashboard"
-                                android:text="@string/dashboard_mtf"
-                                android:id="@+id/autofitTextView2" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_mpay_station"
+                    <com.worldwidewealth.termtem.widgets.MenuButtonView
+                        android:id="@+id/mbv_cashin"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
-                        app:cardUseCompatPadding="true"
-                        android:foreground="?android:attr/selectableItemBackground"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:mbv_icon="@drawable/mpay_icon"
+                        app:mbv_visibility="hide"
+                        app:mbv_type="cashin"
+                        app:mbv_title="@string/menu_mpay"
                         >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/mpay_icon"
-                                />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyTitleMenuDashboard"
-                                android:text="@string/menu_mpay" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
                     <android.support.v7.widget.CardView
                         android:id="@+id/menu_maps"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_size"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:cardUseCompatPadding="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         >
@@ -406,14 +201,6 @@
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
-                    <com.worldwidewealth.termtem.widgets.MenuButtonView
-                        android:id="@+id/mbv_test"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
-
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
