@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
@@ -37,15 +40,23 @@ public class ActivityScan extends MyAppcompatActivity {
     private DecoratedBarcodeView mBarcodeView;
     private Toolbar mToolbar;
     private Button mBtnMyQR;
+    public static final String TAG = ActivityScan.class.getSimpleName();
 
 
     private BarcodeCallback barcodeCallback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            Log.e(TAG, "ScanResult: "+result);
             if (result.getText() != null) {
                 String strResult = result.getText();
-                AgentResponse agentResponse = new Gson().fromJson(strResult, AgentResponse.class);
+                AgentResponse agentResponse = null;
+
+                try {
+                    agentResponse = new Gson().fromJson(strResult, AgentResponse.class);
+                } catch (IllegalStateException e){}
+
                 if (agentResponse != null){
+                    agentResponse.setAgentId(EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID()));
                     addCreditAgent(agentResponse);
                 }
             }

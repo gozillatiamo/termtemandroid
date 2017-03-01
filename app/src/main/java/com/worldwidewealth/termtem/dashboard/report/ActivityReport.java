@@ -133,7 +133,6 @@ public class ActivityReport extends MyAppcompatActivity {
                 @Override
                 public void onClick(View v) {
                     mCurrentType = TOPUP_REPORT;
-                    salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
                     mBottomSheet.dismiss();
                 }
             });
@@ -141,7 +140,6 @@ public class ActivityReport extends MyAppcompatActivity {
                 @Override
                 public void onClick(View v) {
                     mCurrentType = CASHIN_REPORT;
-                    salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
                     mBottomSheet.dismiss();
                 }
             });
@@ -149,31 +147,33 @@ public class ActivityReport extends MyAppcompatActivity {
             mBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    if (canShowTutorial) {
-                        TapTargetView.showFor(ActivityReport.this,
-                                TapTarget.forToolbarMenuItem(mHolder.mToolbar,
-                                        R.id.action_search,
-                                        getString(R.string.search),
-                                        getString(R.string.search_tutorial))
-                                        .outerCircleColor(R.color.colorPrimary)
-                                        .dimColor(android.R.color.black)
-                                        .drawShadow(true)
-                                        .transparentTarget(true)
-                                        .targetCircleColor(android.R.color.black));
-                        canShowTutorial = false;
-                    }
-
+                showTargetView();
                 }
             });
 
             mBottomSheet.show();
         } else {
-            salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+            showTargetView();
         }
 
     }
 
-
+    private void showTargetView(){
+        if (canShowTutorial) {
+            TapTargetView.showFor(ActivityReport.this,
+                    TapTarget.forToolbarMenuItem(mHolder.mToolbar,
+                            R.id.action_search,
+                            getString(R.string.search),
+                            getString(R.string.search_tutorial))
+                            .outerCircleColor(R.color.colorPrimary)
+                            .dimColor(android.R.color.black)
+                            .drawShadow(true)
+                            .transparentTarget(true)
+                            .targetCircleColor(android.R.color.black));
+            canShowTutorial = false;
+        }
+        salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+    }
 
     private long getTimestamp(long timestamp, int hourOfDay){
         mCalendar.setTimeInMillis(timestamp);

@@ -115,6 +115,10 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
     private int mIcon;
     private int mType;
     private int mVisibility;
+    private static boolean canCashIn = false;
+    private static int mAgentCashInVisible = 2;
+    private static int mScanVisible = 2;
+
 
     public static final String TAG = MenuButtonView.class.getSimpleName();
 
@@ -309,6 +313,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
             mIcon = typedArray.getResourceId(R.styleable.MenuButtonView_mbv_icon, R.drawable.ic_people);
             mType = typedArray.getInt(R.styleable.MenuButtonView_mbv_type, -1);
             mVisibility = typedArray.getInt(R.styleable.MenuButtonView_mbv_visibility, VISIBILITY.HIDE.getVisibility());
+
             typedArray.recycle();
         }
     }
@@ -346,6 +351,19 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     public void setMenuVisibility(int visibility){
         this.mVisibility = visibility;
+
+        if (mType == TYPE.AGENTCASHIN.getType()) mAgentCashInVisible = mVisibility;
+        if (mType == TYPE.SCAN.getType()) mScanVisible = mVisibility;
+
+        if (mAgentCashInVisible != VISIBILITY.SHOW.getVisibility() &&
+                mScanVisible != VISIBILITY.SHOW.getVisibility()) {
+            canCashIn = false;
+        } else
+            canCashIn = true;
+
+        Log.e(TAG, "MenuButton canCashIn: "+canCashIn);
+
+
         if (this.mVisibility == -1){
             this.mVisibility = VISIBILITY.HIDE.getVisibility();
         }
@@ -378,6 +396,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Log.e(TAG, "sClickable: "+sClickable);
         if (sClickable) {
             sClickable = false;
             onMenuClick();
@@ -389,6 +408,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
             if (menuClickListener != null){
                 menuClickListener.onMenuClick();
             }
+            sClickable = true;
         } else {
             Intent intent = null;
             switch (TYPE.values()[this.mType]) {
@@ -401,7 +421,6 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     break;
                 case HISTORY:
                     intent = new Intent(getContext(), ActivityReport.class);
-                    boolean canCashIn = getMenuisibility().equals(VISIBILITY.SHOW.name());
                     intent.putExtra(ActivityReport.CASHIN_REPORT, canCashIn);
                     break;
                 case NOTIPAY:
@@ -424,10 +443,13 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
             if (intent != null) {
                 ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_right, 0);
                 getContext().startActivity(intent);
+                sClickable = true;
+            } else {
+                sClickable = true;
             }
 
+
         }
-        sClickable = true;
     }
 
     public interface MenuClickListener{

@@ -18,14 +18,21 @@ public class AgentResponse implements Parcelable {
     private String FirstName;
     private String LastName;
     private String Phoneno;
+    private String TXID;
 
     public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno) {
+        new AgentResponse(agentid, agentcode, firstname, lastname, phoneno, null);
+    }
+
+    public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno, String txid) {
         this.AgentId = agentid;
         this.AgentCode = agentcode;
         this.FirstName = firstname;
         this.LastName = lastname;
         this.Phoneno = phoneno;
+        this.TXID = txid;
     }
+
 
     protected AgentResponse(Parcel in) {
         AgentId = in.readString();
@@ -33,6 +40,7 @@ public class AgentResponse implements Parcelable {
         FirstName = in.readString();
         LastName = in.readString();
         Phoneno = in.readString();
+        TXID = in.readString();
     }
 
     @Override
@@ -42,6 +50,7 @@ public class AgentResponse implements Parcelable {
         dest.writeString(FirstName);
         dest.writeString(LastName);
         dest.writeString(Phoneno);
+        dest.writeString(TXID);
     }
 
     @Override
@@ -63,6 +72,14 @@ public class AgentResponse implements Parcelable {
 
     public String getAgentId() {
         return AgentId;
+    }
+
+    public void setAgentId(String agentId) {
+        AgentId = agentId;
+    }
+
+    public String getTXID() {
+        return TXID;
     }
 
     public String getAgentCode() {

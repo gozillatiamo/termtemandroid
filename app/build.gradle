@@ -30,7 +30,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "1.2.0"
+        versionName "1.2."
 
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
@@ -53,16 +53,18 @@ android {
     productFlavors {
 
         production {
+            versionNameSuffix "0"
         }
 
         demo {
+            versionCode 6
             applicationIdSuffix ".demo"
-            versionNameSuffix "-demo"
+            versionNameSuffix "1-demo"
         }
 
         dev {
             applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
+            versionNameSuffix "1-dev"
         }
 
     }

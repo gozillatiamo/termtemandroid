@@ -54,11 +54,12 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
 
     private void initQRCode(){
         AgentResponse agentResponse = new AgentResponse(
-                EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID()),
+                Global.getInstance().getAGENTID(),
                 Global.getInstance().getAGENTCODE(),
                 Global.getInstance().getFIRSTNAME(),
                 Global.getInstance().getLASTNAME(),
-                Global.getInstance().getPHONENO()
+                Global.getInstance().getPHONENO(),
+                Global.getInstance().getTXID()
         );
 
         mHolder.mMyQRCode.setImageBitmap(Util.generateQR(new Gson().toJson(agentResponse, AgentResponse.class)));
