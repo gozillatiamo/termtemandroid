@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.termtem.dashboard.maps.MapsActivity;
@@ -83,6 +84,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onResume() {
         super.onResume();
         Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
+        MenuButtonView.setsClickable(true);
     }
 
     @Override
@@ -105,6 +107,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        MyApplication.LeavingOrEntering.currentActivity = null;
+                        Util.logoutAPI();
                         finish();
                     }
                 });

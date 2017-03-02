@@ -124,6 +124,14 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     private static boolean sClickable = true;
 
+    public static boolean issClickable() {
+        return sClickable;
+    }
+
+    public static void setsClickable(boolean sClickable) {
+        MenuButtonView.sClickable = sClickable;
+    }
+
     public MenuButtonView(Context context) {
         super(context);
         setup(null);
@@ -191,14 +199,24 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
     }
 
     private void binddialog(){
-        Log.e(TAG, "This Type: "+getType());
-        Log.e(TAG, "SUPPORT Type: "+TYPE.SUPPORT.name());
         if (mType == TYPE.SUPPORT.getType()) {
             mDialogHelp = new DialogHelp(getContext());
+            mDialogHelp.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    setsClickable(true);
+                }
+            });
         } else if(mType == TYPE.SETUP.getType()){
             mDialogSetting = new Dialog(getContext());
             mDialogSetting.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialogSetting.setContentView(R.layout.dialog_setting);
+            mDialogSetting.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    setsClickable(true);
+                }
+            });
             Button btnChangePassword = (Button) mDialogSetting.findViewById(R.id.btn_forgot_password);
             Button btnMyQR = (Button) mDialogSetting.findViewById(R.id.btn_my_qr);
             btnMyQR.setOnClickListener(new OnClickListener() {
@@ -361,7 +379,6 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         } else
             canCashIn = true;
 
-        Log.e(TAG, "MenuButton canCashIn: "+canCashIn);
 
 
         if (this.mVisibility == -1){
@@ -396,9 +413,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        Log.e(TAG, "sClickable: "+sClickable);
-        if (sClickable) {
-            sClickable = false;
+        if (issClickable()) {
+            setsClickable(false);
             onMenuClick();
         }
     }
@@ -408,7 +424,6 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
             if (menuClickListener != null){
                 menuClickListener.onMenuClick();
             }
-            sClickable = true;
         } else {
             Intent intent = null;
             switch (TYPE.values()[this.mType]) {
@@ -443,12 +458,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
             if (intent != null) {
                 ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_right, 0);
                 getContext().startActivity(intent);
-                sClickable = true;
-            } else {
-                sClickable = true;
             }
-
-
         }
     }
 

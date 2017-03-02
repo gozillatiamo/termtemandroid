@@ -4,6 +4,7 @@ package com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.util.Base64;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.FragmentTopupPreview;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
@@ -116,6 +118,17 @@ public class FragmentAddCreditChoice extends Fragment {
                     return;
                 }
 
+                if (Global.getInstance().getBALANCE() < Float.parseFloat(mBottomAction.getPrice())){
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.balance_not_enough)
+                            .setPositiveButton(R.string.confirm, null)
+                            .show();
+                    mBottomAction.setEnable(true);
+
+                    return;
+                }
+
+
                 servicePreview();
 
             }
@@ -170,6 +183,9 @@ public class FragmentAddCreditChoice extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
+                mBottomAction.setEnable(true);
+
+
             }
         });
     }
