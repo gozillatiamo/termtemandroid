@@ -1,7 +1,16 @@
 package com.worldwidewealth.termtem;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.UserMenuModel;
+import com.worldwidewealth.termtem.util.Util;
+
+import java.util.List;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -12,8 +21,10 @@ public class Global {
     private static final String KEY_GLOBAL = Global.class.getSimpleName();
     private static SharedPreferences mPreferences;
     private static SharedPreferences.Editor mEditor;
+    private List<UserMenuModel> mUserMenuList;
     private static final String PAGE = "page";
     private static final String DEVICEID = "deviceid";
+    private static final String VERSIONCODE = "versioncode";
     private static final String USERID = "userid";
     private static final String AGENTID = "agentid";
     private static final String TOKEN = "token";
@@ -24,6 +35,11 @@ public class Global {
     private static final String LASTNAME = "lastname";
     private static final String PHONENO = "phoneno";
     private static final String AGENTCODE = "agentcode";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String USERDATA = "userdata";
+
+    public static final String TAG = Global.class.getSimpleName();
 
     public static Global getInstance(){
         if (mGlobal == null){
@@ -36,6 +52,27 @@ public class Global {
     }
 
     public Global() {
+    }
+
+    public static String getKeyUSERNAME() {
+        return USERNAME;
+    }
+
+    public static String getKeyPASSWORD() {
+        return PASSWORD;
+    }
+
+    public static String getKeyUSERDATA() {
+        return USERDATA;
+    }
+
+    public static int getVERSIONCODE() {
+        return mPreferences.getInt(VERSIONCODE, -1);
+    }
+
+    public void setVERSIONCODE(int versioncode){
+        mEditor.putInt(VERSIONCODE, versioncode);
+        mEditor.commit();
     }
 
     public float getBALANCE() {
@@ -60,21 +97,25 @@ public class Global {
         return mPreferences.getString(USERID, null);
     }
 
+/*
     public void setUSERID(String userid) {
         if ("".equals(userid)) userid = null;
         mEditor.putString(USERID, userid);
         mEditor.commit();
     }
+*/
 
     public String getAGENTID() {
         return mPreferences.getString(AGENTID, null);
     }
 
+/*
     public void setAGENTID(String agentid) {
         if ("".equals(agentid)) agentid = null;
         mEditor.putString(AGENTID, agentid);
         mEditor.commit();
     }
+*/
 
     public String getTXID() {
         return mPreferences.getString(TXID, null);
@@ -122,6 +163,16 @@ public class Global {
         return mPreferences.getString(LASTNAME, null);
     }
 
+    public String getUSERNAME() {
+        return mPreferences.getString(USERNAME, null);
+    }
+
+    public String getPASSWORD() {
+        return mPreferences.getString(PASSWORD, null);
+    }
+
+/*
+
     public void setAGENTCODE(String agentcode) {
         if ("".equals(agentcode)) agentcode = null;
         mEditor.putString(AGENTCODE, agentcode);
@@ -145,6 +196,48 @@ public class Global {
         mEditor.putString(LASTNAME, lastname);
         mEditor.commit();
     }
+*/
 
+    public void setUserData(ContentValues values){
 
+        String responseStr = values.getAsString(USERDATA);
+        String responDecode = Util.decode(responseStr);
+
+        Log.e(TAG, "ResponseLogin: "+responDecode);
+        LoginResponseModel loginResponseModel = new Gson().fromJson(responDecode, LoginResponseModel.class);
+        mEditor.putString(USERNAME, values.getAsString(USERNAME));
+        mEditor.putString(PASSWORD, values.getAsString(PASSWORD));
+        mEditor.putString(USERID, loginResponseModel.getUSERID());
+        mEditor.putString(AGENTID, loginResponseModel.getAGENTID());
+        mEditor.putString(AGENTCODE, loginResponseModel.getAgentCode());
+        mEditor.putString(FIRSTNAME, loginResponseModel.getFirstName());
+        mEditor.putString(LASTNAME, loginResponseModel.getLastName());
+        mEditor.putString(PHONENO, loginResponseModel.getTelNo());
+        mEditor.putFloat(BALANCE, loginResponseModel.getBALANCE());
+        mEditor.putString(MSGREAD, loginResponseModel.getMSGREAD());
+        mUserMenuList = loginResponseModel.getUsermenu();
+
+        mEditor.commit();
+    }
+
+    public void clearUserData(){
+        mEditor.putString(USERNAME, null);
+        mEditor.putString(PASSWORD, null);
+        mEditor.putString(USERID, null);
+        mEditor.putString(AGENTID, null);
+        mEditor.putString(AGENTCODE, null);
+        mEditor.putString(FIRSTNAME, null);
+        mEditor.putString(LASTNAME, null);
+        mEditor.putString(PHONENO, null);
+        mEditor.putFloat(BALANCE, 0);
+        mEditor.putString(MSGREAD, null);
+        mUserMenuList = null;
+
+        mEditor.commit();
+
+    }
+
+    public List<UserMenuModel> getUserMenuList() {
+        return mUserMenuList;
+    }
 }

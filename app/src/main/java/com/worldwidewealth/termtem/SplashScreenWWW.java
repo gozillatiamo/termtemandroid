@@ -103,14 +103,15 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                             if (responseValues == null) return;
 
                             if (responseValues instanceof ResponseModel){
-                                Global.getInstance().setAGENTID(null);
+                               /* Global.getInstance().setAGENTID(null);
                                 Global.getInstance().setAGENTCODE(null);
                                 Global.getInstance().setFIRSTNAME(null);
                                 Global.getInstance().setLASTNAME(null);
                                 Global.getInstance().setPHONENO(null);
                                 Global.getInstance().setUSERID(null);
                                 Global.getInstance().setBALANCE(0);
-                                Global.getInstance().setTXID(null);
+                                Global.getInstance().setTXID(null);*/
+                                Global.getInstance().clearUserData();
                                 getDataDevice();
 
                             }

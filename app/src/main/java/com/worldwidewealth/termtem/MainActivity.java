@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -233,13 +234,15 @@ public class MainActivity extends MyAppcompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                final String username = EncryptionData.EncryptData(mPhone.replace(" ", ""),
+                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+                final String password =  EncryptionData.EncryptData(mPassword,
+                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
                 Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                         Global.getInstance().getDEVICEID(),
                         getString(R.string.platform),
-                        EncryptionData.EncryptData(mPhone.replace(" ", ""),
-                                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()),
-                        EncryptionData.EncryptData(mPassword,
-                                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID()),
+                        username,
+                        password,
                         Global.getInstance().getTXID())));
 
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -272,18 +275,12 @@ public class MainActivity extends MyAppcompatActivity {
                             }
 
                         } else {
-                            String responseStr = strResponse;
-                            String responDecode = Util.decode(responseStr);
-                            Log.e(TAG, "ResponseLogin: "+responDecode);
-                            LoginResponseModel loginResponseModel = gson.fromJson(responDecode, LoginResponseModel.class);
-                            Global.getInstance().setUSERID(loginResponseModel.getUSERID());
-                            Global.getInstance().setAGENTID(loginResponseModel.getAGENTID());
-                            Global.getInstance().setAGENTCODE(loginResponseModel.getAgentCode());
-                            Global.getInstance().setFIRSTNAME(loginResponseModel.getFirstName());
-                            Global.getInstance().setLASTNAME(loginResponseModel.getLastName());
-                            Global.getInstance().setPHONENO(loginResponseModel.getTelNo());
-                            Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
-                            Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
+
+                            ContentValues values = new ContentValues();
+                            values.put(Global.getKeyUSERNAME(), username);
+                            values.put(Global.getKeyPASSWORD(), password);
+                            values.put(Global.getKeyUSERDATA(), strResponse);
+                            Global.getInstance().setUserData(values);
 
                             if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
 
@@ -294,7 +291,7 @@ public class MainActivity extends MyAppcompatActivity {
                             }
 
                             Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
-                            intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
+//                            intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             startActivity(intent);
                             finish();

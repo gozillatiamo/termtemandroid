@@ -1,8 +1,11 @@
 package com.worldwidewealth.termtem.util;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,34 +17,48 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.worldwidewealth.termtem.BuildConfig;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.MainActivity;
+import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.PreRequestModel;
+import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.Global;
@@ -221,7 +238,7 @@ public class Util {
 
     }
 
-    public static void logoutAPI(){
+    public static void logoutAPI(final boolean clearData){
         if (Global.getInstance().getTXID() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
@@ -232,14 +249,9 @@ public class Util {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null) return;
-                Global.getInstance().setAGENTID(null);
-                Global.getInstance().setAGENTCODE(null);
-                Global.getInstance().setFIRSTNAME(null);
-                Global.getInstance().setLASTNAME(null);
-                Global.getInstance().setPHONENO(null);
-                Global.getInstance().setUSERID(null);
-                Global.getInstance().setBALANCE(0);
-                Global.getInstance().setTXID(null);
+                if (clearData){
+                    Global.getInstance().clearUserData();
+                }
             }
 
             @Override
@@ -250,6 +262,7 @@ public class Util {
 
     }
 
+
     public static void backToSignIn(Activity activity){
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -257,6 +270,217 @@ public class Util {
         activity.finish();
     }
 
+    protected void getTXIDfromServer(Context context){
+
+                GPSTracker gpsTracker = new GPSTracker(context);
+                if (gpsTracker.canGetLocation()){
+                    double mLat = gpsTracker.getLatitude();
+                    double mLong = gpsTracker.getLongitude();
+
+                    PreRequestModel mPreRequestModel = new PreRequestModel("PRE", new PreRequestModel.Data(
+                            Global.getInstance().getTOKEN(),
+                            Global.getInstance().getDEVICEID(),
+                            mLat,
+                            mLong,
+                            context.getString(R.string.platform)
+                    ));
+
+                    SendDataService(context, mPreRequestModel);
+                } else {
+                    gpsTracker.showSettingsAlert();
+                }
+    }
+
+    protected  void SendDataService(final Context context, PreRequestModel model){
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+        if (model != null) {
+            Call<ResponseBody> call = services.PRE(model);
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Object responseValues = EncryptionData.getModel(context, call, response.body(), this);
+                    if (responseValues == null) return;
+
+                    if (responseValues instanceof ResponseModel){
+                        ResponseModel responseModel = (ResponseModel)responseValues;
+
+                        if (responseModel.getShow() == APIServices.SUCCESS) {
+                            if (context instanceof SplashScreenWWW) {
+                                if (checkVersionApp(context, responseModel.getVersion())) {
+                                    Global.getInstance().setTXID(responseModel.getTXID());
+                                    startLogin(context);
+                                }
+                            }
+                        } else {
+                            AlertDialog builder = new AlertDialog.Builder(context, R.style.MyAlertDialogWarning)
+                                    .setCancelable(false)
+                                    .setTitle(R.string.warning)
+                                    .setMessage(responseModel.getDesc())
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ((Activity)context).finish();
+                                        }
+                                    }).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    new ErrorNetworkThrowable(t).networkError(context, call, this);
+                }
+            });
+        }
+
+    }
+
+    private void startLogin(Context context){
+        Intent intent = new Intent(context, MainActivity.class);
+        ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        context.startActivity(intent);
+        ((Activity)context).finish();
+
+    }
+
+    private boolean checkVersionApp(final Context context, String version){
+
+        String currentVersion = (BuildConfig.VERSION_NAME).split("-")[0];
+        if (!version.equals(currentVersion)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogWarning);
+            builder.setTitle(context.getString(R.string.update_app_title));
+            builder.setMessage(context.getString(R.string.update_message));
+            builder.setCancelable(false);
+            builder.setPositiveButton(context.getString(R.string.update), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+//                    String server = context.getString(R.string.server);
+                String packageName = context.getApplicationContext().getPackageName();
+
+                if (packageName.contains("demo")||packageName.contains("dev")) {
+                        startLogin(context);
+                    return;
+                }
+
+                try {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id" + BuildConfig.APPLICATION_ID)));
+                }
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                        ((Activity)context).finish();
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
+                            .setTextColor(context.getResources()
+                                    .getColor(android.R.color.holo_orange_dark));
+                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                            .setTextColor(context.getResources()
+                                    .getColor(android.R.color.holo_red_dark));
+                }
+            });
+            try {
+                alertDialog.show();
+            } catch (WindowManager.BadTokenException e){}
+
+            return false;
+        }
+        return true;
+
+    }
+
+    private void reLogin(final Context context, String TXID){
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+        String username = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        username = EncryptionData.EncryptData(username, Global.getInstance().getDEVICEID()+TXID);
+
+        String password = EncryptionData.DecryptData(Global.getInstance().getPASSWORD(),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        password = EncryptionData.EncryptData(password, Global.getInstance().getDEVICEID()+TXID);
+
+        Global.getInstance().setTXID(TXID);
+
+        Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
+                Global.getInstance().getDEVICEID(),
+                context.getString(R.string.platform),
+                username,
+                password,
+                Global.getInstance().getTXID())));
+
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object values = EncryptionData.getModel(context, call, response.body(), this);
+
+                Gson gson = new Gson();
+                DialogCounterAlert.DialogProgress.dismiss();
+                String strResponse = null;
+                ResponseModel responseModel = null;
+                try {
+                    strResponse = response.body().string();
+                    JsonParser jsonParser = new JsonParser();
+
+                    JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
+                    responseModel = gson.fromJson(jsonObject, ResponseModel.class);
+
+                } catch (Exception e) {
+                }
+
+                if (responseModel != null){
+
+                    String[] strRegisDevice = responseModel.getMsg().toString().split(":");
+                    if (strRegisDevice != null) {
+                        if (strRegisDevice.length == 4) {
+                            registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
+                        } else {
+                            Toast.makeText(MainActivity.this, responseModel.getMsg(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                } else {
+
+                    ContentValues values = new ContentValues();
+                    values.put(Global.getKeyUSERNAME(), username);
+                    values.put(Global.getKeyPASSWORD(), password);
+                    values.put(Global.getKeyUSERDATA(), strResponse);
+                    Global.getInstance().setUserData(values);
+
+                    if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
+
+                        mSetHistoryUser.add(mHolder.mPhone.getText().toString());
+                        SharedPreferences.Editor editor = mShared.edit();
+                        editor.putStringSet(USER, mSetHistoryUser);
+                        editor.commit();
+                    }
+
+                    Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
+//                            intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                    startActivity(intent);
+                    finish();
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
+            }
+        });
+
+    }
     public static File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -480,5 +704,28 @@ public class Util {
         }
     }
 
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {}
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
+    }
 
 }

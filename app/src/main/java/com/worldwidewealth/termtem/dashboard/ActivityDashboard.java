@@ -51,6 +51,7 @@ import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.MenuButtonView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,7 +64,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
 
     private ViewHolder mHolder;
     private static final String TAG = ActivityDashboard.class.getSimpleName();
-    private ArrayList<UserMenuModel> mUserMenuList;
+    private List<UserMenuModel> mUserMenuList;
     private LayerDrawable mIconNoti;
 
 
@@ -73,7 +74,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mHolder = new ViewHolder(this);
-        mUserMenuList = (ArrayList<UserMenuModel>) getIntent().getSerializableExtra(UserMenuModel.KEY_MODEL);
+        mUserMenuList = Global.getInstance().getUserMenuList();
 
         initToolbar();
         initBtnMenu();
@@ -95,6 +96,15 @@ public class ActivityDashboard extends MyAppcompatActivity{
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (Global.getInstance().getTXID() != null) {
+            Util.logoutAPI(true);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         int stackCount = getSupportFragmentManager().getBackStackEntryCount();
 
@@ -107,8 +117,10 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+/*
                         MyApplication.LeavingOrEntering.currentActivity = null;
-                        Util.logoutAPI();
+                        Util.logoutAPI(true);
+*/
                         finish();
                     }
                 });
@@ -150,7 +162,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Util.logoutAPI();
+//                        Util.logoutAPI(true);
                         Util.backToSignIn(ActivityDashboard.this);
                     }
                 });

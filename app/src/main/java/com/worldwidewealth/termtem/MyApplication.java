@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,8 +38,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Runnable mRunable = new Runnable() {
         @Override
         public void run() {
-            Log.e(TAG, "Logout");
-            Util.logoutAPI();
+            Log.e(TAG, "Clear User Data");
+            Global.getInstance().clearUserData();
         }
     };
 
@@ -56,6 +59,26 @@ public class MyApplication extends Application implements Application.ActivityLi
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        try {
+            PackageInfo packageInfo = this.getPackageManager()
+                    .getPackageInfo(this.getPackageName(), 0);
+            int versionCode = packageInfo.versionCode;
+            Log.e(TAG, "oldVersionCode: "+Global.getInstance().getVERSIONCODE());
+            Log.e(TAG, "newVersionCode: "+versionCode);
+            if (Global.getInstance().getVERSIONCODE() != versionCode){
+                if (Global.getInstance().getTXID() != null){
+                    Log.e(TAG, "TXID != null");
+                    Util.logoutAPI(true);
+                }
+
+                Util.deleteCache(this);
+                Global.getInstance().setVERSIONCODE(versionCode);
+            }
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Context getContext(){
@@ -75,17 +98,10 @@ public class MyApplication extends Application implements Application.ActivityLi
     public void onActivityResumed(Activity activity) {
 
         if (canUseLeaving(activity)){
-
             LeavingOrEntering.activityResumed(activity);
-/*
-            if (LeavingOrEntering.currentActivity == null ||
-                    activity != LeavingOrEntering.currentActivity) {
-                LeavingOrEntering.activityResumed(activity);
-            } else {
-                LeavingOrEntering.activityStopped(activity);
-            }
-*/
         }
+
+        LeavingOrEntering.currentActivity = null;
 
     }
 
@@ -118,53 +134,45 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         public static void activityResumed( Activity activity )
         {
-            String strCurrentAtivity = (currentActivity == null) ? "null":currentActivity.getLocalClassName();
-            Log.e(TAG, "Resumed currentActivity: "+strCurrentAtivity);
-            Log.e(TAG, "Resumed newActivity: "+activity.getLocalClassName());
+            String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
+
             if (strCurrentAtivity.equals(activity.getLocalClassName())){
                 Log.e(TAG, "ActivityisEqual");
                 if (Global.getInstance().getTXID() == null){
                     Log.e(TAG, "TXID == null");
                     Util.backToSignIn(activity);
-                } else if (mRunable != null){
+                } /*else if (mRunable != null){
                     Log.e(TAG, "mRanble != null and remveCallbacks");
                     mHandler.removeCallbacks(mRunable);
+                }*/
+
+                else {
+                    mHandler.removeCallbacks(mRunable);
+
                 }
 
-                currentActivity = null;
+//                currentActivity = null;
 
-            } else {
+            } /*else {
                 Log.e(TAG, "ActivityNotEqual");
                 currentActivity = activity;
-            }
+            }*/
+
+            currentActivity = activity;
 
 
         }
 
-        public static void activityStopped( Activity activity )
-        {
-            String strCurrentAtivity = (currentActivity == null) ? "null":currentActivity.getLocalClassName();
-
-            Log.e(TAG, "Stopped currentActivity: "+strCurrentAtivity);
-            Log.e(TAG, "Stopped newActivity: "+activity.getLocalClassName());
+        public static void activityStopped( Activity activity ) {
+            String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
             if (currentActivity == null) return;
 
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
                 // We were stopped and no-one else has been started.
                 Log.e(TAG, "ActivityisEqual and Call Logout");
+                Util.logoutAPI(false);
                 mHandler.postDelayed(mRunable, 60000);
-
-/*
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences(Util.KEYPF, Context.MODE_PRIVATE);
-                if (sharedPreferences.getBoolean("LOGOUT", true)){
-                    Util.backToSignIn(activity);
-                    currentActivity = null;
-                } else {
-                    Util.logoutAPI();
-                }
-*/
-                //Util.backToSignIn(activity);
             }
         }
     }

@@ -40,3 +40,11 @@ gradle.properties
 .gradle/2.14.1/tasks/_app_compileDevReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock
 .gradle/2.14.1/tasks/_app_compileDevReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin
 .gradle/2.14.1/tasks/_app_compileDevReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock
+.gradle/3.3/taskArtifacts/fileHashes.bin
+.gradle/3.3/taskArtifacts/fileSnapshots.bin
+.gradle/3.3/taskArtifacts/taskArtifacts.bin
+.gradle/3.3/taskArtifacts/taskArtifacts.lock
+.gradle/3.3/tasks/_app_compileDevDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin
+.gradle/3.3/tasks/_app_compileDevDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock
+.gradle/3.3/tasks/_app_compileDevDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin
+.gradle/3.3/tasks/_app_compileDevDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -32,6 +33,20 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+<!--
+        <service android:name=".accessibility.MyAccessibilityService">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessbilityService"/>
+            </intent-filter>
+        </service>
+-->
+
+        <receiver android:name=".broadcast.UninstallIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.UNINSTALL_PACKAGE" />s
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.google.android.gms.version"
