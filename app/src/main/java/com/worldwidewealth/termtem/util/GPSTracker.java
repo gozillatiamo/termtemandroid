@@ -159,7 +159,7 @@ public class GPSTracker extends Service implements LocationListener{
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                ((Activity)mContext).recreate();
+                ((Activity)mContext).finish();
             }
         });
         // Showing Alert Message

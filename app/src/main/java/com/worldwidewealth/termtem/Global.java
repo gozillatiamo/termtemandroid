@@ -10,7 +10,9 @@ import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -38,6 +40,7 @@ public class Global {
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String USERDATA = "userdata";
+    private static final String CACHEUSER = "cacheuser";
 
     public static final String TAG = Global.class.getSimpleName();
 
@@ -201,10 +204,10 @@ public class Global {
     public void setUserData(ContentValues values){
 
         String responseStr = values.getAsString(USERDATA);
-        String responDecode = Util.decode(responseStr);
+//        String responDecode = Util.decode(responseStr);
 
-        Log.e(TAG, "ResponseLogin: "+responDecode);
-        LoginResponseModel loginResponseModel = new Gson().fromJson(responDecode, LoginResponseModel.class);
+        Log.e(TAG, "ResponseLogin: "+responseStr);
+        LoginResponseModel loginResponseModel = new Gson().fromJson(responseStr, LoginResponseModel.class);
         mEditor.putString(USERNAME, values.getAsString(USERNAME));
         mEditor.putString(PASSWORD, values.getAsString(PASSWORD));
         mEditor.putString(USERID, loginResponseModel.getUSERID());
@@ -221,8 +224,10 @@ public class Global {
     }
 
     public void clearUserData(){
+
         mEditor.putString(USERNAME, null);
         mEditor.putString(PASSWORD, null);
+        mEditor.putString(TXID, null);
         mEditor.putString(USERID, null);
         mEditor.putString(AGENTID, null);
         mEditor.putString(AGENTCODE, null);
@@ -239,5 +244,22 @@ public class Global {
 
     public List<UserMenuModel> getUserMenuList() {
         return mUserMenuList;
+    }
+
+    public String[] getCacheUser(){
+        Set<String> setUser = mPreferences.getStringSet(CACHEUSER, new HashSet<String>());
+        return setUser.toArray(new String[setUser.size()]);
+    }
+
+    public void setCacheUser(String username){
+        Set<String> setUser = mPreferences.getStringSet(CACHEUSER, new HashSet<String>());
+
+        if (!setUser.contains(username)){
+            setUser.add(username);
+
+            mEditor.putStringSet(CACHEUSER, setUser);
+            mEditor.commit();
+        }
+
     }
 }

@@ -43,6 +43,7 @@ import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
@@ -54,16 +55,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends MyAppcompatActivity {
+public class MainActivity extends MyAppcompatActivity implements View.OnClickListener{
 
     private ViewHolder mHolder;
+    private boolean isClicked = true;
     private String TAG = "Main";
     private APIServices services;
     private String mPhone, mPassword;
+/*
     private SharedPreferences mShared;
     private Set<String> mSetHistoryUser;
     public static final String CACHEUSER = "cacheuser";
     public static final String USER = "user";
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,7 @@ public class MainActivity extends MyAppcompatActivity {
         Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initEditText();
-        initBtn();
+//        initBtn();
 
     }
 
@@ -117,12 +121,14 @@ public class MainActivity extends MyAppcompatActivity {
             }
         });
 
-        mShared = getSharedPreferences(CACHEUSER, Context.MODE_PRIVATE);
-        mSetHistoryUser = new HashSet<>(mShared.getStringSet(USER, new HashSet<String>()));
+//        mShared = getSharedPreferences(CACHEUSER, Context.MODE_PRIVATE);
+//        mSetHistoryUser = new HashSet<>(mShared.getStringSet(USER, new HashSet<String>()));
 
-        if (mSetHistoryUser.size() > 0) {
+        String[] cacheUser = Global.getInstance().getCacheUser();
+
+        if (cacheUser.length > 0) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
-                    mSetHistoryUser.toArray(new String[mSetHistoryUser.size()]));
+                   cacheUser);
             mHolder.mPhone.setAdapter(adapter);
             mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -135,16 +141,18 @@ public class MainActivity extends MyAppcompatActivity {
     }
 
     private void login(){
-        mPhone = mHolder.mPhone.getText().toString().replaceAll("-", "");
+        mPhone = mHolder.mPhone.getText().toString();
         mPassword = mHolder.mPassword.getText().toString();
         if (mPhone.equals("") || mPassword.equals("")) {
             Toast.makeText(MainActivity.this, getString(R.string.please_enter_data), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mHolder.mBtnLogin.setEnabled(false);
+//        mHolder.mBtnLogin.setEnabled(false);
 
+        new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN).checkWifi(mPhone, mPassword, Global.getInstance().getTXID());
 
+/*
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -184,9 +192,11 @@ public class MainActivity extends MyAppcompatActivity {
             new DialogCounterAlert.DialogProgress(MainActivity.this);
             serviceLogin();
         }
+*/
 
     }
 
+/*
     private void serviceAcceptWIFI(){
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
                 new DataRequestModel()));
@@ -204,7 +214,9 @@ public class MainActivity extends MyAppcompatActivity {
             }
         });
     }
+*/
 
+/*
     private void initBtn(){
         mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,7 +241,9 @@ public class MainActivity extends MyAppcompatActivity {
         });
 
     }
+*/
 
+/*
     private void serviceLogin(){
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -351,10 +365,34 @@ public class MainActivity extends MyAppcompatActivity {
                     }
                 }).show();
     }
+*/
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (isClicked) {
+            isClicked = false;
+
+            switch (v.getId()) {
+                case R.id.btn_login:
+                    login();
+                    break;
+                case R.id.btn_register:
+                    Intent intent = new Intent(MainActivity.this, ActivityRegister.class);
+                    startActivity(intent);
+                    break;
+                case R.id.help:
+                    new DialogHelp(MainActivity.this).show();
+                    break;
+
+            }
+
+            isClicked = true;
+        }
     }
 
     public class ViewHolder{
@@ -368,12 +406,15 @@ public class MainActivity extends MyAppcompatActivity {
         public ViewHolder(AppCompatActivity view){
 
             mBtnRegister = (TextView) view.findViewById(R.id.btn_register);
+            mBtnRegister.setOnClickListener(MainActivity.this);
             mBtnLogin = (Button) view.findViewById(R.id.btn_login);
+            mBtnLogin.setOnClickListener(MainActivity.this);
 
             mPhone = (AutoCompleteTextView) view.findViewById(R.id.edit_phone);
 
             mPassword = (EditText) view.findViewById(R.id.edit_password);
             mHelp = (TextView) view.findViewById(R.id.help);
+            mHelp.setOnClickListener(MainActivity.this);
 
         }
     }

@@ -172,9 +172,18 @@ public class EncryptionData {
                         msg = context.getString(R.string.alert_topup_fail);
                         new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
                         return null;
+                    case APIServices.ACTIONLOGIN:
+                        return responseModel;
+                    case APIServices.ACTIONLOGOUT:
+                        return null;
                     default:
-                        new ErrorNetworkThrowable(null).networkError(context,
-                                responseModel.getMsg(), call, callback, true);
+                        if ((Global.getInstance().getAGENTID() == null || Global.getInstance().getAGENTID().equals(""))
+                                && Global.getInstance().getUSERNAME() != null){
+                            Util.logoutAPI(context, false);
+                        } else {
+                            new ErrorNetworkThrowable(null).networkError(context,
+                                    responseModel.getMsg(), call, callback, true);
+                        }
                 }
             } else{
                 return responseModel;

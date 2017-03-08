@@ -11,6 +11,7 @@ import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -23,6 +24,7 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.GPSTracker;
+import com.worldwidewealth.termtem.util.TermTemSignIn;
 
 import java.util.Locale;
 
@@ -94,13 +96,16 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                 if (Global.getInstance().getAGENTID() != null) {
 
-
+                    Log.e(TAG, "AgentId: "+Global.getInstance().getAGENTID());
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             Object responseValues = EncryptionData.getModel(SplashScreenWWW.this, call, response.body(), this);
-                            if (responseValues == null) return;
+                            if (responseValues == null){
+                                new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this, call, this);
+                                return;
+                            }
 
                             if (responseValues instanceof ResponseModel){
                                /* Global.getInstance().setAGENTID(null);
@@ -212,6 +217,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                 Global.getInstance().setDEVICEID(deviceId);
 
+                new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN).getTXIDfromServer();
+
+/*
                 GPSTracker gpsTracker = new GPSTracker(SplashScreenWWW.this);
                 if (gpsTracker.canGetLocation()){
                     mLat = gpsTracker.getLatitude();
@@ -230,12 +238,15 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                     gpsTracker.showSettingsAlert();
                 }
 
+*/
+
             }
         };
 
         handler.postDelayed(runnable, 1000);
     }
 
+/*
     protected  void SendDataService(PreRequestModel model){
 
 
@@ -341,4 +352,5 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         return true;
 
     }
+*/
 }

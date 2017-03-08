@@ -18,6 +18,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
+import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
 import io.fabric.sdk.android.Fabric;
@@ -38,8 +39,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Runnable mRunable = new Runnable() {
         @Override
         public void run() {
-            Log.e(TAG, "Clear User Data");
-            Global.getInstance().clearUserData();
+            Util.logoutAPI(null, true);
         }
     };
 
@@ -67,9 +67,9 @@ public class MyApplication extends Application implements Application.ActivityLi
             Log.e(TAG, "oldVersionCode: "+Global.getInstance().getVERSIONCODE());
             Log.e(TAG, "newVersionCode: "+versionCode);
             if (Global.getInstance().getVERSIONCODE() != versionCode){
-                if (Global.getInstance().getTXID() != null){
+                if (Global.getInstance().getAGENTID() != null){
                     Log.e(TAG, "TXID != null");
-                    Util.logoutAPI(true);
+                    Util.logoutAPI(mContext, true);
                 }
 
                 Util.deleteCache(this);
@@ -92,16 +92,17 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStarted(Activity activity) {
+        if (canUseLeaving(activity)){
+            LeavingOrEntering.activityStart(activity);
+        } else {
+            LeavingOrEntering.currentActivity = null;
+        }
+
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
 
-        if (canUseLeaving(activity)){
-            LeavingOrEntering.activityResumed(activity);
-        }
-
-        LeavingOrEntering.currentActivity = null;
 
     }
 
@@ -132,32 +133,28 @@ public class MyApplication extends Application implements Application.ActivityLi
     {
         public static Activity currentActivity = null;
 
-        public static void activityResumed( Activity activity )
+        public static void activityStart( Activity activity )
         {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
-            if (strCurrentAtivity.equals(activity.getLocalClassName())){
+            if (strCurrentAtivity == null) {
+                currentActivity = activity;
+                return;
+            }
+
+            if (strCurrentAtivity.equals(activity.getLocalClassName())) {
                 Log.e(TAG, "ActivityisEqual");
-                if (Global.getInstance().getTXID() == null){
+                if (Global.getInstance().getTXID() == null) {
                     Log.e(TAG, "TXID == null");
                     Util.backToSignIn(activity);
-                } /*else if (mRunable != null){
-                    Log.e(TAG, "mRanble != null and remveCallbacks");
-                    mHandler.removeCallbacks(mRunable);
-                }*/
-
-                else {
-                    mHandler.removeCallbacks(mRunable);
-
+                    return;
                 }
 
-//                currentActivity = null;
-
-            } /*else {
-                Log.e(TAG, "ActivityNotEqual");
-                currentActivity = activity;
-            }*/
-
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(mRunable);
+                    Util.logoutAPI(activity, false);
+                }
+            }
             currentActivity = activity;
 
 
@@ -171,7 +168,7 @@ public class MyApplication extends Application implements Application.ActivityLi
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
                 // We were stopped and no-one else has been started.
                 Log.e(TAG, "ActivityisEqual and Call Logout");
-                Util.logoutAPI(false);
+//                Util.logoutAPI(false);
                 mHandler.postDelayed(mRunable, 60000);
             }
         }

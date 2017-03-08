@@ -35,6 +35,7 @@ import retrofit2.http.POST;
 public interface APIServices {
     public static final int SUCCESS = 0;
 
+    public static final String ACTIONLOGIN = "LOGIN";
     public static final String ACTIONCHANGEPASSWORD = "CHANGEPASSWORD";
     public static final String ACTIONLOADBUTTON = "LOADBUTTON";
     public static final String ACTIONPREVIEW = "PREVIEW";

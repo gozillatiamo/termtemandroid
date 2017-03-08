@@ -84,7 +84,9 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
+        if(Global.getInstance().getAGENTID() != null) {
+            Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
+        }
         MenuButtonView.setsClickable(true);
     }
 
@@ -100,7 +102,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
         super.onDestroy();
 
         if (Global.getInstance().getTXID() != null) {
-            Util.logoutAPI(true);
+            Util.logoutAPI(this, true);
         }
     }
 
