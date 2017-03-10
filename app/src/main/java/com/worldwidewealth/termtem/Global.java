@@ -78,12 +78,14 @@ public class Global {
         mEditor.commit();
     }
 
-    public float getBALANCE() {
-        return mPreferences.getFloat(BALANCE, 0);
+    public double getBALANCE() {
+        String strBalance = mPreferences.getString(BALANCE, null);
+        double balance = (strBalance == null) ? 0:Double.parseDouble(strBalance);
+        return balance;
     }
 
-    public void setBALANCE(float balance) {
-        mEditor.putFloat(BALANCE, balance);
+    public void setBALANCE(String balance) {
+        mEditor.putString(BALANCE, balance);
         mEditor.commit();
     }
 
@@ -216,18 +218,20 @@ public class Global {
         mEditor.putString(FIRSTNAME, loginResponseModel.getFirstName());
         mEditor.putString(LASTNAME, loginResponseModel.getLastName());
         mEditor.putString(PHONENO, loginResponseModel.getTelNo());
-        mEditor.putFloat(BALANCE, loginResponseModel.getBALANCE());
+        mEditor.putString(BALANCE, loginResponseModel.getBALANCE());
         mEditor.putString(MSGREAD, loginResponseModel.getMSGREAD());
         mUserMenuList = loginResponseModel.getUsermenu();
 
         mEditor.commit();
     }
 
-    public void clearUserData(){
+    public void clearUserData(boolean clearall){
 
-        mEditor.putString(USERNAME, null);
-        mEditor.putString(PASSWORD, null);
-        mEditor.putString(TXID, null);
+        if (clearall) {
+            mEditor.putString(USERNAME, null);
+            mEditor.putString(PASSWORD, null);
+            mEditor.putString(TXID, null);
+        }
         mEditor.putString(USERID, null);
         mEditor.putString(AGENTID, null);
         mEditor.putString(AGENTCODE, null);

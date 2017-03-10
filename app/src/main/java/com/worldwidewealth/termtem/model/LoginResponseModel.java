@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.model;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class LoginResponseModel {
     private boolean CASHSERVICE;
     private String AGENTID;
     private String USERID;
-    private float BALANCE;
+    private String BALANCE;
     private String MSGREAD;
     private String FirstName;
     private String LastName;
@@ -23,7 +24,7 @@ public class LoginResponseModel {
 
     private List<UserMenuModel> usermenu;
 
-    public float getBALANCE() {
+    public String getBALANCE() {
         return BALANCE;
     }
 

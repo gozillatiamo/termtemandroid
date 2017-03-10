@@ -13,6 +13,11 @@ public class ResponseModel{
     private String version;
     private int show;
     private String desc;
+    private int idlelimit;
+
+    public int getIdlelimit() {
+        return idlelimit;
+    }
 
     public String getFf() {
         return ff;

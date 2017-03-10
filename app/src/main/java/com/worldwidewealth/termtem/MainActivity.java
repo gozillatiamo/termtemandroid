@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -135,6 +136,12 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                 public void onClick(View v) {
                     if (!mHolder.mPhone.isPopupShowing())
                         mHolder.mPhone.showDropDown();
+                }
+            });
+            mHolder.mPhone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    mHolder.mPassword.requestFocus();
                 }
             });
         }

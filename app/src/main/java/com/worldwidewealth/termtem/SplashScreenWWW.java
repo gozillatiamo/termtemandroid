@@ -103,7 +103,8 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             Object responseValues = EncryptionData.getModel(SplashScreenWWW.this, call, response.body(), this);
                             if (responseValues == null){
-                                new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this, call, this);
+//                                new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this, call, this);
+                                getDataDevice();
                                 return;
                             }
 
@@ -116,7 +117,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                                 Global.getInstance().setUSERID(null);
                                 Global.getInstance().setBALANCE(0);
                                 Global.getInstance().setTXID(null);*/
-                                Global.getInstance().clearUserData();
+                                Global.getInstance().clearUserData(true);
                                 getDataDevice();
 
                             }

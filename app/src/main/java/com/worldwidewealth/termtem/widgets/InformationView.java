@@ -16,6 +16,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by user on 03-Mar-17.
@@ -26,9 +31,10 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private CardView mInformationView;
     private View mLayoutThumbnail;
     private ImageView mImageThumbnail;
-    private TextView mTextLengthVideo, mTextTitle, mTextDes;
+    private TextView mTextLengthVideo, mTextTitle, mTextDes, mTextDate;
 
     private String mTitle, mDes, mThumbnailURL, mLengthVideo;
+    private Date mDate;
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
 
@@ -64,6 +70,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         ss.mLengthVideo = this.mLengthVideo;
         ss.mThumbnailURL = this.mThumbnailURL;
         ss.mThumbnailResource = this.mThumbnailResource;
+        ss.mDate = this.mDate;
         return ss;
     }
 
@@ -80,10 +87,12 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mLengthVideo = ss.mLengthVideo;
         this.mThumbnailURL = ss.mThumbnailURL;
         this.mThumbnailResource = ss.mThumbnailResource;
+        this.mDate = ss.mDate;
 
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
+        setDate(this.mDate);
 
         if (this.mThumbnailURL != null){
             setThumbnail(this.mThumbnailURL);
@@ -108,6 +117,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         mTextDes = (TextView) findViewById(R.id.txt_description);
         mTextLengthVideo = (TextView) findViewById(R.id.txt_length_video);
         mTextTitle = (TextView) findViewById(R.id.txt_title);
+        mTextDate = (TextView) findViewById(R.id.txt_date);
     }
 
     private void setupStyleable(AttributeSet attrs){
@@ -127,6 +137,17 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
         setThumbnail(this.mThumbnailResource);
+    }
+
+    public void setDate(Date date){
+        this.mDate = date;
+        SimpleDateFormat dest = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String resultDate = dest.format(this.mDate);
+        mTextDate.setText(resultDate);
+    }
+
+    public Date getDate(){
+        return mDate;
     }
 
     public void setTitle(String title){
@@ -206,6 +227,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
         String mTitle, mDes, mLengthVideo, mThumbnailURL;
         int mThumbnailResource;
+        Date mDate;
 
         public SavedState(Parcel source) {
             super(source);
@@ -214,6 +236,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             this.mLengthVideo = source.readString();
             this.mThumbnailURL = source.readString();
             this.mThumbnailResource = source.readInt();
+            this.mDate = (Date) source.readValue(getClass().getClassLoader());
         }
 
         public SavedState(Parcelable superState) {
@@ -228,6 +251,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             out.writeString(this.mLengthVideo);
             out.writeString(this.mThumbnailURL);
             out.writeInt(this.mThumbnailResource);
+            out.writeValue(this.mDate);
         }
 
         public static final Creator<InformationView.SavedState> CREATOR = new Creator<InformationView.SavedState>() {

@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.widget.MenuPopupWindow;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -16,7 +20,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -108,15 +114,72 @@ public class ActivityRegister extends MyAppcompatActivity {
 
     private void initPeople(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type_people_dropdown, R.layout.text_spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.type_people_dropdown))/*{
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = null;
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mHolder.mSpinnerTypePeople.setAdapter(adapter);
+                if (position == 0) {
+                    TextView tv = new TextView(getContext());
+                    tv.setHeight(0);
+                    tv.setVisibility(View.GONE);
+                    v = tv;
+                }
+                else {
+
+                    v = super.getDropDownView(position, null, parent);
+                }
+
+                parent.setVerticalScrollBarEnabled(false);
+                return v;            }
+        }*/;
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ListPopupWindow listPopupWindow = new ListPopupWindow(this);
+        listPopupWindow.setAdapter(spinnerAdapter);
+        listPopupWindow.setAnchorView(mHolder.mEditPeopleType);
+        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView tv = (TextView) view;
+                mHolder.mEditPeopleType.setText(tv.getText());
+                mPerson = position;
+                listPopupWindow.dismiss();
+            }
+        });
+
+
+        mHolder.mEditPeopleType.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    listPopupWindow.show();
+
+                }
+                return false;
+            }
+        });
+/*
+        mHolder.mEditPeopleType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listPopupWindow.show();
+            }
+        });
+*/
+/*
+        mHolder.mSpinnerTypePeople.setAdapter(spinnerAdapter);
         mHolder.mSpinnerTypePeople.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 boolean check = false;
-                if (position != 0) check = true;
-                mDataCheck[PEOPLE] = check;
+                if (position != 0){
+                    check = true;
+                    Drawable imgCheck = getResources().getDrawable( R.drawable.ic_check_circle );
+                    mHolder.mLayoutSpinnerPeople.setCompoundDrawables(null, null, imgCheck, null);
+                }
+                    mDataCheck[PEOPLE] = check;
+
             }
 
             @Override
@@ -124,7 +187,8 @@ public class ActivityRegister extends MyAppcompatActivity {
 
             }
         });
-        mHolder.mSpinnerTypePeople.setSelection(0);
+*/
+//        mHolder.mSpinnerTypePeople.setSelection(0);
 
     }
 
@@ -147,7 +211,7 @@ public class ActivityRegister extends MyAppcompatActivity {
                 mLastName = mHolder.mEditLastName.getText().toString();
                 mTel = mHolder.mEditTel.getText().toString();
                 mIden = mHolder.mEditIdentification.getText().toString();
-                mPerson = mHolder.mSpinnerTypePeople.getSelectedItemPosition()-1;
+//                mPerson = mHolder.mSpinnerTypePeople.getSelectedItemPosition()-1;
 
                 if (!mEmail.equals("")){
                     if (!CheckSyntaxData.isEmailValid(mEmail)){
@@ -283,15 +347,16 @@ public class ActivityRegister extends MyAppcompatActivity {
     public class ViewHolder{
 
         private Button mBtnNext, mBtnCondition;
-        private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification;
-        private Spinner mSpinnerTypePeople;
+        private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification,
+        mEditPeopleType;
+//        private Spinner mSpinnerTypePeople;
         private Toolbar mToolbar;
         private AutofitTextView mBtnSignIn;
         private CheckBox mCheckService;
         public ViewHolder(final Activity view){
 
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
-            mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
+//            mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
             mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
 
@@ -318,6 +383,8 @@ public class ActivityRegister extends MyAppcompatActivity {
                 }
             });
             mBtnCondition = (Button) view.findViewById(R.id.btn_condition_termtem);
+            mEditPeopleType = (EditText) view.findViewById(R.id.edit_people_type);
+            mEditPeopleType.addTextChangedListener(onTextChanged(mEditPeopleType, PEOPLE));
             mBtnCondition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

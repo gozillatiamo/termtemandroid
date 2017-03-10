@@ -50,6 +50,7 @@ public interface APIServices {
     public static final String ACTIONNOTIPAY = "NOTIPAY";
     public static final String ACTIONGENBARCODE = "GENBARCODE";
     public static final String ACTIONACCPWIFI = "ACCPWIFI";
+    public static final String ACTIONLEAVE = "LEAVE";
     public static final String ACTIONLOADINBOX = "LOADINBOX";
     public static final String ACTIONREADMSG = "READMSG";
     public static final String ACTIONGETAGENTLIST = "GETAGENTLIST";
@@ -143,6 +144,7 @@ public interface APIServices {
 
                     Request.Builder builder = originalRequest.newBuilder();
                     if (originalRequest.method().equalsIgnoreCase("POST")){
+
 
                         builder = originalRequest.newBuilder()
                                 .method(originalRequest.method(), Util.encode(originalRequest.body()));

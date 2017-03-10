@@ -252,10 +252,10 @@ public class Util {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null) return;
 
+                Global.getInstance().clearUserData(clearData);
+
                 if (!clearData) {
                     new TermTemSignIn(context, TermTemSignIn.TYPE.RELOGIN).getTXIDfromServer();
-                } else {
-                    Global.getInstance().clearUserData();
                 }
 
             }

@@ -106,7 +106,7 @@ public class FragmentAddCreditChoice extends Fragment {
             @Override
             public void onClick(View v) {
                 mBottomAction.setEnable(false);
-                if (Float.parseFloat(mBottomAction.getPrice()) == 0){
+                if (Double.parseDouble(mBottomAction.getPrice()) == 0){
                     Toast.makeText(getContext(), R.string.please_choice_topup, Toast.LENGTH_LONG).show();
                     mBottomAction.setEnable(true);
                     return;
@@ -118,7 +118,7 @@ public class FragmentAddCreditChoice extends Fragment {
                     return;
                 }
 
-                if (Global.getInstance().getBALANCE() < Float.parseFloat(mBottomAction.getPrice())){
+                if (Global.getInstance().getBALANCE() < Double.parseDouble(mBottomAction.getPrice())){
                     AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                             .setMessage(R.string.balance_not_enough)
                             .setPositiveButton(R.string.confirm, null)

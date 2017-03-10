@@ -112,7 +112,7 @@
     <string name="dashboard_vouchers">Vouchers</string>
     <string name="dashboard_my_qr">QR ของฉัน</string>
     <string name="dashboard_scan_qr">สแกน QR</string>
-    <string name="not_have_account">"คุณยังไม่มีบัญชีผู้ใช้งาน?"</string>
+    <string name="not_have_account">กรณียังไม่มีบัญชีผู้ใช้งาน กรุณา </string>
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
     <string name="first_name">ชื่อ</string>
@@ -158,9 +158,9 @@
     <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่านการเชื่อมต่อ wifi \nคุณยืนยันที่จะใช้งานแอพพลิเคชั่นนี้ต่อไปหรือไม่ ?</string>
     <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
-    <string name="add_slip_picture">เพิ่มรูปภาพใบเสร็จ</string>
+    <string name="add_slip_picture">กดเพื่อส่งสลิปการโอนเงิน</string>
     <string name="agent_phone_number">หมายเลขโทรศัพท์มือถือ Agent :</string>
-    <string name="amount_transfered">จำนวนที่แลกเปลี่ยนทั้งสิ้น</string>
+    <string name="amount_transfered">จำนวนเงินที่โอนผ่านธนาคาร</string>
     <string name="fill_money_amount">ระบุยอดเงินโอน</string>
     <string name="please_enter_amount">กรุณาใส่ยอดเงินที่ชำระ</string>
     <string name="alert_amount_mpay_over">กรุณาใส่ยอดเงินขั้นต่ำ 1 บาท สูงสุด 49,000 บาท</string>
@@ -319,7 +319,6 @@
     </string-array>
 
     <string-array name="type_people_dropdown">
-        <item>@string/please_select</item>
         <item>บุคคล</item>
         <item>นิติบุคคล</item>
     </string-array>

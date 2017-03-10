@@ -185,12 +185,34 @@
                         android:layout_height="wrap_content"
                         android:text="@string/person_type"
                         android:textAllCaps="true"/>
-                    <Spinner
-                        android:id="@+id/spinner_type_people"
+                    <EditText
+                        android:id="@+id/edit_people_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/activity_space"
-                        android:background="@android:color/transparent"/>
+                        android:background="@android:color/transparent"
+                        android:editable="false"
+                        android:clickable="true"/>
+
+<!--
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/layout_spinner_people"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_check_circle"
+                            />
+                        <Spinner
+                            android:id="@+id/spinner_type_people"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"/>
+
+                    </RelativeLayout>
+-->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.Until;
 import com.worldwidewealth.termtem.BuildConfig;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
@@ -52,6 +53,8 @@ public class TermTemSignIn {
     private String mUsername, mPassword, mTXID;
     private TYPE mType;
 
+    private static AlertDialog AlertWifi;
+
     public static final String TAG = TermTemSignIn.class.getSimpleName();
 
     public enum TYPE{
@@ -71,6 +74,9 @@ public class TermTemSignIn {
 
 
     public TermTemSignIn(Context context, TYPE type) {
+        if (AlertWifi != null){
+            AlertWifi.dismiss();
+        }
         this.mContext = context;
         this.services = APIServices.retrofit.create(APIServices.class);
         this.mType = type;
@@ -244,15 +250,15 @@ public class TermTemSignIn {
                             mContext.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                         }
                     });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            AlertWifi = builder.create();
+            AlertWifi.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
                     ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
                             .setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
                 }
             });
-            alertDialog.show();
+            AlertWifi.show();
 
         } else {
             Login();
@@ -307,6 +313,10 @@ public class TermTemSignIn {
                         } else {
                             Toast.makeText(mContext, responseModel.getMsg(),
                                     Toast.LENGTH_SHORT).show();
+                            if (mType.equals(TYPE.RELOGIN)){
+                                Global.getInstance().clearUserData(true);
+                                Util.backToSignIn(((Activity)mContext));
+                            }
                         }
                     }
 

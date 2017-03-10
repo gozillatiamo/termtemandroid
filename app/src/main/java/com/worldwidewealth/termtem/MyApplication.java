@@ -18,10 +18,19 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
+import com.worldwidewealth.termtem.model.DataRequestModel;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -92,16 +101,16 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStarted(Activity activity) {
-        if (canUseLeaving(activity)){
-            LeavingOrEntering.activityStart(activity);
-        } else {
-            LeavingOrEntering.currentActivity = null;
-        }
 
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
+        if (canUseLeaving(activity)){
+            LeavingOrEntering.activityResumed(activity);
+        } else {
+            LeavingOrEntering.currentActivity = null;
+        }
 
 
     }
@@ -133,7 +142,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     {
         public static Activity currentActivity = null;
 
-        public static void activityStart( Activity activity )
+        public static void activityResumed( Activity activity )
         {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
@@ -149,9 +158,14 @@ public class MyApplication extends Application implements Application.ActivityLi
                     Util.backToSignIn(activity);
                     return;
                 }
-
+                new DialogCounterAlert.DialogProgress(activity);
                 if (mHandler != null) {
                     mHandler.removeCallbacks(mRunable);
+                }
+
+                if (Global.getInstance().getAGENTID() == null){
+                    new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN).getTXIDfromServer();
+                } else {
                     Util.logoutAPI(activity, false);
                 }
             }
@@ -160,7 +174,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         }
 
-        public static void activityStopped( Activity activity ) {
+        public static void activityStopped(final Activity activity ) {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
             if (currentActivity == null) return;
@@ -169,7 +183,24 @@ public class MyApplication extends Application implements Application.ActivityLi
                 // We were stopped and no-one else has been started.
                 Log.e(TAG, "ActivityisEqual and Call Logout");
 //                Util.logoutAPI(false);
-                mHandler.postDelayed(mRunable, 60000);
+                if (Global.getInstance().getAGENTID() == null) return;
+                APIServices services = APIServices.retrofit.create(APIServices.class);
+                Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Object values = EncryptionData.getModel(activity, call, response.body(), this);
+                        if (values instanceof ResponseModel){
+                            ResponseModel model = (ResponseModel) values;
+                            mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        mHandler.postDelayed(mRunable, 60000);
+                    }
+                });
             }
         }
     }

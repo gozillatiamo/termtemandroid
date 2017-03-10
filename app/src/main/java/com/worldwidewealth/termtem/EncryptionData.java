@@ -175,15 +175,11 @@ public class EncryptionData {
                     case APIServices.ACTIONLOGIN:
                         return responseModel;
                     case APIServices.ACTIONLOGOUT:
+                    case APIServices.ACTIONGETBALANCE:
                         return null;
                     default:
-                        if ((Global.getInstance().getAGENTID() == null || Global.getInstance().getAGENTID().equals(""))
-                                && Global.getInstance().getUSERNAME() != null){
-                            Util.logoutAPI(context, false);
-                        } else {
-                            new ErrorNetworkThrowable(null).networkError(context,
-                                    responseModel.getMsg(), call, callback, true);
-                        }
+                        new ErrorNetworkThrowable(null).networkError(context,
+                                responseModel.getMsg(), call, callback, true);
                 }
             } else{
                 return responseModel;
