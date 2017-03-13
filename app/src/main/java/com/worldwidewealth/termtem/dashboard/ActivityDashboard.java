@@ -175,6 +175,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     }
 
     private void initBtnMenu(){
+        if (mUserMenuList == null) return;
         for (UserMenuModel model : mUserMenuList){
             MenuButtonView.TYPE type = MenuButtonView.TYPE.asTYPE(model.getBUTTON());
             if (type != null) {

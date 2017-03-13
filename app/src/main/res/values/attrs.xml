@@ -12,6 +12,7 @@
             <enum name="support" value="5"/>
             <enum name="notipay" value="6"/>
             <enum name="history" value="7"/>
+            <enum name="pin" value="8"/>
         </attr>
         <attr name="mbv_visibility" format="enum">
             <enum name="show" value="0"/>

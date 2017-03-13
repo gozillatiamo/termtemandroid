@@ -112,6 +112,7 @@
     <string name="dashboard_vouchers">Vouchers</string>
     <string name="dashboard_my_qr">QR ของฉัน</string>
     <string name="dashboard_scan_qr">สแกน QR</string>
+    <string name="dashboard_pin">ขายบัตรเติมเงิน</string>
     <string name="not_have_account">กรณียังไม่มีบัญชีผู้ใช้งาน กรุณา </string>
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
@@ -372,6 +373,18 @@
     <string-array name="menu_help">
         <item>@string/menu_bank_detail</item>
         <item>@string/menu_contact</item>
+    </string-array>
+
+    <string-array name="list_carrier_topup">
+        <item>12CALL</item>
+        <item>TMVH</item>
+        <item>HAPPY</item>
+    </string-array>
+
+    <string-array name="list_carrier_pin">
+        <item></item>
+        <item></item>
+        <item></item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

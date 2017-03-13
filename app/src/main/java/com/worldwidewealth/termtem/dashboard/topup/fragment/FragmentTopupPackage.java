@@ -54,6 +54,7 @@ public class FragmentTopupPackage extends  Fragment{
     private View rootView;
     private ViewHolder mHolder;
     private String mCarrier;
+    private String mTopup;
     private String mPhone;
     private APIServices services;
     private double mAmt = 0.00;
@@ -66,10 +67,11 @@ public class FragmentTopupPackage extends  Fragment{
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
 
-    public static Fragment newInstance(String carrier){
+    public static Fragment newInstance(String carrier, String topup){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
         bundle.putString(CARRIER, carrier);
+        bundle.putString(FragmentTopup.keyTopup, topup);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -78,6 +80,7 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCarrier = getArguments().getString(CARRIER);
+        mTopup = getArguments().getString(FragmentTopup.keyTopup);
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
@@ -183,7 +186,11 @@ public class FragmentTopupPackage extends  Fragment{
                 mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
                 break;
             case APIServices.TRUEMOVE:
-                mHolder.mLogoService.setImageResource(R.drawable.logo_truemove);
+                if (mTopup.equals(FragmentTopup.MOBILE))
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_truemove);
+                else
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_truemoney);
+
                 break;
             case APIServices.DTAC:
                 mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);

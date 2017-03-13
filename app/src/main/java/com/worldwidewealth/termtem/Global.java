@@ -23,7 +23,7 @@ public class Global {
     private static final String KEY_GLOBAL = Global.class.getSimpleName();
     private static SharedPreferences mPreferences;
     private static SharedPreferences.Editor mEditor;
-    private List<UserMenuModel> mUserMenuList;
+    private static List<UserMenuModel> mUserMenuList;
     private static final String PAGE = "page";
     private static final String DEVICEID = "deviceid";
     private static final String VERSIONCODE = "versioncode";

@@ -37,17 +37,32 @@
 -->
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tablayout_inbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@android:color/white"
+                    android:elevation="2dp">
+
+                </android.support.design.widget.TabLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager_inbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tablayout_inbox"
+                    >
+                </android.support.v4.view.ViewPager>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/inbox_recyclear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                 </android.support.v7.widget.RecyclerView>
-            </FrameLayout>
+            </RelativeLayout>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>

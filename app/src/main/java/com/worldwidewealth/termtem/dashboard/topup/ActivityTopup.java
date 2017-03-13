@@ -18,12 +18,13 @@ public class ActivityTopup extends MyAppcompatActivity {
 
     private FrameLayout mContainerTopup;
     private Toolbar mToolbar;
+    private String mTopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topup);
-
+        mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
         initWidgets();
         initToolbar();
         initContainer();
@@ -77,7 +78,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     private void initContainer(){
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container_topup, FragmentTopup.newInstance());
+                .replace(R.id.container_topup, FragmentTopup.newInstance(mTopup));
         transaction.commit();
     }
 

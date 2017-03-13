@@ -56,3 +56,5 @@ gradle.properties
 .gradle/3.3/tasks/_app_compileDemoReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock
 .gradle/3.3/tasks/_app_compileDemoReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin
 .gradle/3.3/tasks/_app_compileDemoReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock
+.gradle/3.3/tasks/_app_compileDevReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin
+.gradle/3.3/tasks/*

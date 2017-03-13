@@ -39,6 +39,7 @@ import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportMT;
 import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
 import com.worldwidewealth.termtem.model.ChangePasswordRequestModel;
@@ -76,7 +77,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         SETUP(4),
         SUPPORT(5),
         NOTIPAY(6),
-        HISTORY(7);
+        HISTORY(7),
+        PIN(8);
 
         private int type;
         TYPE(int i) {
@@ -452,6 +454,11 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     break;
                 case TOPUP:
                     intent = new Intent(getContext(), ActivityTopup.class);
+                    intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.MOBILE);
+                    break;
+                case PIN:
+                    intent = new Intent(getContext(), ActivityTopup.class);
+                    intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.PIN);
                     break;
             }
 

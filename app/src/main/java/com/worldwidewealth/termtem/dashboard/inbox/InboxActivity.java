@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -58,6 +60,8 @@ public class InboxActivity extends MyAppcompatActivity {
     private InboxAdapter mAdapter;
     private int mPage = 1;
     private SearchView searchView = null;
+    private TabLayout mInboxTabLayout;
+    private ViewPager mInboxViewPager;
     public static final String TAG = InboxActivity.class.getSimpleName();
 
     @Override
@@ -70,7 +74,7 @@ public class InboxActivity extends MyAppcompatActivity {
         calendar.set(2016, 1, 1);
         mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
         mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
-        initWidgets();
+        bindView();
         initToolbar();
         loadDataInbox();
 
@@ -215,9 +219,11 @@ public class InboxActivity extends MyAppcompatActivity {
         });
     }
 
-    private void initWidgets(){
+    private void bindView(){
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mInboxRecycler = (RecyclerView) findViewById(R.id.inbox_recyclear);
+        mInboxTabLayout = (TabLayout) findViewById(R.id.tablayout_inbox);
+        mInboxViewPager = (ViewPager) findViewById(R.id.pager_inbox);
     }
 
     private void initToolbar(){
