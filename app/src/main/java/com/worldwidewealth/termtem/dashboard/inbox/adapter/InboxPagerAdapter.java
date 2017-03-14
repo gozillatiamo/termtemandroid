@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.inbox.adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,17 +13,27 @@ import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 
 public class InboxPagerAdapter extends FragmentPagerAdapter {
 
-    public InboxPagerAdapter(FragmentManager fm) {
+    final int PAGE_COUNT = 4;
+    private String tabTitles[] = new String[] { "ALL", "TEXT", "VIDEO", "IMAGE" };
+    private Context mContext;
+
+    public InboxPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        this.mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return InboxFragment.newInstance();
+        return InboxFragment.newInstance(position);
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return PAGE_COUNT;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabTitles[position];
     }
 }

@@ -35,8 +35,11 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private String mTitle, mDes, mThumbnailURL, mLengthVideo;
     private Date mDate;
+    private boolean isRead;
+
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
+    private int mPosition = -1;
 
     public InformationView(Context context) {
         super(context);
@@ -71,6 +74,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         ss.mThumbnailURL = this.mThumbnailURL;
         ss.mThumbnailResource = this.mThumbnailResource;
         ss.mDate = this.mDate;
+        ss.isRead = this.isRead;
         return ss;
     }
 
@@ -88,11 +92,13 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mThumbnailURL = ss.mThumbnailURL;
         this.mThumbnailResource = ss.mThumbnailResource;
         this.mDate = ss.mDate;
+        this.isRead = ss.isRead;
 
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
         setDate(this.mDate);
+        setRead(this.isRead);
 
         if (this.mThumbnailURL != null){
             setThumbnail(this.mThumbnailURL);
@@ -126,7 +132,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             mTitle = typedArray.getString(R.styleable.InformationView_iv_title);
             mDes = typedArray.getString(R.styleable.InformationView_iv_des);
             mLengthVideo = typedArray.getString(R.styleable.InformationView_iv_length_video);
-            mThumbnailResource = typedArray.getResourceId(R.styleable.InformationView_iv_thumbnail, R.drawable.termtem_logo);
+            mThumbnailResource = typedArray.getResourceId(R.styleable.InformationView_iv_thumbnail, R.drawable.termtem_logo_small);
             typedArray.recycle();
         }
     }
@@ -137,6 +143,22 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
         setThumbnail(this.mThumbnailResource);
+        setRead(this.isRead);
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        this.isRead = read;
+
+        if (!this.isRead){
+            mInformationView.setCardBackgroundColor(getContext().getResources().getColor(android.R.color.holo_orange_light));
+        } else {
+            mInformationView.setCardBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+        }
+
     }
 
     public void setDate(Date date){
@@ -197,16 +219,19 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     }
 
     private void setImage(Object image){
-        Glide.with(getContext())
-                .load(image)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .thumbnail(0.3f)
-                .placeholder(R.drawable.termtem_logo)
-                .into(mImageThumbnail);
+        if(!isInEditMode()) {
+            Glide.with(getContext())
+                    .load(image)
+                    .centerCrop()
+                    .placeholder(R.drawable.termtem_logo_small)
+                    .crossFade()
+                    .into(mImageThumbnail);
+        }
     }
 
-    public void setInformationClickListener(InformationClickListener listener){
+    public void setInformationClickListener(InformationClickListener listener, int position){
         this.informationClickListener = listener;
+        this.mPosition = position;
     }
 
     @Override
@@ -216,11 +241,12 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private void onInformationViewClick(){
         if (informationClickListener != null){
-            informationClickListener.onInformationViewClick();
+            informationClickListener.onInformationViewClick(mPosition);
         }
     }
+
     public interface InformationClickListener {
-        void onInformationViewClick();
+        void onInformationViewClick(int position);
     }
 
     private static class SavedState extends BaseSavedState{
@@ -228,6 +254,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         String mTitle, mDes, mLengthVideo, mThumbnailURL;
         int mThumbnailResource;
         Date mDate;
+        boolean isRead;
 
         public SavedState(Parcel source) {
             super(source);
@@ -237,6 +264,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             this.mThumbnailURL = source.readString();
             this.mThumbnailResource = source.readInt();
             this.mDate = (Date) source.readValue(getClass().getClassLoader());
+            this.isRead = source.readByte() != 0;
         }
 
         public SavedState(Parcelable superState) {
@@ -252,6 +280,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             out.writeString(this.mThumbnailURL);
             out.writeInt(this.mThumbnailResource);
             out.writeValue(this.mDate);
+            out.writeByte((byte) (this.isRead ? 1:0));
         }
 
         public static final Creator<InformationView.SavedState> CREATOR = new Creator<InformationView.SavedState>() {

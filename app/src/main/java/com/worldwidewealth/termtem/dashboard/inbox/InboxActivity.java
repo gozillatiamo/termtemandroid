@@ -27,6 +27,7 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
+import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
@@ -76,7 +77,8 @@ public class InboxActivity extends MyAppcompatActivity {
         mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
         bindView();
         initToolbar();
-        loadDataInbox();
+        initViewPager();
+//        loadDataInbox();
 
         mSearchDateRange = new TermTemDialog.SearchDateRangeDialog(this, new DialogInterface.OnClickListener() {
             @Override
@@ -87,7 +89,7 @@ public class InboxActivity extends MyAppcompatActivity {
                 mDateFrom = values.getAsLong(TermTemDialog.SearchDateRangeDialog.DATEFROM);
                 mDateTo = values.getAsLong(TermTemDialog.SearchDateRangeDialog.DATETO);
                 mPage = 1;
-                loadDataInbox();
+//                loadDataInbox();
             }
         });
 
@@ -124,7 +126,7 @@ public class InboxActivity extends MyAppcompatActivity {
                     Log.e(TAG, "OnSearch");
                     mText = query;
                     mPage = 1;
-                    loadDataInbox();
+//                    loadDataInbox();
                     return true;
                 }
 
@@ -134,7 +136,7 @@ public class InboxActivity extends MyAppcompatActivity {
                     mText = newText;
                     if (newText.equals("")){
                         mPage = 1;
-                        loadDataInbox();
+//                        loadDataInbox();
                     }
                     return false;
                 }
@@ -157,6 +159,12 @@ public class InboxActivity extends MyAppcompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void initViewPager(){
+        mInboxViewPager.setAdapter(new InboxPagerAdapter(getSupportFragmentManager(), this));
+        mInboxTabLayout.setupWithViewPager(mInboxViewPager);
+    }
+
+/*
     private void loadDataInbox(){
         if (mPage == 1) {
             new DialogCounterAlert.DialogProgress(this);
@@ -197,10 +205,12 @@ public class InboxActivity extends MyAppcompatActivity {
                                 mListInbox.remove(mListInbox.size() - 1);
                                 mAdapter.notifyItemRemoved(mListInbox.size());
                                 //Load data
+*/
 /*
                                 int index = mListInbox.size();
                                 int end = index + 20;
-*/
+*//*
+
                                 for (InboxResponse model:listinbox){
                                     mListInbox.add(model);
                                 }
@@ -218,10 +228,13 @@ public class InboxActivity extends MyAppcompatActivity {
             }
         });
     }
+*/
 
     private void bindView(){
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+/*
         mInboxRecycler = (RecyclerView) findViewById(R.id.inbox_recyclear);
+*/
         mInboxTabLayout = (TabLayout) findViewById(R.id.tablayout_inbox);
         mInboxViewPager = (ViewPager) findViewById(R.id.pager_inbox);
     }
@@ -234,21 +247,21 @@ public class InboxActivity extends MyAppcompatActivity {
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-    private void initListInbox(){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mInboxRecycler.setLayoutManager(layoutManager);
-        mAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox);
-        mInboxRecycler.setAdapter(mAdapter);
-        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override public void onLoadMore() {
-                if (!mAdapter.isMaxInbox()) {
-                    mPage++;
-                    loadDataInbox();
-                }
-            }
-        });
-        DialogCounterAlert.DialogProgress.dismiss();
-    }
+//    private void initListInbox(){
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//        mInboxRecycler.setLayoutManager(layoutManager);
+//        mAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox);
+//        mInboxRecycler.setAdapter(mAdapter);
+//        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override public void onLoadMore() {
+//                if (!mAdapter.isMaxInbox()) {
+//                    mPage++;
+//                    loadDataInbox();
+//                }
+//            }
+//        });
+//        DialogCounterAlert.DialogProgress.dismiss();
+//    }
 
 
 }

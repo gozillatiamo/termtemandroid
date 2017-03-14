@@ -15,5 +15,6 @@
     <dimen name="elevation_cardview">4dp</dimen>
     <dimen name="my_text_large">18sp</dimen>
     <dimen name="menu_size">80dp</dimen>
+    <dimen name="max_width_thumbnail">120dp</dimen>
 
 </resources>

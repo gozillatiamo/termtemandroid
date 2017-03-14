@@ -86,6 +86,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
         private TextView mTitleNotify, mDesNotify, mTextDate;
         public ViewHolder(View itemView) {
             super(itemView);
+/*
             mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
             mIconNotify.setVisibility(View.GONE);
             mTitleNotify = (TextView) itemView.findViewById(R.id.title_notify);
@@ -93,6 +94,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
             mDesNotify.setVisibility(View.GONE);
             mTextDate = (TextView) itemView.findViewById(R.id.txt_date);
             mTextDate.setVisibility(View.GONE);
+*/
         }
     }
 }

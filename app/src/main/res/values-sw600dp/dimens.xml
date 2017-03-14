@@ -16,6 +16,5 @@
     <dimen name="icon_big_size">120dp</dimen>
     <dimen name="menu_size">120dp</dimen>
     <dimen name="my_text_large">24sp</dimen>
-
-
+    <dimen name="max_width_thumbnail">200dp</dimen>
 </resources>
