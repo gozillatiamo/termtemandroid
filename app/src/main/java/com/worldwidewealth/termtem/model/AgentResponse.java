@@ -19,6 +19,7 @@ public class AgentResponse implements Parcelable {
     private String LastName;
     private String Phoneno;
     private String TXID;
+    private boolean IsTermTemScan = true;
 
     public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno) {
         new AgentResponse(agentid, agentcode, firstname, lastname, phoneno, null);

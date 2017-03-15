@@ -28,6 +28,7 @@ import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
+import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
@@ -49,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InboxActivity extends MyAppcompatActivity {
+public class InboxActivity extends MyAppcompatActivity implements InboxFragment.OnUpdateDataSearchListener{
 
     private RecyclerView mInboxRecycler;
     private Toolbar mToolbar;
@@ -64,6 +65,14 @@ public class InboxActivity extends MyAppcompatActivity {
     private TabLayout mInboxTabLayout;
     private ViewPager mInboxViewPager;
     public static final String TAG = InboxActivity.class.getSimpleName();
+
+    @Override
+    public void onUpdateDataSearch(String text, long datefrom, long dateto) {
+        //searchView.setQuery(text, false);
+        mText = text;
+        mSearchDateRange.setDateFrom(datefrom);
+        mSearchDateRange.setDateTo(dateto);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,7 @@ public class InboxActivity extends MyAppcompatActivity {
                 mDateFrom = values.getAsLong(TermTemDialog.SearchDateRangeDialog.DATEFROM);
                 mDateTo = values.getAsLong(TermTemDialog.SearchDateRangeDialog.DATETO);
                 mPage = 1;
+                searchInbox(mText, mDateFrom, mDateTo);
 //                loadDataInbox();
             }
         });
@@ -126,6 +136,8 @@ public class InboxActivity extends MyAppcompatActivity {
                     Log.e(TAG, "OnSearch");
                     mText = query;
                     mPage = 1;
+                    searchInbox(mText, mDateFrom, mDateTo);
+
 //                    loadDataInbox();
                     return true;
                 }
@@ -136,6 +148,8 @@ public class InboxActivity extends MyAppcompatActivity {
                     mText = newText;
                     if (newText.equals("")){
                         mPage = 1;
+                        searchInbox(mText, mDateFrom, mDateTo);
+
 //                        loadDataInbox();
                     }
                     return false;
@@ -162,6 +176,15 @@ public class InboxActivity extends MyAppcompatActivity {
     private void initViewPager(){
         mInboxViewPager.setAdapter(new InboxPagerAdapter(getSupportFragmentManager(), this));
         mInboxTabLayout.setupWithViewPager(mInboxViewPager);
+    }
+
+    private void searchInbox(String text, long datefrom, long dateto){
+        InboxFragment inboxFragment = (InboxFragment) getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                        + mInboxViewPager.getCurrentItem());
+        if (inboxFragment != null){
+            inboxFragment.search(text, datefrom, dateto);
+        }
     }
 
 /*
@@ -246,6 +269,7 @@ public class InboxActivity extends MyAppcompatActivity {
         getSupportActionBar().setTitle(getString(R.string.in_box));
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
+
 
 //    private void initListInbox(){
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

@@ -86,7 +86,7 @@ dependencies {
     compile "com.android.support:percent:$rootProject.ext.supportLibraryVersion"
     //    compile "com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"
     compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesVersion"
-    compile 'jp.wasabeef:recyclerview-animators:2.2.4'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'me.grantland:autofittextview:+'

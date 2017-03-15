@@ -25,11 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+
 /**
  * Created by user on 14-Feb-17.
  */
 
-public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements InformationView.InformationClickListener{
+public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements InformationView.InformationClickListener {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private OnLoadMoreListener mOnLoadMoreListener;
@@ -170,6 +172,11 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void clearAll(){
         mListInbox = null;
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<InboxResponse> list_inbox){
+        mListInbox = list_inbox;
         notifyDataSetChanged();
     }
 

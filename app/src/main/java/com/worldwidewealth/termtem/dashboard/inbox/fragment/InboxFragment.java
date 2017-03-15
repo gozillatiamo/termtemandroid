@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.inbox.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +54,9 @@ public class InboxFragment extends Fragment {
     public static final String PAGE_TYPE = "pagetype";
     public static final String PAGE_LIST = "pagelist";
     public static final String LISTINBOX = "listinbox";
+    public static final String TEXT_SEARCH = "textsearch";
+    public static final String DATE_FROM = "datefrom";
+    public static final String DATE_TO = "dateto";
     public static final String TAG = InboxFragment.class.getSimpleName();
 
     public static final int ALL = 0;
@@ -60,8 +66,10 @@ public class InboxFragment extends Fragment {
 
     private RecyclerView mInboxRecycler;
     private InboxAdapter mInboxAdapter;
+    private ScaleInAnimationAdapter animationAdapter;
 
     private int mPageType;
+    private OnUpdateDataSearchListener mCallback;
     private APIServices services;
     private View rootView;
     private Call<ResponseBody> call;
@@ -71,6 +79,16 @@ public class InboxFragment extends Fragment {
     private String mText = "";
 
     // TODO: Rename and change types of parameters
+
+/*
+    private void onUpdateDataSearch(String text){
+
+    }
+*/
+
+    public interface OnUpdateDataSearchListener{
+        void onUpdateDataSearch(String text, long datefrom, long dateto);
+    }
 
 
     public InboxFragment() {
@@ -84,6 +102,17 @@ public class InboxFragment extends Fragment {
         args.putInt(PAGE_TYPE, type);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            mCallback = (OnUpdateDataSearchListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString()
+            + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     @Override
@@ -107,6 +136,7 @@ public class InboxFragment extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_inbox, container, false);
+            Util.setupUI(rootView.findViewById(R.id.layout_parent));
             mInboxRecycler = (RecyclerView) rootView.findViewById(R.id.inbox_recyclear);
         }
 
@@ -117,13 +147,22 @@ public class InboxFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState == null ) {
+        if (mListInbox == null) {
             loadDataInbox();
         } else {
-            mPageList = savedInstanceState.getInt(PAGE_LIST);
-            mListInbox = savedInstanceState.getParcelableArrayList(LISTINBOX);
+
+            if(savedInstanceState != null) {
+                mPageList = savedInstanceState.getInt(PAGE_LIST);
+                mListInbox = savedInstanceState.getParcelableArrayList(LISTINBOX);
+                mText = savedInstanceState.getString(TEXT_SEARCH);
+                mDateFrom = savedInstanceState.getLong(DATE_FROM);
+                mDateTo = savedInstanceState.getLong(DATE_TO);
+            }
+            initListInbox();
 //            mInboxAdapter.notifyDataSetChanged();
         }
+
+        mCallback.onUpdateDataSearch(mText, mDateFrom, mDateTo);
     }
 
     @Override
@@ -133,6 +172,9 @@ public class InboxFragment extends Fragment {
 
         outState.putInt(PAGE_LIST, mPageList);
         outState.putParcelableArrayList(LISTINBOX, mListInbox);
+        outState.putString(TEXT_SEARCH, mText);
+        outState.putLong(DATE_FROM, mDateFrom);
+        outState.putLong(DATE_TO, mDateTo);
     }
 
     @Override
@@ -154,7 +196,10 @@ public class InboxFragment extends Fragment {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mInboxRecycler.setLayoutManager(layoutManager);
             mInboxAdapter = new InboxAdapter(getContext(), mInboxRecycler, mListInbox);
-            mInboxRecycler.setAdapter(mInboxAdapter);
+            animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
+            animationAdapter.setInterpolator(new OvershootInterpolator());
+            animationAdapter.setDuration(700);
+            mInboxRecycler.setAdapter(animationAdapter);
             mInboxAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                 @Override
                 public void onLoadMore() {
@@ -167,8 +212,8 @@ public class InboxFragment extends Fragment {
         } else {
             mInboxAdapter.setLoaded();
             mInboxAdapter.setMaxInbox(false);
-
-            mInboxAdapter.notifyDataSetChanged();
+            Log.e(TAG, mListInbox.toString());
+            mInboxAdapter.addAll(mListInbox);
         }
         DialogCounterAlert.DialogProgress.dismiss();
     }
@@ -220,7 +265,7 @@ public class InboxFragment extends Fragment {
                                 for (InboxResponse model:listinbox){
                                     mListInbox.add(model);
                                 }
-                                mInboxAdapter.notifyDataSetChanged();
+                                mInboxAdapter.notifyItemChanged(mInboxAdapter.getItemCount());
                                 mInboxAdapter.setLoaded();
                             }
                         }, 1000);
@@ -233,6 +278,16 @@ public class InboxFragment extends Fragment {
                 new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
             }
         });
+    }
+
+    public void search(String text, long datefrom, long dateto){
+        this.mText = text;
+        this.mDateFrom = datefrom;
+        this.mDateTo = dateto;
+        this.mPageList = 1;
+
+        mCallback.onUpdateDataSearch(mText, mDateFrom, mDateTo);
+        loadDataInbox();
     }
 
 }

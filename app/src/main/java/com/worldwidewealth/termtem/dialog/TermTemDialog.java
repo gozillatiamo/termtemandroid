@@ -26,6 +26,7 @@ public class TermTemDialog {
 
         private Calendar mCalendar = Calendar.getInstance();
         private DatePickerDialog mDatePickerDialog;
+        private  Button btnDateForm, btnDateTo;
         private Context mContext;
         public static final String DATEFROM = "from";
         public static final String DATETO = "to";
@@ -44,9 +45,10 @@ public class TermTemDialog {
             LayoutInflater inflater = LayoutInflater.from(context);
             View dialogView  = inflater.inflate(R.layout.dialog_search_report, null);
 
-            Button btnDateForm = (Button)dialogView.findViewById(R.id.btn_date_form);
-            Button btnDateTo = (Button)dialogView.findViewById(R.id.btn_date_to);
+            btnDateForm = (Button)dialogView.findViewById(R.id.btn_date_form);
+            btnDateTo = (Button)dialogView.findViewById(R.id.btn_date_to);
 
+/*
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             btnDateForm.setText(
                     mCalendar.get(Calendar.DAY_OF_MONTH) + "/" +
@@ -59,6 +61,9 @@ public class TermTemDialog {
                             (mCalendar.get(Calendar.MONTH)+1) + "/" +
                             mCalendar.get(Calendar.YEAR));
 
+*/
+            setDateFrom(System.currentTimeMillis());
+            setDateTo(System.currentTimeMillis());
 
             btnDateForm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,6 +117,27 @@ public class TermTemDialog {
             values.put(DATEFROM, mPreviousDateFrom);
             values.put(DATETO, mPeviousDateTo);
             return values;
+        }
+
+        public void setDateFrom(long dateFrom){
+            mPreviousDateFrom = dateFrom;
+            mCalendar.setTimeInMillis(mPreviousDateFrom);
+            btnDateForm.setText(
+                    mCalendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                            (mCalendar.get(Calendar.MONTH)+1) + "/" +
+                            mCalendar.get(Calendar.YEAR));
+
+
+        }
+
+        public void setDateTo(long dateTo){
+            mPeviousDateTo = dateTo;
+            mCalendar.setTimeInMillis(mPeviousDateTo);
+            btnDateTo.setText(
+                    mCalendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                            (mCalendar.get(Calendar.MONTH)+1) + "/" +
+                            mCalendar.get(Calendar.YEAR));
+
         }
 
         private void initDatePickerDialog(long longdate, final Button btn, final int type){

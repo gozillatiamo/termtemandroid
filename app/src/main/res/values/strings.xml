@@ -37,7 +37,7 @@
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
     <string name="balance_toup_preview">บัญชีคงเหลือ</string>
-    <string name="markup">ค่าดำเนินการ</string>
+    <string name="markup">ค่าดำเนินการ :</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>

@@ -56,12 +56,6 @@
                     android:layout_below="@id/tablayout_inbox"
                     >
                 </android.support.v4.view.ViewPager>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/inbox_recyclear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>
