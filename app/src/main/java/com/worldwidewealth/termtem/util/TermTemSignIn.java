@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -160,10 +161,9 @@ public class TermTemSignIn {
     private void startLogin(){
         Global.getInstance().setTXID(mTXID);
         Intent intent = new Intent(mContext, MainActivity.class);
-        ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ((AppCompatActivity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         mContext.startActivity(intent);
-        ((Activity)mContext).finish();
-
+        ((AppCompatActivity)mContext).finish();
     }
 
     private boolean checkVersionApp(String version){
@@ -221,7 +221,7 @@ public class TermTemSignIn {
     }
 
     public void checkWifi(String username, String password, String TXID){
-        new DialogCounterAlert.DialogProgress(mContext);
+//        new DialogCounterAlert.DialogProgress(mContext);
 
         this.mUsername = username;
         this.mPassword = password;
@@ -234,31 +234,38 @@ public class TermTemSignIn {
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (mWifi.isConnected()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-                    .setMessage(R.string.alert_sure_connect_wifi)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
+            switch (mType){
+                case NEWLOGIN:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                            .setMessage(R.string.alert_sure_connect_wifi)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    serviceAcceptWIFI();
+                                }
+                            })
+                            .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    DialogCounterAlert.DialogProgress.dismiss();
+                                    mContext.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                                }
+                            });
+                    AlertWifi = builder.create();
+                    AlertWifi.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            serviceAcceptWIFI();
-                        }
-                    })
-                    .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            DialogCounterAlert.DialogProgress.dismiss();
-                            mContext.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        public void onShow(DialogInterface dialog) {
+                            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                                    .setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
                         }
                     });
-            AlertWifi = builder.create();
-            AlertWifi.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
-                }
-            });
-            AlertWifi.show();
+                    AlertWifi.show();
+                    break;
+                case RELOGIN:
+                    serviceAcceptWIFI();
+                    break;
+            }
 
         } else {
             Login();
@@ -332,17 +339,17 @@ public class TermTemSignIn {
                             Global.getInstance().setCacheUser(mUsername);
                             mUsername = null;
                             Intent intent = new Intent(mContext, ActivityDashboard.class);
-                            ((Activity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                            ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                            DialogCounterAlert.DialogProgress.dismiss();
                             mContext.startActivity(intent);
-                            ((Activity)mContext).finish();
-
+                            ((AppCompatActivity)mContext).finish();
                             break;
+                        default:
+                            DialogCounterAlert.DialogProgress.dismiss();
+
                     }
 
                 }
-
-                DialogCounterAlert.DialogProgress.dismiss();
-
             }
 
             @Override

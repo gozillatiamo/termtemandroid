@@ -170,7 +170,7 @@ public class Util {
                     }
                 }
 
-                DialogCounterAlert.DialogProgress.dismiss();
+//                DialogCounterAlert.DialogProgress.dismiss();
 
             }
 
@@ -271,7 +271,6 @@ public class Util {
 
     public static void backToSignIn(Activity activity){
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -522,6 +521,4 @@ public class Util {
         } else {
             return false;
         }
-    }
-
-}
+    }}

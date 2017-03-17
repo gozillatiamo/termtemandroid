@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -63,6 +64,8 @@ public class FragmentTopupPackage extends  Fragment{
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
     private BottomAction mBottomAction;
+    private Call<ResponseBody> call;
+    private Callback<ResponseBody> callback;
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -105,15 +108,35 @@ public class FragmentTopupPackage extends  Fragment{
         super.onResume();
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
+
+        if (call != null && call.isCanceled()){
+            new DialogCounterAlert.DialogProgress(getContext());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    call.clone().enqueue(callback);
+                }
+            }, 5000);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Util.hideSoftKeyboard(mHolder.mEditPhone);
+
+        if (call != null && call.isExecuted()){
+            call.cancel();
+        }
     }
 
-/*
+    @Override
+    public void onStop() {
+        super.onStop();
+        DialogCounterAlert.DialogProgress.dismiss();
+    }
+
+    /*
     public void setEnabledBtn(boolean enabled){
         mHolder.mBtnTopup.setEnabled(enabled);
         mHolder.mBtnNext.setEnabled(enabled);
@@ -139,10 +162,10 @@ public class FragmentTopupPackage extends  Fragment{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Call<ResponseBody> call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
+                call = services.loadButton(new RequestModel(APIServices.ACTIONLOADBUTTON,
                         new LoadButtonRequestModel(mCarrier)
                 ));
-                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -281,9 +304,9 @@ public class FragmentTopupPackage extends  Fragment{
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
 
-        Call<ResponseBody> call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
+        call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -407,9 +430,9 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
-        Call<ResponseBody> call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
+        call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                 new GetOTPRequestModel()));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -439,7 +462,7 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void run() {
 
-                Call<ResponseBody> callSubmit = services.submitTopup(
+                call = services.submitTopup(
                         new RequestModel(APIServices.ACTIONSUBMITTOPUP,
                                 new SubmitTopupRequestModel(String.valueOf(getmAmt()),
                                         mCarrier,
@@ -447,7 +470,7 @@ public class FragmentTopupPackage extends  Fragment{
                                         model.getTranid(),
                                         mButtonID,
                                         null)));
-                APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -462,7 +485,9 @@ public class FragmentTopupPackage extends  Fragment{
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
+                        if (!call.isCanceled()) {
+                            new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
+                        }
                         mBottomAction.setEnable(true);
                     }
                 });
@@ -475,8 +500,9 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceEslip(final String transid){
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTIONESLIP, new EslipRequestModel(transid, null)));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        call = services.eslip(new RequestModel(APIServices.ACTIONESLIP, new EslipRequestModel(transid, null)));
+
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -487,6 +513,7 @@ public class FragmentTopupPackage extends  Fragment{
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
 //                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    DialogCounterAlert.DialogProgress.dismiss();
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
 

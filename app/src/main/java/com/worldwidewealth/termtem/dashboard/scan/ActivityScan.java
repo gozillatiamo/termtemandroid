@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -53,7 +55,10 @@ public class ActivityScan extends MyAppcompatActivity {
 
                 try {
                     agentResponse = new Gson().fromJson(strResult, AgentResponse.class);
-                } catch (IllegalStateException e){}
+                } catch (JsonSyntaxException e){
+                    e.printStackTrace();
+                    Toast.makeText(ActivityScan.this, getString(R.string.unavailable_qrcode), Toast.LENGTH_SHORT).show();
+                }
 
                 if (agentResponse != null){
                     agentResponse.setAgentId(EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID()));
@@ -74,7 +79,7 @@ public class ActivityScan extends MyAppcompatActivity {
         setContentView(R.layout.activity_scan);
         initWidgets();
         initToolbar();
-        mBarcodeView.decodeSingle(barcodeCallback);
+        mBarcodeView.decodeContinuous(barcodeCallback);
         mBtnMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

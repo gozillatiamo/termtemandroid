@@ -126,7 +126,20 @@ public class DialogCounterAlert {
         private static ProgressDialog progressDialog;
 
         public DialogProgress(Context context) {
-            if (progressDialog != null && progressDialog.isShowing()) return;
+/*
+            if (progressDialog != null){
+             */
+/*   if (progressDialog.getContext() != context){
+                    progressDialog = null;
+                } else if (progressDialog.isShowing()){
+                    return;
+                }*//*
+
+
+                progressDialog.cancel();
+                progressDialog = null;
+            }
+*/
 
             progressDialog = ProgressDialog.show(context,
                     null,
@@ -138,7 +151,8 @@ public class DialogCounterAlert {
 
         public static void dismiss(){
             if (progressDialog != null) {
-                progressDialog.dismiss();
+                progressDialog.cancel();
+                progressDialog = null;
             }
         }
 

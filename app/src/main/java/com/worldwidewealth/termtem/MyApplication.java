@@ -77,11 +77,11 @@ public class MyApplication extends Application implements Application.ActivityLi
             Log.e(TAG, "newVersionCode: "+versionCode);
             if (Global.getInstance().getVERSIONCODE() != versionCode){
                 if (Global.getInstance().getAGENTID() != null){
-                    Log.e(TAG, "TXID != null");
                     Util.logoutAPI(mContext, true);
                 }
 
-                Util.deleteCache(this);
+//                Util.deleteCache(this);
+                Global.getInstance().clearAll();
                 Global.getInstance().setVERSIONCODE(versionCode);
             }
 
@@ -97,6 +97,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
     }
 
     @Override
@@ -111,13 +112,11 @@ public class MyApplication extends Application implements Application.ActivityLi
         } else {
             LeavingOrEntering.currentActivity = null;
         }
-
-
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        DialogCounterAlert.DialogProgress.dismiss();
+//        DialogCounterAlert.DialogProgress.dismiss();
         DialogNetworkError.dismiss();
     }
 

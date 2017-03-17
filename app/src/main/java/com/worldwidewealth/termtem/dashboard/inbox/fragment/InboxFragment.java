@@ -220,7 +220,7 @@ public class InboxFragment extends Fragment {
 
     private void loadDataInbox(){
         if (mPageList == 1) {
-            new DialogCounterAlert.DialogProgress(getContext());
+//            new DialogCounterAlert.DialogProgress(getContext());
             if (mInboxAdapter != null) mInboxAdapter.clearAll();
         }
 

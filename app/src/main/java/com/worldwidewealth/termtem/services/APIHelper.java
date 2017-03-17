@@ -1,5 +1,11 @@
 package com.worldwidewealth.termtem.services;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.worldwidewealth.termtem.model.ResponseModel;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,7 +23,6 @@ public class APIHelper {
         call.enqueue(new RetryableCallback<T>(call, retryCount) {
             @Override
             public void onFinalResponse(Call<T> call, Response<T> response) {
-
                 callback.onResponse(call, response);
             }
 
@@ -33,7 +38,6 @@ public class APIHelper {
     }
 
     public static boolean isCallSuccess(Response response){
-
         int code = response.code();
         return (code >= 200 && code < 400);
     }

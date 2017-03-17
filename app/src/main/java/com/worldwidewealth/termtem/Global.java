@@ -176,37 +176,10 @@ public class Global {
         return mPreferences.getString(PASSWORD, null);
     }
 
-/*
-
-    public void setAGENTCODE(String agentcode) {
-        if ("".equals(agentcode)) agentcode = null;
-        mEditor.putString(AGENTCODE, agentcode);
-        mEditor.commit();
-    }
-
-    public void setPHONENO(String phoneno) {
-        if ("".equals(phoneno)) phoneno = null;
-        mEditor.putString(PHONENO, phoneno);
-        mEditor.commit();
-    }
-
-    public void setFIRSTNAME(String firstname) {
-        if ("".equals(firstname)) firstname = null;
-        mEditor.putString(FIRSTNAME, firstname);
-        mEditor.commit();
-    }
-
-    public void setLASTNAME(String lastname) {
-        if ("".equals(lastname)) lastname = null;
-        mEditor.putString(LASTNAME, lastname);
-        mEditor.commit();
-    }
-*/
 
     public void setUserData(ContentValues values){
 
         String responseStr = values.getAsString(USERDATA);
-//        String responDecode = Util.decode(responseStr);
 
         Log.e(TAG, "ResponseLogin: "+responseStr);
         LoginResponseModel loginResponseModel = new Gson().fromJson(responseStr, LoginResponseModel.class);
@@ -265,5 +238,10 @@ public class Global {
             mEditor.commit();
         }
 
+    }
+
+    public void clearAll(){
+        mEditor.clear();
+        mEditor.commit();
     }
 }

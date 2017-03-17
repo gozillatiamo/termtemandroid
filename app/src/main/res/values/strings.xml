@@ -157,7 +157,7 @@
     <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
     <string name="alert_connect_wifi">หากคุณกำลังเชื่อต่อ wifi คุณจะไม่สามารถใช้งานแอพพลิเคชั่นนี้ได้ กรุณายกเลิกการเชื่อต่อก่อนใช้งาน</string>
     <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่านการเชื่อมต่อ wifi \nคุณยืนยันที่จะใช้งานแอพพลิเคชั่นนี้ต่อไปหรือไม่ ?</string>
-    <string name="hint_detail_my_qr">Agent ท่านอื่นสามารถใช้ตัวอ่านคิวอาร์โค้ด ในการสแกนคิวอาร์โค้ดของท่าน เพื่อใช้ในการรับข้อมูล Agent ของท่านสำหรับทำรายการต่าง ๆ ต่อไป</string>
+    <string name="hint_detail_my_qr">สามารถให้เอเจ้นท์ ท่านอื่นสแกนคิวอาร์โค้ด เพื่อรับ-ส่งข้อมูลได้</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
     <string name="add_slip_picture">กดเพื่อส่งสลิปการโอนเงิน</string>
     <string name="agent_phone_number">หมายเลขโทรศัพท์มือถือ Agent :</string>
@@ -237,6 +237,7 @@
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>
+    <string name="unavailable_qrcode">คิวอาร์โค้ดนี้ไม่สามารถใช้งานได้</string>
 
 
     <string-array name="str_list_dashboard">

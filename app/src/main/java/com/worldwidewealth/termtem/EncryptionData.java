@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 
@@ -147,13 +148,13 @@ public class EncryptionData {
         }
     }
 
+    private static int retry = 0;
+    public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
 
-    public static final Object getModel(Context context, Call call, ResponseBody response, Callback callback){
-
-        ResponseModel responseModel = null;
+        ResponseModel responseModel;
         RequestModel requestModel = null;
         Gson gson = new Gson();
-        String msg = null;
+        String msg;
         String strRespone = null;
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
@@ -165,18 +166,33 @@ public class EncryptionData {
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
-
                 switch (requestModel.getAction()){
+
                     case APIServices.ACTIONGETOTP:
                     case APIServices.ACTIONSUBMITTOPUP:
-                        msg = context.getString(R.string.alert_topup_fail);
-                        new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+                        if (retry < 3) {
+                            retry++;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    call.cancel();
+                                    call.clone().enqueue(callback);
+                                }
+                            }, 5000);
+                        } else {
+                            retry = 0;
+                            msg = context.getString(R.string.alert_topup_fail);
+                            new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+                        }
                         return null;
+
                     case APIServices.ACTIONLOGIN:
                         return responseModel;
+
                     case APIServices.ACTIONLOGOUT:
                     case APIServices.ACTIONGETBALANCE:
                         return null;
+
                     default:
                         new ErrorNetworkThrowable(null).networkError(context,
                                 responseModel.getMsg(), call, callback, true);
@@ -191,7 +207,9 @@ public class EncryptionData {
             Log.e(TAG, requestModel.getAction()+"Response: "+responDecode);
             return responDecode;
 
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }

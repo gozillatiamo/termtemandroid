@@ -31,7 +31,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
         versionName "1.2."
-
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
     }
@@ -83,7 +82,6 @@ dependencies {
     compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.ext.playServicesVersion"
     compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:percent:$rootProject.ext.supportLibraryVersion"
     //    compile "com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"
     compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesVersion"
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
