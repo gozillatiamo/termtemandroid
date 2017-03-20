@@ -3,10 +3,14 @@ package com.worldwidewealth.termtem.dashboard.inbox.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,7 +35,8 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
  * Created by user on 14-Feb-17.
  */
 
-public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements InformationView.InformationClickListener {
+public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
+        InformationView.InformationClickListener, InformationView.InformationLongClickListener {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private OnLoadMoreListener mOnLoadMoreListener;
@@ -39,14 +44,37 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int visibleThreshold = 1;
     private int lastVisibleItem,totalItemCount;
     private List<InboxResponse> mListInbox;
-    private Context mContext;
+    private AppCompatActivity mActivity;
     public boolean maxInbox = false;
     public static final String TAG = InboxAdapter.class.getSimpleName();
+    private ActionMode.Callback mDeleteMode = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mActivity.getMenuInflater().inflate(R.menu.menu_bill_select, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    };
 
 
-    public InboxAdapter(Context context, RecyclerView recyclerView, List<InboxResponse> listdata) {
+
+    public InboxAdapter(AppCompatActivity activity, RecyclerView recyclerView, List<InboxResponse> listdata) {
         this.mListInbox = listdata;
-        this.mContext = context;
+        this.mActivity = activity;
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -79,10 +107,10 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View rootView;
         switch (viewType){
             case VIEW_TYPE_ITEM:
-                rootView = LayoutInflater.from(mContext).inflate(R.layout.item_inbox, parent, false);
+                rootView = LayoutInflater.from(mActivity).inflate(R.layout.item_inbox, parent, false);
                 return new InboxViewHolder(rootView);
             case VIEW_TYPE_LOADING:
-                rootView = LayoutInflater.from(mContext).inflate(R.layout.layout_loading_item, parent, false);
+                rootView = LayoutInflater.from(mActivity).inflate(R.layout.layout_loading_item, parent, false);
                 return new LoadingViewHolder(rootView);
             default: return null;
         }
@@ -103,12 +131,20 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((InboxViewHolder) holder).mItemInbox.setDes(getItem(position).getMsg());
             ((InboxViewHolder) holder).mItemInbox.setRead(getItem(position).isReaded());
 
+            if (getItem(position).getThumbnail() != -1){
+                ((InboxViewHolder) holder).mItemInbox.setThumbnail(getItem(position).getThumbnail());
+            }
+
+
+            ((InboxViewHolder) holder).mItemInbox.setLengthVideo(getItem(position).getTimeLength());
+
+
             /*SimpleDateFormat dest = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
             String resultDate = dest.format();*/
             ((InboxViewHolder) holder).mItemInbox.setDate(getItem(position).getCreate_Date());
             ((InboxViewHolder) holder).mItemInbox.setInformationClickListener(this, position);
-
+            ((InboxViewHolder) holder).mItemInbox.setInformationLongClickListener(this);
 /*
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,12 +173,12 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (position == -1) return;
         getItem(position).setReaded(true);
         notifyDataSetChanged();
-        Intent intent = new Intent(mContext, ActivityShowNotify.class);
+        Intent intent = new Intent(mActivity, ActivityShowNotify.class);
         intent.putExtra(MyFirebaseMessagingService.TEXT, getItem(position).getTitle());
         intent.putExtra(MyFirebaseMessagingService.BOX, getItem(position).getMsg());
         intent.putExtra(MyFirebaseMessagingService.MSGID, getItem(position).getMsgid());
-        ((Activity)mContext).overridePendingTransition(R.anim.slide_in_up, 0);
-        mContext.startActivity(intent);
+        mActivity.overridePendingTransition(R.anim.slide_in_up, 0);
+        mActivity.startActivity(intent);
 
     }
 
@@ -182,6 +218,12 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void setMaxInbox(boolean maxInbox) {
         this.maxInbox = maxInbox;
+    }
+
+    @Override
+    public void onInformationLongViewClick() {
+
+        mActivity.startSupportActionMode(mDeleteMode);
     }
 
     public class InboxViewHolder extends RecyclerView.ViewHolder{

@@ -26,7 +26,7 @@ import java.util.Locale;
  * Created by user on 03-Mar-17.
  */
 
-public class InformationView extends FrameLayout implements View.OnClickListener{
+public class InformationView extends FrameLayout implements View.OnClickListener, View.OnLongClickListener{
 
     private CardView mInformationView;
     private View mLayoutThumbnail;
@@ -39,6 +39,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
+    private InformationLongClickListener informationLongClickListener;
     private int mPosition = -1;
 
     public InformationView(Context context) {
@@ -139,6 +140,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private void setupview(){
         mInformationView.setOnClickListener(this);
+        mInformationView.setOnLongClickListener(this);
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
@@ -222,8 +224,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         if(!isInEditMode()) {
             Glide.with(getContext())
                     .load(image)
-                    .centerCrop()
-                    .placeholder(R.drawable.termtem_logo_small)
+                    .placeholder(android.R.color.black)
                     .crossFade()
                     .into(mImageThumbnail);
         }
@@ -232,6 +233,10 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     public void setInformationClickListener(InformationClickListener listener, int position){
         this.informationClickListener = listener;
         this.mPosition = position;
+    }
+
+    public void setInformationLongClickListener(InformationLongClickListener listener){
+        this.informationLongClickListener = listener;
     }
 
     @Override
@@ -245,9 +250,25 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        if (informationLongClickListener != null){
+            informationLongClickListener.onInformationLongViewClick();
+            return true;
+
+        }
+
+        return false;
+    }
+
     public interface InformationClickListener {
         void onInformationViewClick(int position);
     }
+
+    public interface InformationLongClickListener {
+        void onInformationLongViewClick();
+    }
+
 
     private static class SavedState extends BaseSavedState{
 

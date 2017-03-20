@@ -24,6 +24,7 @@ import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.SimpleDividerItemDecoration;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
@@ -137,6 +138,7 @@ public class ActivityAddCreditAgent extends MyAppcompatActivity {
         mHolder.mRecyclerAgent.setLayoutManager(manager);
         mAdapter = new AgentAdapter(this, list);
         mHolder.mRecyclerAgent.setAdapter(mAdapter);
+        mHolder.mRecyclerAgent.addItemDecoration(new SimpleDividerItemDecoration(this));
 //        mHolder.mRecyclerAgent.setAdapter(new AgentAdapter());
     }
 

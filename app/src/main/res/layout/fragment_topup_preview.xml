@@ -26,7 +26,6 @@
                 android:orientation="vertical"
                 >
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -37,6 +36,40 @@
                         android:layout_height="wrap_content"
                         style="@style/TextAppearance.AppCompat.Medium"
                         android:text="@string/amount"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center|right">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/black"
+                            android:text="THB "/>
+                        <me.grantland.widget.AutofitTextView
+                            android:id="@+id/txt_select_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorPrimary"
+                            android:text="190.00" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/activity_space"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Medium"
+                        android:text="@string/debit"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,11 +98,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_space"
                     android:orientation="horizontal">
+
                     <TextView
+                        android:id="@+id/textView2"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/TextAppearance.AppCompat.Medium"
-                        android:text="Commission "/>
+                        android:text="Commission " />
+
                     <TextView
                         android:id="@+id/txt_commission_rate"
                         android:layout_width="wrap_content"

@@ -24,21 +24,27 @@ public class FragmentTopupPreview extends Fragment {
     private ViewHolder mHolder;
     private APIServices service;
     private String mData;
+    private String mSelectAmout;
     private TopupPreviewResponseModel mModel;
     private NumberFormat format = NumberFormat.getInstance();
     private static final String DATA = "data";
-    public static Fragment newInstance(String data){
+    private static final String SELECT_AMOUNT = "selectamount";
+
+    public static Fragment newInstance(String data, String selectAmount){
         FragmentTopupPreview fragment = new FragmentTopupPreview();
         Bundle bundle = new Bundle();
         bundle.putString(DATA, data);
+        bundle.putString(SELECT_AMOUNT, selectAmount);
         fragment.setArguments(bundle);
         return fragment;
     }
 
+
+
     public class ViewHolder{
 
         private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
-        mTextMarkup, mTextTotal;
+        mTextMarkup, mTextTotal, mTextSelectAmout;
         private View mLayoutCommission, mLayoutMarkup;
         public ViewHolder(View itemview){
             mTextAmount = (TextView) itemview.findViewById(R.id.txt_amount);
@@ -49,6 +55,7 @@ public class FragmentTopupPreview extends Fragment {
             mTextTotal = (TextView) itemview.findViewById(R.id.txt_total);
             mLayoutCommission = (View) itemview.findViewById(R.id.layout_commission);
             mLayoutMarkup = (View) itemview.findViewById(R.id.layout_markup);
+            mTextSelectAmout = (TextView) itemview.findViewById(R.id.txt_select_amount);
         }
     }
 
@@ -57,6 +64,7 @@ public class FragmentTopupPreview extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         service = APIServices.retrofit.create(APIServices.class);
         mData = getArguments().getString(DATA);
+        mSelectAmout = getArguments().getString(SELECT_AMOUNT);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_preview, container, false);
             mHolder = new ViewHolder(rootView);
@@ -153,6 +161,7 @@ public class FragmentTopupPreview extends Fragment {
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));
+        mHolder.mTextSelectAmout.setText(format.format(mSelectAmout));
         if (mModel.getCOMMISSION_AMOUNT() != 0) {
             mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
             mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));

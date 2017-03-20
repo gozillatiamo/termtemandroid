@@ -140,6 +140,9 @@ public class DialogCounterAlert {
                 progressDialog = null;
             }
 */
+            if (progressDialog != null){
+                return;
+            }
 
             progressDialog = ProgressDialog.show(context,
                     null,

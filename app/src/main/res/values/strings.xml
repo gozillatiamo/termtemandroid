@@ -128,6 +128,7 @@
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
     <string name="amount">ยอดเติม :</string>
+    <string name="debit">หักบัญชี :</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
     <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>

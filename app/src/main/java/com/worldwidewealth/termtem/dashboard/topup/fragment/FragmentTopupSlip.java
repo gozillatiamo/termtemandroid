@@ -209,7 +209,7 @@ public class FragmentTopupSlip extends Fragment {
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                    DialogCounterAlert.DialogProgress.dismiss();
                 }
 
                 @Override

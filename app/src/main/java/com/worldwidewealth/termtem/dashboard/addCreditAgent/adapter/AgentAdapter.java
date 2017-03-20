@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +38,17 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.item_inbox, parent, false);
+        View rootView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1, parent, false);
         return new ViewHolder(rootView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        TypedValue typedValue = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+
+        holder.itemView.setClickable(true);
+        holder.itemView.setBackgroundResource(typedValue.resourceId);
 
         holder.mTitleNotify.setText(getItem(position).getFirstName() + "\t" + getItem(position).getLastName());
 
@@ -86,6 +92,8 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
         private TextView mTitleNotify, mDesNotify, mTextDate;
         public ViewHolder(View itemView) {
             super(itemView);
+            mTitleNotify = (TextView) itemView.findViewById(android.R.id.text1);
+
 /*
             mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
             mIconNotify.setVisibility(View.GONE);

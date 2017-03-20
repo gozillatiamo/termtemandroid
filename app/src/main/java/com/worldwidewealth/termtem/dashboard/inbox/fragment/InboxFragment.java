@@ -5,9 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,12 +61,13 @@ public class InboxFragment extends Fragment {
     public static final String TEXT_SEARCH = "textsearch";
     public static final String DATE_FROM = "datefrom";
     public static final String DATE_TO = "dateto";
+    public static final String INBOX_TYPE = "inboxtype";
     public static final String TAG = InboxFragment.class.getSimpleName();
 
     public static final int ALL = 0;
     public static final int TEXT = 1;
-    public static final int IMAGE = 2;
-    public static final int VIDEO = 3;
+    public static final int VIDEO = 2;
+    public static final int IMAGE = 3;
 
     private RecyclerView mInboxRecycler;
     private InboxAdapter mInboxAdapter;
@@ -77,6 +82,8 @@ public class InboxFragment extends Fragment {
     private int mPageList = 1;
     private long mDateFrom, mDateTo;
     private String mText = "";
+    private ArrayList<InboxResponse> mListMockUp;
+
 
     // TODO: Rename and change types of parameters
 
@@ -125,10 +132,27 @@ public class InboxFragment extends Fragment {
 
         mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
         mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
-
         if (getArguments() != null) {
             mPageType = getArguments().getInt(PAGE_TYPE);
         }
+
+        mListMockUp = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++){
+            InboxResponse response = new InboxResponse();
+            response.setTitle("Title "+(i+1));
+            response.setCreate_Date(new Date());
+            response.setMsg("Description "+(i+1));
+            response.setReaded(true);
+            response.setThumbnail(R.drawable.thumbnail_video);
+            if (mPageType == VIDEO){
+                response.setTimeLength(i+":00");
+                response.setUrl("https://video"+i+".co.th");
+            }
+            mListMockUp.add(response);
+        }
+
+
     }
 
     @Override
@@ -157,6 +181,7 @@ public class InboxFragment extends Fragment {
                 mText = savedInstanceState.getString(TEXT_SEARCH);
                 mDateFrom = savedInstanceState.getLong(DATE_FROM);
                 mDateTo = savedInstanceState.getLong(DATE_TO);
+                mPageType = savedInstanceState.getInt(INBOX_TYPE);
             }
             initListInbox();
 //            mInboxAdapter.notifyDataSetChanged();
@@ -175,6 +200,7 @@ public class InboxFragment extends Fragment {
         outState.putString(TEXT_SEARCH, mText);
         outState.putLong(DATE_FROM, mDateFrom);
         outState.putLong(DATE_TO, mDateTo);
+        outState.putInt(INBOX_TYPE, mPageType);
     }
 
     @Override
@@ -195,7 +221,16 @@ public class InboxFragment extends Fragment {
         if (mInboxAdapter == null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mInboxRecycler.setLayoutManager(layoutManager);
-            mInboxAdapter = new InboxAdapter(getContext(), mInboxRecycler, mListInbox);
+            switch (mPageType){
+                case ALL:
+                    mListInbox.addAll(mListMockUp);
+                    break;
+                case VIDEO:
+                case IMAGE:
+                    mListInbox = mListMockUp;
+                    break;
+            }
+            mInboxAdapter = new InboxAdapter((AppCompatActivity) getActivity(), mInboxRecycler, mListInbox);
             animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
             animationAdapter.setInterpolator(new OvershootInterpolator());
             animationAdapter.setDuration(700);
@@ -216,6 +251,9 @@ public class InboxFragment extends Fragment {
             mInboxAdapter.addAll(mListInbox);
         }
         DialogCounterAlert.DialogProgress.dismiss();
+    }
+
+    private void bindMultiSelectMode(){
     }
 
     private void loadDataInbox(){

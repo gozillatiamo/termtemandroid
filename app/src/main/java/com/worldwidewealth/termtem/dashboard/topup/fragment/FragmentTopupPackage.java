@@ -66,6 +66,8 @@ public class FragmentTopupPackage extends  Fragment{
     private BottomAction mBottomAction;
     private Call<ResponseBody> call;
     private Callback<ResponseBody> callback;
+    private byte[] imageByte = null;
+    private String transid;
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -109,14 +111,18 @@ public class FragmentTopupPackage extends  Fragment{
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
 
-        if (call != null && call.isCanceled()){
-            new DialogCounterAlert.DialogProgress(getContext());
+        if (call != null && call.isExecuted()){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    call.clone().enqueue(callback);
+                    if (imageByte != null){
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    } else {
+                        new DialogCounterAlert.DialogProgress(getContext());
+                    }
                 }
-            }, 5000);
+            }, 2000);
         }
     }
 
@@ -124,24 +130,12 @@ public class FragmentTopupPackage extends  Fragment{
     public void onPause() {
         super.onPause();
         Util.hideSoftKeyboard(mHolder.mEditPhone);
-
-        if (call != null && call.isExecuted()){
-            call.cancel();
-        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        DialogCounterAlert.DialogProgress.dismiss();
     }
-
-    /*
-    public void setEnabledBtn(boolean enabled){
-        mHolder.mBtnTopup.setEnabled(enabled);
-        mHolder.mBtnNext.setEnabled(enabled);
-    }
-*/
 
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
@@ -179,16 +173,6 @@ public class FragmentTopupPackage extends  Fragment{
                                     .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance((String)responseValues))
                                     .commit();
                         }
-/*
-                String responseStr = null;
-                try {
-                    responseStr = response.body().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-*/
-
-
                     }
 
                     @Override
@@ -327,7 +311,7 @@ public class FragmentTopupPackage extends  Fragment{
                                     R.anim.slide_in_left,
                                     R.anim.slide_out_right)
                             .replace(R.id.container_topup_package, FragmentTopupPreview
-                                    .newInstance((String)modelValues))
+                                    .newInstance(((String)modelValues), mBottomAction.getPrice()))
                             .addToBackStack(null)
                             .commit();
 /*
@@ -509,13 +493,15 @@ public class FragmentTopupPackage extends  Fragment{
                 if (responseValues == null) return;
 
                 if (responseValues instanceof ResponseModel){
-                    byte[] imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
+                    FragmentTopupPackage.this.transid = transid;
+                    imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
 //                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    DialogCounterAlert.DialogProgress.dismiss();
-                    activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    try {
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    } catch (IllegalStateException e){e.printStackTrace();}
 
                 }
 

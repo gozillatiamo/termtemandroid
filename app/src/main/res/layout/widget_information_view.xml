@@ -25,8 +25,8 @@
                 <ImageView
                     android:id="@+id/image_thumbnail"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/termtem_logo_small"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/thumbnail_video"
                     android:maxWidth="@dimen/max_width_thumbnail"
                     android:adjustViewBounds="true"/>
                 <TextView

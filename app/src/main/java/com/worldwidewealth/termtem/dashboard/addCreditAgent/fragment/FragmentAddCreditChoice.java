@@ -2,6 +2,7 @@ package com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +37,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.BottomAction;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,6 +54,11 @@ public class FragmentAddCreditChoice extends Fragment {
     private AgentResponse mAgent;
     private BottomAction mBottomAction;
     private APIServices services;
+    private Call<ResponseBody> call;
+    private Callback<ResponseBody> callback;
+    private byte[] imageByte = null;
+    private String transid;
+
     public FragmentAddCreditChoice() {
         // Required empty public constructor
     }
@@ -78,6 +85,24 @@ public class FragmentAddCreditChoice extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (call != null && call.isExecuted()){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (imageByte != null){
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    } else {
+                        new DialogCounterAlert.DialogProgress(getContext());
+                    }
+                }
+            }, 2000);
+        }
+
+    }
 
     private void initData(){
         mAmount = new String[]{
@@ -137,10 +162,10 @@ public class FragmentAddCreditChoice extends Fragment {
 
     private void servicePreview(){
         new DialogCounterAlert.DialogProgress(getContext());
-        Call<ResponseBody> call = services.topupService(
+        call = services.topupService(
                 new RequestModel(APIServices.ACTION_PREVIEW_AGENT_CASHIN,
                         new TopupPreviewRequestModel(Double.parseDouble(mBottomAction.getPrice()), null)));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object objectResponse = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -152,8 +177,8 @@ public class FragmentAddCreditChoice extends Fragment {
                                     R.anim.slide_out_left,
                                     R.anim.slide_in_left,
                                     R.anim.slide_out_right)
-                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance((String)objectResponse))
-                            .addToBackStack(null);
+                            .addToBackStack(null)
+                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance(((String)objectResponse), mBottomAction.getPrice()));
                     transaction.commit();
 
 
@@ -192,9 +217,9 @@ public class FragmentAddCreditChoice extends Fragment {
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(getContext());
-        Call<ResponseBody> call = services.topupService(
+        call = services.topupService(
                 new RequestModel(APIServices.ACTION_GETOTP_AGENT_CASHIN, new GetOTPRequestModel()));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -220,7 +245,7 @@ public class FragmentAddCreditChoice extends Fragment {
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        Call<ResponseBody> callSubmit = services.submitTopup(
+        call = services.submitTopup(
                 new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
                         new SubmitTopupRequestModel(mBottomAction.getPrice(),
                                 null,
@@ -228,7 +253,7 @@ public class FragmentAddCreditChoice extends Fragment {
                                 model.getTranid(),
                                 null,
                                 mAgent.getAgentId())));
-        APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -252,19 +277,22 @@ public class FragmentAddCreditChoice extends Fragment {
 
     private void serviceEslip(final String transid){
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid, mAgent.getPhoneno())));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid, mAgent.getPhoneno())));
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null) return;
 
                 if (responseValues instanceof ResponseModel){
-                    byte[] imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
+                    FragmentAddCreditChoice.this.transid  = transid;
+                    imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) getActivity();
-                    activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    try {
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    } catch (IllegalStateException e){e.printStackTrace();}
                 }
             }
 

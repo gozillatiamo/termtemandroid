@@ -166,24 +166,15 @@ public class EncryptionData {
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
+
                 switch (requestModel.getAction()){
 
                     case APIServices.ACTIONGETOTP:
                     case APIServices.ACTIONSUBMITTOPUP:
-                        if (retry < 3) {
-                            retry++;
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    call.cancel();
-                                    call.clone().enqueue(callback);
-                                }
-                            }, 5000);
-                        } else {
-                            retry = 0;
-                            msg = context.getString(R.string.alert_topup_fail);
-                            new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
-                        }
+
+                        msg = context.getString(R.string.alert_topup_fail);
+                        new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+
                         return null;
 
                     case APIServices.ACTIONLOGIN:
