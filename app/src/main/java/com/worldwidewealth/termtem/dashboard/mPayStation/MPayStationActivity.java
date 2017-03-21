@@ -148,7 +148,7 @@ public class MPayStationActivity extends MyAppcompatActivity {
                     return;
                 }
                 mBottomAction.setEnable(false);
-                new DialogCounterAlert.DialogProgress(MPayStationActivity.this);
+                new DialogCounterAlert.DialogProgress(MPayStationActivity.this).show();
                 Call<ResponseBody> call = services.genBarcode(
                         new RequestModel(APIServices.ACTIONGENBARCODE,
                                 new GenBarcodeRequestModel(AMT.replaceAll("\\.", ""), mType)));
@@ -189,7 +189,7 @@ public class MPayStationActivity extends MyAppcompatActivity {
                                     @Override
                                     public void onPageStarted(WebView view, String url, Bitmap favicon) {
                                         super.onPageStarted(view, url, favicon);
-                                        new DialogCounterAlert.DialogProgress(MPayStationActivity.this);
+                                        new DialogCounterAlert.DialogProgress(MPayStationActivity.this).show();
                                     }
 
                                     @Override

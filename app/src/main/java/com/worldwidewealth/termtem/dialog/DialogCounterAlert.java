@@ -124,38 +124,34 @@ public class DialogCounterAlert {
 
     public static class DialogProgress{
         private static ProgressDialog progressDialog;
+        private static Context mContext;
 
         public DialogProgress(Context context) {
-/*
-            if (progressDialog != null){
-             */
-/*   if (progressDialog.getContext() != context){
-                    progressDialog = null;
-                } else if (progressDialog.isShowing()){
-                    return;
-                }*//*
+            this.mContext = context;
+        }
 
+        public static boolean show(){
+            boolean isShow = isShow();
 
-                progressDialog.cancel();
-                progressDialog = null;
-            }
-*/
-            if (progressDialog != null){
-                return;
+            if (!isShow){
+                progressDialog = ProgressDialog.show(mContext,
+                        null,
+                        mContext.getString(R.string.msg_progress),
+                        true,
+                        false);
             }
 
-            progressDialog = ProgressDialog.show(context,
-                    null,
-                    context.getString(R.string.msg_progress),
-                    true,
-                    false);
-
+            return isShow;
         }
 
         public static void dismiss(){
-            if (progressDialog != null) {
-                progressDialog.cancel();
-                progressDialog = null;
+            try {
+                if (progressDialog != null) {
+                    progressDialog.cancel();
+                    progressDialog = null;
+                }
+            }catch (IllegalArgumentException e){
+                e.printStackTrace();
             }
         }
 

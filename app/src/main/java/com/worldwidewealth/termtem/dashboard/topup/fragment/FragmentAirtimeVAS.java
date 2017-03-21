@@ -50,7 +50,7 @@ public class FragmentAirtimeVAS extends Fragment {
         }
         mData = this.getArguments().getString(DATA);
         if (!DialogCounterAlert.DialogProgress.isShow()){
-            new DialogCounterAlert.DialogProgress(getContext());
+            new DialogCounterAlert.DialogProgress(getContext()).show();
         }
 
         if (rootView == null){

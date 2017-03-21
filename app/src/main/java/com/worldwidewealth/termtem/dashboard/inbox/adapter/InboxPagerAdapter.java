@@ -13,7 +13,7 @@ import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 
 public class InboxPagerAdapter extends FragmentPagerAdapter {
 
-    final int PAGE_COUNT = 4;
+    final int PAGE_COUNT = 1;
     private String tabTitles[] = new String[] { "ALL", "TEXT", "VIDEO", "IMAGE" };
     private Context mContext;
 

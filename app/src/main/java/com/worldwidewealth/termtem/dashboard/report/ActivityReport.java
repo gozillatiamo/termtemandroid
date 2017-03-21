@@ -262,7 +262,7 @@ public class ActivityReport extends MyAppcompatActivity {
     }
 
     private void salerptService(String timeFrom, String timeTo){
-        new DialogCounterAlert.DialogProgress(this);
+        new DialogCounterAlert.DialogProgress(this).show();
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));

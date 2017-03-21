@@ -68,7 +68,7 @@ public class DialogNetworkError {
                 .setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new DialogCounterAlert.DialogProgress(mContext);
+                        new DialogCounterAlert.DialogProgress(mContext).show();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

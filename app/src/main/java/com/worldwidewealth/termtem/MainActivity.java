@@ -156,8 +156,11 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
         }
 
 //        mHolder.mBtnLogin.setEnabled(false);
-        new DialogCounterAlert.DialogProgress(this);
-        new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN).checkWifi(mPhone, mPassword, Global.getInstance().getTXID());
+
+
+        new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN,
+                new DialogCounterAlert.DialogProgress(this).show())
+                .checkWifi(mPhone, mPassword, Global.getInstance().getTXID());
 
 /*
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

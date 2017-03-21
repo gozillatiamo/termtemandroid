@@ -98,7 +98,7 @@ public class ActivityAddCreditAgent extends MyAppcompatActivity {
     }
 
     private void initData(){
-        new DialogCounterAlert.DialogProgress(this);
+        new DialogCounterAlert.DialogProgress(this).show();
         Call<ResponseBody> call = services.topupService(
                 new RequestModel(APIServices.ACTIONGETAGENTLIST, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {

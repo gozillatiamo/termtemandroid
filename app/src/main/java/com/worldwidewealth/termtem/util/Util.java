@@ -255,7 +255,9 @@ public class Util {
                 Global.getInstance().clearUserData(clearData);
 
                 if (!clearData) {
-                    new TermTemSignIn(context, TermTemSignIn.TYPE.RELOGIN).getTXIDfromServer();
+                    new TermTemSignIn(context,
+                            TermTemSignIn.TYPE.RELOGIN,
+                            new DialogCounterAlert.DialogProgress(context).show()).getTXIDfromServer();
                 }
 
             }

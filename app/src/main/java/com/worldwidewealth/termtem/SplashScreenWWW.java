@@ -222,7 +222,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                 Global.getInstance().setDEVICEID(deviceId);
 
-                new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN).getTXIDfromServer();
+                new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN, true).getTXIDfromServer();
 
 /*
                 GPSTracker gpsTracker = new GPSTracker(SplashScreenWWW.this);

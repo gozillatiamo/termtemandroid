@@ -161,7 +161,7 @@ public class FragmentTopupPreview extends Fragment {
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));
-        mHolder.mTextSelectAmout.setText(format.format(mSelectAmout));
+        mHolder.mTextSelectAmout.setText(mSelectAmout);
         if (mModel.getCOMMISSION_AMOUNT() != 0) {
             mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
             mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));

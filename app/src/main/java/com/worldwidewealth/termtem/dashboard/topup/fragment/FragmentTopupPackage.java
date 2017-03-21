@@ -111,19 +111,16 @@ public class FragmentTopupPackage extends  Fragment{
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
 
-        if (call != null && call.isExecuted()){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (imageByte != null){
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
-                    } else {
-                        new DialogCounterAlert.DialogProgress(getContext());
                     }
                 }
             }, 2000);
-        }
+
     }
 
     @Override
@@ -152,7 +149,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void initPageTopup(){
 
-        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -213,43 +210,6 @@ public class FragmentTopupPackage extends  Fragment{
                 servicePreview();
             }
         });
-/*
-        mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHolder.mBtnNext.setEnabled(false);
-                servicePreview();
-            }
-        });
-*/
-
-/*
-        mHolder.mBtnTopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHolder.mBtnTopup.setEnabled(false);
-                if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
-                    FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
-                    if (!fragmentTopupPreview.canTopup()) {
-                        setEnabledBtn(true);
-                        return;
-                    }
-                }
-
-                serviceTopup();
-
-            }
-        });
-*/
-
-/*
-        mHolder.mBtnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-*/
     }
 
     private void servicePreview(){
@@ -286,7 +246,7 @@ public class FragmentTopupPackage extends  Fragment{
         }
 
 
-        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
 
         call = services.preview(new RequestModel(APIServices.ACTIONPREVIEW,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
@@ -413,7 +373,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void serviceTopup(){
-        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext());
+        new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
         call = services.getOTP(new RequestModel(APIServices.ACTIONGETOTP,
                 new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
@@ -442,44 +402,35 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        mRunnableSubmit = new Runnable() {
+        call = services.submitTopup(
+                new RequestModel(APIServices.ACTIONSUBMITTOPUP,
+                        new SubmitTopupRequestModel(String.valueOf(getmAmt()),
+                                mCarrier,
+                                mPhone,
+                                model.getTranid(),
+                                mButtonID,
+                                null)));
+        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
-            public void run() {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                if (responseValues == null) {
+                    mBottomAction.setEnable(true);
+                    return;
+                }
 
-                call = services.submitTopup(
-                        new RequestModel(APIServices.ACTIONSUBMITTOPUP,
-                                new SubmitTopupRequestModel(String.valueOf(getmAmt()),
-                                        mCarrier,
-                                        mPhone,
-                                        model.getTranid(),
-                                        mButtonID,
-                                        null)));
-                APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-                        if (responseValues == null) {
-                            mBottomAction.setEnable(true);
-                            return;
-                        }
-
-                        if (responseValues instanceof ResponseModel){
-                            serviceEslip(model.getTranid());
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        if (!call.isCanceled()) {
-                            new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                        }
-                        mBottomAction.setEnable(true);
-                    }
-                });
-
+                if (responseValues instanceof ResponseModel){
+                    serviceEslip(model.getTranid());
+                }
             }
-        };
-
-        mHandler.postDelayed(mRunnableSubmit, postDelay);
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
+                }
+                mBottomAction.setEnable(true);
+            }
+        });
     }
 
     private void serviceEslip(final String transid){

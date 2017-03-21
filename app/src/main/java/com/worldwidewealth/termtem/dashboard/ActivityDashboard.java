@@ -119,10 +119,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-/*
                         MyApplication.LeavingOrEntering.currentActivity = null;
-                        Util.logoutAPI(true);
-*/
+                        Util.logoutAPI(ActivityDashboard.this, true);
                         finish();
                     }
                 });

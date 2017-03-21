@@ -225,7 +225,7 @@ public class ActivityRegister extends MyAppcompatActivity {
                     return;
 
                 }
-                new DialogCounterAlert.DialogProgress(ActivityRegister.this);
+                new DialogCounterAlert.DialogProgress(ActivityRegister.this).show();
                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                         mFirstName,
                         mLastName,

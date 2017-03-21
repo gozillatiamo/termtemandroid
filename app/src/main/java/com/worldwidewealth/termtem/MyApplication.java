@@ -51,6 +51,7 @@ public class MyApplication extends Application implements Application.ActivityLi
             Util.logoutAPI(null, true);
         }
     };
+    private static Thread mThread;
 
     public static final String TAG = MyApplication.class.getSimpleName();
 
@@ -134,7 +135,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-
+        DialogCounterAlert.DialogProgress.dismiss();
     }
 
     public static class LeavingOrEntering
@@ -157,13 +158,15 @@ public class MyApplication extends Application implements Application.ActivityLi
                     Util.backToSignIn(activity);
                     return;
                 }
-                new DialogCounterAlert.DialogProgress(activity);
+
                 if (mHandler != null) {
                     mHandler.removeCallbacks(mRunable);
+                    mThread.interrupt();
                 }
 
                 if (Global.getInstance().getAGENTID() == null){
-                    new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN).getTXIDfromServer();
+                    new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN,
+                            new DialogCounterAlert.DialogProgress(activity).show()).getTXIDfromServer();
                 } else {
                     Util.logoutAPI(activity, false);
                 }
@@ -182,24 +185,48 @@ public class MyApplication extends Application implements Application.ActivityLi
                 // We were stopped and no-one else has been started.
                 Log.e(TAG, "ActivityisEqual and Call Logout");
 //                Util.logoutAPI(false);
-                if (Global.getInstance().getAGENTID() == null) return;
-                APIServices services = APIServices.retrofit.create(APIServices.class);
-                Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Object values = EncryptionData.getModel(activity, call, response.body(), this);
-                        if (values instanceof ResponseModel){
-                            ResponseModel model = (ResponseModel) values;
-                            mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
-                        }
-                    }
+                if(mThread != null && mThread.isAlive()){
+                    mThread.interrupt();
+                }
 
+                mThread = new Thread(new Runnable() {
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        mHandler.postDelayed(mRunable, 60000);
+                    public void run() {
+                        int times = 0;
+                        while (Global.getInstance().getAGENTID() == null && times < 3){
+                            try {
+                                Log.e(TAG, ""+(times+1));
+                                Thread.sleep(1000);
+                                times++;
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        Log.e(TAG, "AgentId :"+Global.getInstance().getAGENTID());
+
+                        if (Global.getInstance().getAGENTID() == null) return;
+                        APIServices services = APIServices.retrofit.create(APIServices.class);
+                        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Object values = EncryptionData.getModel(activity, call, response.body(), this);
+                                if (values instanceof ResponseModel){
+                                    ResponseModel model = (ResponseModel) values;
+                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                mHandler.postDelayed(mRunable, 60000);
+                            }
+                        });
                     }
                 });
+
+                mThread.start();
             }
         }
     }

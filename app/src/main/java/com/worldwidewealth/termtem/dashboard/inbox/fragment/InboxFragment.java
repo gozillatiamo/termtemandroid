@@ -136,6 +136,7 @@ public class InboxFragment extends Fragment {
             mPageType = getArguments().getInt(PAGE_TYPE);
         }
 
+/*
         mListMockUp = new ArrayList<>();
 
         for (int i = 0; i < 10; i++){
@@ -151,6 +152,7 @@ public class InboxFragment extends Fragment {
             }
             mListMockUp.add(response);
         }
+*/
 
 
     }
@@ -221,6 +223,7 @@ public class InboxFragment extends Fragment {
         if (mInboxAdapter == null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mInboxRecycler.setLayoutManager(layoutManager);
+/*
             switch (mPageType){
                 case ALL:
                     mListInbox.addAll(mListMockUp);
@@ -230,6 +233,7 @@ public class InboxFragment extends Fragment {
                     mListInbox = mListMockUp;
                     break;
             }
+*/
             mInboxAdapter = new InboxAdapter((AppCompatActivity) getActivity(), mInboxRecycler, mListInbox);
             animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
             animationAdapter.setInterpolator(new OvershootInterpolator());

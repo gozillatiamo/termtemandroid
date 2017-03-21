@@ -88,19 +88,16 @@ public class FragmentAddCreditChoice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (call != null && call.isExecuted()){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (imageByte != null){
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
-                    } else {
-                        new DialogCounterAlert.DialogProgress(getContext());
-                    }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (imageByte != null){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
                 }
-            }, 2000);
-        }
+            }
+        }, 2000);
 
     }
 
@@ -161,7 +158,7 @@ public class FragmentAddCreditChoice extends Fragment {
     }
 
     private void servicePreview(){
-        new DialogCounterAlert.DialogProgress(getContext());
+        new DialogCounterAlert.DialogProgress(getContext()).show();
         call = services.topupService(
                 new RequestModel(APIServices.ACTION_PREVIEW_AGENT_CASHIN,
                         new TopupPreviewRequestModel(Double.parseDouble(mBottomAction.getPrice()), null)));
@@ -216,7 +213,7 @@ public class FragmentAddCreditChoice extends Fragment {
     }
 
     private void serviceTopup(){
-        new DialogCounterAlert.DialogProgress(getContext());
+        new DialogCounterAlert.DialogProgress(getContext()).show();
         call = services.topupService(
                 new RequestModel(APIServices.ACTION_GETOTP_AGENT_CASHIN, new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {

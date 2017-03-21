@@ -224,6 +224,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         if(!isInEditMode()) {
             Glide.with(getContext())
                     .load(image)
+
                     .placeholder(android.R.color.black)
                     .crossFade()
                     .into(mImageThumbnail);

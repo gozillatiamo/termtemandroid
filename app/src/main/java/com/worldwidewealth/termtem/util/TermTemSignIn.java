@@ -53,6 +53,7 @@ public class TermTemSignIn {
     private APIServices services;
     private String mUsername, mPassword, mTXID;
     private TYPE mType;
+    private boolean isAlreadyShowProgress;
 
     private static AlertDialog AlertWifi;
 
@@ -74,13 +75,14 @@ public class TermTemSignIn {
     }
 
 
-    public TermTemSignIn(Context context, TYPE type) {
+    public TermTemSignIn(Context context, TYPE type, boolean isAlreadyShowProgress) {
         if (AlertWifi != null){
             AlertWifi.dismiss();
         }
         this.mContext = context;
         this.services = APIServices.retrofit.create(APIServices.class);
         this.mType = type;
+        this.isAlreadyShowProgress = isAlreadyShowProgress;
     }
 
     public void getTXIDfromServer(){
@@ -334,19 +336,18 @@ public class TermTemSignIn {
                     values.put(Global.getKeyUSERDATA(), (String)responseValues);
                     Global.getInstance().setUserData(values);
 
+                    if (!isAlreadyShowProgress){
+                        DialogCounterAlert.DialogProgress.dismiss();
+                    }
                     switch (mType){
                         case NEWLOGIN:
                             Global.getInstance().setCacheUser(mUsername);
                             mUsername = null;
                             Intent intent = new Intent(mContext, ActivityDashboard.class);
                             ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                            DialogCounterAlert.DialogProgress.dismiss();
                             mContext.startActivity(intent);
                             ((AppCompatActivity)mContext).finish();
                             break;
-                        default:
-                            DialogCounterAlert.DialogProgress.dismiss();
-
                     }
 
                 }
@@ -367,7 +368,7 @@ public class TermTemSignIn {
                 .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new DialogCounterAlert.DialogProgress(mContext);
+                        new DialogCounterAlert.DialogProgress(mContext).show();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
