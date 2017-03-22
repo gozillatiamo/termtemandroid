@@ -89,15 +89,17 @@ public class FragmentAddCreditChoice extends Fragment {
     public void onResume() {
         super.onResume();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (imageByte != null){
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+        if (Global.getInstance().getAGENTID() != null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (imageByte != null) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    }
                 }
-            }
-        }, 2000);
+            }, 2000);
+        }
 
     }
 

@@ -111,15 +111,17 @@ public class FragmentTopupPackage extends  Fragment{
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
 
+        if (Global.getInstance().getAGENTID() != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (imageByte != null){
+                    if (imageByte != null) {
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
                     }
                 }
             }, 2000);
+        }
 
     }
 

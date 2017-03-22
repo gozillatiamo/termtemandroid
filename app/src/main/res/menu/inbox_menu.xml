@@ -13,4 +13,9 @@
         app:showAsAction="always"
         android:title="DateRange"/>
 
+    <item
+        android:id="@+id/action_delete"
+        android:title="@string/confirm_delete_title"
+        app:showAsAction="never" />
+
 </menu>

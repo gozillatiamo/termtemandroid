@@ -254,9 +254,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     @Override
     public boolean onLongClick(View v) {
         if (informationLongClickListener != null){
-            informationLongClickListener.onInformationLongViewClick();
+            informationLongClickListener.onInformationLongViewClick(mPosition);
             return true;
-
         }
 
         return false;
@@ -267,7 +266,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     }
 
     public interface InformationLongClickListener {
-        void onInformationLongViewClick();
+        void onInformationLongViewClick(int postion);
     }
 
 

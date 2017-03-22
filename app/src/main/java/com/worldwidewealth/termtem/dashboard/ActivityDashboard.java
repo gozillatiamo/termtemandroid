@@ -164,6 +164,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
                     public void onClick(DialogInterface dialog, int which) {
 //                        Util.logoutAPI(true);
                         Util.backToSignIn(ActivityDashboard.this);
+
                     }
                 });
             }

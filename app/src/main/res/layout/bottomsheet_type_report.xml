@@ -11,34 +11,52 @@
         android:textStyle="bold"
         android:padding="@dimen/activity_space"
         android:text="@string/type_report"/>
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_topup_report"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:drawableTint="@android:color/darker_gray"
-        android:padding="@dimen/activity_vertical_margin"
-        android:text="@string/report_topup"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:drawableLeft="@drawable/ic_smartphone"
-        android:textColor="@android:color/darker_gray"
-        />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_topup_primary"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/activity_vertical_margin"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_topup_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/report_topup"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            />
+
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorLine"/>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_cashin_agent_report"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:drawableLeft="@drawable/ic_people"
-        android:drawableTint="@android:color/darker_gray"
-        android:padding="@dimen/activity_vertical_margin"
-        android:text="@string/report_cashin_agent"
-        android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:src="@drawable/ic_agent_cashin_primary"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_cashin_agent_report"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/report_cashin_agent"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
 </LinearLayout>

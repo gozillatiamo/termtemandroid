@@ -143,7 +143,7 @@
     <string name="password_not_same">ยืนยันรหัสผ่านไม่ถูกต้อง!!!</string>
     <string name="success">สำเร็จ</string>
     <string name="change_password_success">เปลี่ยนรหัสผ่านสำเร็จ</string>
-    <string name="please_choice_topup">กรุณาเลือกจำรวนที่ท่านต้องการจะเติม</string>
+    <string name="please_choice_topup">กรุณาเลือกจำนวนที่ท่านต้องการจะเติม</string>
     <string name="balance_not_enough">ยอดเงินคงเหลือของท่านไม่พอที่จะทำรายการ</string>
     <string name="register">ลงทะเบียน</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
@@ -234,11 +234,14 @@
     <string name="agent_name">ชื่อ-นามสกุล Agent:</string>
     <string name="type_report">เลือกประเภทประวัติรายการ</string>
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
-    <string name="report_cashin_agent">ประวัติการเติมเงิน Agent</string>
+    <string name="report_cashin_agent">ประวัติการโอนเงิน Agent</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>
     <string name="unavailable_qrcode">คิวอาร์โค้ดนี้ไม่สามารถใช้งานได้</string>
+    <string name="delete">ลบ</string>
+    <string name="confirm_delete_title">ลบข้อความ</string>
+    <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>
 
 
     <string-array name="str_list_dashboard">

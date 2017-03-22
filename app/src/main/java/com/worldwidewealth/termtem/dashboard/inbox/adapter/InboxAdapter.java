@@ -2,7 +2,9 @@ package com.worldwidewealth.termtem.dashboard.inbox.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,7 +73,8 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     };
 
-
+    public interface OnItemLongClickListener{
+    }
 
     public InboxAdapter(AppCompatActivity activity, RecyclerView recyclerView, List<InboxResponse> listdata) {
         this.mListInbox = listdata;
@@ -120,7 +124,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         if (holder instanceof InboxViewHolder){
-
+            holder.itemView.setTag(position);
          /*   if (!getItem(position).isReaded()){
                 ((CardView)holder.itemView).setCardBackgroundColor(mContext.getResources().getColor(android.R.color.holo_orange_light));
             } else {
@@ -168,6 +172,10 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    public void setOnItemLongClickListener(InformationView.OnLongClickListener listener){
+
+    }
+
     @Override
     public void onInformationViewClick(int position) {
         if (position == -1) return;
@@ -182,6 +190,10 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
+    @Override
+    public void onInformationLongViewClick(final int position) {
+
+    }
 
     @Override
     public int getItemCount() {
@@ -216,15 +228,16 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public void removeItem(int position){
+        mListInbox.remove(position);
+        this.notifyItemRemoved(position);
+        this.notifyItemRangeChanged(position, getItemCount()-1);
+    }
+
     public void setMaxInbox(boolean maxInbox) {
         this.maxInbox = maxInbox;
     }
 
-    @Override
-    public void onInformationLongViewClick() {
-
-        mActivity.startSupportActionMode(mDeleteMode);
-    }
 
     public class InboxViewHolder extends RecyclerView.ViewHolder{
         private InformationView mItemInbox;

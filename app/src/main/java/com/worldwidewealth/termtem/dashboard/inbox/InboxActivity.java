@@ -161,6 +161,12 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.e(TAG, "onPrepareOptionsMenu");
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
@@ -263,6 +269,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     }
 
     private void initToolbar(){
+        mToolbar.hideOverflowMenu();
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

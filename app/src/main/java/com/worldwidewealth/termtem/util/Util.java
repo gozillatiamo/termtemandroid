@@ -272,6 +272,7 @@ public class Util {
 
 
     public static void backToSignIn(Activity activity){
+        MyApplication.LeavingOrEntering.currentActivity = null;
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
         activity.startActivity(intent);
         activity.finish();

@@ -2,12 +2,15 @@ package com.worldwidewealth.termtem.dashboard.inbox.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -185,11 +188,12 @@ public class InboxFragment extends Fragment {
                 mDateTo = savedInstanceState.getLong(DATE_TO);
                 mPageType = savedInstanceState.getInt(INBOX_TYPE);
             }
+            mCallback.onUpdateDataSearch(mText, mDateFrom, mDateTo);
+
             initListInbox();
 //            mInboxAdapter.notifyDataSetChanged();
         }
 
-        mCallback.onUpdateDataSearch(mText, mDateFrom, mDateTo);
     }
 
     @Override
@@ -248,6 +252,51 @@ public class InboxFragment extends Fragment {
                     }
                 }
             });
+
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                    //Remove swiped item from list and notify the RecyclerView
+                    Log.e(TAG, "position: "+viewHolder.itemView.getTag());
+                    final int position = (int) viewHolder.itemView.getTag();
+                    AlertDialog builderInner = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogError)
+                            .setMessage(getContext().getString(R.string.confirm_delete_msg))
+                            .setTitle(getContext().getString(R.string.confirm_delete_title))
+                            .setCancelable(false)
+                            .setPositiveButton(getContext().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,int which) {
+                                    dialog.dismiss();
+                                    mInboxAdapter.removeItem(position);
+                                }
+                            })
+                            .setNegativeButton(getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mInboxAdapter.notifyDataSetChanged();
+                                }
+                            }).create();
+
+                    builderInner.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
+                                    .setTextColor(getContext().getResources()
+                                            .getColor(android.R.color.holo_red_dark));
+                        }
+                    });
+                    builderInner.show();
+
+                }
+            };
+
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(mInboxRecycler);
         } else {
             mInboxAdapter.setLoaded();
             mInboxAdapter.setMaxInbox(false);
