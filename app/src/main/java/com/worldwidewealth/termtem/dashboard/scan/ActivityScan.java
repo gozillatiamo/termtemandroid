@@ -49,6 +49,7 @@ public class ActivityScan extends MyAppcompatActivity {
         @Override
         public void barcodeResult(BarcodeResult result) {
             Log.e(TAG, "ScanResult: "+result);
+            mBarcodeView.pause();
             if (result.getText() != null) {
                 String strResult = result.getText();
                 AgentResponse agentResponse = null;
@@ -61,10 +62,17 @@ public class ActivityScan extends MyAppcompatActivity {
                 }
 
                 if (agentResponse != null){
-                    agentResponse.setAgentId(EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID()));
-                    addCreditAgent(agentResponse);
+                    String myAgentId = EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID());
+                    String customerAgentId = EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID());
+                    if (!myAgentId.equals(customerAgentId)) {
+                        agentResponse.setAgentId(customerAgentId);
+                        addCreditAgent(agentResponse);
+                    }else {
+                        Toast.makeText(ActivityScan.this, getString(R.string.unavailable_qrcode), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
+            mBarcodeView.resume();
         }
 
         @Override
@@ -80,6 +88,7 @@ public class ActivityScan extends MyAppcompatActivity {
         initWidgets();
         initToolbar();
         mBarcodeView.decodeContinuous(barcodeCallback);
+
         mBtnMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

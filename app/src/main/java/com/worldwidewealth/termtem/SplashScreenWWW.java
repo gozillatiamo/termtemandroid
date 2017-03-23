@@ -50,6 +50,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            Log.e(TAG, "FlagActivityBrought: "+getIntent().getFlags()+"::"+Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             finish();
             return;
         }

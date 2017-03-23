@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +25,9 @@ import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.RequestBody;
@@ -44,6 +48,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean clickable = true;
     private static final int NOTIUPLOAD = 1;
     private static boolean isUpload = false;
+/*
     private static Handler  mHandler = new Handler();
     private static Runnable mRunable = new Runnable() {
         @Override
@@ -51,6 +56,7 @@ public class MyApplication extends Application implements Application.ActivityLi
             Util.logoutAPI(null, true);
         }
     };
+*/
     private static Thread mThread;
 
     public static final String TAG = MyApplication.class.getSimpleName();
@@ -141,6 +147,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static class LeavingOrEntering
     {
         public static Activity currentActivity = null;
+        public static int count;
+        public static Timer T;
 
         public static void activityResumed( Activity activity )
         {
@@ -150,19 +158,23 @@ public class MyApplication extends Application implements Application.ActivityLi
                 currentActivity = activity;
                 return;
             }
-
+            Log.e(TAG, "current: "+strCurrentAtivity);
+            Log.e(TAG, "new: "+activity.getLocalClassName());
             if (strCurrentAtivity.equals(activity.getLocalClassName())) {
                 Log.e(TAG, "ActivityisEqual");
+
+                if (mThread != null || mThread.isAlive()) {
+//                    mHandler.removeCallbacks(mRunable);
+                    mThread.interrupt();
+                    T.cancel();
+                }
+
                 if (Global.getInstance().getTXID() == null) {
                     Log.e(TAG, "TXID == null");
                     Util.backToSignIn(activity);
                     return;
                 }
 
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(mRunable);
-                    mThread.interrupt();
-                }
 
                 if (Global.getInstance().getAGENTID() == null){
                     new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN,
@@ -175,6 +187,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 
         }
+
 
         public static void activityStopped(final Activity activity ) {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
@@ -214,19 +227,42 @@ public class MyApplication extends Application implements Application.ActivityLi
                                 Object values = EncryptionData.getModel(activity, call, response.body(), this);
                                 if (values instanceof ResponseModel){
                                     ResponseModel model = (ResponseModel) values;
-                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
+                                    count = model.getIdlelimit();
+                                    T= new Timer();
+                                    T.scheduleAtFixedRate(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            activity.runOnUiThread(new Runnable()
+                                            {
+                                                @Override
+                                                public void run()
+                                                {
+
+                                                    count--;
+                                                    Log.e(TAG, "Second: "+count);
+                                                    if (count == 0){
+                                                        Util.logoutAPI(null, true);
+                                                        T.cancel();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }, 1000, 1000);
+
+//                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                mHandler.postDelayed(mRunable, 60000);
+//                                mHandler.postDelayed(mRunable, 60000);
                             }
                         });
                     }
                 });
 
                 mThread.start();
+
             }
         }
     }

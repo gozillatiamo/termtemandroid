@@ -42,39 +42,26 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         InformationView.InformationClickListener, InformationView.InformationLongClickListener {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+
     private OnLoadMoreListener mOnLoadMoreListener;
     private boolean isLoading;
     private int visibleThreshold = 1;
     private int lastVisibleItem,totalItemCount;
     private List<InboxResponse> mListInbox;
     private AppCompatActivity mActivity;
+    private OnItemLongClickListener longClickListener;
     public boolean maxInbox = false;
     public static final String TAG = InboxAdapter.class.getSimpleName();
-    private ActionMode.Callback mDeleteMode = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mActivity.getMenuInflater().inflate(R.menu.menu_bill_select, menu);
-            return true;
-        }
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };
 
     public interface OnItemLongClickListener{
+        void onItemLongClick(InboxViewHolder holder, int position);
     }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.mOnLoadMoreListener = mOnLoadMoreListener;
+    }
+
 
     public InboxAdapter(AppCompatActivity activity, RecyclerView recyclerView, List<InboxResponse> listdata) {
         this.mListInbox = listdata;
@@ -101,9 +88,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         });
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
-    }
 
 
     @Override
@@ -125,11 +109,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (holder instanceof InboxViewHolder){
             holder.itemView.setTag(position);
-         /*   if (!getItem(position).isReaded()){
-                ((CardView)holder.itemView).setCardBackgroundColor(mContext.getResources().getColor(android.R.color.holo_orange_light));
-            } else {
-                ((CardView)holder.itemView).setCardBackgroundColor(mContext.getResources().getColor(android.R.color.white));
-            }*/
 
             ((InboxViewHolder) holder).mItemInbox.setTitle(getItem(position).getTitle());
             ((InboxViewHolder) holder).mItemInbox.setDes(getItem(position).getMsg());
@@ -143,28 +122,9 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((InboxViewHolder) holder).mItemInbox.setLengthVideo(getItem(position).getTimeLength());
 
 
-            /*SimpleDateFormat dest = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-
-            String resultDate = dest.format();*/
             ((InboxViewHolder) holder).mItemInbox.setDate(getItem(position).getCreate_Date());
             ((InboxViewHolder) holder).mItemInbox.setInformationClickListener(this, position);
-            ((InboxViewHolder) holder).mItemInbox.setInformationLongClickListener(this);
-/*
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getItem(position).setReaded(true);
-                    notifyDataSetChanged();
-                    Intent intent = new Intent(mContext, ActivityShowNotify.class);
-                    intent.putExtra(MyFirebaseMessagingService.TEXT, getItem(position).getTitle());
-                    intent.putExtra(MyFirebaseMessagingService.BOX, getItem(position).getMsg());
-                    intent.putExtra(MyFirebaseMessagingService.MSGID, getItem(position).getMsgid());
-                    ((Activity)mContext).overridePendingTransition(R.anim.slide_in_up, 0);
-                    mContext.startActivity(intent);
-
-                }
-            });
-*/
+            ((InboxViewHolder) holder).mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
 
 
         } else if (holder instanceof LoadingViewHolder){
@@ -172,9 +132,17 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void setOnItemLongClickListener(InformationView.OnLongClickListener listener){
-
+    public void setOnItemLongClickListener(OnItemLongClickListener listener){
+        longClickListener = listener;
     }
+
+    @Override
+    public void onInformationLongViewClick(InboxViewHolder holder, final int position) {
+        if(longClickListener != null){
+            longClickListener.onItemLongClick(holder, position);
+        }
+    }
+
 
     @Override
     public void onInformationViewClick(int position) {
@@ -190,10 +158,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    @Override
-    public void onInformationLongViewClick(final int position) {
-
-    }
 
     @Override
     public int getItemCount() {
@@ -240,20 +204,12 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     public class InboxViewHolder extends RecyclerView.ViewHolder{
-        private InformationView mItemInbox;
-/*
-        private ImageView mIconNotify;
-        private TextView mTitleNotify, mDesNotify, mTextDate;
-*/
+        public InformationView mItemInbox;
         public InboxViewHolder(View itemView) {
             super(itemView);
+
             mItemInbox = (InformationView) itemView.findViewById(R.id.item_inbox);
-/*
-            mIconNotify = (ImageView) itemView.findViewById(R.id.icon_notify);
-            mTitleNotify = (TextView) itemView.findViewById(R.id.title_notify);
-            mDesNotify = (TextView) itemView.findViewById(R.id.des_notify);
-            mTextDate = (TextView) itemView.findViewById(R.id.txt_date);
-*/
+
         }
     }
 

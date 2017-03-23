@@ -9,6 +9,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,20 +28,25 @@ import java.util.Locale;
  * Created by user on 03-Mar-17.
  */
 
-public class InformationView extends FrameLayout implements View.OnClickListener, View.OnLongClickListener{
+public class InformationView extends FrameLayout implements View.OnClickListener,
+        View.OnLongClickListener, CompoundButton.OnCheckedChangeListener{
 
     private CardView mInformationView;
     private View mLayoutThumbnail;
     private ImageView mImageThumbnail;
     private TextView mTextLengthVideo, mTextTitle, mTextDes, mTextDate;
+    private CheckBox mCheckDelete;
 
     private String mTitle, mDes, mThumbnailURL, mLengthVideo;
     private Date mDate;
     private boolean isRead;
+    private boolean isCheck;
 
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
     private InformationLongClickListener informationLongClickListener;
+    private OnInformationCheckedChangedListener informationCheckedChanged;
+    private InboxAdapter.InboxViewHolder holder;
     private int mPosition = -1;
 
     public InformationView(Context context) {
@@ -76,6 +83,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         ss.mThumbnailResource = this.mThumbnailResource;
         ss.mDate = this.mDate;
         ss.isRead = this.isRead;
+        ss.isCheck = this.isCheck;
         return ss;
     }
 
@@ -94,12 +102,14 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mThumbnailResource = ss.mThumbnailResource;
         this.mDate = ss.mDate;
         this.isRead = ss.isRead;
+        this.isCheck = ss.isCheck;
 
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
         setDate(this.mDate);
         setRead(this.isRead);
+        setCheckDelete(this.isCheck);
 
         if (this.mThumbnailURL != null){
             setThumbnail(this.mThumbnailURL);
@@ -125,6 +135,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         mTextLengthVideo = (TextView) findViewById(R.id.txt_length_video);
         mTextTitle = (TextView) findViewById(R.id.txt_title);
         mTextDate = (TextView) findViewById(R.id.txt_date);
+        mCheckDelete = (CheckBox) findViewById(R.id.check_delete);
     }
 
     private void setupStyleable(AttributeSet attrs){
@@ -141,11 +152,27 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private void setupview(){
         mInformationView.setOnClickListener(this);
         mInformationView.setOnLongClickListener(this);
+        mCheckDelete.setOnCheckedChangeListener(this);
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
         setThumbnail(this.mThumbnailResource);
         setRead(this.isRead);
+    }
+
+    public void setEnableCheckDelete(boolean enable){
+        if (enable){
+            mCheckDelete.setVisibility(VISIBLE);
+        } else
+            mCheckDelete.setVisibility(GONE);
+    }
+    public void setCheckDelete(boolean isCheck){
+        this.isCheck = isCheck;
+        mCheckDelete.setChecked(this.isCheck);
+    }
+
+    public boolean isCheckDelete(){
+        return isCheck;
     }
 
     public boolean isRead() {
@@ -236,8 +263,14 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mPosition = position;
     }
 
-    public void setInformationLongClickListener(InformationLongClickListener listener){
+    public void setInformationLongClickListener(InformationLongClickListener listener, InboxAdapter.InboxViewHolder holder){
         this.informationLongClickListener = listener;
+        this.holder = holder;
+    }
+
+    public void setInformationCheckedChanged(OnInformationCheckedChangedListener listener, int position){
+        this.informationCheckedChanged = listener;
+        this.mPosition = position;
     }
 
     @Override
@@ -254,11 +287,23 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     @Override
     public boolean onLongClick(View v) {
         if (informationLongClickListener != null){
-            informationLongClickListener.onInformationLongViewClick(mPosition);
+            informationLongClickListener.onInformationLongViewClick(holder, mPosition);
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        isCheck = isChecked;
+        if (informationCheckedChanged != null){
+            informationCheckedChanged.onCheckedChanged(buttonView, isChecked, mPosition);
+        }
+    }
+
+    public interface OnInformationCheckedChangedListener{
+        void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int positon);
     }
 
     public interface InformationClickListener {
@@ -266,7 +311,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     }
 
     public interface InformationLongClickListener {
-        void onInformationLongViewClick(int postion);
+        void onInformationLongViewClick(InboxAdapter.InboxViewHolder holder, int postion);
     }
 
 
@@ -276,6 +321,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         int mThumbnailResource;
         Date mDate;
         boolean isRead;
+        boolean isCheck;
 
         public SavedState(Parcel source) {
             super(source);
@@ -286,6 +332,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             this.mThumbnailResource = source.readInt();
             this.mDate = (Date) source.readValue(getClass().getClassLoader());
             this.isRead = source.readByte() != 0;
+            this.isCheck = source.readByte() != 0;
         }
 
         public SavedState(Parcelable superState) {
@@ -302,6 +349,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             out.writeInt(this.mThumbnailResource);
             out.writeValue(this.mDate);
             out.writeByte((byte) (this.isRead ? 1:0));
+            out.writeByte((byte) (this.isCheck ? 1:0));
         }
 
         public static final Creator<InformationView.SavedState> CREATOR = new Creator<InformationView.SavedState>() {

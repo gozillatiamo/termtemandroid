@@ -192,7 +192,7 @@ public class Util {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        updateMyBalanceWallet(context, includeMywallet);
+                        updateMyBalanceWallet(context, includeMywallet, iconNoti);
                         v.clearAnimation();
                     }
                 }, 2000);
@@ -274,6 +274,9 @@ public class Util {
     public static void backToSignIn(Activity activity){
         MyApplication.LeavingOrEntering.currentActivity = null;
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+                Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         activity.finish();
     }

@@ -26,6 +26,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String BOX = "box";
     public static final String MSGID = "msgid";
 
+    public static final String INTENT_FILTER = "INTENT_FILTER";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 /*
@@ -33,9 +35,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String box = remoteMessage.getData().get("box");
 */
 //        String click_action = remoteMessage.getNotification().getClickAction();
+
+        Intent intent = new Intent(INTENT_FILTER);
+        sendBroadcast(intent);
+
         if (remoteMessage.getData() != null) {
             Bundle bundle = new Bundle();
-
             bundle.putString(TEXT, remoteMessage.getData().get(TEXT));
             bundle.putString(BOX, remoteMessage.getData().get(BOX));
             bundle.putString(MSGID, remoteMessage.getData().get(MSGID));

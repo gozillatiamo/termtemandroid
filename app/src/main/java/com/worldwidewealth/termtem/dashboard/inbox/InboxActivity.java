@@ -4,10 +4,12 @@ import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -29,6 +31,7 @@ import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
+import com.worldwidewealth.termtem.widgets.EnableViewPager;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.TermTemDialog;
@@ -50,7 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InboxActivity extends MyAppcompatActivity implements InboxFragment.OnUpdateDataSearchListener{
+public class InboxActivity extends MyAppcompatActivity implements InboxFragment.OnActiveFragment{
 
     private RecyclerView mInboxRecycler;
     private Toolbar mToolbar;
@@ -63,8 +66,46 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private int mPage = 1;
     private SearchView searchView = null;
     private TabLayout mInboxTabLayout;
-    private ViewPager mInboxViewPager;
+    private EnableViewPager mInboxViewPager;
+    private int statusBarColor;
+    private ActionMode mActionMode;
     public static final String TAG = InboxActivity.class.getSimpleName();
+
+    private ActionMode.Callback mDeleteMode = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_bill_select, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //hold current color of status bar
+                statusBarColor = getWindow().getStatusBarColor();
+                //set your gray color
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccentDark));
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //return to "old" color of status bar
+                getWindow().setStatusBarColor(statusBarColor);
+            }
+            mInboxViewPager.setPagingEnabled(true);
+            mInboxTabLayout.setVisibility(View.VISIBLE);
+        }
+    };
+
 
     @Override
     public void onUpdateDataSearch(String text, long datefrom, long dateto) {
@@ -72,6 +113,18 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         mText = text;
         mSearchDateRange.setDateFrom(datefrom);
         mSearchDateRange.setDateTo(dateto);
+    }
+
+    @Override
+    public void onCallSelectMode() {
+
+        mActionMode = this.startSupportActionMode(mDeleteMode);
+        mActionMode.setTitle("1 รายการที่เลือก");
+
+
+        this.getSupportActionBar().startActionMode(mDeleteMode);
+        mInboxViewPager.setPagingEnabled(false);
+        mInboxTabLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -193,79 +246,11 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         }
     }
 
-/*
-    private void loadDataInbox(){
-        if (mPage == 1) {
-            new DialogCounterAlert.DialogProgress(this);
-            if (mAdapter != null) mAdapter.clearAll();
-        }
-        Call<ResponseBody> call = services.service(
-                new RequestModel(APIServices.ACTIONLOADINBOX,
-                        new InboxRepuest(mPage, mDateFrom, mDateTo, mText)));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Object objectResponse = EncryptionData.getModel(
-                        InboxActivity.this, call, response.body(), this);
-
-                if (objectResponse instanceof String){
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
-                    final List<InboxResponse> listinbox = gson
-                            .fromJson((String)objectResponse,
-                                    new TypeToken<ArrayList<InboxResponse>>(){}.getType());
-
-                    if (listinbox.size() == 0 && mAdapter != null ){
-                        mAdapter.setLoaded();
-                        mAdapter.setMaxInbox(true);
-                        return;
-                    }
-
-                    if (mPage == 1) {
-                        mListInbox = listinbox;
-                        initListInbox();
-                    } else {
-                        mListInbox.add(null);
-                        mAdapter.notifyItemInserted(mListInbox.size() - 1);
-                        //Load more data for reyclerview
-                        new Handler().postDelayed(new Runnable() {
-                            @Override public void run() {
-                                Log.e("haint", "Load More "+mPage);
-                                //Remove loading item
-                                mListInbox.remove(mListInbox.size() - 1);
-                                mAdapter.notifyItemRemoved(mListInbox.size());
-                                //Load data
-*/
-/*
-                                int index = mListInbox.size();
-                                int end = index + 20;
-*//*
-
-                                for (InboxResponse model:listinbox){
-                                    mListInbox.add(model);
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setLoaded();
-                            }
-                        }, 1000);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(InboxActivity.this, call, this);
-            }
-        });
-    }
-*/
 
     private void bindView(){
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-/*
-        mInboxRecycler = (RecyclerView) findViewById(R.id.inbox_recyclear);
-*/
         mInboxTabLayout = (TabLayout) findViewById(R.id.tablayout_inbox);
-        mInboxViewPager = (ViewPager) findViewById(R.id.pager_inbox);
+        mInboxViewPager = (EnableViewPager) findViewById(R.id.pager_inbox);
     }
 
     private void initToolbar(){
@@ -274,25 +259,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.in_box));
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-
-
-//    private void initListInbox(){
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//        mInboxRecycler.setLayoutManager(layoutManager);
-//        mAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox);
-//        mInboxRecycler.setAdapter(mAdapter);
-//        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override public void onLoadMore() {
-//                if (!mAdapter.isMaxInbox()) {
-//                    mPage++;
-//                    loadDataInbox();
-//                }
-//            }
-//        });
-//        DialogCounterAlert.DialogProgress.dismiss();
-//    }
 
 
 }

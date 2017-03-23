@@ -64,6 +64,13 @@
                 android:text="@string/app_name" />
 
         </LinearLayout>
+        <CheckBox
+            android:id="@+id/check_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:buttonTint="@android:color/darker_gray"/>
     </LinearLayout>
     <TextView
         android:id="@+id/txt_date"

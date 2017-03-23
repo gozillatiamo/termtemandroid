@@ -2,8 +2,11 @@ package com.worldwidewealth.termtem.dashboard;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.termtem.dashboard.maps.MapsActivity;
@@ -67,12 +71,18 @@ public class ActivityDashboard extends MyAppcompatActivity{
     private List<UserMenuModel> mUserMenuList;
     private LayerDrawable mIconNoti;
 
-
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBalance();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
         mHolder = new ViewHolder(this);
         mUserMenuList = Global.getInstance().getUserMenuList();
 
@@ -84,9 +94,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        if(Global.getInstance().getAGENTID() != null) {
-            Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
-        }
+        updateBalance();
         MenuButtonView.setsClickable(true);
     }
 
@@ -100,7 +108,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        unregisterReceiver(myReceiver);
         if (Global.getInstance().getTXID() != null) {
             Util.logoutAPI(this, true);
         }
@@ -148,6 +156,13 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateBalance(){
+        if(Global.getInstance().getAGENTID() != null) {
+            Util.updateMyBalanceWallet(this, mHolder.mIncludeMyWallet, mIconNoti);
+        }
+
     }
 
     private void initToolbar(){

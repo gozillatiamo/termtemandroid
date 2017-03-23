@@ -77,7 +77,7 @@ public class InboxFragment extends Fragment {
     private ScaleInAnimationAdapter animationAdapter;
 
     private int mPageType;
-    private OnUpdateDataSearchListener mCallback;
+    private OnActiveFragment mCallback;
     private APIServices services;
     private View rootView;
     private Call<ResponseBody> call;
@@ -96,8 +96,9 @@ public class InboxFragment extends Fragment {
     }
 */
 
-    public interface OnUpdateDataSearchListener{
+    public interface OnActiveFragment{
         void onUpdateDataSearch(String text, long datefrom, long dateto);
+        void onCallSelectMode();
     }
 
 
@@ -118,7 +119,7 @@ public class InboxFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
-            mCallback = (OnUpdateDataSearchListener) context;
+            mCallback = (OnActiveFragment) context;
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString()
             + " must implement OnHeadlineSelectedListener");
@@ -252,7 +253,16 @@ public class InboxFragment extends Fragment {
                     }
                 }
             });
+            mInboxAdapter.setOnItemLongClickListener(new InboxAdapter.OnItemLongClickListener() {
+                @Override
+                public void onItemLongClick(InboxAdapter.InboxViewHolder holder, int position) {
+                    Log.e(TAG, "InboxDate: "+holder.mItemInbox.getDate().toString());
+                    Log.e(TAG, "position: "+position);
+//                    mCallback.onCallSelectMode();
+                }
+            });
 
+/*
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
                 public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -297,6 +307,7 @@ public class InboxFragment extends Fragment {
 
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
             itemTouchHelper.attachToRecyclerView(mInboxRecycler);
+*/
         } else {
             mInboxAdapter.setLoaded();
             mInboxAdapter.setMaxInbox(false);

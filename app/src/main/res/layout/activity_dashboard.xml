@@ -92,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             app:mbv_icon="@drawable/ic_scan_primary"
-                            app:mbv_visibility="show"
+                            app:mbv_visibility="hide"
                             app:mbv_type="pin"
                             app:mbv_title="@string/dashboard_pin"
                             >
