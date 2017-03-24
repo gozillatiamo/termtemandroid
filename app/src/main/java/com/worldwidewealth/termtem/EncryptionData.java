@@ -195,7 +195,6 @@ public class EncryptionData {
         } catch (JsonSyntaxException e){
 //            String converted = Util.ConvertJsonEncode(strRespone);
             String responDecode = Util.decode(strRespone);
-            Log.e(TAG, requestModel.getAction()+"Response: "+responDecode);
             return responDecode;
 
         } catch (IOException e) {

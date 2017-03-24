@@ -56,9 +56,9 @@ android {
         }
 
         demo {
-            versionCode 21
+            versionCode 22
             applicationIdSuffix ".demo"
-            versionNameSuffix "16-demo"
+            versionNameSuffix "17-demo"
         }
 
         dev {

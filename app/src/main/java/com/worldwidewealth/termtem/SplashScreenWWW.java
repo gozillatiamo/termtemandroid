@@ -50,7 +50,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            Log.e(TAG, "FlagActivityBrought: "+getIntent().getFlags()+"::"+Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             finish();
             return;
         }
@@ -60,40 +59,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         services = APIServices.retrofit.create(APIServices.class);
 
 
-/*
-        Log.e(TAG, "package: "+getApplicationContext().getPackageName());
-        Log.e(TAG, "VersionName: "+BuildConfig.VERSION_NAME);
-        String encodedUsername = EncryptionData.EncryptData("0820132613", "f0391bc9-c1c3-4c6f-bde1-e492d764e59202b027b5-632e-4b85-ae62-30d5a158d322");
-        Log.e(TAG, "EncodedUsername: "+encodedUsername);
-        String encodedPassword = EncryptionData.EncryptData("23993668", "f0391bc9-c1c3-4c6f-bde1-e492d764e59202b027b5-632e-4b85-ae62-30d5a158d322");
-        Log.e(TAG, "EncodedPassword: "+encodedPassword);
-*/
-//        String decodedusername = EncryptionData.DecryptData("d7393f27-fdca-4e3a-8db2-e026e453ffce","f0391bc9-c1c3-4c6f-bde1-e492d764e59202b027b5-632e-4b85-ae62-30d5a158d322");
-//        Log.e(TAG, "Username: "+decodedusername);
-//        String decodedpassword = EncryptionData.DecryptData("bSkVSuaWOErrCLI4mxmtqQ==","f0391bc9-c1c3-4c6f-bde1-e492d764e59202b027b5-632e-4b85-ae62-30d5a158d322");
-//        Log.e(TAG, "Password: "+decodedpassword);
-
-/*
-        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
-                new DataRequestModel("2bc04406-95e2-4a8e-a15d-b9ebd5158b7e",
-                        "ios",
-                        "bc99602c-bddc-4737-91cf-fe7ddae05bfb",
-                        "7Wnd7Dbonhd5M/kz%2BtiiRluN2bN71S2inu7p4X1w3eH3zUfngZP35Q==",
-                        "wJ0tYJSl1MSeZ2krKLXBr/IBqj7ucMiutGLzLaaoaweVc/EgRoZU4g==")));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(SplashScreenWWW.this, call, this);
-            }
-        });
-*/
-
-
-
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -101,7 +66,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                 if (Global.getInstance().getAGENTID() != null) {
 
-                    Log.e(TAG, "AgentId: "+Global.getInstance().getAGENTID());
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                         @Override
@@ -114,14 +78,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                             }
 
                             if (responseValues instanceof ResponseModel){
-                               /* Global.getInstance().setAGENTID(null);
-                                Global.getInstance().setAGENTCODE(null);
-                                Global.getInstance().setFIRSTNAME(null);
-                                Global.getInstance().setLASTNAME(null);
-                                Global.getInstance().setPHONENO(null);
-                                Global.getInstance().setUSERID(null);
-                                Global.getInstance().setBALANCE(0);
-                                Global.getInstance().setTXID(null);*/
                                 Global.getInstance().clearUserData(true);
                                 getDataDevice();
 

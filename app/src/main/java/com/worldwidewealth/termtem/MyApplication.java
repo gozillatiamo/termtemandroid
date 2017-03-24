@@ -80,8 +80,6 @@ public class MyApplication extends Application implements Application.ActivityLi
             PackageInfo packageInfo = this.getPackageManager()
                     .getPackageInfo(this.getPackageName(), 0);
             int versionCode = packageInfo.versionCode;
-            Log.e(TAG, "oldVersionCode: "+Global.getInstance().getVERSIONCODE());
-            Log.e(TAG, "newVersionCode: "+versionCode);
             if (Global.getInstance().getVERSIONCODE() != versionCode){
                 if (Global.getInstance().getAGENTID() != null){
                     Util.logoutAPI(mContext, true);
@@ -158,10 +156,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                 currentActivity = activity;
                 return;
             }
-            Log.e(TAG, "current: "+strCurrentAtivity);
-            Log.e(TAG, "new: "+activity.getLocalClassName());
             if (strCurrentAtivity.equals(activity.getLocalClassName())) {
-                Log.e(TAG, "ActivityisEqual");
 
                 if (mThread != null || mThread.isAlive()) {
 //                    mHandler.removeCallbacks(mRunable);
@@ -175,7 +170,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                 }
 
                 if (Global.getInstance().getTXID() == null) {
-                    Log.e(TAG, "TXID == null");
                     Util.backToSignIn(activity);
                     return;
                 }
@@ -201,7 +195,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
                 // We were stopped and no-one else has been started.
-                Log.e(TAG, "ActivityisEqual and Call Logout");
 //                Util.logoutAPI(false);
                 if(mThread != null && mThread.isAlive()){
                     mThread.interrupt();
@@ -213,7 +206,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                         int times = 0;
                         while (Global.getInstance().getAGENTID() == null && times < 3){
                             try {
-                                Log.e(TAG, ""+(times+1));
                                 Thread.sleep(1000);
                                 times++;
                             } catch (InterruptedException e) {
@@ -221,7 +213,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                             }
                         }
 
-                        Log.e(TAG, "AgentId :"+Global.getInstance().getAGENTID());
 
                         if (Global.getInstance().getAGENTID() == null) return;
                         APIServices services = APIServices.retrofit.create(APIServices.class);
@@ -244,7 +235,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                 {
 
                                                     count--;
-                                                    Log.e(TAG, "Second: "+count);
                                                     if (count == 0){
                                                         Util.logoutAPI(null, true);
                                                         T.cancel();
