@@ -17,7 +17,7 @@
     <string name="in_box">กล่องข้อความ</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
-    <string name="phone_number">เบอร์โทรศัพท์</string>
+    <string name="phone_number">หมายเลขโทรศัพท์</string>
     <string name="hint_phone_number">กรอกหมายเลขโทรศัพท์</string>
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>
@@ -234,7 +234,7 @@
     <string name="agent_name">ชื่อ-นามสกุล Agent:</string>
     <string name="type_report">เลือกประเภทประวัติรายการ</string>
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
-    <string name="report_cashin_agent">ประวัติการโอนเงิน Agent</string>
+    <string name="report_cashin_agent">ประวัติการโอนเงินให้ Agent</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>

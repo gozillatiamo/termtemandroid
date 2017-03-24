@@ -427,9 +427,7 @@ public class FragmentTopupPackage extends  Fragment{
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) {
                     new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                }
                 mBottomAction.setEnable(true);
             }
         });

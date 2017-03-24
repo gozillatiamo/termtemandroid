@@ -166,7 +166,12 @@ public class MyApplication extends Application implements Application.ActivityLi
                 if (mThread != null || mThread.isAlive()) {
 //                    mHandler.removeCallbacks(mRunable);
                     mThread.interrupt();
-                    T.cancel();
+                    mThread = null;
+
+                    if (T != null) {
+                        T.cancel();
+                        T = null;
+                    }
                 }
 
                 if (Global.getInstance().getTXID() == null) {
@@ -243,6 +248,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                     if (count == 0){
                                                         Util.logoutAPI(null, true);
                                                         T.cancel();
+                                                        T = null;
                                                     }
                                                 }
                                             });

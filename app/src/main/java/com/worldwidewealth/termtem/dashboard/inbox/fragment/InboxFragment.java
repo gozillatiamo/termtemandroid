@@ -12,6 +12,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.MultiSelector;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class InboxFragment extends Fragment {
     public static final String INBOX_TYPE = "inboxtype";
     public static final String TAG = InboxFragment.class.getSimpleName();
 
+
     public static final int ALL = 0;
     public static final int TEXT = 1;
     public static final int VIDEO = 2;
@@ -86,6 +89,10 @@ public class InboxFragment extends Fragment {
     private long mDateFrom, mDateTo;
     private String mText = "";
     private ArrayList<InboxResponse> mListMockUp;
+    private SparseBooleanArray mSelectedPositions;
+    private boolean mIsSelectable = false;
+    private int countSeclect = 0;
+
 
 
     // TODO: Rename and change types of parameters
@@ -98,7 +105,7 @@ public class InboxFragment extends Fragment {
 
     public interface OnActiveFragment{
         void onUpdateDataSearch(String text, long datefrom, long dateto);
-        void onCallSelectMode();
+        void onCallSelectMode(int count);
     }
 
 
@@ -239,7 +246,7 @@ public class InboxFragment extends Fragment {
                     break;
             }
 */
-            mInboxAdapter = new InboxAdapter((AppCompatActivity) getActivity(), mInboxRecycler, mListInbox);
+            mInboxAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox);
             animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
             animationAdapter.setInterpolator(new OvershootInterpolator());
             animationAdapter.setDuration(700);
@@ -258,7 +265,10 @@ public class InboxFragment extends Fragment {
                 public void onItemLongClick(InboxAdapter.InboxViewHolder holder, int position) {
                     Log.e(TAG, "InboxDate: "+holder.mItemInbox.getDate().toString());
                     Log.e(TAG, "position: "+position);
-//                    mCallback.onCallSelectMode();
+                    if(!isSelectable()){
+                        setSelectable(true);
+                        setItemChecked(position, true);
+                    }
                 }
             });
 
@@ -317,7 +327,36 @@ public class InboxFragment extends Fragment {
         DialogCounterAlert.DialogProgress.dismiss();
     }
 
-    private void bindMultiSelectMode(){
+    public void setItemChecked(int position, boolean isChecked) {
+        if (isChecked) countSeclect++;
+        else countSeclect--;
+
+        mSelectedPositions.put(position, isChecked);
+        mCallback.onCallSelectMode(countSeclect);
+
+    }
+
+    public boolean isItemChecked(int position) {
+        return mSelectedPositions.get(position);
+    }
+
+    public void setSelectable(boolean selectable) {
+        if (selectable){
+            mSelectedPositions = new SparseBooleanArray();
+            countSeclect = 0;
+        }
+        mIsSelectable = selectable;
+        mInboxAdapter.notifyDataSetChanged();
+    }
+
+    public boolean isSelectable() {
+        return mIsSelectable;
+    }
+
+    public void deleteList(){
+        mInboxAdapter.removeListSelected(mSelectedPositions);
+        mSelectedPositions = new SparseBooleanArray();
+//        mInboxAdapter.notifyItemRangeChanged(0, mInboxAdapter.getItemCount());
     }
 
     private void loadDataInbox(){

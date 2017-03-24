@@ -160,6 +160,10 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         setRead(this.isRead);
     }
 
+    public void checkToggle(){
+        mCheckDelete.toggle();
+    }
+
     public void setEnableCheckDelete(boolean enable){
         if (enable){
             mCheckDelete.setVisibility(VISIBLE);
@@ -258,9 +262,10 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         }
     }
 
-    public void setInformationClickListener(InformationClickListener listener, int position){
+    public void setInformationClickListener(InformationClickListener listener, InboxAdapter.InboxViewHolder holder, int position){
         this.informationClickListener = listener;
         this.mPosition = position;
+        this.holder = holder;
     }
 
     public void setInformationLongClickListener(InformationLongClickListener listener, InboxAdapter.InboxViewHolder holder){
@@ -280,7 +285,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private void onInformationViewClick(){
         if (informationClickListener != null){
-            informationClickListener.onInformationViewClick(mPosition);
+            informationClickListener.onInformationViewClick(holder, mPosition);
         }
     }
 
@@ -307,7 +312,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     }
 
     public interface InformationClickListener {
-        void onInformationViewClick(int position);
+        void onInformationViewClick(InboxAdapter.InboxViewHolder holder, int position);
     }
 
     public interface InformationLongClickListener {

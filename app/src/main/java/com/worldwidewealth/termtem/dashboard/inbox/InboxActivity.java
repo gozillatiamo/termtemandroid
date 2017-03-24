@@ -68,6 +68,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private TabLayout mInboxTabLayout;
     private EnableViewPager mInboxViewPager;
     private int statusBarColor;
+    private static InboxFragment mCurrentInbox;
     private ActionMode mActionMode;
     public static final String TAG = InboxActivity.class.getSimpleName();
 
@@ -75,11 +76,6 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             getMenuInflater().inflate(R.menu.menu_bill_select, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //hold current color of status bar
                 statusBarColor = getWindow().getStatusBarColor();
@@ -87,11 +83,26 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
                 getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccentDark));
             }
 
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+
             return false;
         }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.action_delete:
+                    mCurrentInbox = (InboxFragment) getSupportFragmentManager()
+                            .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                                    + mInboxViewPager.getCurrentItem());
+                    mCurrentInbox.deleteList();
+//                    mode.finish();
+                    break;
+            }
             return false;
         }
 
@@ -103,6 +114,10 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
             }
             mInboxViewPager.setPagingEnabled(true);
             mInboxTabLayout.setVisibility(View.VISIBLE);
+            mCurrentInbox = (InboxFragment) getSupportFragmentManager()
+                    .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                            + mInboxViewPager.getCurrentItem());
+            mCurrentInbox.setSelectable(false);
         }
     };
 
@@ -116,15 +131,18 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     }
 
     @Override
-    public void onCallSelectMode() {
+    public void onCallSelectMode(int count) {
 
-        mActionMode = this.startSupportActionMode(mDeleteMode);
-        mActionMode.setTitle("1 รายการที่เลือก");
+        if(mInboxTabLayout.getVisibility() == View.VISIBLE){
+            mActionMode = this.startSupportActionMode(mDeleteMode);
+            this.getSupportActionBar().startActionMode(mDeleteMode);
+            mInboxViewPager.setPagingEnabled(false);
+            mInboxTabLayout.setVisibility(View.GONE);
+
+        }
+        mActionMode.setTitle(count+" รายการที่เลือก");
 
 
-        this.getSupportActionBar().startActionMode(mDeleteMode);
-        mInboxViewPager.setPagingEnabled(false);
-        mInboxTabLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -235,14 +253,34 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private void initViewPager(){
         mInboxViewPager.setAdapter(new InboxPagerAdapter(getSupportFragmentManager(), this));
         mInboxTabLayout.setupWithViewPager(mInboxViewPager);
+        mCurrentInbox = (InboxFragment) getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                        + mInboxViewPager.getCurrentItem());
+
+        mInboxViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentInbox = (InboxFragment) getSupportFragmentManager()
+                        .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                                + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     private void searchInbox(String text, long datefrom, long dateto){
-        InboxFragment inboxFragment = (InboxFragment) getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
-                        + mInboxViewPager.getCurrentItem());
-        if (inboxFragment != null){
-            inboxFragment.search(text, datefrom, dateto);
+        if (mCurrentInbox != null){
+            mCurrentInbox.search(text, datefrom, dateto);
         }
     }
 

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 import com.worldwidewealth.termtem.widgets.InformationView;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -48,7 +52,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int visibleThreshold = 1;
     private int lastVisibleItem,totalItemCount;
     private List<InboxResponse> mListInbox;
-    private AppCompatActivity mActivity;
+    private InboxFragment mFragment;
     private OnItemLongClickListener longClickListener;
     public boolean maxInbox = false;
     public static final String TAG = InboxAdapter.class.getSimpleName();
@@ -58,14 +62,15 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void onItemLongClick(InboxViewHolder holder, int position);
     }
 
+
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
 
 
-    public InboxAdapter(AppCompatActivity activity, RecyclerView recyclerView, List<InboxResponse> listdata) {
+    public InboxAdapter(InboxFragment fragment, RecyclerView recyclerView, List<InboxResponse> listdata) {
         this.mListInbox = listdata;
-        this.mActivity = activity;
+        this.mFragment = fragment;
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -95,10 +100,10 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View rootView;
         switch (viewType){
             case VIEW_TYPE_ITEM:
-                rootView = LayoutInflater.from(mActivity).inflate(R.layout.item_inbox, parent, false);
+                rootView = LayoutInflater.from(mFragment.getContext()).inflate(R.layout.item_inbox, parent, false);
                 return new InboxViewHolder(rootView);
             case VIEW_TYPE_LOADING:
-                rootView = LayoutInflater.from(mActivity).inflate(R.layout.layout_loading_item, parent, false);
+                rootView = LayoutInflater.from(mFragment.getContext()).inflate(R.layout.layout_loading_item, parent, false);
                 return new LoadingViewHolder(rootView);
             default: return null;
         }
@@ -123,10 +128,16 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
             ((InboxViewHolder) holder).mItemInbox.setDate(getItem(position).getCreate_Date());
-            ((InboxViewHolder) holder).mItemInbox.setInformationClickListener(this, position);
+            ((InboxViewHolder) holder).mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
             ((InboxViewHolder) holder).mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
 
-
+            if (mFragment.isSelectable()){
+                ((InboxViewHolder) holder).mItemInbox.setEnableCheckDelete(true);
+                ((InboxViewHolder) holder).mItemInbox.setCheckDelete(mFragment.isItemChecked(position));
+            } else {
+                ((InboxViewHolder) holder).mItemInbox.setEnableCheckDelete(false);
+                ((InboxViewHolder) holder).mItemInbox.setCheckDelete(false);
+            }
         } else if (holder instanceof LoadingViewHolder){
             ((LoadingViewHolder) holder).mProgressbar.setIndeterminate(true);
         }
@@ -145,16 +156,23 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     @Override
-    public void onInformationViewClick(int position) {
+    public void onInformationViewClick(InboxViewHolder holder, int position) {
         if (position == -1) return;
-        getItem(position).setReaded(true);
-        notifyDataSetChanged();
-        Intent intent = new Intent(mActivity, ActivityShowNotify.class);
-        intent.putExtra(MyFirebaseMessagingService.TEXT, getItem(position).getTitle());
-        intent.putExtra(MyFirebaseMessagingService.BOX, getItem(position).getMsg());
-        intent.putExtra(MyFirebaseMessagingService.MSGID, getItem(position).getMsgid());
-        mActivity.overridePendingTransition(R.anim.slide_in_up, 0);
-        mActivity.startActivity(intent);
+        if (!mFragment.isSelectable()) {
+            getItem(position).setReaded(true);
+            notifyDataSetChanged();
+            Intent intent = new Intent(mFragment.getContext(), ActivityShowNotify.class);
+            intent.putExtra(MyFirebaseMessagingService.TEXT, getItem(position).getTitle());
+            intent.putExtra(MyFirebaseMessagingService.BOX, getItem(position).getMsg());
+            intent.putExtra(MyFirebaseMessagingService.MSGID, getItem(position).getMsgid());
+            mFragment.getActivity().overridePendingTransition(R.anim.slide_in_up, 0);
+            mFragment.getContext().startActivity(intent);
+        } else {
+            mFragment.setItemChecked(position, !holder.mItemInbox.isCheckDelete());
+            holder.mItemInbox.checkToggle();
+            Log.e(TAG, position+":"+holder.mItemInbox.isCheckDelete());
+//            notifyDataSetChanged();
+        }
 
     }
 
@@ -190,6 +208,19 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void addAll(List<InboxResponse> list_inbox){
         mListInbox = list_inbox;
         notifyDataSetChanged();
+    }
+
+    public void removeListSelected(SparseBooleanArray booleanArray){
+        for (int i = 0; i < booleanArray.size(); i++) {
+            if (booleanArray.get(i)) {
+                Log.e(TAG, "Remove: "+i);
+                mListInbox.remove(i);
+                notifyItemRemoved(i);
+//                this.notifyItemRangeChanged(i, getItemCount()-1);
+            }
+        }
+
+
     }
 
     public void removeItem(int position){
