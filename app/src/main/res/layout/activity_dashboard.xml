@@ -62,7 +62,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 app:mbv_icon="@drawable/ic_agent_cashin_primary"
-                                app:mbv_visibility="show"
+                                app:mbv_visibility="hide"
                                 app:mbv_type="agentcashin"
                                 app:mbv_title="@string/add_credit_agent"
                                 >
@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             app:mbv_icon="@drawable/ic_topup_primary"
-                            app:mbv_visibility="show"
+                            app:mbv_visibility="hide"
                             app:mbv_type="topup"
                             app:mbv_title="@string/topup"
                             >
@@ -112,7 +112,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             app:mbv_icon="@drawable/ic_setup_primary"
-                            app:mbv_visibility="show"
+                            app:mbv_visibility="hide"
                             app:mbv_type="setup"
                             app:mbv_title="@string/setting"
                             >
@@ -124,7 +124,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             app:mbv_icon="@drawable/ic_support_primary"
-                            app:mbv_visibility="show"
+                            app:mbv_visibility="hide"
                             app:mbv_type="support"
                             app:mbv_title="@string/support"
                             >
@@ -144,14 +144,14 @@
                             app:mbv_icon="@drawable/ic_history_primary"
                             app:mbv_title="@string/report_history"
                             app:mbv_type="history"
-                            app:mbv_visibility="show"/>
+                            app:mbv_visibility="hide"/>
                         <com.worldwidewealth.termtem.widgets.MenuButtonView
                             android:id="@+id/mbv_scan"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             app:mbv_icon="@drawable/ic_scan_primary"
-                            app:mbv_visibility="show"
+                            app:mbv_visibility="hide"
                             app:mbv_type="scan"
                             app:mbv_title="@string/dashboard_scan_qr"/>
 
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:mbv_icon="@drawable/ic_notipay_primary"
-                        app:mbv_visibility="show"
+                        app:mbv_visibility="hide"
                         app:mbv_type="notipay"
                         app:mbv_title="@string/dashboard_mtf"
                         >
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:mbv_icon="@drawable/mpay_icon"
-                        app:mbv_visibility="show"
+                        app:mbv_visibility="hide"
                         app:mbv_type="cashin"
                         app:mbv_title="@string/menu_mpay"
                         >

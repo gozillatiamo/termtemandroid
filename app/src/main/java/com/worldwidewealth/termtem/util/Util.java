@@ -474,10 +474,12 @@ public class Util {
 
     }
 
-    public static long getTimestamp(long timestamp, int hourOfDay){
+    public static long getTimestamp(long timestamp, int hourOfDay, int minute, int second){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
         return calendar.getTimeInMillis();
     }
 

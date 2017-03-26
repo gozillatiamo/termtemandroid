@@ -40,8 +40,8 @@ public class TermTemDialog {
 
         public SearchDateRangeDialog(Context context, DialogInterface.OnClickListener submitListener){
             this.mContext = context;
-            mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0);
-            mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
+            mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
+            mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
             LayoutInflater inflater = LayoutInflater.from(context);
             View dialogView  = inflater.inflate(R.layout.dialog_search_report, null);
 
@@ -163,10 +163,10 @@ public class TermTemDialog {
                     btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                     switch (type){
                         case FORM:
-                            mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
+                            mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
                             break;
                         case TO:
-                            mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23);
+                            mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23, 59, 59);
                             break;
                     }
 

@@ -29,7 +29,7 @@ android {
         applicationId "com.worldwidewealth.termtem"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
+        versionCode 9
         versionName "1.2."
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
@@ -52,7 +52,7 @@ android {
     productFlavors {
 
         production {
-            versionNameSuffix "0"
+            versionNameSuffix "1"
         }
 
         demo {

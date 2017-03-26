@@ -141,8 +141,8 @@ public class InboxFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2016, 1, 1);
 
-        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
-        mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
+        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
+        mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
         if (getArguments() != null) {
             mPageType = getArguments().getInt(PAGE_TYPE);
         }
@@ -260,6 +260,7 @@ public class InboxFragment extends Fragment {
                     }
                 }
             });
+/*
             mInboxAdapter.setOnItemLongClickListener(new InboxAdapter.OnItemLongClickListener() {
                 @Override
                 public void onItemLongClick(InboxAdapter.InboxViewHolder holder, int position) {
@@ -271,6 +272,7 @@ public class InboxFragment extends Fragment {
                     }
                 }
             });
+*/
 
 /*
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

@@ -153,8 +153,8 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         Util.setupUI(findViewById(R.id.layout_parent));
         Calendar calendar = Calendar.getInstance();
         calendar.set(2016, 1, 1);
-        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0);
-        mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23);
+        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
+        mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
         bindView();
         initToolbar();
         initViewPager();

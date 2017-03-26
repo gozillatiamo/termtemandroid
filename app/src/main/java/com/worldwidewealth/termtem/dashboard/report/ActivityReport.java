@@ -82,8 +82,8 @@ public class ActivityReport extends MyAppcompatActivity {
         Log.e(TAG, "Dashboard Can CashIn: "+mCanCashIn);
         mHolder = new ViewHolder(this);
         services = APIServices.retrofit.create(APIServices.class);
-        mPreviousDateFrom = getTimestamp(System.currentTimeMillis(), 0);
-        mPeviousDateTo = getTimestamp(System.currentTimeMillis(), 23);
+        mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
+        mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
         initToolbar();
         initListReport();
         initBottomAction();
@@ -175,11 +175,6 @@ public class ActivityReport extends MyAppcompatActivity {
         salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
     }
 
-    private long getTimestamp(long timestamp, int hourOfDay){
-        mCalendar.setTimeInMillis(timestamp);
-        mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        return mCalendar.getTimeInMillis();
-    }
 
     private void initToolbar(){
         mHolder.mToolbar.inflateMenu(R.menu.menu_report);
@@ -351,10 +346,10 @@ public class ActivityReport extends MyAppcompatActivity {
                 btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
                 switch (type){
                     case FORM:
-                        mPreviousDateFrom = getTimestamp(calendar.getTimeInMillis(), 0);
+                        mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
                         break;
                     case TO:
-                        mPeviousDateTo = getTimestamp(calendar.getTimeInMillis(), 23);
+                        mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23, 59, 59);
                         break;
                 }
 
