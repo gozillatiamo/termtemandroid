@@ -253,9 +253,6 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private void initViewPager(){
         mInboxViewPager.setAdapter(new InboxPagerAdapter(getSupportFragmentManager(), this));
         mInboxTabLayout.setupWithViewPager(mInboxViewPager);
-        mCurrentInbox = (InboxFragment) getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
-                        + mInboxViewPager.getCurrentItem());
 
         mInboxViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -279,6 +276,10 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     }
 
     private void searchInbox(String text, long datefrom, long dateto){
+        mCurrentInbox = (InboxFragment) getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
+                        + mInboxViewPager.getCurrentItem());
+
         if (mCurrentInbox != null){
             mCurrentInbox.search(text, datefrom, dateto);
         }

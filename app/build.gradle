@@ -19,7 +19,7 @@ android {
         config {
             keyAlias 'www'
             keyPassword 'wwwholding'
-            storeFile file('D:/Android/TermTem/keystore/termtem.jks')
+            storeFile file('/Users/gozillatiamo/Documents/Andriod/termtemandroid/keystore/termtem.jks')
             storePassword 'termtemholding'
         }
     }
@@ -56,9 +56,9 @@ android {
         }
 
         demo {
-            versionCode 22
+            versionCode 23
             applicationIdSuffix ".demo"
-            versionNameSuffix "17-demo"
+            versionNameSuffix "18-demo"
         }
 
         dev {
