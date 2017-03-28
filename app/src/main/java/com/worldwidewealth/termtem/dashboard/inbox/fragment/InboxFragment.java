@@ -260,19 +260,18 @@ public class InboxFragment extends Fragment {
                     }
                 }
             });
-/*
+
             mInboxAdapter.setOnItemLongClickListener(new InboxAdapter.OnItemLongClickListener() {
                 @Override
                 public void onItemLongClick(InboxAdapter.InboxViewHolder holder, int position) {
                     Log.e(TAG, "InboxDate: "+holder.mItemInbox.getDate().toString());
-                    Log.e(TAG, "position: "+position);
+                    Log.e(TAG, "position: "+holder.itemView.getTag());
                     if(!isSelectable()){
                         setSelectable(true);
                         setItemChecked(position, true);
                     }
                 }
             });
-*/
 
 /*
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -332,13 +331,14 @@ public class InboxFragment extends Fragment {
     public void setItemChecked(int position, boolean isChecked) {
         if (isChecked) countSeclect++;
         else countSeclect--;
-
+        Log.e(TAG, "At position: "+position+" isChecked: "+isChecked);
         mSelectedPositions.put(position, isChecked);
         mCallback.onCallSelectMode(countSeclect);
 
     }
 
     public boolean isItemChecked(int position) {
+        if (mSelectedPositions == null) return false;
         return mSelectedPositions.get(position);
     }
 
@@ -356,8 +356,16 @@ public class InboxFragment extends Fragment {
     }
 
     public void deleteList(){
-        mInboxAdapter.removeListSelected(mSelectedPositions);
-        mSelectedPositions = new SparseBooleanArray();
+        List<Integer> items = new ArrayList<>(mSelectedPositions.size());
+        for (int i = 0; i< mSelectedPositions.size(); i++){
+            items.add(mSelectedPositions.keyAt(i));
+            Log.e(TAG, "Position at: "+mSelectedPositions.keyAt(i)+" isChecked:"+mSelectedPositions.get(i));
+        }
+        if (items.size() != 0){
+            mInboxAdapter.removeListSelected(items);
+            mSelectedPositions.clear();
+        }
+//        mSelectedPositions = new SparseBooleanArray();
 //        mInboxAdapter.notifyItemRangeChanged(0, mInboxAdapter.getItemCount());
     }
 

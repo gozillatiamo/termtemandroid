@@ -233,7 +233,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                 @Override
                                                 public void run()
                                                 {
-
+                                                    Log.e(TAG, ""+count);
                                                     count--;
                                                     if (count == 0){
                                                         Util.logoutAPI(null, true);

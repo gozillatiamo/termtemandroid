@@ -162,6 +162,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     public void checkToggle(){
         mCheckDelete.toggle();
+        setCheckDelete(mCheckDelete.isChecked());
     }
 
     public void setEnableCheckDelete(boolean enable){

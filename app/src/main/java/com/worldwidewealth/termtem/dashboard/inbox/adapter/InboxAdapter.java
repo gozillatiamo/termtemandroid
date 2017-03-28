@@ -114,7 +114,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (holder instanceof InboxViewHolder){
             holder.itemView.setTag(position);
-
+            Log.e(TAG, "onBindViewHolder");
             ((InboxViewHolder) holder).mItemInbox.setTitle(getItem(position).getTitle());
             ((InboxViewHolder) holder).mItemInbox.setDes(getItem(position).getMsg());
             ((InboxViewHolder) holder).mItemInbox.setRead(getItem(position).isReaded());
@@ -158,6 +158,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onInformationViewClick(InboxViewHolder holder, int position) {
         if (position == -1) return;
+        Log.e(TAG, "Selectable: "+mFragment.isSelectable());
         if (!mFragment.isSelectable()) {
             getItem(position).setReaded(true);
             notifyDataSetChanged();
@@ -168,9 +169,9 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mFragment.getActivity().overridePendingTransition(R.anim.slide_in_up, 0);
             mFragment.getContext().startActivity(intent);
         } else {
-            mFragment.setItemChecked(position, !holder.mItemInbox.isCheckDelete());
             holder.mItemInbox.checkToggle();
-            Log.e(TAG, position+":"+holder.mItemInbox.isCheckDelete());
+            mFragment.setItemChecked(position, holder.mItemInbox.isCheckDelete());
+            Log.e(TAG, "Position at: "+position+" isChecked: "+holder.mItemInbox.isCheckDelete());
 //            notifyDataSetChanged();
         }
 
@@ -210,17 +211,19 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void removeListSelected(SparseBooleanArray booleanArray){
-        for (int i = 0; i < booleanArray.size(); i++) {
-            if (booleanArray.get(i)) {
-                Log.e(TAG, "Remove: "+i);
-                mListInbox.remove(i);
-                notifyItemRemoved(i);
-//                this.notifyItemRangeChanged(i, getItemCount()-1);
-            }
+    public void removeListSelected(List<Integer> items){
+
+        for (int i = 0; i < items.size(); i++) {
+            Log.e(TAG, "PositionRemove: " + items.get(i));
+            Log.e(TAG, "Data of inbox: " + mListInbox.get(items.get(i)).getCreate_Date().toString());
+            Log.e(TAG, "ItemSize: " + mListInbox.size());
+            mListInbox.remove(items.get(i)-i);
+            this.notifyItemRemoved(items.get(i)-i);
+            this.notifyItemRangeChanged(items.get(i)-i, getItemCount());
+
         }
-
-
+//            mListInbox.remove(item);
+//        notifyDataSetChanged();
     }
 
     public void removeItem(int position){
