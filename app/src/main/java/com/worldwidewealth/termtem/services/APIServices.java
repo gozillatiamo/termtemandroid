@@ -56,8 +56,19 @@ public interface APIServices {
     public static final String ACTIONGETAGENTLIST = "GETAGENTLIST";
     public static final String ACTION_PREVIEW_AGENT_CASHIN = "PREVIEWAGENTCASHIN";
     public static final String ACTION_GETOTP_AGENT_CASHIN = "GETOTPAGENTCASHIN";
-    public static final String ACTION_SUBMIT_AGENT_CASHIN= "SUBMITAGENTCASHIN";
-    public static final String ACTION_ESLIP_AGENT_CASHIN= "ESLIPAGENTCASHIN";
+    public static final String ACTION_SUBMIT_AGENT_CASHIN = "SUBMITAGENTCASHIN";
+    public static final String ACTION_ESLIP_AGENT_CASHIN = "ESLIPAGENTCASHIN";
+    public static final String ACTION_LOAD_BUTTON_EPIN = "LOADBUTTONEPIN";
+    public static final String ACTION_PREVIEW_EPIN = "PREVIEWEPIN";
+    public static final String ACTION_GET_TOPUP_EPIN = "GETOTPEPIN";
+    public static final String ACTION_SUBMIT_TOPUP_EPIN = "SUBMITTOPUPEPIN";
+    public static final String ACTION_ESLIP_EPIN = "ESLIPEPIN";
+
+
+
+
+
+
 
     public static final String AIS = "12CALL";
     public static final String TRUEMOVE = "TMVH";

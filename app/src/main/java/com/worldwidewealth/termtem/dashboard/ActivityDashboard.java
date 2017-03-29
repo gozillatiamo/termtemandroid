@@ -197,6 +197,11 @@ public class ActivityDashboard extends MyAppcompatActivity{
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;
                 }
+            } else {
+                if (model.getBUTTON().equals("E-Pin")){
+                    mHolder.mMenuTopupPIN.setMenuVisibility(
+                            MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                }
             }
         }
     }
@@ -204,7 +209,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
 
         private Toolbar mToolbar;
         private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuScan, mMenuTopup, mMenuSetUp,
-                                mMenuSupport, mMenuNotiPay, mMenuHistory;
+                                mMenuSupport, mMenuNotiPay, mMenuHistory, mMenuTopupPIN;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -217,6 +222,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             mMenuSupport = (MenuButtonView) view.findViewById(R.id.mbv_support);
             mMenuNotiPay = (MenuButtonView) view.findViewById(R.id.mbv_notipay);
             mMenuHistory = (MenuButtonView) view.findViewById(R.id.mbv_history);
+            mMenuTopupPIN = (MenuButtonView) view.findViewById(R.id.mbv_topup_pin);
         }
     }
 }
