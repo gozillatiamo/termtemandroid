@@ -98,6 +98,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226969355297:android:fb591ec4b7a64a51",
+        "android_client_info": {
+          "package_name": "com.worldwidewealth.termtem.demoairtime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_h4amMGOEArRR_W-TDuB1-_3nGtt6uMQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

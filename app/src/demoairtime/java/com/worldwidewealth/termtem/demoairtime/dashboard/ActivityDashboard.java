@@ -1,4 +1,4 @@
-package com.worldwidewealth.termtem.dashboard;
+package com.worldwidewealth.termtem.demoairtime.dashboard;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -15,15 +15,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
-import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
-import com.worldwidewealth.termtem.model.UserMenuModel;
-import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
+import com.worldwidewealth.termtem.demoairtime.MainActivitytest;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.util.BadgeDrawable;
 import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.MenuButtonView;
@@ -199,12 +200,21 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 }
             }
         }
+
+        mHolder.mMenuDemoAirTime.setMenuClickListener(new MenuButtonView.MenuClickListener() {
+            @Override
+            public void onMenuClick() {
+                Intent intent = new Intent(ActivityDashboard.this, MainActivitytest.class);
+                startActivity(intent);
+            }
+        });
     }
+
     public class ViewHolder{
 
         private Toolbar mToolbar;
         private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuScan, mMenuTopup, mMenuSetUp,
-                                mMenuSupport, mMenuNotiPay, mMenuHistory;
+                                mMenuSupport, mMenuNotiPay, mMenuHistory, mMenuDemoAirTime;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -217,6 +227,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             mMenuSupport = (MenuButtonView) view.findViewById(R.id.mbv_support);
             mMenuNotiPay = (MenuButtonView) view.findViewById(R.id.mbv_notipay);
             mMenuHistory = (MenuButtonView) view.findViewById(R.id.mbv_history);
+            mMenuDemoAirTime = (MenuButtonView) view.findViewById(R.id.mbv_demoairtime);
         }
     }
 }

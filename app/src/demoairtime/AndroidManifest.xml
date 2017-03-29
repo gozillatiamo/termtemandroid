@@ -20,15 +20,12 @@
         android:icon="@drawable/ic_launcher_2"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
-
+        android:theme="@style/AppTheme">
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -52,15 +49,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".dashboard.ActivityDashboard"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
 
-        </activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".demoairtime.dashboard.ActivityDashboard"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+
+
         <activity
             android:name=".ActivityShowNotify"
             android:launchMode="singleTop"
@@ -128,7 +129,11 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".dashboard.maps.MapsActivity"></activity>
+        <activity android:name=".dashboard.maps.MapsActivity" />
+
+        <activity android:name=".demoairtime.MainActivitytest">
+
+        </activity>
     </application>
 
 </manifest>

@@ -5,11 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -18,16 +16,11 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.annotations.Until;
 import com.worldwidewealth.termtem.BuildConfig;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -343,7 +336,17 @@ public class TermTemSignIn {
                         case NEWLOGIN:
                             Global.getInstance().setCacheUser(mUsername);
                             mUsername = null;
-                            Intent intent = new Intent(mContext, ActivityDashboard.class);
+                            Intent intent = null;
+
+                            if(BuildConfig.FLAVOR.equals("demoairtime")) {
+                                try {
+                                    intent = new Intent(mContext, Class.forName("com.worldwidewealth.termtem.demoairtime.dashboard.ActivityDashboard"));
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                intent = new Intent(mContext, ActivityDashboard.class);
+                            }
                             ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             mContext.startActivity(intent);
                             ((AppCompatActivity)mContext).finish();

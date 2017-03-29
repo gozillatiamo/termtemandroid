@@ -358,12 +358,15 @@ public class InboxFragment extends Fragment {
     public void deleteList(){
         List<Integer> items = new ArrayList<>(mSelectedPositions.size());
         for (int i = 0; i< mSelectedPositions.size(); i++){
-            items.add(mSelectedPositions.keyAt(i));
-            Log.e(TAG, "Position at: "+mSelectedPositions.keyAt(i)+" isChecked:"+mSelectedPositions.get(i));
+            if (mSelectedPositions.valueAt(i))
+                items.add(mSelectedPositions.keyAt(i));
+            Log.e(TAG, "Position at: "+mSelectedPositions.keyAt(i)+" isChecked:"+mSelectedPositions.valueAt(i));
         }
         if (items.size() != 0){
             mInboxAdapter.removeListSelected(items);
             mSelectedPositions.clear();
+            countSeclect = 0;
+            mCallback.onCallSelectMode(countSeclect);
         }
 //        mSelectedPositions = new SparseBooleanArray();
 //        mInboxAdapter.notifyItemRangeChanged(0, mInboxAdapter.getItemCount());

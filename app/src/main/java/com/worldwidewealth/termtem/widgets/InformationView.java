@@ -29,7 +29,7 @@ import java.util.Locale;
  */
 
 public class InformationView extends FrameLayout implements View.OnClickListener,
-        View.OnLongClickListener, CompoundButton.OnCheckedChangeListener{
+        View.OnLongClickListener{
 
     private CardView mInformationView;
     private View mLayoutThumbnail;
@@ -45,7 +45,6 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
     private InformationLongClickListener informationLongClickListener;
-    private OnInformationCheckedChangedListener informationCheckedChanged;
     private InboxAdapter.InboxViewHolder holder;
     private int mPosition = -1;
 
@@ -152,7 +151,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private void setupview(){
         mInformationView.setOnClickListener(this);
         mInformationView.setOnLongClickListener(this);
-        mCheckDelete.setOnCheckedChangeListener(this);
+        mCheckDelete.setOnClickListener(this);
+
         setTitle(this.mTitle);
         setDes(this.mDes);
         setLengthVideo(this.mLengthVideo);
@@ -274,13 +274,12 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.holder = holder;
     }
 
-    public void setInformationCheckedChanged(OnInformationCheckedChangedListener listener, int position){
-        this.informationCheckedChanged = listener;
-        this.mPosition = position;
-    }
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.check_delete){
+            mCheckDelete.toggle();
+        }
         onInformationViewClick();
     }
 
@@ -298,18 +297,6 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         }
 
         return false;
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        isCheck = isChecked;
-        if (informationCheckedChanged != null){
-            informationCheckedChanged.onCheckedChanged(buttonView, isChecked, mPosition);
-        }
-    }
-
-    public interface OnInformationCheckedChangedListener{
-        void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int positon);
     }
 
     public interface InformationClickListener {
