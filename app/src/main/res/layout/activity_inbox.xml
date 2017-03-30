@@ -57,6 +57,7 @@
                     >
                 </com.worldwidewealth.termtem.widgets.EnableViewPager>
             </RelativeLayout>
+
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>

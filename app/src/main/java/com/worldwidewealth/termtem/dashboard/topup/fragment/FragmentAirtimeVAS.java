@@ -31,10 +31,13 @@ public class FragmentAirtimeVAS extends Fragment {
     private static final int AIRTIME = 0;
     private static final int VAS = 1;
 
-    public static Fragment newInstance(String data) {
+    private String mTopup;
+
+    public static Fragment newInstance(String data, String topup) {
         Bundle bundle = new Bundle();
         FragmentAirtimeVAS fragmentAirtimeVAS = new FragmentAirtimeVAS();
         bundle.putString(DATA, data);
+        bundle.putString(FragmentTopup.keyTopup, topup);
         fragmentAirtimeVAS.setArguments(bundle);
         return fragmentAirtimeVAS;
         // Required empty public constructor
@@ -49,6 +52,8 @@ public class FragmentAirtimeVAS extends Fragment {
             ((FragmentTopupPackage)getParentFragment()).setEnableEditPhone(true);
         }
         mData = this.getArguments().getString(DATA);
+        mTopup = this.getArguments().getString(FragmentTopup.keyTopup);
+
         if (!DialogCounterAlert.DialogProgress.isShow()){
             new DialogCounterAlert.DialogProgress(getContext()).show();
         }
@@ -74,7 +79,7 @@ public class FragmentAirtimeVAS extends Fragment {
     }
 
     private void initChoiceTopup(){
-        mAdapterPageTopup = new AdapterPageTopup(this.getChildFragmentManager(), mData);
+        mAdapterPageTopup = new AdapterPageTopup(this.getChildFragmentManager(), mData, mTopup);
         mHolder.mPager.setAdapter(mAdapterPageTopup);
         mHolder.mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

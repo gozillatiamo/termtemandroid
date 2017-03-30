@@ -1,8 +1,10 @@
 package com.worldwidewealth.termtem.dashboard.inbox.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -67,7 +69,10 @@ public class InboxFragment extends Fragment {
     public static final String DATE_FROM = "datefrom";
     public static final String DATE_TO = "dateto";
     public static final String INBOX_TYPE = "inboxtype";
+    public static final String POSITION = "position";
     public static final String TAG = InboxFragment.class.getSimpleName();
+    public static final int DELETE_INBOX = 0x0;
+    public static final int READ_INBOX = 0x1;
 
 
     public static final int ALL = 0;
@@ -231,6 +236,23 @@ public class InboxFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case DELETE_INBOX:
+                if (resultCode == Activity.RESULT_OK){
+                    mInboxAdapter.removeItem(data.getExtras().getInt(POSITION));
+                }
+                break;
+            case READ_INBOX:
+                if (resultCode == Activity.RESULT_OK){
+                    mInboxAdapter.getItem(data.getExtras().getInt(POSITION)).setReaded(true);
+                    mInboxAdapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
+
     private void initListInbox(){
         if (mInboxAdapter == null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -376,6 +398,7 @@ public class InboxFragment extends Fragment {
         if (mPageList == 1) {
 //            new DialogCounterAlert.DialogProgress(getContext());
             if (mInboxAdapter != null) mInboxAdapter.clearAll();
+
         }
 
         call = services.service(

@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentChoiceTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -26,14 +27,18 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
     private String[] title;
 
     private String mData;
+    private String mTopup;
     private List<LoadButtonResponseModel> mListAirtime;
     private List<LoadButtonResponseModel> mListVAS;
+    private List<LoadButtonResponseModel> mListEpin;
 
-    public AdapterPageTopup(FragmentManager fm, String data) {
+    public AdapterPageTopup(FragmentManager fm, String data, String topup) {
         super(fm);
         this.mData = data;
+        this.mTopup = topup;
         mListAirtime = new ArrayList<>();
         mListVAS = new ArrayList<>();
+        mListEpin = new ArrayList<>();
         title = new String[]{
                 MyApplication.getContext().getString(R.string.airtime),
                 MyApplication.getContext().getString(R.string.vas)
@@ -55,6 +60,8 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
                 case "VAS":
                     mListVAS.add(model.getSORT_NO()-1, model);
                     break;
+                case "E-PIN":
+                    mListEpin.add(model.getSORT_NO()-1, model);
             }
         }
     }
@@ -73,7 +80,11 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
     public FragmentChoiceTopup getItem(int position) {
         switch (position){
             case 0:
-                return FragmentChoiceTopup.newInstance(mListAirtime);
+                if (mTopup.equals(FragmentTopup.MOBILE)) {
+                    return FragmentChoiceTopup.newInstance(mListAirtime);
+                } else {
+                    return FragmentChoiceTopup.newInstance(mListEpin);
+                }
 
             case 1:
                 return FragmentChoiceTopup.newInstance(mListVAS);

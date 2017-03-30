@@ -267,7 +267,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         return !(activity instanceof SplashScreenWWW |
 //                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
-                activity instanceof ActivityRegister);
+                activity instanceof ActivityRegister |
+                activity instanceof ActivityShowNotify);
     }
 
     public static void showNotifyUpload(){

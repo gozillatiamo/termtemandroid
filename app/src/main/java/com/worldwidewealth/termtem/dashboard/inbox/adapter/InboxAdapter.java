@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxBottomSheetDialogFragment;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 import com.worldwidewealth.termtem.widgets.InformationView;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
@@ -114,7 +116,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (holder instanceof InboxViewHolder){
             holder.itemView.setTag(position);
-            Log.e(TAG, "onBindViewHolder");
             ((InboxViewHolder) holder).mItemInbox.setTitle(getItem(position).getTitle());
             ((InboxViewHolder) holder).mItemInbox.setDes(getItem(position).getMsg());
             ((InboxViewHolder) holder).mItemInbox.setRead(getItem(position).isReaded());
@@ -158,21 +159,13 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onInformationViewClick(InboxViewHolder holder, int position) {
         if (position == -1) return;
-        Log.e(TAG, "Selectable: "+mFragment.isSelectable());
         if (!mFragment.isSelectable()) {
-            getItem(position).setReaded(true);
-            notifyDataSetChanged();
-            Intent intent = new Intent(mFragment.getContext(), ActivityShowNotify.class);
-            intent.putExtra(MyFirebaseMessagingService.TEXT, getItem(position).getTitle());
-            intent.putExtra(MyFirebaseMessagingService.BOX, getItem(position).getMsg());
-            intent.putExtra(MyFirebaseMessagingService.MSGID, getItem(position).getMsgid());
-            mFragment.getActivity().overridePendingTransition(R.anim.slide_in_up, 0);
-            mFragment.getContext().startActivity(intent);
+            BottomSheetDialogFragment bottomSheetDialogFragment = InboxBottomSheetDialogFragment.newInstance(getItem(position), position);
+            bottomSheetDialogFragment.setTargetFragment(mFragment, 0);
+            bottomSheetDialogFragment.show(mFragment.getFragmentManager(), bottomSheetDialogFragment.getTag());
         } else {
             holder.mItemInbox.checkToggle();
             mFragment.setItemChecked(position, holder.mItemInbox.isCheckDelete());
-            Log.e(TAG, "Position at: "+position+" isChecked: "+holder.mItemInbox.isCheckDelete());
-//            notifyDataSetChanged();
         }
 
     }
@@ -214,9 +207,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void removeListSelected(List<Integer> items){
 
         for (int i = 0; i < items.size(); i++) {
-            Log.e(TAG, "PositionRemove: " + items.get(i));
-            Log.e(TAG, "Data of inbox: " + mListInbox.get(items.get(i)).getCreate_Date().toString());
-            Log.e(TAG, "ItemSize: " + mListInbox.size());
             mListInbox.remove(items.get(i)-i);
             this.notifyItemRemoved(items.get(i)-i);
             this.notifyItemRangeChanged(items.get(i)-i, getItemCount());
@@ -229,7 +219,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void removeItem(int position){
         mListInbox.remove(position);
         this.notifyItemRemoved(position);
-        this.notifyItemRangeChanged(position, getItemCount()-1);
+        this.notifyItemRangeChanged(position, getItemCount());
     }
 
     public void setMaxInbox(boolean maxInbox) {

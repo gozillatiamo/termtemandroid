@@ -257,7 +257,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             Glide.with(getContext())
                     .load(image)
 
-                    .placeholder(android.R.color.black)
+                    .placeholder(android.R.color.white)
                     .crossFade()
                     .into(mImageThumbnail);
         }
