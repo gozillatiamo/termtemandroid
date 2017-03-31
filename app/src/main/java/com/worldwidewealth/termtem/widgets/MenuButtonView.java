@@ -72,7 +72,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         SUPPORT(5),
         NOTIPAY(6),
         HISTORY(7),
-        PIN(8);
+        EPIN(8);
 
         private int type;
         TYPE(int i) {
@@ -450,7 +450,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.MOBILE);
                     break;
-                case PIN:
+                case EPIN:
                     intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.PIN);
                     break;

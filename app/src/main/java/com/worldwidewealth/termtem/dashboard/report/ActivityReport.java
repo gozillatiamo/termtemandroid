@@ -125,22 +125,14 @@ public class ActivityReport extends MyAppcompatActivity {
     }
 
     private void initBottomAction(){
+        mBottomSheet = new BottomSheetTypeReport(ActivityReport.this);
 
-        if (mCanCashIn) {
-            mBottomSheet = new BottomSheetTypeReport(ActivityReport.this);
+        if (mBottomSheet.getMenuSize() > 1) {
 
-            mBottomSheet.setOnClick(BottomSheetTypeReport.TOPUP_REPORT_MENU, new View.OnClickListener() {
+            mBottomSheet.setOnResultTypeListener(new BottomSheetTypeReport.OnResultTypeListener() {
                 @Override
-                public void onClick(View v) {
-                    mCurrentType = TOPUP_REPORT;
-                    mBottomSheet.dismiss();
-                }
-            });
-            mBottomSheet.setOnClick(BottomSheetTypeReport.CASHIN_AGENT_REPORT_MENU, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCurrentType = CASHIN_REPORT;
-                    mBottomSheet.dismiss();
+                public void onResult(String typeReport) {
+                    mCurrentType = typeReport;
                 }
             });
 

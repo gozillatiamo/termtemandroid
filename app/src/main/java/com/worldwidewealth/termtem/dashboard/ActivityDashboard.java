@@ -196,11 +196,10 @@ public class ActivityDashboard extends MyAppcompatActivity{
                         mHolder.mMenuAgentCashIn.setMenuVisibility(
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;
-                }
-            } else {
-                if (model.getBUTTON().equals("E-Pin")){
-                    mHolder.mMenuTopupPIN.setMenuVisibility(
-                            MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                    case EPIN:
+                        mHolder.mMenuTopupPIN.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
                 }
             }
         }

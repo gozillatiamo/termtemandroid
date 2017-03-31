@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
     <ImageView
-        android:id="@+id/icon_title"
+        android:id="@+id/icon_submenu"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_topup"
+        android:src="@drawable/ic_agent_cashin_primary"
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/activity_vertical_margin"/>
     <TextView
-        android:id="@+id/title_topup_report"
+        android:id="@+id/title_submenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
