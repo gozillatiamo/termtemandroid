@@ -29,6 +29,9 @@ import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxBottomSheetDialogFragment;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
+import com.worldwidewealth.termtem.model.ReadMsgRequest;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.widgets.InformationView;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -39,6 +42,10 @@ import java.util.List;
 import java.util.Locale;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by user on 14-Feb-17.
@@ -56,6 +63,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<InboxResponse> mListInbox;
     private InboxFragment mFragment;
     private OnItemLongClickListener longClickListener;
+    private APIServices services = APIServices.retrofit.create(APIServices.class);
     public boolean maxInbox = false;
     public static final String TAG = InboxAdapter.class.getSimpleName();
 
@@ -207,6 +215,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void removeListSelected(List<Integer> items){
 
         for (int i = 0; i < items.size(); i++) {
+            serviceRemove(items.get(i)-i);
             mListInbox.remove(items.get(i)-i);
             this.notifyItemRemoved(items.get(i)-i);
             this.notifyItemRangeChanged(items.get(i)-i, getItemCount());
@@ -217,10 +226,30 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void removeItem(int position){
+        serviceRemove(position);
         mListInbox.remove(position);
         this.notifyItemRemoved(position);
         this.notifyItemRangeChanged(position, getItemCount());
     }
+
+    private void serviceRemove(int position){
+            Call<ResponseBody> call = services.service(
+                    new RequestModel(APIServices.ACTIONREMOVEMSG,
+                            new ReadMsgRequest(getItem(position).getMsgid())));
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+    }
+
+
 
     public void setMaxInbox(boolean maxInbox) {
         this.maxInbox = maxInbox;

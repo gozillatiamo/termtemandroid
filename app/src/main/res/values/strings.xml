@@ -76,7 +76,7 @@
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
-    <string name="total">ยอดที่ชำระ</string>
+    <string name="total">ยอดเติม</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
@@ -182,7 +182,7 @@
     <string name="please_select_date_time">กรุณาเลือก วันที่-เวลา</string>
     <string name="please_select_bank_start">กรุณาเลือก ธนาคารต้นทาง</string>
     <string name="please_select_bank_end">กรุณาเลือก ธนาคารปลายทาง</string>
-    <string name="airtime">ยอดเติม</string>
+    <string name="airtime">ยอดเติมเงิน</string>
     <string name="vas">VAS</string>
     <string name="bank_mt_start">ธนาคารต้นทาง:</string>
     <string name="bank_mt_end">ธนาคารปลายทาง:</string>
@@ -387,11 +387,19 @@
         <item>HAPPY</item>
     </string-array>
 
-    <string-array name="list_carrier_pin">
-        <item></item>
-        <item></item>
-        <item></item>
+
+    <string-array name="list_submenu_history">
+        <item>@string/report_topup</item>
+        <item>@string/report_epin</item>
+        <item>@string/report_cashin_agent</item>
     </string-array>
+
+    <string-array name="type_history_report">
+        <item>TOPUP</item>
+        <item>EPIN</item>
+        <item>CASHIN</item>
+    </string-array>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

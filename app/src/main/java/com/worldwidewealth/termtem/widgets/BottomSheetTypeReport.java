@@ -1,9 +1,12 @@
 package com.worldwidewealth.termtem.widgets;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,22 +30,23 @@ import java.util.List;
 
 public class BottomSheetTypeReport extends BottomSheetDialog {
 
+/*
     public static final int TOPUP_REPORT_MENU = 0;
     public static final int CASHIN_AGENT_REPORT_MENU = 1;
 
-    public static final String TOPUP_REPORT = "TOPUP";
-    public static final String CASHIN_REPORT = "CASHIN";
-    public static final String EPIN_REPORT = "EPIN";
     public static final String TITLE = "title";
     public static final String ICON = "icon";
     public static final String TYPEREPORT = "typereport";
+*/
 
     public OnResultTypeListener onResultTypeListener;
-    public String mTypeCurrent = TOPUP_REPORT;
+    public String mTypeCurrent = "TOPUP";
 
 //    private AppCompatButton mMenuTopup, mMenuCashInAgent;
     private RecyclerView mRecyclerSubMenu;
     private List<ContentValues> mListSubmenu;
+    private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+
 
     public interface OnResultTypeListener{
         void onResult(String typeReport);
@@ -63,7 +67,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     @Override
     public void show() {
 
-        if (mListSubmenu.size() <= 1){
+        if (sparseBooleanArray.size() <= 1){
             return;
         }
 
@@ -85,7 +89,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     }
 
     public int getMenuSize(){
-        return mListSubmenu.size();
+        return sparseBooleanArray.size();
     }
 
     private void initWidgets(){
@@ -93,7 +97,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     }
 
     private void bindDataSubmenu(){
-        SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
 
         for (UserMenuModel model : Global.getInstance().getUserMenuList()){
 
@@ -121,9 +124,10 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
             }
         }
 
-        createListForSubmenu(sparseBooleanArray);
+//        createListForSubmenu(sparseBooleanArray);
     }
 
+/*
     private void createListForSubmenu(SparseBooleanArray sparseBooleanArray){
 
         String title = null, type = null;
@@ -157,13 +161,30 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
             }
         }
     }
+*/
 
     private void setupMenu(){
         mRecyclerSubMenu.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mRecyclerSubMenu.setAdapter(new SubMenuHistoryAdapter());
+        mRecyclerSubMenu.setAdapter(new SubMenuHistoryAdapter(getContext()));
     }
 
     public class SubMenuHistoryAdapter extends RecyclerView.Adapter<SubMenuHistoryAdapter.ViewHolder>{
+
+        private String[] mListTitle;
+        private String[] mListType;
+        private TypedArray mListIcon;
+        private Context mContext;
+
+        private static final int TOPUP = 0;
+        private static final int EPIN = 1;
+        private static final int CASHIN = 2;
+
+        public SubMenuHistoryAdapter(Context context) {
+            this.mContext = context;
+            mListTitle = mContext.getResources().getStringArray(R.array.list_submenu_history);
+            mListType = mContext.getResources().getStringArray(R.array.type_history_report);
+            mListIcon = mContext.getResources().obtainTypedArray(R.array.ic_list_submenu_history);
+        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -174,25 +195,44 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            holder.mIconTitle.setImageResource(getItem(position).getAsInteger(ICON));
-            holder.mTextTitle.setText(getItem(position).getAsString(TITLE));
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mTypeCurrent = getItem(position).getAsString(TYPEREPORT);
-                    dismiss();
-                }
-            });
+            boolean isShow = false;
+
+            switch (position){
+                case TOPUP:
+                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType());
+                    break;
+                case EPIN:
+                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType());
+                    break;
+                case CASHIN:
+                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType());
+                    break;
+            }
+
+            if (isShow) {
+                holder.mIconTitle.setImageResource(mListIcon.getResourceId(position, -1));
+                holder.mTextTitle.setText(mListTitle[position]);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mTypeCurrent = mListType[position];
+                        dismiss();
+                    }
+                });
+                holder.itemView.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemView.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mListSubmenu.size();
+            return mListTitle.length;
         }
 
-        public ContentValues getItem(int postion){
-            return mListSubmenu.get(postion);
-        }
+//        public ContentValues getItem(int postion){
+//            return mListSubmenu.get(postion);
+//        }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             private ImageView mIconTitle;

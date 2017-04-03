@@ -99,7 +99,7 @@ public class ActivityReport extends MyAppcompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        if (!mCanCashIn) {
+        if (mBottomSheet.getMenuSize() <= 1) {
             MenuItem menuItem = menu.findItem(R.id.action_swich_mode);
             menuItem.setVisible(false);
             invalidateOptionsMenu();

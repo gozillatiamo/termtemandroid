@@ -53,6 +53,7 @@ public interface APIServices {
     public static final String ACTIONLEAVE = "LEAVE";
     public static final String ACTIONLOADINBOX = "LOADINBOX";
     public static final String ACTIONREADMSG = "READMSG";
+    public static final String ACTIONREMOVEMSG = "REMOVEMSG";
     public static final String ACTIONGETAGENTLIST = "GETAGENTLIST";
     public static final String ACTION_PREVIEW_AGENT_CASHIN = "PREVIEWAGENTCASHIN";
     public static final String ACTION_GETOTP_AGENT_CASHIN = "GETOTPAGENTCASHIN";
