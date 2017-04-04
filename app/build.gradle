@@ -113,8 +113,12 @@ dependencies {
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.7.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.android.support.constraint:constraint-layout:+'
+    compile 'com.google.vr:sdk-videowidget:1.40.0'
+    compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
+/*
     compile 'com.google.vr:sdk-audio:1.10.0'
     compile 'com.google.vr:sdk-base:1.10.0'
+*/
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

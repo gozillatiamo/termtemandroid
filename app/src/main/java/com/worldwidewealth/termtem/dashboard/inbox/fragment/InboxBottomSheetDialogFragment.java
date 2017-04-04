@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -12,16 +15,30 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.vr.sdk.widgets.video.VrVideoEventListener;
+import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
+
+import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,6 +58,9 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
+    private VrVideoView mVideoView;
+    private VrVideoView.Options videoOptions = new VrVideoView.Options();
+    private VideoLoaderTask backgroundVideoLoaderTask;
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallbak = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -95,6 +115,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         mTitle = (TextView) contentView.findViewById(R.id.inbox_title);
         mDes = (TextView) contentView.findViewById(R.id.inbox_des);
         mBtnDel = (ImageView) contentView.findViewById(R.id.btn_del);
+        mVideoView = (VrVideoView) contentView.findViewById(R.id.video_view);
     }
 
     private void bindDialogBottomSheet(View contentView){
@@ -163,6 +184,9 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
             }
         });
+
+        mVideoView.setEventListener(new ActivityEventListener());
+        handleVideo();
     }
 
     private void callRead(){
@@ -187,5 +211,76 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             });
         }
 
+    }
+
+    private void handleExoplayer(){
+        Handler mainHandler = new Handler();
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        LoadControl loadControl = new DefaultLoadControl();
+
+
+    }
+
+    private void handleVideo(){
+        videoOptions.inputFormat = VrVideoView.Options.FORMAT_DEFAULT;
+        videoOptions.inputType = VrVideoView.Options.TYPE_MONO;
+
+
+        if (backgroundVideoLoaderTask != null){
+            backgroundVideoLoaderTask.cancel(true);
+        }
+
+        backgroundVideoLoaderTask = new VideoLoaderTask();
+        backgroundVideoLoaderTask.execute(Pair.create(Uri.parse("http://www.html5videoplayer.net/videos/toystory.mp4"), videoOptions));
+    }
+
+    private class ActivityEventListener extends VrVideoEventListener {
+        public String TAG = ActivityEventListener.class.getSimpleName();
+        @Override
+        public void onClick() {
+            super.onClick();
+        }
+
+        @Override
+        public void onCompletion() {
+            super.onCompletion();
+            mVideoView.seekTo(0);
+        }
+
+        @Override
+        public void onNewFrame() {
+            super.onNewFrame();
+        }
+
+        @Override
+        public void onLoadSuccess() {
+            super.onLoadSuccess();
+        }
+
+        @Override
+        public void onLoadError(String errorMessage) {
+            super.onLoadError(errorMessage);
+            Log.e(TAG, "Error loading video: "+errorMessage);
+        }
+    }
+
+    class VideoLoaderTask extends AsyncTask<Pair<Uri, VrVideoView.Options>, Pair, Pair<Uri, VrVideoView.Options>>{
+        @Override
+        protected Pair<Uri, VrVideoView.Options> doInBackground(Pair<Uri, VrVideoView.Options>... pairs) {
+            return new Pair<>(pairs[0].first, pairs[0].second);
+        }
+
+        @Override
+        protected void onPostExecute(Pair<Uri, VrVideoView.Options> uriOptionsPair) {
+            super.onPostExecute(uriOptionsPair);
+            try {
+                mVideoView.loadVideo(uriOptionsPair.first, uriOptionsPair.second);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

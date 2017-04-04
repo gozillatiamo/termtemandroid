@@ -11,7 +11,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <uses-sdk tools:overrideLibrary="com.google.vr.sdk.audio, com.google.vr.sdk.base, com.google.vr.cardboard"/>
+    <uses-sdk tools:overrideLibrary="com.google.vr.widgets.video
+    ,com.google.vr.widgets.common, com.google.vr.widgets.video
+    ,com.google.vr.cardboard"/>
+    <!--<uses-sdk tools:overrideLibrary="com.google.vr.sdk.audio, com.google.vr.sdk.base, com.google.vr.cardboard"/>-->
 
     <uses-feature
         android:name="android.hardware.camera"
