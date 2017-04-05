@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="server">http://203.154.162.119/wealthservice/</string>
+    <string name="server">https://test.wwwealth.co/wealthservice/</string>
 </resources>

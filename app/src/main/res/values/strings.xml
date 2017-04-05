@@ -2,7 +2,7 @@
     <!-- Config In App -->
     <string name="app_name">TermTem</string>
     <string name="platform">android</string>
-    <string name="server">http://203.154.162.114/wealthservice/</string>
+    <string name="server">https://dev.wwwealth.co/wealthservice/</string>
     <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
     <string name="branch">สุขุมวิท 101</string>
     <string name="bank_account_type">ออมทรัพย์</string>

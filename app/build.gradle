@@ -35,6 +35,10 @@ android {
 
     }
 
+    dexOptions{
+        jumboMode true
+    }
+
     applicationVariants.all { variant ->
         variant.resValue "string", "versionName", variant.versionName
     }

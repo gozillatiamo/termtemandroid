@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,13 +24,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
+import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
+import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.Allocator;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.R;
@@ -58,9 +80,19 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
+    private SimpleExoPlayerView mExoPlayerView;
     private VrVideoView mVideoView;
     private VrVideoView.Options videoOptions = new VrVideoView.Options();
     private VideoLoaderTask backgroundVideoLoaderTask;
+    private TrackSelector trackSelector;
+
+
+    private SimpleExoPlayer player;
+
+    public static final int BUFFER_SEGMENT_SIZE = 16 * 1024; // Original value was 64 * 1024
+    public static final int VIDEO_BUFFER_SEGMENTS = 50; // Original value was 200
+    public static final int AUDIO_BUFFER_SEGMENTS = 20; // Original value was 54
+    public static final int BUFFER_SEGMENT_COUNT = 64; // Original value was 256
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallbak = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -116,6 +148,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         mDes = (TextView) contentView.findViewById(R.id.inbox_des);
         mBtnDel = (ImageView) contentView.findViewById(R.id.btn_del);
         mVideoView = (VrVideoView) contentView.findViewById(R.id.video_view);
+        mExoPlayerView = (SimpleExoPlayerView) contentView.findViewById(R.id.exoplayer_view);
     }
 
     private void bindDialogBottomSheet(View contentView){
@@ -186,7 +219,8 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         });
 
         mVideoView.setEventListener(new ActivityEventListener());
-        handleVideo();
+//        handleVideo();
+        handleExoplayer();
     }
 
     private void callRead(){
@@ -214,14 +248,71 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void handleExoplayer(){
-        Handler mainHandler = new Handler();
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        Uri uri = Uri.parse("https://tungsten.aaplimg.com/VOD/bipbop_adv_fmp4_example/master.m3u8");
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         LoadControl loadControl = new DefaultLoadControl();
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+        Handler mainHandler = new Handler();
+        AdaptiveMediaSourceEventListener eventListener = new AdaptiveMediaSourceEventListener() {
+            @Override
+            public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
+
+            }
+
+            @Override
+            public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+
+            }
+
+            @Override
+            public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+
+            }
+
+            @Override
+            public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
+
+            }
+
+            @Override
+            public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
+
+            }
+
+            @Override
+            public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
+
+            }
+        };
+
+        mExoPlayerView.setPlayer(player);
+        player.setPlayWhenReady(true);
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
+        MediaSource mediaSource = new HlsMediaSource(Uri.parse("https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8"),
+                dataSourceFactory, mainHandler, eventListener);
+        player.prepare(mediaSource);
 
 
+
+/*
+
+        DefaultBandwidthMeter defaultBandwidthMeter = new DefauNiltBandwidthMeter();
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                Util.getUserAgent(getContext(), getString(R.string.app_name)), defaultBandwidthMeter);
+
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        MediaSource videoSource = new ExtractorMediaSource(Uri.parse("http://videos.electroteque.org/bitrate/big_buck_bunny_600k.mp4"),
+                dataSourceFactory, extractorsFactory, null, null);
+        player.prepare(videoSource);
+//        player.release();
+
+        player.setPlayWhenReady(true);
+        mExoPlayerView.setPlayer(player);
+*/
     }
 
     private void handleVideo(){
@@ -234,7 +325,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         }
 
         backgroundVideoLoaderTask = new VideoLoaderTask();
-        backgroundVideoLoaderTask.execute(Pair.create(Uri.parse("http://www.html5videoplayer.net/videos/toystory.mp4"), videoOptions));
+        backgroundVideoLoaderTask.execute(Pair.create(Uri.parse("https://flowplayer.electroteque.org/video/360/ultra_light_flight_720p.mp4"), videoOptions));
     }
 
     private class ActivityEventListener extends VrVideoEventListener {
