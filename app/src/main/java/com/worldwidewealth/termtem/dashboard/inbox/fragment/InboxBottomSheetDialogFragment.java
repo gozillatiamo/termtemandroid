@@ -80,14 +80,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
-    private SimpleExoPlayerView mExoPlayerView;
-    private VrVideoView mVideoView;
-    private VrVideoView.Options videoOptions = new VrVideoView.Options();
-    private VideoLoaderTask backgroundVideoLoaderTask;
-    private TrackSelector trackSelector;
-
-
-    private SimpleExoPlayer player;
 
     public static final int BUFFER_SEGMENT_SIZE = 16 * 1024; // Original value was 64 * 1024
     public static final int VIDEO_BUFFER_SEGMENTS = 50; // Original value was 200
@@ -147,8 +139,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         mTitle = (TextView) contentView.findViewById(R.id.inbox_title);
         mDes = (TextView) contentView.findViewById(R.id.inbox_des);
         mBtnDel = (ImageView) contentView.findViewById(R.id.btn_del);
-        mVideoView = (VrVideoView) contentView.findViewById(R.id.video_view);
-        mExoPlayerView = (SimpleExoPlayerView) contentView.findViewById(R.id.exoplayer_view);
     }
 
     private void bindDialogBottomSheet(View contentView){
@@ -218,7 +208,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         });
 
-        mVideoView.setEventListener(new ActivityEventListener());
 //        handleVideo();
         handleExoplayer();
     }
@@ -248,6 +237,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void handleExoplayer(){
+/*
         Uri uri = Uri.parse("https://tungsten.aaplimg.com/VOD/bipbop_adv_fmp4_example/master.m3u8");
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
@@ -256,45 +246,17 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         LoadControl loadControl = new DefaultLoadControl();
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
         Handler mainHandler = new Handler();
-        AdaptiveMediaSourceEventListener eventListener = new AdaptiveMediaSourceEventListener() {
-            @Override
-            public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
-
-            }
-
-            @Override
-            public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-
-            }
-
-            @Override
-            public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
-
-            }
-
-            @Override
-            public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
-
-            }
-
-            @Override
-            public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
-
-            }
-
-            @Override
-            public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
-
-            }
-        };
 
         mExoPlayerView.setPlayer(player);
         player.setPlayWhenReady(true);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
+*/
+/*
         MediaSource mediaSource = new HlsMediaSource(Uri.parse("https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8"),
                 dataSourceFactory, mainHandler, eventListener);
-        player.prepare(mediaSource);
+*/
+//        player.prepare(mediaSource);
 
 
 
@@ -316,6 +278,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void handleVideo(){
+/*
         videoOptions.inputFormat = VrVideoView.Options.FORMAT_DEFAULT;
         videoOptions.inputType = VrVideoView.Options.TYPE_MONO;
 
@@ -326,8 +289,10 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         backgroundVideoLoaderTask = new VideoLoaderTask();
         backgroundVideoLoaderTask.execute(Pair.create(Uri.parse("https://flowplayer.electroteque.org/video/360/ultra_light_flight_720p.mp4"), videoOptions));
+*/
     }
 
+/*
     private class ActivityEventListener extends VrVideoEventListener {
         public String TAG = ActivityEventListener.class.getSimpleName();
         @Override
@@ -338,7 +303,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         @Override
         public void onCompletion() {
             super.onCompletion();
-            mVideoView.seekTo(0);
+//            mVideoView.seekTo(0);
         }
 
         @Override
@@ -357,7 +322,9 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             Log.e(TAG, "Error loading video: "+errorMessage);
         }
     }
+*/
 
+/*
     class VideoLoaderTask extends AsyncTask<Pair<Uri, VrVideoView.Options>, Pair, Pair<Uri, VrVideoView.Options>>{
         @Override
         protected Pair<Uri, VrVideoView.Options> doInBackground(Pair<Uri, VrVideoView.Options>... pairs) {
@@ -374,4 +341,5 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         }
     }
+*/
 }

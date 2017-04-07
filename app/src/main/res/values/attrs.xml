@@ -27,4 +27,12 @@
         <attr name="iv_length_video" format="string"/>
         <attr name="iv_thumbnail" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="WidgetTypeInbox">
+        <attr name="ti_type" format="enum">
+            <enum name="video" value="0"/>
+            <enum name="video_vr" value="1"/>
+            <enum name="image" value="2"/>
+        </attr>
+    </declare-styleable>
 </resources>

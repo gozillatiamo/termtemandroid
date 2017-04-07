@@ -50,19 +50,12 @@
                 android:id="@+id/container_media"
                 android:layout_width="match_parent"
                 app:layout_heightPercent="45%">
-
-                <com.google.vr.sdk.widgets.video.VrVideoView
-                    android:id="@+id/video_view"
+                <com.worldwidewealth.termtem.widgets.WidgetTypeInbox
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:scrollbars="@null"/>
+                    app:ti_type="video">
 
-                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                    android:id="@+id/exoplayer_view"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"/>
-
+                </com.worldwidewealth.termtem.widgets.WidgetTypeInbox>
             </RelativeLayout>
 
 

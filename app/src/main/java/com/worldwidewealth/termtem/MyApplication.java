@@ -17,6 +17,11 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -48,7 +53,9 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean clickable = true;
     private static final int NOTIUPLOAD = 1;
     private static boolean isUpload = false;
-/*
+    protected String userAgent;
+
+    /*
     private static Handler  mHandler = new Handler();
     private static Runnable mRunable = new Runnable() {
         @Override
@@ -67,6 +74,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
+        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -141,6 +149,21 @@ public class MyApplication extends Application implements Application.ActivityLi
     public void onActivityDestroyed(Activity activity) {
         DialogCounterAlert.DialogProgress.dismiss();
     }
+
+    public boolean useExtensionRenderers() {
+        return BuildConfig.FLAVOR.equals("withExtensions");
+    }
+
+    public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(this, bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+    }
+
+
 
     public static class LeavingOrEntering
     {
