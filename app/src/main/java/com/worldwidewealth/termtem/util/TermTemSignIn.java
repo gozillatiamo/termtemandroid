@@ -13,7 +13,9 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.worldwidewealth.termtem.BuildConfig;
@@ -255,7 +257,10 @@ public class TermTemSignIn {
                                     .setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
                         }
                     });
+
                     AlertWifi.show();
+                    TextView messageText = (TextView) AlertWifi.findViewById(android.R.id.message);
+                    messageText.setGravity(Gravity.CENTER);
                     break;
                 case RELOGIN:
                     serviceAcceptWIFI();

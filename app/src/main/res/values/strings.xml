@@ -4,10 +4,13 @@
     <string name="platform">android</string>
     <string name="server">https://dev.wwwealth.co/wealthservice/</string>
     <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
-    <string name="branch">สุขุมวิท 101</string>
+    <string name="kbank_branch">สุขุมวิท 101</string>
+    <string name="bbl_branch">ม.เทคโนโลยีราชมงคลกรุงเทพ</string>
     <string name="bank_account_type">ออมทรัพย์</string>
     <string name="bank_account_name">บริษัท เวิลด์ ไวด์ เวลธ์ โฮลดิ้ง จำกัด</string>
-    <string name="config_bank_account_number">019-8-36814-8</string>
+    <string name="kbank_saving_account_number">019-8-36814-8</string>
+    <string name="bbl_saving_account_number">902-7-11486-8</string>
+    <string name="bbl_promptpay_account_number">0-1055-59135-27-4</string>
 
 
     <string name="content_version">เวอร์ชั่น:</string>
@@ -15,6 +18,8 @@
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
     <string name="in_box">กล่องข้อความ</string>
+    <string name="saving_account">บัญชีออมทรัพย์</string>
+    <string name="promptpay_account">บัญชีพร้อมเพย์</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -24,7 +29,7 @@
     <string name="send">ส่ง</string>
     <string name="email">อีเมล (ถ้ามี)</string>
     <string name="password">รหัสผ่าน</string>
-    <string name="forgot_password">ลืมรหัสผ่าน</string>
+    <string name="forgot_password">ลืมรหัสผ่าน?</string>
     <string name="change_password">เปลี่ยนรหัสผ่าน</string>
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
@@ -59,6 +64,7 @@
     <string name="tmb">ธนาคารทหารไทย</string>
     <string name="gsb">ธนาคารออมสิน</string>
     <string name="kbank">กสิกรไทย</string>
+    <string name="bbl">ธนาคารกรุงเทพ</string>
     <string name="ktb">ธนาคารกรุงไทย</string>
     <string name="tnch">ธนาคารธนชาต</string>
     <string name="exchange_rate">อัตราแลกเปลี่ยน</string>
@@ -156,8 +162,7 @@
     <string name="please_select">กรุณาเลือก</string>
     <string name="pay_code">หมายเลขการชำระ :</string>
     <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
-    <string name="alert_connect_wifi">หากคุณกำลังเชื่อต่อ wifi คุณจะไม่สามารถใช้งานแอพพลิเคชั่นนี้ได้ กรุณายกเลิกการเชื่อต่อก่อนใช้งาน</string>
-    <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่านการเชื่อมต่อ wifi \nคุณยืนยันที่จะใช้งานแอพพลิเคชั่นนี้ต่อไปหรือไม่ ?</string>
+    <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่าน wifi\nยีืืนยันการใช้งาน</string>
     <string name="hint_detail_my_qr">สามารถให้เอเจ้นท์ ท่านอื่นสแกนคิวอาร์โค้ด เพื่อรับ-ส่งข้อมูลได้</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
     <string name="add_slip_picture">กดเพื่อส่งสลิปการโอนเงิน</string>
@@ -243,7 +248,7 @@
     <string name="delete">ลบ</string>
     <string name="confirm_delete_title">ลบข้อความ</string>
     <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>
-
+    <string name="username">รหัสผู้ใช้งาน</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

@@ -1,9 +1,14 @@
 package com.worldwidewealth.termtem.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -12,9 +17,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.model.BankInformationModel;
 
 import java.util.regex.Pattern;
 
@@ -49,7 +56,7 @@ public class DialogHelp extends Dialog {
 
     private class HelpExpandableAdapter extends BaseExpandableListAdapter{
         private String[] mMainMenu = getContext().getResources().getStringArray(R.array.menu_help);
-
+        private BankInformationModel bankInformationModel = new BankInformationModel();
         @Override
         public int getGroupCount() {
             return mMainMenu.length;
@@ -57,7 +64,14 @@ public class DialogHelp extends Dialog {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return 1;
+            switch (groupPosition){
+                case 0:
+                    return bankInformationModel.getmListBank().size();
+                case 1:
+                    return 1;
+            }
+
+            return -1;
         }
 
         @Override
@@ -67,6 +81,12 @@ public class DialogHelp extends Dialog {
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
+
+            switch (groupPosition){
+                case 0:
+                    return bankInformationModel.getmListBank().get(childPosition);
+            }
+
             return childPosition;
         }
 
@@ -105,14 +125,41 @@ public class DialogHelp extends Dialog {
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
+            TextView title;
             switch (groupPosition) {
                 case 0:
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_bank_detail, null);
+                    final BankInformationModel.Bank bank = bankInformationModel.getmListBank().get(childPosition);
+                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
+                    TypedValue typedValue = new TypedValue();
+
+                    getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+
+                    // it's probably a good idea to check if the color wasn't specified as a resource
+                    if (typedValue.resourceId != 0) {
+                        convertView.setBackgroundResource(typedValue.resourceId);
+                    } else {
+                        // this should work whether there was a resource id or not
+                        convertView.setBackgroundColor(typedValue.data);
+                    }
+                    title = (TextView) convertView.findViewById(android.R.id.text1);
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.small_text_size));
+
+                    title.setText(bank.getName());
+                    Drawable drawable = ContextCompat.getDrawable(getContext(), bank.getLogo());
+                    int logoSize = getContext().getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    drawable.setBounds(0, 0, logoSize, logoSize);
+                    title.setCompoundDrawables(drawable, null, null, null);
+                    title.setCompoundDrawablePadding(getContext().getResources().getDimensionPixelSize(R.dimen.activity_small_space));
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showBankInformation(bank);
+                        }
+                    });
                     break;
                 case 1:
                     convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
-                    TextView title = (TextView) convertView.findViewById(android.R.id.text1);
+                    title = (TextView) convertView.findViewById(android.R.id.text1);
                     title.setText(getContext().getString(R.string.contact_phone_no));
                     title.setTypeface(Typeface.DEFAULT_BOLD);
                     title.setTextColor(getContext().getResources().getColor(android.R.color.secondary_text_dark));
@@ -131,5 +178,41 @@ public class DialogHelp extends Dialog {
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return false;
         }
+
+        private void showBankInformation(BankInformationModel.Bank bank){
+            AlertDialog alertDialog;
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.item_bank_detail, null);
+            dialogBuilder.setView(dialogView);
+//            alertDialog.setContentView(R.layout.item_bank_detail);
+
+            TextView mBankName, mAccountSaving, mAccountPromptPay, mAccountName, mBankBranch;
+            ImageView mBankLogo;
+
+            mBankName = (TextView) dialogView.findViewById(R.id.bank_name);
+            mAccountSaving = (TextView) dialogView.findViewById(R.id.saving_account_id);
+            mAccountPromptPay = (TextView) dialogView.findViewById(R.id.promptpay_account_id);
+            mAccountName = (TextView) dialogView.findViewById(R.id.account_name);
+            mBankBranch = (TextView) dialogView.findViewById(R.id.bank_branch);
+            mBankLogo = (ImageView) dialogView.findViewById(R.id.bank_logo);
+
+            mBankName.setText(bank.getName());
+            mAccountSaving.setText(bank.getSaving_account());
+            if (bank.getPromptpay_account() != null){
+                mAccountPromptPay.setText(bank.getPromptpay_account());
+                dialogView.findViewById(R.id.layout_promptpay_id).setVisibility(View.VISIBLE);
+            } else {
+                dialogView.findViewById(R.id.layout_promptpay_id).setVisibility(View.GONE);
+            }
+
+            mAccountName.setText(bank.getAccount_name());
+            mBankBranch.setText(bank.getBranch_name());
+            mBankLogo.setImageResource(bank.getLogo());
+
+            alertDialog = dialogBuilder.create();
+            alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            alertDialog.show();
+        }
+
     }
 }
