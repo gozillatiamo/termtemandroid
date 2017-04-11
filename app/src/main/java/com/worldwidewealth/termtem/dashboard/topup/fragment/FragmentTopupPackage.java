@@ -98,6 +98,7 @@ public class FragmentTopupPackage extends  Fragment{
             mActionGetOTP = APIServices.ACTION_GET_TOPUP_EPIN;
             mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
             mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+            getView().findViewById(R.id.text_hint_pin).setVisibility(View.VISIBLE);
         }
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);

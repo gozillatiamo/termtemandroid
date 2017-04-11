@@ -180,16 +180,21 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return;
             }
             if (strCurrentAtivity.equals(activity.getLocalClassName())) {
-
-                if (mThread != null || mThread.isAlive()) {
+                try {
+                    if (mThread != null || mThread.isAlive()) {
 //                    mHandler.removeCallbacks(mRunable);
-                    mThread.interrupt();
-                    mThread = null;
+                        mThread.interrupt();
+                        mThread = null;
 
-                    if (T != null) {
-                        T.cancel();
-                        T = null;
+                        if (T != null) {
+                            T.cancel();
+                            T = null;
+                        }
                     }
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                    mThread = null;
+                    T = null;
                 }
 
                 if (Global.getInstance().getTXID() == null) {

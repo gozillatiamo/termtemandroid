@@ -105,7 +105,7 @@ public class FragmentAirtimeVAS extends Fragment {
 
             }
         });
-        mHolder.mTab.setupWithViewPager(mHolder.mPager);
+//        mHolder.mTab.setupWithViewPager(mHolder.mPager);
 /*
         mHolder.mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -128,6 +128,7 @@ public class FragmentAirtimeVAS extends Fragment {
         });
 */
 
+/*
         for(int i=0; i < mHolder.mTab.getTabCount(); i++) {
             View tab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(i);
             tab.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -143,6 +144,7 @@ public class FragmentAirtimeVAS extends Fragment {
 
             tab.requestLayout();
         }
+*/
 
         setTabViewColor(0);
 
@@ -159,11 +161,13 @@ public class FragmentAirtimeVAS extends Fragment {
                 break;
         }
 
+/*
         mHolder.mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
         View viewTab = ((ViewGroup) mHolder.mTab.getChildAt(0)).getChildAt(position);
         viewTab.setBackgroundColor(getResources().getColor(getsTabColor()));
         mHolder.mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
                 getResources().getColor(android.R.color.white));
+*/
 
 
     }
@@ -178,13 +182,15 @@ public class FragmentAirtimeVAS extends Fragment {
 
     private class ViewHolder{
 
-        private TabLayout mTab;
+//        private TabLayout mTab;
         private ViewPager mPager;
         public ViewHolder(View itemView){
+/*
             mTab = (TabLayout) itemView.findViewById(R.id.topup_tab);
             mTab.setSelectedTabIndicatorColor(getResources().getColor(getsTabColor()));
             mTab.setTabTextColors(getResources().getColor(android.R.color.tertiary_text_dark),
                     getResources().getColor(getsTabColor()));
+*/
             mPager = (ViewPager) itemView.findViewById(R.id.topup_pager);
         }
     }

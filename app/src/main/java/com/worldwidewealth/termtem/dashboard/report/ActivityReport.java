@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -119,6 +120,9 @@ public class ActivityReport extends MyAppcompatActivity {
                 break;
             case R.id.action_swich_mode:
                 mBottomSheet.show();
+                mBottomSheet.setCancelable(true);
+                mBottomSheet.setCanceledOnTouchOutside(true);
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -133,13 +137,31 @@ public class ActivityReport extends MyAppcompatActivity {
                 @Override
                 public void onResult(String typeReport) {
                     mCurrentType = typeReport;
+                    switch (mCurrentType){
+                        case "TOPUP":
+                            mHolder.mIconType.setImageResource(R.drawable.ic_topup);
+                            mHolder.mTextType.setText(R.string.report_topup);
+                            break;
+                        case "EPIN":
+                            mHolder.mIconType.setImageResource(R.drawable.ic_pin_code);
+                            mHolder.mTextType.setText(R.string.report_epin);
+
+                            break;
+                        case "CASHIN":
+                            mHolder.mIconType.setImageResource(R.drawable.ic_agent_cashin_primary);
+                            mHolder.mTextType.setText(R.string.report_cashin_agent);
+                            break;
+
+                    }
+
+                    findViewById(R.id.card_title_type).setVisibility(View.VISIBLE);
                 }
             });
 
             mBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                showTargetView();
+                    showTargetView();
                 }
             });
 
@@ -361,12 +383,15 @@ public class ActivityReport extends MyAppcompatActivity {
     private class ViewHolder{
         private RecyclerView mListReport;
         private Toolbar mToolbar;
-        private TextView mTextReportTotal;
+        private TextView mTextReportTotal, mTextType;
+        private ImageView mIconType;
 
         public ViewHolder(Activity itemView){
             mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
             mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
             mTextReportTotal = (TextView) itemView.findViewById(R.id.txt_report_total);
+            mTextType = (TextView) itemView.findViewById(R.id.text_type_report);
+            mIconType = (ImageView) itemView.findViewById(R.id.icon_type_report);
         }
     }
 }

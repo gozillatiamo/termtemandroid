@@ -2,8 +2,10 @@ package com.worldwidewealth.termtem.dashboard.reportmoneytransfer.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,7 +40,9 @@ import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.NotiPayRequestModel;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -55,6 +59,7 @@ public class FragmentReportMT extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
     private String mStrAmount, mStrBankStart = "", mStrBankEnd = "";
+    private List<ContentValues> mListBankStart, mListBankEnd;
     private APIServices services;
     private Bitmap mBitmapImage;
     private DatePickerDialog mDateDialog;
@@ -66,6 +71,11 @@ public class FragmentReportMT extends Fragment {
     private String imgPath = null;
     private int id = 1;
     private DialogCounterAlert mAlertConfirmUpload = null;
+
+    private String[] mListNameBank;
+    private String[] mListCodeBank;
+    private TypedArray mLisIconBank;
+
 
     public static Fragment newInstance(){
         FragmentReportMT fragment = new FragmentReportMT();
@@ -83,6 +93,7 @@ public class FragmentReportMT extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
         Util.setupUI(rootView);
+        bindListBank();
         initBtn();
         return rootView;
     }
@@ -142,14 +153,46 @@ public class FragmentReportMT extends Fragment {
      }
     }
 
+    private void bindListBank(){
+        mListNameBank = getContext().getResources().getStringArray(R.array.list_name_bank_start);
+        mListCodeBank = getContext().getResources().getStringArray(R.array.list_code_bank_start);
+        mLisIconBank = getContext().getResources().obtainTypedArray(R.array.ic_list_bank_start);
+
+        mListBankStart = new ArrayList<>();
+        mListBankEnd = new ArrayList<>();
+
+        for (int i = 0; i < mListNameBank.length; i++){
+            ContentValues values = new ContentValues();
+            values.put(PopupChoiceBank.KEY_NAME, mListNameBank[i]);
+            values.put(PopupChoiceBank.KEY_ICON, mLisIconBank.getResourceId(i, -1));
+            values.put(PopupChoiceBank.KEY_CODE, mListCodeBank[i]);
+            mListBankStart.add(values);
+        }
+
+        mListNameBank = getContext().getResources().getStringArray(R.array.list_name_bank_end);
+        mListCodeBank = getContext().getResources().getStringArray(R.array.list_code_bank_end);
+        mLisIconBank = getContext().getResources().obtainTypedArray(R.array.ic_list_bank_end);
+
+        for (int i = 0; i < mListNameBank.length; i++){
+            ContentValues values = new ContentValues();
+            values.put(PopupChoiceBank.KEY_NAME, mListNameBank[i]);
+            values.put(PopupChoiceBank.KEY_ICON, mLisIconBank.getResourceId(i, -1));
+            values.put(PopupChoiceBank.KEY_CODE, mListCodeBank[i]);
+            mListBankEnd.add(values);
+        }
+
+
+
+    }
+
     private void initBtn(){
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 mStrAmount = mHolder.mEditAmount.getText().toString();
                 mStrBankStart = mPopupBankStart.getBank();
-//                mStrBankEnd = mPopupBankEnd.getBank();
-                mStrBankEnd = "KBANK";
+                mStrBankEnd = mPopupBankEnd.getBank();
+//                mStrBankEnd = "KBANK";
                 if (mStrAmount.equals("") || Double.parseDouble(mStrAmount) <= 0.25){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
                     mHolder.mScrollView.smoothScrollTo(0, 0);
@@ -233,8 +276,8 @@ public class FragmentReportMT extends Fragment {
                                                 Util.encodeBitmapToUpload(mBitmapImage),
                                                 mHolder.mBtnDateTransfer.getText().toString(),
                                                 mHolder.mBtnTimeTransfer.getText().toString(),
-                                                mPopupBankStart.getPositionSelect(),
-                                                3))
+                                                mPopupBankStart.getValuesBankSelected(),
+                                                mPopupBankEnd.getValuesBankSelected()))
                                         .addToBackStack(null);
                                 fragmentTransaction.commit();
 
@@ -274,8 +317,8 @@ public class FragmentReportMT extends Fragment {
             }
         });
 
-        mPopupBankStart = new PopupChoiceBank(getContext(), mHolder.mIncludeBankStart);
-//        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd);
+        mPopupBankStart = new PopupChoiceBank(getContext(), mHolder.mIncludeBankStart, mListBankStart);
+        mPopupBankEnd = new PopupChoiceBank(getContext(), mHolder.mIncludeBankEnd, mListBankEnd);
     }
 
 
@@ -347,7 +390,7 @@ public class FragmentReportMT extends Fragment {
         private ImageButton mBtnTakePhoto;
         private ImageView mImagePhoto;
         private EditText mEditAmount;
-        private View mIncludeBankStart;
+        private View mIncludeBankStart, mIncludeBankEnd;
         private NestedScrollView mScrollView;
         private ProgressBar mLoadingImage;
         private View mLayoutBtnAddImage;
@@ -367,6 +410,7 @@ public class FragmentReportMT extends Fragment {
             });
             mEditAmount = (EditText) itemview.findViewById(R.id.edit_amount);
             mIncludeBankStart = (View) itemview.findViewById(R.id.include_bank_start);
+            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
             mScrollView = (NestedScrollView) itemview.findViewById(R.id.nested_scrollview);
             mLoadingImage = (ProgressBar) itemview.findViewById(R.id.progress_loading_image);
             mLayoutBtnAddImage = (View) itemview.findViewById(R.id.layout_btn_add_image);
@@ -391,7 +435,7 @@ public class FragmentReportMT extends Fragment {
                 }
             });
 */
-//            mIncludeBankEnd = (View) itemview.findViewById(R.id.include_bank_end);
+//
 
         }
     }

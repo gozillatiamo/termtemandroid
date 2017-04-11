@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 
 /**
  * Created by MyNet on 4/11/2559.
@@ -132,7 +133,7 @@ public class GPSTracker extends Service implements LocationListener{
      * Function to show settings alert dialog
      * */
     public void showSettingsAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning);
 
         // Setting Dialog Title
         alertDialog.setTitle(mContext.getString(R.string.setting_gps_title));
@@ -163,7 +164,10 @@ public class GPSTracker extends Service implements LocationListener{
             }
         });
         // Showing Alert Message
-        alertDialog.show();
+
+        AlertDialog myAlertDialog = alertDialog.create();
+        myAlertDialog.setOnShowListener(new MyShowListener());
+        myAlertDialog.show();
     }
 
     /**

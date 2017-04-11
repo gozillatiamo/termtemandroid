@@ -25,6 +25,7 @@ import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.PreRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -141,7 +142,10 @@ public class TermTemSignIn {
                                         public void onClick(DialogInterface dialog, int which) {
                                             ((Activity)mContext).finish();
                                         }
-                                    }).show();
+                                    }).create();
+
+                            builder.setOnShowListener(new MyShowListener());
+                            builder.show();
                         }
                     }
                 }
@@ -196,17 +200,7 @@ public class TermTemSignIn {
             });
 
             AlertDialog alertDialog = builder.create();
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
-                            .setTextColor(mContext.getResources()
-                                    .getColor(android.R.color.holo_orange_dark));
-                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(mContext.getResources()
-                                    .getColor(android.R.color.holo_red_dark));
-                }
-            });
+            alertDialog.setOnShowListener(new MyShowListener());
             try {
                 alertDialog.show();
             } catch (WindowManager.BadTokenException e){}
@@ -233,7 +227,8 @@ public class TermTemSignIn {
         if (mWifi.isConnected()) {
             switch (mType){
                 case NEWLOGIN:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning)
+                            .setTitle(R.string.warning)
                             .setMessage(R.string.alert_sure_connect_wifi)
                             .setCancelable(false)
                             .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
@@ -250,14 +245,7 @@ public class TermTemSignIn {
                                 }
                             });
                     AlertWifi = builder.create();
-                    AlertWifi.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                                    .setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
-                        }
-                    });
-
+                    AlertWifi.setOnShowListener(new MyShowListener());
                     AlertWifi.show();
                     TextView messageText = (TextView) AlertWifi.findViewById(android.R.id.message);
                     messageText.setGravity(Gravity.CENTER);
@@ -352,8 +340,8 @@ public class TermTemSignIn {
                             } else {
                                 intent = new Intent(mContext, ActivityDashboard.class);
                             }
-                            ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             mContext.startActivity(intent);
+                            ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             ((AppCompatActivity)mContext).finish();
                             break;
                     }
@@ -405,7 +393,10 @@ public class TermTemSignIn {
                             }
                         }, 1000);
                     }
-                }).show();
+                }).create();
+
+        alertDialog.setOnShowListener(new MyShowListener());
+        alertDialog.show();
     }
 
 

@@ -3,8 +3,11 @@ package com.worldwidewealth.termtem.widgets;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -14,6 +17,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +50,24 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     private RecyclerView mRecyclerSubMenu;
     private List<ContentValues> mListSubmenu;
     private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+/*
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
+        @Override
+        public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
 
+                dismiss();
+                bottomSheetBehavior.setState(CustomBottomSheetBehavior.STATE_COLLAPSED);
+            }
+        }
+
+        @Override
+        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+        }
+    };
+*/
 
     public interface OnResultTypeListener{
         void onResult(String typeReport);
@@ -56,12 +77,29 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
         super(context);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setContentView(R.layout.bottomsheet_type_report);
+//        mBottomSheetBehavior = BottomSheetBehavior.from(getwi)
         mListSubmenu = new ArrayList<>();
 
         initWidgets();
         bindDataSubmenu();
         setupMenu();
+        this.setCancelable(false);
+        this.setCanceledOnTouchOutside(false);
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
+                FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog
+                        .findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
     }
 
     @Override
@@ -72,8 +110,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
         }
 
         super.show();
-        this.setCancelable(false);
-        this.setCanceledOnTouchOutside(false);
     }
 
     @Override

@@ -210,6 +210,7 @@ public class DialogHelp extends Dialog {
             mBankLogo.setImageResource(bank.getLogo());
 
             alertDialog = dialogBuilder.create();
+            alertDialog.setOnShowListener(new MyShowListener());
             alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             alertDialog.show();
         }

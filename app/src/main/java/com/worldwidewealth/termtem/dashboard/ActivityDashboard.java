@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
@@ -70,8 +73,6 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        mHolder.mMenuSupport.dismiss();
-        mHolder.mMenuSetUp.dismiss();
     }
 
     @Override
@@ -88,9 +89,12 @@ public class ActivityDashboard extends MyAppcompatActivity{
         int stackCount = getSupportFragmentManager().getBackStackEntryCount();
 
         if (stackCount != 0) {
-            Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
-            if (currentFragment instanceof FragmentTopupSlip) return;
+            super.onBackPressed();
+            return;
+           /* Fragment currentFragment = getSupportFragmentManager().getFragments().get(stackCount - 1);
+            if (currentFragment instanceof FragmentTopupSlip) return;*/
         }
+
         new DialogCounterAlert(ActivityDashboard.this, getString(R.string.title_leave_app),
                 getString(R.string.msg_leave_app), getString(R.string.title_leave_app),
                 new DialogInterface.OnClickListener() {
@@ -158,6 +162,11 @@ public class ActivityDashboard extends MyAppcompatActivity{
     }
 
     private void initBtnMenu(){
+        String username = PhoneNumberUtils.formatNumber(
+                EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID())
+        );
+        mHolder.mTextUserName.setText(username);
         if (mUserMenuList == null) return;
         for (UserMenuModel model : mUserMenuList){
             MenuButtonView.TYPE type = MenuButtonView.TYPE.asTYPE(model.getBUTTON());
@@ -177,16 +186,10 @@ public class ActivityDashboard extends MyAppcompatActivity{
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;
                     case SCAN:
-                        mHolder.mMenuScan.setMenuVisibility(
-                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
-                        break;
                     case SETUP:
-                        mHolder.mMenuSetUp.setMenuVisibility(
-                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
-                        break;
                     case SUPPORT:
-                        mHolder.mMenuSupport.setMenuVisibility(
-                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        if (model.getSTATUS().equals(MenuButtonView.VISIBILITY.SHOW.name()))
+                            mHolder.mMenuOther.setMenuVisibility(MenuButtonView.VISIBILITY.SHOW.getVisibility());
                         break;
                     case TOPUP:
                         mHolder.mMenuTopup.setMenuVisibility(
@@ -207,21 +210,24 @@ public class ActivityDashboard extends MyAppcompatActivity{
     public class ViewHolder{
 
         private Toolbar mToolbar;
-        private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuScan, mMenuTopup, mMenuSetUp,
-                                mMenuSupport, mMenuNotiPay, mMenuHistory, mMenuTopupPIN;
+        private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuTopup,
+                                mMenuNotiPay, mMenuHistory, mMenuTopupPIN, mMenuOther;
+        private TextView mTextUserName;
         private View mIncludeMyWallet;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
             mMenuCashIn = (MenuButtonView) view.findViewById(R.id.mbv_cashin);
-            mMenuScan = (MenuButtonView) view.findViewById(R.id.mbv_scan);
+//            mMenuScan = (MenuButtonView) view.findViewById(R.id.mbv_scan);
             mMenuAgentCashIn = (MenuButtonView) view.findViewById(R.id.mbv_agentcashin);
             mMenuTopup = (MenuButtonView) view.findViewById(R.id.mbv_topup);
-            mMenuSetUp = (MenuButtonView) view.findViewById(R.id.mbv_setup);
-            mMenuSupport = (MenuButtonView) view.findViewById(R.id.mbv_support);
+//            mMenuSetUp = (MenuButtonView) view.findViewById(R.id.mbv_setup);
+//            mMenuSupport = (MenuButtonView) view.findViewById(R.id.mbv_support);
             mMenuNotiPay = (MenuButtonView) view.findViewById(R.id.mbv_notipay);
             mMenuHistory = (MenuButtonView) view.findViewById(R.id.mbv_history);
             mMenuTopupPIN = (MenuButtonView) view.findViewById(R.id.mbv_topup_pin);
+            mTextUserName = (TextView) view.findViewById(R.id.text_username);
+            mMenuOther = (MenuButtonView) view.findViewById(R.id.mbv_other);
         }
     }
 }

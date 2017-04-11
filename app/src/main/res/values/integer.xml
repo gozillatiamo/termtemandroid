@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer-array name="ic_list_bank">
+    <integer-array name="ic_list_bank_start">
         <item>@drawable/bbl</item>
         <item>@drawable/ktb</item>
         <item>@drawable/bay</item>
@@ -20,6 +20,11 @@
         <item>@drawable/gsb</item>
         <item>@drawable/ghb</item>
         <item>@drawable/baac</item>
+    </integer-array>
+
+    <integer-array name="ic_list_bank_end">
+        <item>@drawable/kbank</item>
+        <item>@drawable/bbl</item>
     </integer-array>
 
     <integer-array name="ic_list_submenu_history">

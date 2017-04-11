@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dialog;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
 
+import java.util.List;
+
 /**
  * Created by user on 21-Dec-16.
  */
@@ -24,13 +27,19 @@ public class PopupChoiceBank {
     private PopupWindow mPopupMenu;
     private ViewHolder mHolder;
     private String mStrBank = "";
-    private int mPositionBank = -1;
+    private ContentValues mBankSelected = null;
+    private List<ContentValues> mListBank;
+
+    public static final String KEY_NAME = "keyname";
+    public static final String KEY_CODE = "keycode";
+    public static final String KEY_ICON = "keyicon";
 
     public static final String TAG = PopupChoiceBank.class.getSimpleName();
 
-    public PopupChoiceBank(Context context, View mRootView) {
+    public PopupChoiceBank(Context context, View mRootView, List<ContentValues> listBank) {
         this.mRootView = mRootView;
         this.mContext = context;
+        this.mListBank = listBank;
         mHolder = new ViewHolder(this.mRootView);
         initPopupBank();
         mHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -49,8 +58,8 @@ public class PopupChoiceBank {
         return mStrBank;
     }
 
-    public int getPositionSelect(){
-        return mPositionBank;
+    public ContentValues getValuesBankSelected(){
+        return mBankSelected;
     }
 
     private void initPopupBank(){
@@ -75,10 +84,6 @@ public class PopupChoiceBank {
 
     private class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHolder>{
 
-        private String[] mListNameBank = mContext.getResources().getStringArray(R.array.list_name_bank);
-        private String[] mListCodeBank = mContext.getResources().getStringArray(R.array.list_code_bank);
-        private TypedArray mLisIconBank = mContext.getResources().obtainTypedArray(R.array.ic_list_bank);
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View rootView = LayoutInflater.from(mContext).inflate(R.layout.item_bank, parent, false);
@@ -88,15 +93,15 @@ public class PopupChoiceBank {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            holder.mTextListBank.setText(mListNameBank[position]);
-            holder.mIconListBank.setImageDrawable(mLisIconBank.getDrawable(position));
+            holder.mTextListBank.setText(mListBank.get(position).getAsString(KEY_NAME));
+            holder.mIconListBank.setImageResource(mListBank.get(position).getAsInteger(KEY_ICON));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mHolder.mTextBank.setText((mListCodeBank[position]));
-                    mHolder.mIconBank.setImageDrawable(mLisIconBank.getDrawable(position));
-                    mStrBank = mListCodeBank[position];
-                    mPositionBank = position;
+                    mHolder.mTextBank.setText(mListBank.get(position).getAsString(KEY_CODE));
+                    mHolder.mIconBank.setImageResource(mListBank.get(position).getAsInteger(KEY_ICON));
+                    mStrBank = mListBank.get(position).getAsString(KEY_CODE);
+                    mBankSelected = mListBank.get(position);
                     mHolder.mIconBank.setVisibility(View.VISIBLE);
                     mPopupMenu.dismiss();
                 }
@@ -105,7 +110,7 @@ public class PopupChoiceBank {
 
         @Override
         public int getItemCount() {
-            return mListNameBank.length;
+            return mListBank.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{

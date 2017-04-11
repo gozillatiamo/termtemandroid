@@ -86,6 +86,7 @@ public class TermTemDialog {
             builder.setNegativeButton(R.string.cancel, null);
 
             mChoiceDialog = builder.create();
+            mChoiceDialog.setOnShowListener(new MyShowListener());
         }
 
         public void show(){

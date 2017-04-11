@@ -14,7 +14,6 @@
 
 
     <string name="content_version">เวอร์ชั่น:</string>
-    <string name="currentcy">THB</string>
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
     <string name="in_box">กล่องข้อความ</string>
@@ -41,12 +40,13 @@
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
-    <string name="balance_toup_preview">บัญชีคงเหลือ</string>
-    <string name="markup">ค่าดำเนินการ :</string>
+    <string name="balance_toup_preview">บัญชีคงเหลือ(บาท)</string>
+    <string name="markup">ค่าดำเนินการ(บาท)</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>
     <string name="report_history">ประวัติรายการ</string>
+    <string name="dashboard_other">อื่น ๆ</string>
     <string name="setting">ตั้งค่าโปรแกรม</string>
     <string name="bill_payment">ชำระบิล</string>
     <string name="transfer">แล้เปลี่ยนเงิน</string>
@@ -82,12 +82,13 @@
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
-    <string name="total">ยอดเติม</string>
+    <string name="total">ยอดที่ชำระ</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
     <string name="balance_transfer">ยอดเงินที่โอน :</string>
-    <string name="currency">สกุลเงิน :</string>
+    <string name="currency">บาท</string>
+    <string name="currency_hint">(บาท)</string>
     <string name="date_transfer">วันที่โอน :</string>
     <string name="time">เวลา :</string>
     <string name="evidance">หลักฐาน :</string>
@@ -108,7 +109,7 @@
     <string name="dashboard_card_to_card">Card to Card</string>
     <string name="dashboard_loyalty">Loyalty</string>
     <string name="dashboard_wallet">บัญชี</string>
-    <string name="dashboard_mtf">แจ้งโอนเงินผ่านธนาคาร</string>
+    <string name="dashboard_mtf">โอนเงินผ่านธนาคาร แจ้งที่นี้!</string>
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>
@@ -118,7 +119,7 @@
     <string name="dashboard_vouchers">Vouchers</string>
     <string name="dashboard_my_qr">QR ของฉัน</string>
     <string name="dashboard_scan_qr">สแกน QR</string>
-    <string name="dashboard_pin">ขายบัตรเติมเงิน</string>
+    <string name="dashboard_pin">ขายบัตรเงินสด</string>
     <string name="not_have_account">กรณียังไม่มีบัญชีผู้ใช้งาน กรุณา </string>
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
@@ -133,8 +134,8 @@
     <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
-    <string name="amount">ยอดเติม :</string>
-    <string name="debit">หักบัญชี :</string>
+    <string name="amount">ยอดเติม(บาท)</string>
+    <string name="debit">หักบัญชี(บาท)</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
     <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>
@@ -162,7 +163,7 @@
     <string name="please_select">กรุณาเลือก</string>
     <string name="pay_code">หมายเลขการชำระ :</string>
     <string name="not_found_report">ไม่มี Report สำหรับวันนี้</string>
-    <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่าน wifi\nยีืืนยันการใช้งาน</string>
+    <string name="alert_sure_connect_wifi">คุณกำลังใช้งานแอพพลิเคชั่นนี้ผ่าน wifi\nยืนยันการใช้งาน</string>
     <string name="hint_detail_my_qr">สามารถให้เอเจ้นท์ ท่านอื่นสแกนคิวอาร์โค้ด เพื่อรับ-ส่งข้อมูลได้</string>
     <string name="slip_not_found">ไม่พบใบเสร็จ</string>
     <string name="add_slip_picture">กดเพื่อส่งสลิปการโอนเงิน</string>
@@ -281,12 +282,6 @@
         <item>@string/tnch</item>
     </string-array>
 
-    <string-array name="currency">
-        <item>US</item>
-        <item>KIP</item>
-        <item>THB</item>
-    </string-array>
-
     <string-array name="list_type_bill">
         <item>ค่าไฟฟ้า</item>
         <item>ค่าน้ำ</item>
@@ -339,7 +334,7 @@
         <item>TH</item>
     </string-array>
 
-    <string-array name="list_name_bank">
+    <string-array name="list_name_bank_start">
         <item>ธนาคารกรุงเทพ</item>
         <item>ธนาคารกรุงไท​ย</item>
         <item>ธนาคารกรุงศรีอยุธยา</item>
@@ -360,7 +355,7 @@
         <item>ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</item>
     </string-array>
 
-    <string-array name="list_code_bank">
+    <string-array name="list_code_bank_start">
         <item>BBL</item>
         <item>KTB</item>
         <item>BAY</item>
@@ -380,6 +375,17 @@
         <item>GHB</item>
         <item>BAAC</item>
     </string-array>
+
+    <string-array name="list_name_bank_end">
+        <item>ธนาคารกสิกรไทย</item>
+        <item>ธนาคารกรุงเทพ</item>
+    </string-array>
+
+    <string-array name="list_code_bank_end">
+        <item>KBANK</item>
+        <item>BBL</item>
+    </string-array>
+
 
     <string-array name="menu_help">
         <item>@string/menu_bank_detail</item>

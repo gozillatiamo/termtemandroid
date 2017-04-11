@@ -6,8 +6,8 @@
 
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -23,195 +23,194 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    >
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                     <TextView
+                        style="@style/MyTitleActionBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/main_menu"
-                        style="@style/MyTitleActionBar"
-                        />
+                        android:text="@string/main_menu" />
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
+
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                >
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/activity_space"
-                    >
-
-                    <include
-                        android:id="@+id/include_my_wallet"
-                        layout="@layout/card_my_wallet" />
-
+                    android:padding="@dimen/activity_space">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_person"
+                            android:drawablePadding="@dimen/activity_space"
+                            android:gravity="center"
+                            android:text="@string/username" />
+
+                        <TextView
+                            android:id="@+id/text_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/activity_space"
+                            android:text="00000000"
+                            style="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/include_my_wallet"
+                        layout="@layout/card_my_wallet" />
+                    <FrameLayout
+                        android:id="@+id/container_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_topup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_topup"
+                                    app:mbv_title="@string/topup"
+                                    app:mbv_type="topup"
+                                    app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_topup_pin"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_pin_code"
+                                    app:mbv_title="@string/dashboard_pin"
+                                    app:mbv_type="pin"
+                                    app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+
+                            </LinearLayout>
+
+        <!--
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_setup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_setting"
+                                    app:mbv_title="@string/setting"
+                                    app:mbv_type="setup"
+                                    app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_support"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_support"
+                                    app:mbv_title="@string/support"
+                                    app:mbv_type="support"
+                                    app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+                            </LinearLayout>
+        -->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_history"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_history"
+                                    app:mbv_title="@string/report_history"
+                                    app:mbv_type="history"
+                                    app:mbv_visibility="hide" />
+
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_other"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_history"
+                                    app:mbv_title="@string/dashboard_other"
+                                    app:mbv_type="other"
+                                    app:mbv_visibility="hide" />
+
+        <!--
+                                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                    android:id="@+id/mbv_scan"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    app:mbv_icon="@drawable/ic_scan_primary"
+                                    app:mbv_title="@string/dashboard_scan_qr"
+                                    app:mbv_type="scan"
+                                    app:mbv_visibility="hide" />
+        -->
+
+                            </LinearLayout>
+                            <com.worldwidewealth.termtem.widgets.MenuButtonView
                                 android:id="@+id/mbv_agentcashin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 app:mbv_icon="@drawable/ic_agent_cashin_primary"
-                                app:mbv_visibility="hide"
-                                app:mbv_type="agentcashin"
                                 app:mbv_title="@string/add_credit_agent"
-                                >
-                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
-                    </LinearLayout>
+                                app:mbv_type="agentcashin"
+                                app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_topup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_topup"
-                            app:mbv_visibility="hide"
-                            app:mbv_type="topup"
-                            app:mbv_title="@string/topup"
-                            >
-                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
+                            <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                android:id="@+id/mbv_notipay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mbv_icon="@drawable/ic_notipay_primary"
+                                app:mbv_title="@string/dashboard_mtf"
+                                app:mbv_type="notipay"
+                                app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
 
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_topup_pin"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_pin_code"
-                            app:mbv_visibility="hide"
-                            app:mbv_type="pin"
-                            app:mbv_title="@string/dashboard_pin"
-                            >
-                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_setup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_setting"
-                            app:mbv_visibility="hide"
-                            app:mbv_type="setup"
-                            app:mbv_title="@string/setting"
-                            >
-                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
-
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_support"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_support"
-                            app:mbv_visibility="hide"
-                            app:mbv_type="support"
-                            app:mbv_title="@string/support"
-                            >
-                        </com.worldwidewealth.termtem.widgets.MenuButtonView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_history"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_history"
-                            app:mbv_title="@string/report_history"
-                            app:mbv_type="history"
-                            app:mbv_visibility="hide"/>
-                        <com.worldwidewealth.termtem.widgets.MenuButtonView
-                            android:id="@+id/mbv_scan"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:mbv_icon="@drawable/ic_scan_primary"
-                            app:mbv_visibility="hide"
-                            app:mbv_type="scan"
-                            app:mbv_title="@string/dashboard_scan_qr"/>
-
-                    </LinearLayout>
-
-
-
-                    <com.worldwidewealth.termtem.widgets.MenuButtonView
-                        android:id="@+id/mbv_notipay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:mbv_icon="@drawable/ic_notipay_primary"
-                        app:mbv_visibility="hide"
-                        app:mbv_type="notipay"
-                        app:mbv_title="@string/dashboard_mtf"
-                        >
-                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
-
-                    <com.worldwidewealth.termtem.widgets.MenuButtonView
-                        android:id="@+id/mbv_cashin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:mbv_icon="@drawable/mpay_icon"
-                        app:mbv_visibility="hide"
-                        app:mbv_type="cashin"
-                        app:mbv_title="@string/menu_mpay"
-                        >
-                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/menu_maps"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_size"
-                        android:visibility="gone"
-                        app:cardUseCompatPadding="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyIconMenuDashboard"
-                                android:src="@drawable/ic_map"
-                                />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                style="@style/MyTitleMenuDashboard"
-                                android:text="Maps" />
-
+                            <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                android:id="@+id/mbv_cashin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mbv_icon="@drawable/mpay_icon"
+                                app:mbv_title="@string/menu_mpay"
+                                app:mbv_type="cashin"
+                                app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </FrameLayout>
+
+
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>

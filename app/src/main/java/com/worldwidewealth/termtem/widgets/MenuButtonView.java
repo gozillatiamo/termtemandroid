@@ -11,6 +11,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.OtherMenuFragment;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
@@ -72,7 +74,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         SUPPORT(5),
         NOTIPAY(6),
         HISTORY(7),
-        EPIN(8);
+        EPIN(8),
+        OTHER(9);
 
         private int type;
         TYPE(int i) {
@@ -453,6 +456,15 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                 case EPIN:
                     intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.PIN);
+                    break;
+                case OTHER:
+                    ((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                                    android.R.anim.fade_in, android.R.anim.fade_out)
+                            .replace(R.id.container_menu, OtherMenuFragment.newInstance())
+                            .addToBackStack(null)
+                            .commit();
+                    setsClickable(true);
                     break;
             }
 

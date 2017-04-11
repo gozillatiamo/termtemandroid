@@ -94,20 +94,9 @@ public class DialogNetworkError {
             alertDialog.dismiss();
 
         alertDialog = builder.create();
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                        .setTextColor(mContext.getResources()
-                                .getColor(android.R.color.holo_red_dark));
-                ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE)
-                        .setTextColor(mContext.getResources()
-                                .getColor(R.color.colorPrimary));
-                TextView msgTxt = (TextView) ((AlertDialog)dialog).findViewById(android.R.id.message);
-                msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
-            }
-        });
-
+        alertDialog.setOnShowListener(new MyShowListener());
+        TextView msgTxt = (TextView) alertDialog.findViewById(android.R.id.message);
+        msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
         try {
             alertDialog.show();
         } catch (WindowManager.BadTokenException e){}

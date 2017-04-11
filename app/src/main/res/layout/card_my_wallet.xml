@@ -36,7 +36,7 @@
 
                 app:sizeToFit="true"
 
-                android:text="THB"
+                android:text="@string/currency"
                 android:layout_marginTop="@dimen/activity_space"
                 android:textColor="@android:color/secondary_text_light_nodisable"
                 style="@style/TextAppearance.AppCompat.Large"/>

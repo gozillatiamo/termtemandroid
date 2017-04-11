@@ -72,6 +72,8 @@ public class DialogCounterAlert {
 
         }
         alertDialog = builder.create();
+        alertDialog.setOnShowListener(new MyShowListener());
+/*
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -88,6 +90,7 @@ public class DialogCounterAlert {
                 }
             }
         });
+*/
 
         try {
             alertDialog.show();

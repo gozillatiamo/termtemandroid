@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.reportmoneytransfer.fragment;
 
+import android.content.ContentValues;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dialog.PopupChoiceBank;
 
 import java.text.NumberFormat;
 
@@ -26,23 +28,28 @@ import java.text.NumberFormat;
 public class FragmentReportMtPreview extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
+/*
     private String[] mListCodeBank;
     private TypedArray mListIconBank;
+*/
+
+    private ContentValues mValuesBankStart;
+    private ContentValues mValuesBankEnd;
     private static final String AMOUNTMT = "amountmt";
     private static final String IMAGESLIP = "imageslip";
     private static final String DATE = "date";
     private static final String TIME = "time";
     private static final String BANKSTART = "bankstart";
     private static final String BANKEND = "bankend";
-    public static Fragment newInstance(double amountMt, String imageSlip, String date, String time, int bankstart, int bankend){
+    public static Fragment newInstance(double amountMt, String imageSlip, String date, String time, ContentValues bankstart, ContentValues bankend){
         FragmentReportMtPreview fragment = new FragmentReportMtPreview();
         Bundle bundle = new Bundle();
         bundle.putDouble(AMOUNTMT, amountMt);
         bundle.putString(IMAGESLIP, imageSlip);
         bundle.putString(DATE, date);
         bundle.putString(TIME, time);
-        bundle.putInt(BANKSTART, bankstart);
-        bundle.putInt(BANKEND, bankend);
+        bundle.putParcelable(BANKSTART, bankstart);
+        bundle.putParcelable(BANKEND, bankend);
 
         fragment.setArguments(bundle);
         return fragment;
@@ -51,8 +58,13 @@ public class FragmentReportMtPreview extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+/*
         mListCodeBank = getResources().getStringArray(R.array.list_code_bank);
         mListIconBank = getContext().getResources().obtainTypedArray(R.array.ic_list_bank);
+*/
+        mValuesBankStart = getArguments().getParcelable(BANKSTART);
+        mValuesBankEnd = getArguments().getParcelable(BANKEND);
+
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_report_mt_preview, container, false);
             mHolder = new ViewHolder(rootView);
@@ -105,10 +117,10 @@ public class FragmentReportMtPreview extends Fragment {
         mHolder.mImageSlip.setImageBitmap(BitmapFactory.decodeByteArray(bytesImage, 0, bytesImage.length));
         mHolder.mTextDate.setText(getArguments().getString(DATE));
         mHolder.mTextTime.setText(getArguments().getString(TIME));
-        mHolder.mTextBankStart.setText(mListCodeBank[getArguments().getInt(BANKSTART)]);
-        mHolder.mTextBankEnd.setText(mListCodeBank[getArguments().getInt(BANKEND)]);
-        mHolder.mIconBankStart.setImageDrawable(mListIconBank.getDrawable(getArguments().getInt(BANKSTART)));
-        mHolder.mIconBankEnd.setImageDrawable(mListIconBank.getDrawable(getArguments().getInt(BANKEND)));
+        mHolder.mTextBankStart.setText(mValuesBankStart.getAsString(PopupChoiceBank.KEY_CODE));
+        mHolder.mTextBankEnd.setText(mValuesBankEnd.getAsString(PopupChoiceBank.KEY_CODE));
+        mHolder.mIconBankStart.setImageResource(mValuesBankStart.getAsInteger(PopupChoiceBank.KEY_ICON));
+        mHolder.mIconBankEnd.setImageResource(mValuesBankEnd.getAsInteger(PopupChoiceBank.KEY_ICON));
     }
 
     public class ViewHolder{
