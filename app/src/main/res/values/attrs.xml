@@ -14,6 +14,7 @@
             <enum name="history" value="7"/>
             <enum name="pin" value="8"/>
             <enum name="other" value="9"/>
+            <enum name="ar" value="10"/>
         </attr>
         <attr name="mbv_visibility" format="enum">
             <enum name="show" value="0"/>
