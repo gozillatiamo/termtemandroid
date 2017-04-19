@@ -1,11 +1,16 @@
 package com.worldwidewealth.termtem;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -23,16 +28,26 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.RegisterRequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -40,6 +55,12 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.CheckSyntaxData;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.TermTemLoading;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import me.grantland.widget.AutofitTextView;
 import retrofit2.Call;
@@ -49,20 +70,31 @@ import retrofit2.Response;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityRegister extends MyAppcompatActivity {
+public class ActivityRegister extends MyAppcompatActivity implements View.OnTouchListener, View.OnClickListener{
 
     private View rootView;
     private ViewHolder mHolder;
-    private static final int FIRSTNAME = 0;
-    private static final int LASTNAME = 1;
-    private static final int TEL = 2;
-    private static final int IDEN = 3;
-    private static final int PEOPLE = 4;
-    private static final int EMAIL = 5;
+    private static final int TITLENAME = 0;
+    private static final int FIRSTNAME = 1;
+    private static final int LASTNAME = 2;
+    private static final int BIRTH = 3;
+    private static final int TEL = 4;
+    private static final int IDEN = 5;
+    private static final int ATTACH = 6;
+    private static final int PEOPLE = 7;
+    private static final int EMAIL = 8;
     private String mEmail, mFirstName, mLastName, mTel, mIden;
+    private Dialog mDialogCondition;
+    private DatePickerDialog mDateDialog;
     private int mPerson;
-    private boolean[] mDataCheck = new boolean[6];
+    private boolean[] mDataCheck = new boolean[9];
     private APIServices services;
+    private TermTemLoading mLoading;
+    private Calendar mCalendar = Calendar.getInstance();
+    private Uri photoURI;
+    private String imgPath;
+
+
     public static final String TAG = ActivityRegister.class.getSimpleName();
 
     @Override
@@ -71,11 +103,13 @@ public class ActivityRegister extends MyAppcompatActivity {
         setContentView(R.layout.activity_register);
         mHolder = new ViewHolder(this);
         mDataCheck[EMAIL] = true;
+        mDataCheck[PEOPLE] = true;
         Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
-        initPeople();
         initNext();
+        setupDialogCondition();
+        setupCalendar();
 
     }
 
@@ -89,21 +123,67 @@ public class ActivityRegister extends MyAppcompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode){
+                case MyApplication.REQUEST_IMAGE_CAPTURE:
+//                    Bundle extras = data.getExtras();
+//                    uri = Util.getImageUri((Bitmap) extras.get("data"));
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//
-//        if (rootView == null){
-//            rootView = inflater.inflate(R.layout.activity_register, null, false);
-//            mHolder = new ViewHolder(rootView);
-//            rootView.setTag(mHolder);
-//        } else mHolder = (ViewHolder) rootView.getTag();
-//
-//
-//
-//        return rootView;
-//    }
+                    imgPath =  Util.getRealPathFromURI(photoURI);
+
+
+                    break;
+                case MyApplication.REQUEST_IMAGE_CHOOSE:
+                    photoURI = data.getData();
+                    imgPath = Util.getRealPathFromURI(photoURI);
+
+                    photoURI.toString().replace("com.android.gallery3d","com.google.android.gallery3d");
+
+                    if (photoURI.toString().startsWith("content://com.google.android.gallery3d")
+                            || photoURI.toString().startsWith("content://com.sec.android.gallery3d.provider") ) {
+
+                        imgPath = Util.getPicasaImage(photoURI);
+                    }
+                    else
+                        imgPath = Util.getRealPathFromURI(photoURI);
+
+//                    imgPath = Util.getRealPathFromURI(uri);
+
+                    break;
+            }
+
+/*
+            if (imgPath != null) {
+                mHolder.mImageAttach.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imgPath)
+                        .override(300, 300)
+                        .crossFade()
+                        .placeholder(R.drawable.ic_picture)
+                        .into(mHolder.mImageAttach);
+*/
+
+                mDataCheck[ATTACH] = true;
+            if (imgPath != null) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHolder.mImageAttach.setVisibility(View.VISIBLE);
+                        Glide.with(ActivityRegister.this).load(imgPath)
+                                .override(300, 300)
+                                .crossFade()
+                                .placeholder(R.drawable.ic_picture)
+                                .into(mHolder.mImageAttach);
+                        System.gc();
+                    }
+                }, 500);
+            }
+
+        }
+
+    }
 
     private void initToolbar(){
         setSupportActionBar(mHolder.mToolbar);
@@ -112,96 +192,36 @@ public class ActivityRegister extends MyAppcompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initPeople(){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type_people_dropdown, R.layout.text_spinner);
+    private void showDropDown(final EditText editText, int itemResource){
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.type_people_dropdown))/*{
-            @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                View v = null;
-
-                if (position == 0) {
-                    TextView tv = new TextView(getContext());
-                    tv.setHeight(0);
-                    tv.setVisibility(View.GONE);
-                    v = tv;
-                }
-                else {
-
-                    v = super.getDropDownView(position, null, parent);
-                }
-
-                parent.setVerticalScrollBarEnabled(false);
-                return v;            }
-        }*/;
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                android.R.layout.simple_list_item_1, getResources().getStringArray(itemResource));
         final ListPopupWindow listPopupWindow = new ListPopupWindow(this);
         listPopupWindow.setAdapter(spinnerAdapter);
-        listPopupWindow.setAnchorView(mHolder.mEditPeopleType);
+        listPopupWindow.setAnchorView(editText);
         listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView tv = (TextView) view;
-                mHolder.mEditPeopleType.setText(tv.getText());
-                mPerson = position;
+                editText.setText(tv.getText());
+//                mPerson = position;
                 listPopupWindow.dismiss();
             }
         });
 
+        listPopupWindow.show();
 
-        mHolder.mEditPeopleType.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP){
-                    listPopupWindow.show();
-
-                }
-                return false;
-            }
-        });
-/*
-        mHolder.mEditPeopleType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listPopupWindow.show();
-            }
-        });
-*/
-/*
-        mHolder.mSpinnerTypePeople.setAdapter(spinnerAdapter);
-        mHolder.mSpinnerTypePeople.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                boolean check = false;
-                if (position != 0){
-                    check = true;
-                    Drawable imgCheck = getResources().getDrawable( R.drawable.ic_check_circle );
-                    mHolder.mLayoutSpinnerPeople.setCompoundDrawables(null, null, imgCheck, null);
-                }
-                    mDataCheck[PEOPLE] = check;
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-*/
-//        mHolder.mSpinnerTypePeople.setSelection(0);
 
     }
 
     private void initNext(){
-
         mHolder.mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                for (boolean check: mDataCheck){
-                    Log.e(TAG, ""+check);
-                    if (!check){
-                        Toast.makeText(ActivityRegister.this, "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < mDataCheck.length; i++){
+                    Log.e(TAG, ""+mDataCheck[i]);
+                    if (!mDataCheck[i]){
+                        setupError(i);
                         return;
                     }
                 }
@@ -211,7 +231,6 @@ public class ActivityRegister extends MyAppcompatActivity {
                 mLastName = mHolder.mEditLastName.getText().toString();
                 mTel = mHolder.mEditTel.getText().toString();
                 mIden = mHolder.mEditIdentification.getText().toString();
-//                mPerson = mHolder.mSpinnerTypePeople.getSelectedItemPosition()-1;
 
                 if (!mEmail.equals("")){
                     if (!CheckSyntaxData.isEmailValid(mEmail)){
@@ -220,61 +239,159 @@ public class ActivityRegister extends MyAppcompatActivity {
                     }
                 }
 
-                if (!mHolder.mCheckService.isChecked()){
-                    Toast.makeText(ActivityRegister.this, getString(R.string.submit_service_please), Toast.LENGTH_LONG).show();
-                    return;
 
-                }
-                new DialogCounterAlert.DialogProgress(ActivityRegister.this).show();
-                Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
-                        mFirstName,
-                        mLastName,
-                        mEmail,
-                        mTel,
-                        mIden,
-                        mPerson
-                )));
-
-                APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
-                    @Override
-                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-
-                        if(response.body().getStatus() == APIServices.SUCCESS){
-
-                            final TextView message = new TextView(ActivityRegister.this);
-                            message.setPadding(20, 20, 20, 20);
-                            // i.e.: R.string.dialog_message =>
-                            // "Test this dialog following the link to dtmilano.blogspot.com"
-                            final SpannableString s =
-                                    new SpannableString(ActivityRegister.this.getText(R.string.register_done));
-                            Linkify.addLinks(s, Linkify.WEB_URLS);
-                            message.setText(s);
-                            message.setMovementMethod(LinkMovementMethod.getInstance());
-
-                            AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
-                                    .setView(message)
-                                    .setCancelable(false)
-                                    .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ActivityRegister.this.finish();
-                                        }
-                                    }).show();
-                        } else {
-                            Toast.makeText(ActivityRegister.this, response.body().getMsg(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        DialogCounterAlert.DialogProgress.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseModel> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(ActivityRegister.this, call, this);
-                    }
-                });
+                mDialogCondition.show();
 
             }
         });
+
+    }
+
+    private void setupDialogCondition(){
+        if (mDialogCondition == null){
+            mDialogCondition = new Dialog(this);
+            mDialogCondition.setContentView(R.layout.dialog_condition);
+            mDialogCondition.setTitle(R.string.title_condition);
+            mDialogCondition.setCancelable(false);
+            mDialogCondition.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            WebView webCodition = (WebView) mDialogCondition.findViewById(R.id.webview_condition);
+            final CheckBox checkboxSubmit = (CheckBox) mDialogCondition.findViewById(R.id.check_submit);
+             mDialogCondition.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     mDialogCondition.cancel();
+                 }
+             });
+
+            webCodition.getSettings().setJavaScriptEnabled(true);
+            webCodition.setWebChromeClient(new WebChromeClient());
+            webCodition.loadUrl("http://180.128.21.81/wealthweb/terms.htm");
+
+            checkboxSubmit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b){
+                        checkboxSubmit.toggle();
+                        mDialogCondition.cancel();
+
+                        if (mLoading == null){
+                            mLoading = new TermTemLoading(ActivityRegister.this, (ViewGroup) findViewById(R.id.layout_parent));
+                        }
+
+                        mLoading.show();
+
+                        Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
+                                mFirstName,
+                                mLastName,
+                                mEmail,
+                                mTel,
+                                mIden,
+                                mPerson
+                        )));
+
+                        APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
+                            @Override
+                            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+
+                                if(response.body().getStatus() == APIServices.SUCCESS){
+
+                                    final TextView message = new TextView(ActivityRegister.this);
+                                    message.setPadding(20, 20, 20, 20);
+                                    final SpannableString s =
+                                            new SpannableString(ActivityRegister.this.getText(R.string.register_done));
+                                    Linkify.addLinks(s, Linkify.WEB_URLS);
+                                    message.setText(s);
+                                    message.setMovementMethod(LinkMovementMethod.getInstance());
+
+                                    AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
+                                            .setView(message)
+                                            .setCancelable(false)
+                                            .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    ActivityRegister.this.finish();
+                                                }
+                                            }).show();
+                                    alertdialog.setOnShowListener(new MyShowListener());
+
+                                } else {
+                                    Toast.makeText(ActivityRegister.this, response.body().getMsg(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                mLoading.hide();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                mLoading.hide();
+                                new ErrorNetworkThrowable(t).networkError(ActivityRegister.this, call, this);
+                            }
+                        });
+
+                    }
+                }
+            });
+
+        }
+
+    }
+
+    private void setupError(int type){
+        Drawable imgCheck = getResources().getDrawable( R.drawable.ic_cancel );
+        EditText editText = null;
+        switch (type){
+            case FIRSTNAME:
+                editText = mHolder.mEditFristName;
+                break;
+            case LASTNAME:
+                editText = mHolder.mEditLastName;
+                break;
+            case TEL:
+                editText = mHolder.mEditTel;
+                break;
+            case IDEN:
+                editText = mHolder.mEditIdentification;
+                break;
+            case PEOPLE:
+                editText = mHolder.mEditPeopleType;
+                break;
+            case EMAIL:
+                editText = mHolder.mEditEmail;
+                break;
+            case BIRTH:
+                editText = mHolder.mEditBirth;
+                break;
+            case TITLENAME:
+                editText = mHolder.mEditTitleName;
+                break;
+            case ATTACH:
+                Toast.makeText(this, R.string.error_image_identity, Toast.LENGTH_SHORT).show();
+                mHolder.mBtnAttach.requestFocus();
+                break;
+
+        }
+
+        if (editText == null) return;
+        Toast.makeText(ActivityRegister.this, "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
+        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, imgCheck, null);
+        editText.requestFocus();
+
+
+    }
+
+    private void setupCalendar(){
+        mCalendar.setTimeInMillis(System.currentTimeMillis());
+        mDateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                mHolder.mEditBirth.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, month);
+                mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            }
+        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
 
     }
 
@@ -343,56 +460,105 @@ public class ActivityRegister extends MyAppcompatActivity {
         };
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Util.hideSoftKeyboard(view);
+        switch (motionEvent.getAction()){
+            case MotionEvent.ACTION_UP:
+                switch (view.getId()){
+                    case R.id.edit_birthdate:
+                        mDateDialog.show();
+                        break;
+                    case R.id.edit_title_name:
+                        showDropDown((EditText) view, R.array.type_title_name);
+                        break;
+                    case R.id.edit_people_type:
+                        showDropDown((EditText) view, R.array.type_people_dropdown);
+
+                        break;
+                }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_attach:
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
+                if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = Util.createImageFile();
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                        ex.printStackTrace();
+                    }
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+//                        photoURI = FileProvider.getUriForFile(mFragment.getContext(),
+//                                MyApplication.getContext().getPackageName(),
+//                                photoFile);
+                        photoURI = Uri.fromFile(photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, MyApplication.REQUEST_IMAGE_CAPTURE);
+                    }
+                }
+                break;
+        }
+    }
+
 
     public class ViewHolder{
 
-        private Button mBtnNext, mBtnCondition;
+        private Button mBtnNext, mBtnAttach;
+        private ImageView mImageAttach;
         private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification,
-        mEditPeopleType;
-//        private Spinner mSpinnerTypePeople;
+        mEditPeopleType, mEditBirth, mEditTitleName;
         private Toolbar mToolbar;
         private AutofitTextView mBtnSignIn;
-        private CheckBox mCheckService;
+
         public ViewHolder(final Activity view){
 
             mBtnNext = (Button) view.findViewById(R.id.btn_next);
-//            mSpinnerTypePeople = (Spinner) view.findViewById(R.id.spinner_type_people);
             mEditEmail = (EditText) view.findViewById(R.id.edit_email);
             mEditEmail.addTextChangedListener(onTextChanged(mEditEmail, EMAIL));
 
-//            mEditEmail.setOnFocusChangeListener(Util.onFocusEditText());
             mEditFristName = (EditText) view.findViewById(R.id.edit_name);
-//            mEditFristName.setOnFocusChangeListener(Util.onFocusEditText());
             mEditFristName.addTextChangedListener(onTextChanged(mEditFristName, FIRSTNAME));
             mEditLastName = (EditText) view.findViewById(R.id.edit_last_name);
-//            mEditLastName.setOnFocusChangeListener(Util.onFocusEditText());
             mEditLastName.addTextChangedListener(onTextChanged(mEditLastName, LASTNAME));
             mEditTel = (EditText) view.findViewById(R.id.edit_tel);
-//            mEditTel.setOnFocusChangeListener(Util.onFocusEditText());
             mEditTel.addTextChangedListener(onTextChanged(mEditTel, TEL));
             mEditIdentification = (EditText) view.findViewById(R.id.edit_identification);
-//            mEditIdentification.setOnFocusChangeListener(Util.onFocusEditText());
             mEditIdentification.addTextChangedListener(onTextChanged(mEditIdentification, IDEN));
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mBtnSignIn = (AutofitTextView) view.findViewById(R.id.btn_signin);
-            mCheckService = (CheckBox) view.findViewById(R.id.check_submit);
             mBtnSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     view.finish();
                 }
             });
-            mBtnCondition = (Button) view.findViewById(R.id.btn_condition_termtem);
             mEditPeopleType = (EditText) view.findViewById(R.id.edit_people_type);
             mEditPeopleType.addTextChangedListener(onTextChanged(mEditPeopleType, PEOPLE));
-            mBtnCondition.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse("http://180.128.21.81/wealthweb/terms.htm"));
-                    startActivity(i);
-                }
-            });
+            mEditPeopleType.setOnTouchListener(ActivityRegister.this);
+
+            mEditBirth = (EditText) view.findViewById(R.id.edit_birthdate);
+            mEditBirth.addTextChangedListener(onTextChanged(mEditBirth, BIRTH));
+            mEditBirth.setOnTouchListener(ActivityRegister.this);
+
+            mEditTitleName = (EditText) view.findViewById(R.id.edit_title_name);
+            mEditTitleName.addTextChangedListener(onTextChanged(mEditTitleName, TITLENAME));
+            mEditTitleName.setOnTouchListener(ActivityRegister.this);
+
+            mBtnAttach = (Button) view.findViewById(R.id.btn_attach);
+            mBtnAttach.setOnClickListener(ActivityRegister.this);
+
+            mImageAttach = (ImageView) view.findViewById(R.id.image_identity);
         }
     }
 

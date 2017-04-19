@@ -26,6 +26,7 @@
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>
     <string name="send">ส่ง</string>
+    <string name="hint_birthday">กรุณาเลือกวันเกิด</string>
     <string name="email">อีเมล (ถ้ามี)</string>
     <string name="password">รหัสผ่าน</string>
     <string name="forgot_password">ลืมรหัสผ่าน?</string>
@@ -125,9 +126,11 @@
     <string name="sign_up">ลงทะเบียน</string>
     <string name="sign_in">เข้าสู่ระบบ</string>
     <string name="first_name">ชื่อ</string>
+    <string name="title_name">คำนำหน้าชื่อ</string>
     <string name="last_name">นามสกุล</string>
     <string name="birth_day">วันเกิด</string>
     <string name="person_type">ประเภทบุคคล</string>
+    <string name="attach_identity_card">แนบภาพบัตรประชาชน</string>
     <string name="create">สร้าง</string>
     <string name="already_have_account">คุณมีบัญชีผู้ใช้งานอยู่แล้ว</string>
     <string name="add_credit_agent">โอนเงินให้ Agent</string>
@@ -205,7 +208,7 @@
     <string name="msg_leave_app">หากคุณออกจากแอพพลิเคชั่น\nระบบจะทำการ "ออกจากระบบ" ให้คุณโดยอัตโนมัติ\nคุณต้องการออกจากแอพพลิเคชั่นหรือไม่?</string>
     <string name="save_eslip_success">บันทึก E-Slip ลงใน "อัลบั้มรูปภาพ" ของคุณเรียบร้อยแล้ว</string>
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
-    <string name="menu_contact">ติดต่อเรา</string>
+    <string name="menu_contact">สอบถามข้อมูล/ลืมรหัสผ่าน</string>
     <string name="menu_bank_detail">ข้อมูลธนาคาร</string>
     <string name="bank">ธนาคาร:</string>
     <string name="bank_account_number">เลขที่บัญชี:</string>
@@ -224,6 +227,7 @@
     <string name="search_tutorial">สำหรับดูรายการย้อนหลัง</string>
     <string name="other">อื่น ๆ</string>
     <string name="submit_service">ยอมรับเงื่อนไขบริการ</string>
+    <string name="title_condition">เงื่อนไขการบริการ</string>
     <string name="goto_service">ที่มาเงื่อนไข</string>
     <string name="submit_service_please">กรุณายืนยันเงื่อนไข</string>
     <string name="menu_mpay">โอนเงินผ่าน เอ็มเปย์สเตชั่น และ เอทีเอ็ม</string>
@@ -251,6 +255,7 @@
     <string name="confirm_delete_title">ลบข้อความ</string>
     <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>
     <string name="username">รหัสผู้ใช้งาน</string>
+    <string name="error_image_identity">กรุณาแนบภาพบัตรประชาชน</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
@@ -330,6 +335,13 @@
         <item>บุคคล</item>
         <item>นิติบุคคล</item>
     </string-array>
+
+    <string-array name="type_title_name">
+        <item>นาย</item>
+        <item>นาง</item>
+        <item>นางสาว</item>
+    </string-array>
+
 
     <string-array name="phone_country">
         <item>TH</item>

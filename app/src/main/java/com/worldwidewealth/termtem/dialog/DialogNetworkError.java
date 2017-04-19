@@ -74,7 +74,7 @@ public class DialogNetworkError {
                             public void run() {
                                 APIHelper.enqueueWithRetry(call.clone(), callback);
                             }
-                        }, 3000);
+                        }, 5000);
                     }
                 });
 
@@ -95,8 +95,10 @@ public class DialogNetworkError {
 
         alertDialog = builder.create();
         alertDialog.setOnShowListener(new MyShowListener());
+/*
         TextView msgTxt = (TextView) alertDialog.findViewById(android.R.id.message);
         msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
+*/
         try {
             alertDialog.show();
         } catch (WindowManager.BadTokenException e){}

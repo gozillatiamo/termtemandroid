@@ -107,7 +107,7 @@ public class FragmentReportMT extends Fragment {
             mHolder.mLoadingImage.setVisibility(View.VISIBLE);
 
             switch (requestCode){
-                case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CAPTURE:
+                case MyApplication.REQUEST_IMAGE_CAPTURE:
 //                    Bundle extras = data.getExtras();
 //                    uri = Util.getImageUri((Bitmap) extras.get("data"));
                     uri = sheetDialogFragment.getImageUri();
@@ -116,7 +116,7 @@ public class FragmentReportMT extends Fragment {
 
 
                     break;
-                case BottomSheetDialogChoicePhoto.REQUEST_IMAGE_CHOOSE:
+                case MyApplication.REQUEST_IMAGE_CHOOSE:
                     uri = data.getData();
                     imgPath = Util.getRealPathFromURI(uri);
 

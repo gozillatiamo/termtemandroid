@@ -53,6 +53,9 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean clickable = true;
     private static final int NOTIUPLOAD = 1;
     private static boolean isUpload = false;
+    public static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final int REQUEST_IMAGE_CHOOSE = 2;
+
     protected String userAgent;
 
     /*

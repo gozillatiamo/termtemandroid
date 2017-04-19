@@ -25,8 +25,6 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
     private ViewHolder mHolder;
     private Fragment mFragment;
     private Uri photoURI;
-    public static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final int REQUEST_IMAGE_CHOOSE = 2;
     public static final String TAG = BottomSheetDialogChoicePhoto.class.getSimpleName();
 
     public BottomSheetDialogChoicePhoto() {
@@ -67,7 +65,7 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
 //                                photoFile);
                         photoURI = Uri.fromFile(photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        mFragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                        mFragment.startActivityForResult(takePictureIntent, MyApplication.REQUEST_IMAGE_CAPTURE);
                     }
 /*
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -87,7 +85,7 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
                 Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickIntent.setType("image/*");
 
-                mFragment.startActivityForResult(pickIntent, REQUEST_IMAGE_CHOOSE);
+                mFragment.startActivityForResult(pickIntent, MyApplication.REQUEST_IMAGE_CHOOSE);
             }
         });
 
