@@ -82,6 +82,7 @@
         <activity
             android:name=".ActivityRegister"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.topup.ActivityTopup"

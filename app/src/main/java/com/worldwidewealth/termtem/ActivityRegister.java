@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -91,7 +92,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     private APIServices services;
     private TermTemLoading mLoading;
     private Calendar mCalendar = Calendar.getInstance();
-    private Uri photoURI;
+    private static Uri photoURI;
     private String imgPath;
 
 
@@ -155,31 +156,16 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                     break;
             }
 
-/*
-            if (imgPath != null) {
-                mHolder.mImageAttach.setVisibility(View.VISIBLE);
-                Glide.with(this).load(imgPath)
-                        .override(300, 300)
-                        .crossFade()
-                        .placeholder(R.drawable.ic_picture)
-                        .into(mHolder.mImageAttach);
-*/
+                if (imgPath != null) {
+                    mHolder.mImageAttach.setVisibility(View.VISIBLE);
+                    Glide.with(this).load(imgPath)
+                            .override(300, 300)
+                            .crossFade()
+                            .placeholder(R.drawable.ic_picture)
+                            .into(mHolder.mImageAttach);
 
-                mDataCheck[ATTACH] = true;
-            if (imgPath != null) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mHolder.mImageAttach.setVisibility(View.VISIBLE);
-                        Glide.with(ActivityRegister.this).load(imgPath)
-                                .override(300, 300)
-                                .crossFade()
-                                .placeholder(R.drawable.ic_picture)
-                                .into(mHolder.mImageAttach);
-                        System.gc();
-                    }
-                }, 500);
-            }
+                    mDataCheck[ATTACH] = true;
+                }
 
         }
 
