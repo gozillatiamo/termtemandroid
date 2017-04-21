@@ -1,10 +1,13 @@
 package com.worldwidewealth.termtem.dashboard.topup.adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +65,13 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
 
         }else holder.mTextProductItem.setText(getItem(position).getPRODUCT_ITEM());
 
-        holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
-        holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
-        holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+/*
+        holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.primary_text_dark));
+        holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.primary_text_dark));
+        holder.mBtnChoice.setCardBackgroundColor(Color.parseColor("#f5f5f5"));
+*/
+
+        ((FragmentChoiceTopup)mFragment).clearSelected();
 
         if (position == previousSelectedPosition)
             setBackgroundSelect(holder, position);
@@ -95,7 +102,13 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
                 FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS) mFragment.getParentFragment();
                 holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.white));
                 holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.white));
-                holder.mBtnChoice.setCardBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+                TypedValue typedValue = new TypedValue();
+
+                TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorPrimary });
+                int color = a.getColor(0, 0);
+
+                a.recycle();
+                holder.mBtnChoice.setCardBackgroundColor(color);
             }
 
 

@@ -12,169 +12,200 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
         app:cardElevation="0dp">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_space"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/phone_number"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:id="@+id/textView18" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/logo_service"
-                    android:layout_width="64dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/logo_ais"/>
-                <EditText
-                    android:id="@+id/edit_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:hint="@string/hint_phone_number"
-                    android:maxLength="12"
-                    android:digits="0123456789-"
-                    android:background="@android:drawable/editbox_background_normal"
-                    android:layout_weight="1"
-                    android:imeOptions="actionDone"
-                    android:inputType="phone"/>
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <FrameLayout
-        android:id="@+id/container_topup_package"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/text_hint_pin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/dashboard_pin"
-            android:gravity="center"
-            android:textColor="#80CCCCCC"
-            style="@style/TextAppearance.AppCompat.Display1"
-            android:layout_gravity="bottom"/>
-    </FrameLayout>
-
-    <include
-        android:id="@+id/include_bottom_action"
-        layout="@layout/bottom_action"/>
-<!--
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        app:cardElevation="2dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/activity_space"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@android:color/secondary_text_light_nodisable"
-                    android:text="@string/total"/>
+                android:padding="@dimen/activity_space"
+                >
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center|right"
-                    android:layout_weight="1">
-
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:textColor="@android:color/black"
-                        android:text="THB"/>
-                    <TextView
-                        android:id="@+id/text_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/activity_space"
-                        style="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/colorPrimary"
-                        android:textStyle="bold"
-                        android:gravity="right"
-                        android:text="200.00"/>
+                        style="@style/TextAppearance.AppCompat.Caption"
+                        android:gravity="bottom"
+                        android:padding="@dimen/activity_small_space"
+                        android:text="ผู้ให้บริการ"/>
+                    <ImageView
+                        android:id="@+id/logo_service"
+                        android:layout_width="64dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/logo_ais"/>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone_number"
+                        android:gravity="center"
+                        android:padding="@dimen/activity_small_space"
+                        style="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"
+                        android:id="@+id/textView18" />
+                    <EditText
+                        android:id="@+id/edit_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/hint_phone_number"
+                        android:maxLength="12"
+                        android:digits="0123456789-"
+                        style="@style/TextAppearance.AppCompat.Small"
+                        android:background="@drawable/background_editext_topup"
+                        android:imeOptions="actionDone"
+                        android:inputType="phone"/>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_next"
+            <FrameLayout
+                android:id="@+id/container_topup_package"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/MyButton"
-                android:backgroundTint="@android:color/holo_orange_dark"
-                android:text="@string/next"
-                android:textColor="@android:color/white"/>
-            <LinearLayout
-                android:id="@+id/layout_btn_topup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/btn_cancel"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/text_hint_pin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    style="@style/MyButton"
-                    android:backgroundTint="@android:color/holo_red_dark"
-                    android:text="@string/cancel"
-                    android:textColor="@android:color/white"/>
+                    android:visibility="gone"
+                    android:text="@string/dashboard_pin"
+                    android:gravity="center"
+                    android:textColor="#80CCCCCC"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_gravity="bottom"/>
+            </FrameLayout>
 
-                <Button
-                    android:id="@+id/btn_topup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@style/MyButton"
-                    android:backgroundTint="@color/colorSuccess"
-                    android:text="@string/confirm_order"
-                    android:textColor="@android:color/white"/>
-
-            </LinearLayout>
+            <include
+                android:id="@+id/include_bottom_action"
+                layout="@layout/bottom_action" />
 
         </LinearLayout>
 
+
+
     </android.support.v7.widget.CardView>
--->
+
+    <!--
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true"
+
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_space"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        style="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@android:color/secondary_text_light_nodisable"
+                        android:text="@string/total"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center|right"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/black"
+                            android:text="THB"/>
+                        <TextView
+                            android:id="@+id/text_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/activity_space"
+                            style="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"
+                            android:gravity="right"
+                            android:text="200.00"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/MyButton"
+                    android:backgroundTint="@android:color/holo_orange_dark"
+                    android:text="@string/next"
+                    android:textColor="@android:color/white"/>
+                <LinearLayout
+                    android:id="@+id/layout_btn_topup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="visible"
+                        style="@style/MyButton"
+                        android:backgroundTint="@android:color/holo_red_dark"
+                        android:text="@string/cancel"
+                        android:textColor="@android:color/white"/>
+
+                    <Button
+                        android:id="@+id/btn_topup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        style="@style/MyButton"
+                        android:backgroundTint="@color/colorSuccess"
+                        android:text="@string/confirm_order"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    -->
 
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -83,7 +84,7 @@ public class FragmentChoiceTopup extends Fragment{
             if (holder == null) return;
             holder.mTextProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
             holder.mTextCurency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
-            holder.mBtnChoice.setCardBackgroundColor(getResources().getColor(android.R.color.white));
+            holder.mBtnChoice.setCardBackgroundColor(Color.parseColor("#f5f5f5"));
 //            mAdapter.previousSelectedPosition = -1;
         }
 

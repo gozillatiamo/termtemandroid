@@ -13,6 +13,50 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="AppTheme.Topup" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryToup</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryToup</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryToup</item>
+        <item name="colorAccent">@color/colorPrimaryToup</item>
+        <item name="background">@color/colorBackground</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.Pin" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryPin</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryPin</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryPin</item>
+        <item name="colorAccent">@color/colorPrimaryPin</item>
+        <item name="background">@color/colorBackground</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.Other" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryOther</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryOther</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryOther</item>
+        <item name="colorAccent">@color/colorPrimaryOther</item>
+        <item name="background">@color/colorBackground</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.History" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryHistory</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryHistory</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryHistory</item>
+        <item name="colorAccent">@color/colorPrimaryHistory</item>
+        <item name="background">@color/colorBackground</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
     <style name="MyEditTextStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/colorPrimary</item>

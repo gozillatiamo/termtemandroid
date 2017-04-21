@@ -92,14 +92,6 @@ public class FragmentTopupPackage extends  Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCarrier = getArguments().getString(CARRIER);
         mTopup = getArguments().getString(FragmentTopup.keyTopup);
-        if(mTopup.equals(FragmentTopup.PIN)){
-            mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
-            mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
-            mActionGetOTP = APIServices.ACTION_GET_TOPUP_EPIN;
-            mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
-            mActionEslip = APIServices.ACTION_ESLIP_EPIN;
-            getView().findViewById(R.id.text_hint_pin).setVisibility(View.VISIBLE);
-        }
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
@@ -107,6 +99,15 @@ public class FragmentTopupPackage extends  Fragment{
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
+
+        if(mTopup.equals(FragmentTopup.PIN)){
+            mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
+            mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
+            mActionGetOTP = APIServices.ACTION_GET_TOPUP_EPIN;
+            mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
+            mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+            rootView.findViewById(R.id.text_hint_pin).setVisibility(View.VISIBLE);
+        }
 
         Util.setupUI(rootView);
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));

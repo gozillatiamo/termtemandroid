@@ -111,7 +111,7 @@
     <string name="dashboard_loyalty">Loyalty</string>
     <string name="dashboard_ar">Game AR</string>
     <string name="dashboard_wallet">บัญชี</string>
-    <string name="dashboard_mtf">โอนเงินผ่านธนาคาร แจ้งที่นี้!</string>
+    <string name="dashboard_mtf">โอนเงินผ่านธนาคาร แจ้งที่นี่!</string>
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>

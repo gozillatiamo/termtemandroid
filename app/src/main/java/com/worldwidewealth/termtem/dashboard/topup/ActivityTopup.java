@@ -23,8 +23,17 @@ public class ActivityTopup extends MyAppcompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_topup);
         mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
+        switch (mTopup){
+            case FragmentTopup.MOBILE:
+                setTheme(R.style.AppTheme_Topup);
+                break;
+            case FragmentTopup.PIN:
+                setTheme(R.style.AppTheme_Pin);
+                break;
+        }
+
+        setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
         initContainer();

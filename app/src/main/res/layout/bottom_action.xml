@@ -6,97 +6,112 @@
     app:cardUseCompatPadding="true"
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
-    app:cardElevation="2dp"
+    app:cardElevation="0dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_space"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/activity_space">
+
         <LinearLayout
             android:id="@+id/layout_amout_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="@dimen/activity_space"
-            >
+            android:orientation="horizontal">
+
             <TextView
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/total"
                 android:textAllCaps="true"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/secondary_text_light_nodisable"
-                android:text="@string/total"/>
+                android:textColor="@android:color/secondary_text_light_nodisable" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:layout_weight="1"
                 android:gravity="center|right"
-                android:layout_weight="1">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/text_price"
+                    style="@style/TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/activity_space"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
                     android:gravity="right"
-                    android:text="200.00"/>
+                    android:text="200.00"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
+
                 <TextView
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColor="@android:color/black"
-                    android:text="@string/currency"/>
+                    android:text="@string/currency"
+                    android:textColor="@android:color/black" />
 
             </LinearLayout>
         </LinearLayout>
+
         <TextView
+            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_space"
+            android:text="@string/currency_hint"
             android:textAllCaps="true"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@android:color/secondary_text_light_nodisable"
-            android:text="@string/currency_hint"/>
+            android:textColor="@android:color/secondary_text_light_nodisable" />
 
-        <Button
-            android:id="@+id/btn_next"
+        <TextView
+            style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/topup"
+            android:textColor="#ebebeb" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_next"
             style="@style/MyButton"
-            android:backgroundTint="@android:color/holo_orange_dark"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:textSize="@dimen/my_text_large"
+            android:backgroundTint="?attr/colorPrimary"
             android:text="@string/next"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
+
         <LinearLayout
             android:id="@+id/layout_btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <Button
                 android:id="@+id/btn_cancel"
+                style="@style/MyButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:visibility="visible"
-                style="@style/MyButton"
                 android:backgroundTint="@android:color/holo_red_dark"
                 android:text="@string/cancel"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_submit"
+                style="@style/MyButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/MyButton"
                 android:backgroundTint="@color/colorSuccess"
                 android:text="@string/confirm_order"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

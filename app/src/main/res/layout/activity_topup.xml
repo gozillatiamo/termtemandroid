@@ -15,12 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:theme="@style/ToolbarColored">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_topup"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -31,10 +25,20 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
+
     <FrameLayout
         android:id="@+id/container_topup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/activity_space"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"></FrameLayout>
+
+    <ImageView
+        android:layout_width="@dimen/icon_big_size"
+        android:layout_height="@dimen/icon_big_size"
+        android:src="@drawable/ic_add_circle_outline"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="@dimen/icon_large_size"/>
+
 </android.support.design.widget.CoordinatorLayout>
