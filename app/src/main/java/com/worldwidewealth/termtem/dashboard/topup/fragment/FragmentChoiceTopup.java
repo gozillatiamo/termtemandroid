@@ -56,8 +56,9 @@ public class FragmentChoiceTopup extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        clearSelected();
         mAdapter.previousSelectedPosition = -1;
+        clearSelected();
+
         Fragment fragment = getParentFragment().getParentFragment();
 
         if (fragment instanceof FragmentTopupPackage) {
@@ -73,18 +74,24 @@ public class FragmentChoiceTopup extends Fragment{
         mRecyclerBtnTopup.setLayoutManager(gridLayoutManager);
         mAdapter = new BtnTopupAdapter(FragmentChoiceTopup.this, mDataList);
         mRecyclerBtnTopup.setAdapter(mAdapter);
+        mRecyclerBtnTopup.setItemViewCacheSize(mDataList.size());
     }
 
 
     public void clearSelected(){
 
         if (mAdapter.previousSelectedPosition != -1){
+            mAdapter.notifyDataSetChanged();
+/*
             BtnTopupAdapter.ViewHolder holder = (BtnTopupAdapter.ViewHolder)
                     mRecyclerBtnTopup.findViewHolderForAdapterPosition(mAdapter.previousSelectedPosition);
             if (holder == null) return;
+*/
+/*
             holder.mTextProductItem.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
             holder.mTextCurency.setTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
             holder.mBtnChoice.setCardBackgroundColor(Color.parseColor("#f5f5f5"));
+*/
 //            mAdapter.previousSelectedPosition = -1;
         }
 

@@ -13,12 +13,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -34,6 +39,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
+
+import java.util.List;
 
 /**
  * Created by user on 07-Apr-17.
@@ -56,6 +63,7 @@ public class WidgetTypeInbox extends FrameLayout{
     private View mLayoutVrView;
 
     private int mWidgetType;
+    private List<String> mListImage;
 
     public enum WIDGET_TYPE{
         VIDEO(0),
@@ -100,6 +108,7 @@ public class WidgetTypeInbox extends FrameLayout{
         Parcelable parcelable = super.onSaveInstanceState();
         SaveState ss = new SaveState(parcelable);
         ss.mWidgetType = this.mWidgetType;
+        ss.mListImage = this.mListImage;
         return ss;
     }
 
@@ -114,7 +123,9 @@ public class WidgetTypeInbox extends FrameLayout{
         SaveState ss = (SaveState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         this.mWidgetType = ss.mWidgetType;
+        this.mListImage = ss.mListImage;
         setWidgetType(this.mWidgetType);
+//        setImage();
     }
 
     private void setup(AttributeSet attrs){
@@ -165,6 +176,21 @@ public class WidgetTypeInbox extends FrameLayout{
         }
     }
 
+    private void setImage(List<String> listImage){
+        this.mListImage = listImage;
+
+        int spanCount;
+
+        if (mListImage.size() > 3)
+            spanCount = 3;
+        else
+            spanCount = mListImage.size();
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
+        mRecyclerImage.setLayoutManager(gridLayoutManager);
+
+    }
+
     private void setVideo(Uri uri){
         Activity activity = (Activity) getContext();
         @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode =
@@ -205,9 +231,11 @@ public class WidgetTypeInbox extends FrameLayout{
     private static class SaveState extends BaseSavedState{
 
         int mWidgetType;
+        List<String> mListImage;
         public SaveState(Parcel source) {
             super(source);
             this.mWidgetType = source.readInt();
+            this.mListImage = source.readArrayList(source.getClass().getClassLoader());
         }
 
         public SaveState(Parcelable superState) {
@@ -218,6 +246,7 @@ public class WidgetTypeInbox extends FrameLayout{
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(this.mWidgetType);
+            out.writeStringList(this.mListImage);
         }
 
         public static final Creator<SaveState> CREATOR = new Creator<SaveState>() {
@@ -231,6 +260,52 @@ public class WidgetTypeInbox extends FrameLayout{
                 return new SaveState[i];
             }
         };
+    }
+
+    private class ImageInboxAdapter extends RecyclerView.Adapter<ImageInboxAdapter.ViewHolder>
+        implements OnClickListener{
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(new ImageView(getContext()));
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (getItemCount() > 1){
+                Glide.with(getContext())
+                        .load(mListImage.get(position))
+                        .override(300, 300)
+                        .crossFade()
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_picture)
+                        .into((ImageView) holder.itemView);
+            } else {
+                Glide.with(getContext())
+                        .load(mListImage.get(position))
+                        .override(300, 300)
+                        .crossFade()
+                        .placeholder(R.drawable.ic_picture)
+                        .into((ImageView) holder.itemView);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return mListImage.size();
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder{
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
     }
 
 }

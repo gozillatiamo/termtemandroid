@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
@@ -19,6 +20,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     private FrameLayout mContainerTopup;
     private Toolbar mToolbar;
     private String mTopup;
+    private ImageView mMenuIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,11 @@ public class ActivityTopup extends MyAppcompatActivity {
     private void initWidgets(){
         mContainerTopup = (FrameLayout) findViewById(R.id.container_topup);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_topup);
-
+        mMenuIcon = (ImageView) findViewById(R.id.logo_menu);
+/*
+        mMenuIcon.bringToFront();
+        mToolbar.invalidate();
+*/
     }
     private void initToolbar(){
         setSupportActionBar(mToolbar);

@@ -16,32 +16,36 @@
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
         app:cardElevation="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/activity_space"
-                >
+                android:padding="@dimen/activity_space">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
+                        style="@style/TextAppearance.AppCompat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/TextAppearance.AppCompat.Caption"
                         android:gravity="bottom"
                         android:padding="@dimen/activity_small_space"
-                        android:text="ผู้ให้บริการ"/>
+                        android:text="ผู้ให้บริการ" />
+
                     <ImageView
                         android:id="@+id/logo_service"
                         android:layout_width="64dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/logo_ais"/>
+                        android:src="@drawable/logo_ais" />
 
                 </LinearLayout>
 
@@ -49,27 +53,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/textView18"
+                        style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/phone_number"
                         android:gravity="center"
                         android:padding="@dimen/activity_small_space"
-                        style="@style/TextAppearance.AppCompat.Small"
+                        android:text="@string/phone_number"
                         android:textColor="?attr/colorPrimary"
-                        android:textStyle="bold"
-                        android:id="@+id/textView18" />
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/edit_phone"
+                        style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/hint_phone_number"
-                        android:maxLength="12"
-                        android:digits="0123456789-"
-                        style="@style/TextAppearance.AppCompat.Small"
                         android:background="@drawable/background_editext_topup"
+                        android:digits="0123456789-"
+                        android:hint="@string/hint_phone_number"
                         android:imeOptions="actionDone"
-                        android:inputType="phone"/>
+                        android:inputType="phone"
+                        android:maxLength="12" />
 
 
                 </LinearLayout>
@@ -88,16 +94,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:id="@+id/text_hint_pin"
+                    style="@style/TextAppearance.AppCompat.Display1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="@string/dashboard_pin"
+                    android:layout_gravity="bottom"
                     android:gravity="center"
+                    android:text="@string/dashboard_pin"
                     android:textColor="#80CCCCCC"
-                    style="@style/TextAppearance.AppCompat.Display1"
-                    android:layout_gravity="bottom"/>
+                    android:visibility="visible" />
             </FrameLayout>
 
             <include
@@ -105,7 +112,6 @@
                 layout="@layout/bottom_action" />
 
         </LinearLayout>
-
 
 
     </android.support.v7.widget.CardView>

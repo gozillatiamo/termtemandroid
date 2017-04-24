@@ -71,7 +71,9 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         holder.mBtnChoice.setCardBackgroundColor(Color.parseColor("#f5f5f5"));
 */
 
-        ((FragmentChoiceTopup)mFragment).clearSelected();
+        holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
+        holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.tertiary_text_dark));
+        holder.mBtnChoice.setCardBackgroundColor(Color.parseColor("#f5f5f5"));
 
         if (position == previousSelectedPosition)
             setBackgroundSelect(holder, position);
@@ -89,6 +91,11 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mDataList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public LoadButtonResponseModel getItem(int position){
@@ -114,9 +121,11 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
 
             if (previousSelectedPosition == position) return;
 
+/*
             if (mFragment instanceof FragmentChoiceTopup){
                 ((FragmentChoiceTopup)mFragment).clearSelected();
             }
+*/
         }
     }
 
@@ -126,7 +135,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         String buttonId = null;
         if (position != -1) {
             if (previousSelectedPosition == position) return;
-            setBackgroundSelect(holder, position);
+//            setBackgroundSelect(holder, position);
             LoadButtonResponseModel buttonResponseModel = getItem(position);
             nowAmt = buttonResponseModel.getPRODUCT_PRICE();
             buttonId = buttonResponseModel.getTXID();
@@ -143,6 +152,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
 //        clearSelected();
 
         previousSelectedPosition = position;
+        notifyDataSetChanged();
 
     }
 
