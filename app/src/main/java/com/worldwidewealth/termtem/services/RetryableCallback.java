@@ -63,6 +63,6 @@ public abstract class RetryableCallback<T> implements Callback<T> {
             public void run() {
                 call.clone().enqueue(RetryableCallback.this);
             }
-        }, 5000);
+        }, 500);
     }
 }

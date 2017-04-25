@@ -31,21 +31,31 @@ public class RegisterRequestModel {
         private String EMAIL;
         private String PHONENO;
         private String IDCARD;
+        private String TITLE_NAME;
+        private long BDAY;
+        private String IDFILE;
         private int AGENTTYPE;
 
-        public Data(String firstname,
+        public Data(String titlename,
+                    String firstname,
                     String lastname,
+                    long birthday,
                     String email,
                     String phoneno,
                     String idcard,
-                    int agenttype){
+                    int agenttype,
+                    String idfile){
 
+            this.TITLE_NAME = titlename;
             this.FIRSTNAME = firstname;
             this.LASTNAME = lastname;
+            this.BDAY  = birthday;
             this.EMAIL = email;
             this.PHONENO = phoneno;
             this.IDCARD = idcard;
             this.AGENTTYPE = agenttype;
+            this.IDFILE = idfile;
+
 
         }
     }

@@ -27,6 +27,7 @@ import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
@@ -248,7 +249,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                         if (Global.getInstance().getAGENTID() == null) return;
                         APIServices services = APIServices.retrofit.create(APIServices.class);
                         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
-                        call.enqueue(new Callback<ResponseBody>() {
+                        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 Object values = EncryptionData.getModel(activity, call, response.body(), this);

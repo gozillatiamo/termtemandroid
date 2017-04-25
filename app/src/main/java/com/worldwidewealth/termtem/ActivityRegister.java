@@ -87,13 +87,14 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     private String mEmail, mFirstName, mLastName, mTel, mIden;
     private Dialog mDialogCondition;
     private DatePickerDialog mDateDialog;
-    private int mPerson;
+    private int mPerson = 0;
     private boolean[] mDataCheck = new boolean[9];
     private APIServices services;
     private TermTemLoading mLoading;
     private Calendar mCalendar = Calendar.getInstance();
     private static Uri photoURI;
     private String imgPath;
+    private Bitmap mBitmapImage;
 
 
     public static final String TAG = ActivityRegister.class.getSimpleName();
@@ -164,6 +165,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                             .placeholder(R.drawable.ic_picture)
                             .into(mHolder.mImageAttach);
 
+                    mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
                     mDataCheck[ATTACH] = true;
                 }
 
@@ -268,12 +270,15 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                         mLoading.show();
 
                         Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
+                                mHolder.mEditTitleName.getText().toString(),
                                 mFirstName,
                                 mLastName,
+                                mCalendar.getTimeInMillis(),
                                 mEmail,
                                 mTel,
                                 mIden,
-                                mPerson
+                                mPerson,
+                                Util.encodeBitmapToUpload(mBitmapImage)
                         )));
 
                         APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {

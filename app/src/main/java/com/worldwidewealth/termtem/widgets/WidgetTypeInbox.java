@@ -42,6 +42,8 @@ import com.worldwidewealth.termtem.R;
 
 import java.util.List;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+
 /**
  * Created by user on 07-Apr-17.
  */
@@ -154,7 +156,7 @@ public class WidgetTypeInbox extends FrameLayout{
         setWidgetType(this.mWidgetType);
     }
 
-    private void setWidgetType(int type){
+    public void setWidgetType(int type){
         this.mWidgetType = type;
         mExoPlayerView.setVisibility(GONE);
         mLayoutVrView.setVisibility(GONE);
@@ -176,7 +178,7 @@ public class WidgetTypeInbox extends FrameLayout{
         }
     }
 
-    private void setImage(List<String> listImage){
+    public void setImage(List<String> listImage){
         this.mListImage = listImage;
 
         int spanCount;
@@ -188,6 +190,8 @@ public class WidgetTypeInbox extends FrameLayout{
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
         mRecyclerImage.setLayoutManager(gridLayoutManager);
+        ImageInboxAdapter adapter = new ImageInboxAdapter();
+        mRecyclerImage.setAdapter(new AlphaInAnimationAdapter(adapter));
 
     }
 
@@ -288,6 +292,8 @@ public class WidgetTypeInbox extends FrameLayout{
                         .placeholder(R.drawable.ic_picture)
                         .into((ImageView) holder.itemView);
             }
+            holder.itemView.setTag(position);
+            holder.itemView.setOnClickListener(this);
         }
 
         @Override
@@ -297,7 +303,10 @@ public class WidgetTypeInbox extends FrameLayout{
 
         @Override
         public void onClick(View view) {
-
+            ZoomView.zoomImageFromThumb(getContext(),
+                    WidgetTypeInbox.this.getRootView(),
+                    view,
+                    mListImage.get((Integer) view.getTag()));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{

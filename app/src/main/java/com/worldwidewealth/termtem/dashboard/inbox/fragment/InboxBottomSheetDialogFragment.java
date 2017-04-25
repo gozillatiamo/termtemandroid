@@ -59,8 +59,11 @@ import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -80,6 +83,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
+    private WidgetTypeInbox mWidgetType;
 
     public static final int BUFFER_SEGMENT_SIZE = 16 * 1024; // Original value was 64 * 1024
     public static final int VIDEO_BUFFER_SEGMENTS = 50; // Original value was 200
@@ -114,7 +118,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mDataInbox = getArguments().getParcelable(KEY_INBOX_RESPONSE);
         getArguments().remove(KEY_INBOX_RESPONSE);
-
         super.onCreate(savedInstanceState);
     }
 
@@ -139,6 +142,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         mTitle = (TextView) contentView.findViewById(R.id.inbox_title);
         mDes = (TextView) contentView.findViewById(R.id.inbox_des);
         mBtnDel = (ImageView) contentView.findViewById(R.id.btn_del);
+        mWidgetType = (WidgetTypeInbox) contentView.findViewById(R.id.widget_type);
     }
 
     private void bindDialogBottomSheet(View contentView){
@@ -208,8 +212,19 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         });
 
+
+
+
+        mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.IMAGE.getWidgetType());
+        List<String> mListImage = new ArrayList<>();
+        mListImage.add("http://placehold.it/120x120&text=image1");
+        mListImage.add("http://placehold.it/120x120&text=image2");
+        mListImage.add("http://placehold.it/120x120&text=image3");
+        mListImage.add("http://placehold.it/120x120&text=image4");
+        mWidgetType.setImage(mListImage);
+
 //        handleVideo();
-        handleExoplayer();
+//        handleExoplayer();
     }
 
     private void callRead(){

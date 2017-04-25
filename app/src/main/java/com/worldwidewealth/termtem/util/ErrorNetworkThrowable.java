@@ -27,6 +27,7 @@ public class ErrorNetworkThrowable extends Throwable {
 
     public ErrorNetworkThrowable(Throwable t){
         super(t);
+        t.printStackTrace();
     }
 
     public void networkError(Context context, String msg, Call call, Callback callback, boolean canCancel){

@@ -18,12 +18,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.model.DataRequestModel;
+import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.util.BadgeDrawable;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -96,11 +102,38 @@ public class FragmentTopupSlip extends Fragment {
 
 //        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
 //        tabLayout.setVisibility(View.GONE);
-        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
+//        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
+
         initBtn();
-        if (mImageBitmap != null || mTransID != null) {
-            initEslip();
-        }
+
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Object values = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                        if (values instanceof String) {
+                            LoginResponseModel loginResponseModel = new Gson().fromJson((String) values, LoginResponseModel.class);
+                            Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
+                            Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
+                            Util.setBalanceWallet(mHolder.mIncludeMyWallet);
+
+                        }
+
+                        if (mImageBitmap != null || mTransID != null) {
+                            initEslip();
+                        }
+
+
+//                DialogCounterAlert.DialogProgress.dismiss();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    }
+                });
+
         return rootView;
     }
 

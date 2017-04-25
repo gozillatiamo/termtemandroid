@@ -13,10 +13,13 @@ import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -143,11 +146,13 @@ public interface APIServices {
     Call<ResponseBody> genBarcode(@Body RequestModel requestModel);
 
 
-    final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
-    final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.MINUTES)
-            .readTimeout(5, TimeUnit.MINUTES)
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override
@@ -159,19 +164,21 @@ public interface APIServices {
 
 
                         builder = originalRequest.newBuilder()
+                                .addHeader("connection", "close")
                                 .method(originalRequest.method(), Util.encode(originalRequest.body()));
                     }
                     Response response = chain.proceed(builder.build());
+//                    Response response = client.newCall(builder.build()).execute();
                     return  response;
                 }
             })
             .build();
 
-    public static final Gson gson = new GsonBuilder()
+    Gson gson = new GsonBuilder()
             .setLenient()
     .create();
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
+     Retrofit retrofit = new Retrofit.Builder()
         .baseUrl(MyApplication.getContext().getString(R.string.server)).client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
