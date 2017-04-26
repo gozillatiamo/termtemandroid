@@ -22,6 +22,7 @@ import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -33,20 +34,38 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
     private CardView mInformationView;
     private View mLayoutThumbnail;
-    private ImageView mImageThumbnail;
-    private TextView mTextLengthVideo, mTextTitle, mTextDes, mTextDate;
+    private ImageView mImageLogo;
+    private TextView  mTextTitle, mTextDes, mTextDate;
     private CheckBox mCheckDelete;
+    private ImageThumbnailView mImageThumbnailView;
 
     private String mTitle, mDes, mThumbnailURL, mLengthVideo;
     private Date mDate;
     private boolean isRead;
     private boolean isCheck;
+    private int mType;
+    private List<String> mListImage;
 
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
     private InformationLongClickListener informationLongClickListener;
     private InboxAdapter.InboxViewHolder holder;
     private int mPosition = -1;
+
+    public enum TYPE{
+        TEXT(0),
+        IMAGE(1),
+        VIDEO(2);
+
+        private int type;
+        TYPE(int i) {
+            this.type = i;
+        }
+
+        public int getType() {
+            return type;
+        }
+    }
 
     public InformationView(Context context) {
         super(context);
@@ -83,6 +102,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         ss.mDate = this.mDate;
         ss.isRead = this.isRead;
         ss.isCheck = this.isCheck;
+        ss.mType = this.mType;
+        ss.mListImage = this.mListImage;
         return ss;
     }
 
@@ -102,13 +123,16 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mDate = ss.mDate;
         this.isRead = ss.isRead;
         this.isCheck = ss.isCheck;
+        this.mType = ss.mType;
+        this.mListImage = ss.mListImage;
 
         setTitle(this.mTitle);
         setDes(this.mDes);
-        setLengthVideo(this.mLengthVideo);
+//        setLengthVideo(this.mLengthVideo);
         setDate(this.mDate);
         setRead(this.isRead);
         setCheckDelete(this.isCheck);
+        setImageThumbnail(this.mListImage);
 
         if (this.mThumbnailURL != null){
             setThumbnail(this.mThumbnailURL);
@@ -127,14 +151,15 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     }
 
     private void bindview(){
-        mImageThumbnail = (ImageView) findViewById(R.id.image_thumbnail);
+        mImageLogo = (ImageView) findViewById(R.id.logo_inbox);
         mInformationView = (CardView) findViewById(R.id.information_view);
         mLayoutThumbnail = findViewById(R.id.layout_thumbnail);
         mTextDes = (TextView) findViewById(R.id.txt_description);
-        mTextLengthVideo = (TextView) findViewById(R.id.txt_length_video);
+//        mTextLengthVideo = (TextView) findViewById(R.id.txt_length_video);
         mTextTitle = (TextView) findViewById(R.id.txt_title);
         mTextDate = (TextView) findViewById(R.id.txt_date);
         mCheckDelete = (CheckBox) findViewById(R.id.check_delete);
+        mImageThumbnailView = (ImageThumbnailView) findViewById(R.id.image_thumbnail_view);
     }
 
     private void setupStyleable(AttributeSet attrs){
@@ -144,6 +169,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             mDes = typedArray.getString(R.styleable.InformationView_iv_des);
             mLengthVideo = typedArray.getString(R.styleable.InformationView_iv_length_video);
             mThumbnailResource = typedArray.getResourceId(R.styleable.InformationView_iv_thumbnail, R.drawable.termtem_logo_small);
+            mType = typedArray.getInt(R.styleable.InformationView_iv_type, -1);
             typedArray.recycle();
         }
     }
@@ -155,9 +181,35 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
         setTitle(this.mTitle);
         setDes(this.mDes);
-        setLengthVideo(this.mLengthVideo);
+//        setLengthVideo(this.mLengthVideo);
         setThumbnail(this.mThumbnailResource);
         setRead(this.isRead);
+    }
+
+    public void setType(int type){
+        mImageLogo.setVisibility(GONE);
+        mImageThumbnailView.setVisibility(GONE);
+        mListImage = null;
+
+        this.mType = type;
+        if (mType == -1) return;
+
+        switch (TYPE.values()[mType]){
+            case TEXT:
+                mImageLogo.setVisibility(VISIBLE);
+                break;
+            case IMAGE:
+                mImageThumbnailView.setVisibility(VISIBLE);
+                break;
+            case VIDEO:
+                break;
+        }
+    }
+
+    public void setImageThumbnail(List<String> listImage){
+        this.mListImage = listImage;
+        if (mListImage == null) return;
+        mImageThumbnailView.setImageThumbnail(listImage);
     }
 
     public void checkToggle(){
@@ -171,6 +223,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         } else
             mCheckDelete.setVisibility(GONE);
     }
+
     public void setCheckDelete(boolean isCheck){
         this.isCheck = isCheck;
         mCheckDelete.setChecked(this.isCheck);
@@ -224,6 +277,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         return this.mDes;
     }
 
+/*
     public void setLengthVideo(String lengthVideo){
         this.mLengthVideo = lengthVideo;
         if (mTextLengthVideo!= null) {
@@ -232,6 +286,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         } else
             mTextLengthVideo.setVisibility(GONE);
     }
+*/
 
     public String getLengthVideo(){
         return this.mLengthVideo;
@@ -240,7 +295,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     public void setThumbnail(String url){
         this.mThumbnailURL = url;
         this.mThumbnailResource = -1;
-        setImage(this.mThumbnailURL);
+//        setImage(this.mThumbnailURL);
     }
 
     public void setThumbnail(int res){
@@ -248,10 +303,11 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         this.mThumbnailURL = null;
 
         if (this.mThumbnailResource != -1) {
-            setImage(this.mThumbnailResource);
+//            setImage(this.mThumbnailResource);
         }
     }
 
+/*
     private void setImage(Object image){
         if(!isInEditMode()) {
             Glide.with(getContext())
@@ -262,6 +318,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
                     .into(mImageThumbnail);
         }
     }
+*/
 
     public void setInformationClickListener(InformationClickListener listener, InboxAdapter.InboxViewHolder holder, int position){
         this.informationClickListener = listener;
@@ -315,6 +372,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         Date mDate;
         boolean isRead;
         boolean isCheck;
+        int mType;
+        List<String> mListImage;
 
         public SavedState(Parcel source) {
             super(source);
@@ -326,6 +385,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             this.mDate = (Date) source.readValue(getClass().getClassLoader());
             this.isRead = source.readByte() != 0;
             this.isCheck = source.readByte() != 0;
+            this.mType = source.readInt();
+            source.readStringList(this.mListImage);
         }
 
         public SavedState(Parcelable superState) {
@@ -343,6 +404,8 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             out.writeValue(this.mDate);
             out.writeByte((byte) (this.isRead ? 1:0));
             out.writeByte((byte) (this.isCheck ? 1:0));
+            out.writeInt(this.mType);
+            out.writeStringList(this.mListImage);
         }
 
         public static final Creator<InformationView.SavedState> CREATOR = new Creator<InformationView.SavedState>() {

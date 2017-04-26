@@ -46,6 +46,7 @@ public class APIHelper {
                 case APIServices.ACTIONSUBMITTOPUP:
                 case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                case APIServices.ACTIONNOTIPAY:
                     DEFAULT_RETIES = 0;
                     break;
             }

@@ -18,6 +18,14 @@ public class BankInformationModel {
     private static Context mContext = MyApplication.getContext();
     private static final ArrayList<Bank> mListBank = new ArrayList<>(Arrays.asList(
             new Bank(
+                    mContext.getString(R.string.ppay),
+                    R.drawable.ic_promptpay,
+                    null,
+                    mContext.getString(R.string.bbl_promptpay_account_number),
+                    mContext.getString(R.string.bank_account_name),
+                    null
+            ),
+            new Bank(
                     mContext.getString(R.string.kbank),
                     R.drawable.kbank,
                     mContext.getString(R.string.kbank_saving_account_number),
@@ -29,7 +37,7 @@ public class BankInformationModel {
                     mContext.getString(R.string.bbl),
                     R.drawable.bbl,
                     mContext.getString(R.string.bbl_saving_account_number),
-                    mContext.getString(R.string.bbl_promptpay_account_number),
+                    null,
                     mContext.getString(R.string.bank_account_name),
                     mContext.getString(R.string.bbl_branch)
             )

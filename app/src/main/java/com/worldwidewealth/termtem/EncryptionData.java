@@ -171,6 +171,8 @@ public class EncryptionData {
 
                     case APIServices.ACTIONGETOTP:
                     case APIServices.ACTIONSUBMITTOPUP:
+                    case APIServices.ACTION_GET_OTP_EPIN:
+                    case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
 
                         msg = context.getString(R.string.alert_topup_fail);
                         new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
@@ -178,6 +180,7 @@ public class EncryptionData {
                         return null;
 
                     case APIServices.ACTIONLOGIN:
+                    case APIServices.ACTIONNOTIPAY:
                         return responseModel;
 
                     case APIServices.ACTIONLOGOUT:

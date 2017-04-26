@@ -3,6 +3,7 @@ package com.worldwidewealth.termtem.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -13,10 +14,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -192,8 +195,19 @@ public class WidgetTypeInbox extends FrameLayout{
         mRecyclerImage.setLayoutManager(gridLayoutManager);
         ImageInboxAdapter adapter = new ImageInboxAdapter();
         mRecyclerImage.setAdapter(new AlphaInAnimationAdapter(adapter));
-
+        mRecyclerImage.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int size = getResources().getDimensionPixelSize(R.dimen.activity_small_space);
+                outRect.left = size;
+                outRect.right = size;
+                outRect.top = size;
+                outRect.bottom = size;
+            }
+        });
     }
+
 
     private void setVideo(Uri uri){
         Activity activity = (Activity) getContext();
@@ -276,6 +290,21 @@ public class WidgetTypeInbox extends FrameLayout{
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            ImageView image = (ImageView) holder.itemView;
+            image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            int sizePadding = getResources().getDimensionPixelSize(R.dimen.activity_small_space);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                TypedArray a = getContext().obtainStyledAttributes(new int[] { android.R.attr.selectableItemBackground });
+                int resource = a.getResourceId(0, 0);
+                //first 0 is the index in the array, second is the   default value
+                a.recycle();
+
+                image.setBackgroundResource(resource);
+            }
+
+//            image.(sizePadding, sizePadding, sizePadding, sizePadding);
             if (getItemCount() > 1){
                 Glide.with(getContext())
                         .load(mListImage.get(position))
@@ -283,17 +312,17 @@ public class WidgetTypeInbox extends FrameLayout{
                         .crossFade()
                         .centerCrop()
                         .placeholder(R.drawable.ic_picture)
-                        .into((ImageView) holder.itemView);
+                        .into(image);
             } else {
                 Glide.with(getContext())
                         .load(mListImage.get(position))
                         .override(300, 300)
                         .crossFade()
                         .placeholder(R.drawable.ic_picture)
-                        .into((ImageView) holder.itemView);
+                        .into(image);
             }
-            holder.itemView.setTag(position);
-            holder.itemView.setOnClickListener(this);
+            image.setTag(position);
+            image.setOnClickListener(this);
         }
 
         @Override

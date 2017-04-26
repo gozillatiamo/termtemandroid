@@ -38,6 +38,7 @@ import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.InboxResponse;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -124,28 +125,44 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (holder instanceof InboxViewHolder){
             holder.itemView.setTag(position);
-            ((InboxViewHolder) holder).mItemInbox.setTitle(getItem(position).getTitle());
-            ((InboxViewHolder) holder).mItemInbox.setDes(getItem(position).getMsg());
-            ((InboxViewHolder) holder).mItemInbox.setRead(getItem(position).isReaded());
+            InboxViewHolder inboxViewHolder = (InboxViewHolder) holder;
+
+            inboxViewHolder.mItemInbox.setTitle(getItem(position).getTitle());
+            inboxViewHolder.mItemInbox.setDes(getItem(position).getMsg());
+            inboxViewHolder.mItemInbox.setRead(getItem(position).isReaded());
 
             if (getItem(position).getThumbnail() != -1){
-                ((InboxViewHolder) holder).mItemInbox.setThumbnail(getItem(position).getThumbnail());
+                inboxViewHolder.mItemInbox.setThumbnail(getItem(position).getThumbnail());
             }
 
 
-            ((InboxViewHolder) holder).mItemInbox.setLengthVideo(getItem(position).getTimeLength());
+//            inboxViewHolder.mItemInbox.setLengthVideo(getItem(position).getTimeLength());
 
 
-            ((InboxViewHolder) holder).mItemInbox.setDate(getItem(position).getCreate_Date());
-            ((InboxViewHolder) holder).mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
-            ((InboxViewHolder) holder).mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
+            inboxViewHolder.mItemInbox.setDate(getItem(position).getCreate_Date());
+
+            if (position%2 == 0){
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
+                mListImage.add("http://placehold.it/120x120&text=image2");
+                mListImage.add("http://placehold.it/120x120&text=image3");
+                mListImage.add("http://placehold.it/120x120&text=image4");
+                mListImage.add("http://placehold.it/120x120&text=image4");
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+            } else {
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
+            }
+            inboxViewHolder.mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
+            inboxViewHolder.mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
 
             if (mFragment.isSelectable()){
-                ((InboxViewHolder) holder).mItemInbox.setEnableCheckDelete(true);
-                ((InboxViewHolder) holder).mItemInbox.setCheckDelete(mFragment.isItemChecked(position));
+                inboxViewHolder.mItemInbox.setEnableCheckDelete(true);
+                inboxViewHolder.mItemInbox.setCheckDelete(mFragment.isItemChecked(position));
             } else {
-                ((InboxViewHolder) holder).mItemInbox.setEnableCheckDelete(false);
-                ((InboxViewHolder) holder).mItemInbox.setCheckDelete(false);
+                inboxViewHolder.mItemInbox.setEnableCheckDelete(false);
+                inboxViewHolder.mItemInbox.setCheckDelete(false);
             }
         } else if (holder instanceof LoadingViewHolder){
             ((LoadingViewHolder) holder).mProgressbar.setIndeterminate(true);

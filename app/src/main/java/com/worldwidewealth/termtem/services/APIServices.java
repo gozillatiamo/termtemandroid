@@ -64,7 +64,7 @@ public interface APIServices {
     public static final String ACTION_ESLIP_AGENT_CASHIN = "ESLIPAGENTCASHIN";
     public static final String ACTION_LOAD_BUTTON_EPIN = "LOADBUTTONEPIN";
     public static final String ACTION_PREVIEW_EPIN = "PREVIEWEPIN";
-    public static final String ACTION_GET_TOPUP_EPIN = "GETOTPEPIN";
+    public static final String ACTION_GET_OTP_EPIN = "GETOTPEPIN";
     public static final String ACTION_SUBMIT_TOPUP_EPIN = "SUBMITTOPUPEPIN";
     public static final String ACTION_ESLIP_EPIN = "ESLIPEPIN";
 

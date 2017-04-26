@@ -66,6 +66,7 @@
     <string name="gsb">ธนาคารออมสิน</string>
     <string name="kbank">กสิกรไทย</string>
     <string name="bbl">ธนาคารกรุงเทพ</string>
+    <string name="ppay">พร้อมเพย์</string>
     <string name="ktb">ธนาคารกรุงไทย</string>
     <string name="tnch">ธนาคารธนชาต</string>
     <string name="exchange_rate">อัตราแลกเปลี่ยน</string>
@@ -390,11 +391,13 @@
     </string-array>
 
     <string-array name="list_name_bank_end">
-        <item>ธนาคารกสิกรไทย</item>
-        <item>ธนาคารกรุงเทพ</item>
+        <item>@string/ppay</item>
+        <item>@string/kbank</item>
+        <item>@string/bbl</item>
     </string-array>
 
     <string-array name="list_code_bank_end">
+        <item>PPAY</item>
         <item>KBANK</item>
         <item>BBL</item>
     </string-array>

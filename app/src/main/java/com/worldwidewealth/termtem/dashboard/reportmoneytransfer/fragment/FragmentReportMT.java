@@ -43,6 +43,7 @@ import com.worldwidewealth.termtem.util.Util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -85,7 +86,12 @@ public class FragmentReportMT extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        services = APIServices.retrofit.create(APIServices.class);
+//        services = APIServices.retrofit.create(APIServices.class);
+        services = APIServices.retrofit.newBuilder()
+                .client(APIServices.client.newBuilder()
+                        .connectTimeout(3, TimeUnit.MINUTES)
+                .readTimeout(3, TimeUnit.MINUTES)
+                .writeTimeout(3, TimeUnit.MINUTES).build()).build().create(APIServices.class);
         mCalender.setTimeInMillis(System.currentTimeMillis());
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_report_mt, container, false);
@@ -237,6 +243,7 @@ public class FragmentReportMT extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             if (!MyApplication.isUpload(getContext())) {
+
                                 final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
                                         APIServices.ACTIONNOTIPAY,
                                         new NotiPayRequestModel(mStrAmount,
@@ -252,10 +259,13 @@ public class FragmentReportMT extends Fragment {
                                         Object responseValues = EncryptionData.getModel(null, call, response.body(), this);
 
                                         if (responseValues instanceof ResponseModel) {
-                                            MyApplication.uploadSuccess();
-
+                                            ResponseModel responseModel = (ResponseModel) responseValues;
+                                            if (responseModel.getStatus() == APIServices.SUCCESS)
+                                                MyApplication.uploadSuccess();
+                                            else
+                                                MyApplication.uploadFail(responseModel.getMsg());
                                         } else {
-                                            MyApplication.uploadFail();
+                                            MyApplication.uploadFail(null);
                                         }
                                     }
 
@@ -263,7 +273,7 @@ public class FragmentReportMT extends Fragment {
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         t.printStackTrace();
                                         //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                        MyApplication.uploadFail();
+                                        MyApplication.uploadFail(null);
                                     }
                                 });
 

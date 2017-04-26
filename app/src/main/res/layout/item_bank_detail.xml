@@ -40,6 +40,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_bank_saving_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -107,6 +108,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_bank_branch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"

@@ -16,5 +16,6 @@
     <dimen name="my_text_large">18sp</dimen>
     <dimen name="menu_size">80dp</dimen>
     <dimen name="max_width_thumbnail">120dp</dimen>
+    <dimen name="height_item_inbox">96dp</dimen>
 
 </resources>

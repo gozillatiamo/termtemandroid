@@ -37,7 +37,12 @@
         android:id="@+id/list_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:padding="@dimen/activity_small_space"
+        android:fillViewport="true"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/exoplayer_view"
+        android:layout_toEndOf="@+id/exoplayer_view">
 
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

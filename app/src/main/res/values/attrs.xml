@@ -28,6 +28,11 @@
         <attr name="iv_des" format="string"/>
         <attr name="iv_length_video" format="string"/>
         <attr name="iv_thumbnail" format="reference"/>
+        <attr name="iv_type" format="enum">
+            <enum name="text" value="0"/>
+            <enum name="image" value="1"/>
+            <enum name="video" value="2"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="WidgetTypeInbox">

@@ -197,7 +197,12 @@ public class DialogHelp extends Dialog {
             mBankLogo = (ImageView) dialogView.findViewById(R.id.bank_logo);
 
             mBankName.setText(bank.getName());
-            mAccountSaving.setText(bank.getSaving_account());
+            if (bank.getSaving_account() != null){
+                mAccountSaving.setText(bank.getSaving_account());
+                dialogView.findViewById(R.id.layout_bank_saving_id).setVisibility(View.VISIBLE);
+            } else {
+                dialogView.findViewById(R.id.layout_bank_saving_id).setVisibility(View.GONE);
+            }
             if (bank.getPromptpay_account() != null){
                 mAccountPromptPay.setText(bank.getPromptpay_account());
                 dialogView.findViewById(R.id.layout_promptpay_id).setVisibility(View.VISIBLE);
@@ -206,7 +211,12 @@ public class DialogHelp extends Dialog {
             }
 
             mAccountName.setText(bank.getAccount_name());
-            mBankBranch.setText(bank.getBranch_name());
+            if (bank.getBranch_name() != null){
+                mBankBranch.setText(bank.getBranch_name());
+                dialogView.findViewById(R.id.layout_bank_branch).setVisibility(View.VISIBLE);
+            } else {
+                dialogView.findViewById(R.id.layout_bank_branch).setVisibility(View.GONE);
+            }
             mBankLogo.setImageResource(bank.getLogo());
 
             alertDialog = dialogBuilder.create();

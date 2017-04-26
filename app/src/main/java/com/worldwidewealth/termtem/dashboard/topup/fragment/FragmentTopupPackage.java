@@ -103,7 +103,7 @@ public class FragmentTopupPackage extends  Fragment{
         if(mTopup.equals(FragmentTopup.PIN)){
             mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
             mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
-            mActionGetOTP = APIServices.ACTION_GET_TOPUP_EPIN;
+            mActionGetOTP = APIServices.ACTION_GET_OTP_EPIN;
             mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
             mActionEslip = APIServices.ACTION_ESLIP_EPIN;
             rootView.findViewById(R.id.text_hint_pin).setVisibility(View.VISIBLE);

@@ -23,6 +23,7 @@
     </integer-array>
 
     <integer-array name="ic_list_bank_end">
+        <item>@drawable/ic_promptpay</item>
         <item>@drawable/kbank</item>
         <item>@drawable/bbl</item>
     </integer-array>

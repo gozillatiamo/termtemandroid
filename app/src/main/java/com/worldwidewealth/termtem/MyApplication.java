@@ -331,9 +331,9 @@ public class MyApplication extends Application implements Application.ActivityLi
         isUpload = false;
     }
 
-    public static void uploadFail(){
+    public static void uploadFail(String msg){
         mBuilder.setContentTitle(getContext().getString(R.string.title_upload_fail));
-        mBuilder.setContentText(getContext().getString(R.string.msg_upload_fail));
+        mBuilder.setContentText(msg + " " + getContext().getString(R.string.msg_upload_fail));
         mBuilder.setSmallIcon(android.R.drawable.stat_notify_error);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
