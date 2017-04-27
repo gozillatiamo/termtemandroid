@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="@dimen/activity_vertical_margin">
@@ -38,7 +38,7 @@
                 android:id="@+id/image_thumbnail_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="visible">
 
             </com.worldwidewealth.termtem.widgets.ImageThumbnailView>
 
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="@dimen/max_width_thumbnail"
                 android:scaleType="center"
+                android:visibility="gone"
                 android:src="@drawable/termtem_logo_small" />
 
 <!--

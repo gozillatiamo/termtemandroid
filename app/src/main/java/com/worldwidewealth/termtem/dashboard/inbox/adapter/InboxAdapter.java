@@ -141,13 +141,43 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             inboxViewHolder.mItemInbox.setDate(getItem(position).getCreate_Date());
 
-            if (position%2 == 0){
+            if (position == 0){
                 List<String> mListImage = new ArrayList<>();
                 mListImage.add("http://placehold.it/120x120&text=image1");
                 mListImage.add("http://placehold.it/120x120&text=image2");
                 mListImage.add("http://placehold.it/120x120&text=image3");
                 mListImage.add("http://placehold.it/120x120&text=image4");
                 mListImage.add("http://placehold.it/120x120&text=image4");
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+            } else if (position == 1){
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
+                mListImage.add("http://placehold.it/120x120&text=image2");
+                mListImage.add("http://placehold.it/120x120&text=image3");
+                mListImage.add("http://placehold.it/120x120&text=image4");
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+            } else if (position == 2){
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
+                mListImage.add("http://placehold.it/120x120&text=image2");
+                mListImage.add("http://placehold.it/120x120&text=image3");
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+            } else if (position == 3){
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
+                mListImage.add("http://placehold.it/120x120&text=image2");
+                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+            } else if (position == 4){
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
                 inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
                 inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
