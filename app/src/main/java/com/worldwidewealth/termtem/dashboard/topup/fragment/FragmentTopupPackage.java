@@ -106,7 +106,7 @@ public class FragmentTopupPackage extends  Fragment{
             mActionGetOTP = APIServices.ACTION_GET_OTP_EPIN;
             mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
             mActionEslip = APIServices.ACTION_ESLIP_EPIN;
-            rootView.findViewById(R.id.text_hint_pin).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.text_hint).setVisibility(View.VISIBLE);
         }
 
         Util.setupUI(rootView);
@@ -204,7 +204,11 @@ public class FragmentTopupPackage extends  Fragment{
         setAmt(mAmt, null);
         switch (mCarrier){
             case APIServices.AIS:
-                mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
+                if (mTopup.equals(FragmentTopup.MOBILE))
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
+                else
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
+
                 break;
             case APIServices.TRUEMOVE:
                 if (mTopup.equals(FragmentTopup.MOBILE))
@@ -215,6 +219,15 @@ public class FragmentTopupPackage extends  Fragment{
                 break;
             case APIServices.DTAC:
                 mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
+                break;
+        }
+
+        switch (mTopup){
+            case FragmentTopup.MOBILE:
+                mHolder.mTextHint.setText(R.string.topup);
+                break;
+            case FragmentTopup.PIN:
+                mHolder.mTextHint.setText(R.string.dashboard_pin);
                 break;
         }
     }
@@ -518,7 +531,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     public class ViewHolder{
 //        private Button mBtnNext, mBtnTopup, mBtnCancel;
-        private TextView mTextPrice;
+        private TextView mTextPrice, mTextHint;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
@@ -533,6 +546,7 @@ public class FragmentTopupPackage extends  Fragment{
 */
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
+            mTextHint = (TextView) itemview.findViewById(R.id.text_hint);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
 //            mEditPhone.setOnFocusChangeListener(Util.onFocusEditText());

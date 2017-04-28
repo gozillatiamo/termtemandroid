@@ -85,6 +85,7 @@
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
     <string name="total">ยอดที่ชำระ</string>
+    <string name="all_total">รวมยอดเติม (บาท)</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
@@ -139,8 +140,9 @@
     <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
-    <string name="amount">ยอดเติม(บาท)</string>
-    <string name="debit">หักบัญชี(บาท)</string>
+    <string name="amount">ยอดเติม (บาท)</string>
+    <string name="debit">หักบัญชี (บาท)</string>
+    <string name="all_debit">รวมยอดหักบัญชี (บาท)</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
     <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>

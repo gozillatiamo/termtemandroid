@@ -37,7 +37,7 @@
         android:id="@+id/mbv_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mbv_icon="@drawable/ic_scan_primary"
+        app:mbv_icon="@drawable/ic_scan_qr"
         app:mbv_title="@string/dashboard_scan_qr"
         app:mbv_type="scan"
         app:mbv_visibility="show" />

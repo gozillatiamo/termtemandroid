@@ -8,21 +8,26 @@
     tools:context="com.worldwidewealth.termtem.dashboard.topup.ActivityTopup">
 
 
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_topup"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:theme="@style/ToolbarColored"
-            android:elevation="8dp">
+            android:elevation="8dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ToolbarColored">
+
             <TextView
+                android:id="@+id/title"
+                style="@style/MyTitleActionBar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/title_topup"
-                style="@style/MyTitleActionBar"
-                />
+                android:text="@string/title_topup" />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -39,8 +44,10 @@
         android:layout_width="@dimen/icon_big_size"
         android:layout_height="@dimen/icon_big_size"
         android:src="@drawable/ic_topup"
-        android:layout_marginLeft="@dimen/icon_size"
-        app:layout_anchor="@id/toolbar_topup"
+        app:layout_anchor="@+id/toolbar_topup"
+        android:layout_marginLeft="40dp"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/activity_space"
         android:elevation="8dp"
         />
 

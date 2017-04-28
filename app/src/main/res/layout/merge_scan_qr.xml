@@ -25,6 +25,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/background_tilte_ovals"
         android:text="@string/scan_qr_code"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/icon_size"
         android:textColor="@color/zxing_status_text"/>
     <RelativeLayout

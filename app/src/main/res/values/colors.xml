@@ -2,11 +2,7 @@
 <resources>
     <color name="colorPrimary">#529f49</color>
     <color name="colorPrimaryDark">#498d41</color>
-    <color name="colorPrimaryToup">#00a13e</color>
-    <color name="colorPrimaryPin">#f5b002</color>
-    <color name="colorPrimaryHistory">#d13434</color>
-    <color name="colorPrimaryOther">#9947a1</color>
-    <color name="colorAccent">#FF9800</color>
+    <color name="colorAccent">#E09D20</color>
     <color name="colorAccentDark">#F57C00</color>
     <color name="colorBackground">#f5f5f5</color>
     <color name="colorSelector">#E39774</color>

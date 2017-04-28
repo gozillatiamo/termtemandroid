@@ -29,9 +29,9 @@
     </integer-array>
 
     <integer-array name="ic_list_submenu_history">
-        <item>@drawable/ic_topup</item>
-        <item>@drawable/ic_pin_code</item>
-        <item>@drawable/ic_agent_cashin_primary</item>
+        <item>@drawable/ic_report_topup</item>
+        <item>@drawable/ic_report_epin</item>
+        <item>@drawable/ic_report_cashin</item>
     </integer-array>
 
 </resources>

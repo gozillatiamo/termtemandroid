@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:id="@+id/layout_parent"
-    android:focusableInTouchMode="true" >
+     >
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,14 +42,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusableInTouchMode="true"
             android:scrollbars="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/icon_large_size"
                 android:paddingRight="@dimen/icon_large_size">
@@ -74,7 +72,6 @@
                         android:editable="false"
                         android:padding="@dimen/activity_space">
 
-                        <requestFocus />
                     </EditText>
 
                     <View
@@ -105,7 +102,6 @@
                         android:inputType="text"
                         android:padding="@dimen/activity_space">
 
-                        <requestFocus />
                     </EditText>
 
                     <View
@@ -285,7 +281,6 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="@android:color/holo_orange_dark"
                             android:drawableTop="@drawable/ic_identity_card"
-                            android:focusableInTouchMode="true"
                             android:text="@string/attach_identity_card" />
 
                     </LinearLayout>

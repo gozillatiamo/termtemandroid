@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
@@ -21,23 +22,26 @@ public class ActivityTopup extends MyAppcompatActivity {
     private Toolbar mToolbar;
     private String mTopup;
     private ImageView mMenuIcon;
+    private TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
-        switch (mTopup){
-            case FragmentTopup.MOBILE:
-                setTheme(R.style.AppTheme_Topup);
-                break;
-            case FragmentTopup.PIN:
-                setTheme(R.style.AppTheme_Pin);
-                break;
-        }
 
         setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
+        switch (mTopup){
+            case FragmentTopup.MOBILE:
+                mMenuIcon.setImageResource(R.drawable.ic_topup);
+                break;
+            case FragmentTopup.PIN:
+                mTitle.setText(getString(R.string.dashboard_pin));
+                mMenuIcon.setImageResource(R.drawable.ic_pin_code);
+                break;
+        }
+
         initContainer();
     }
 
@@ -77,6 +81,7 @@ public class ActivityTopup extends MyAppcompatActivity {
         mContainerTopup = (FrameLayout) findViewById(R.id.container_topup);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_topup);
         mMenuIcon = (ImageView) findViewById(R.id.logo_menu);
+        mTitle = (TextView) findViewById(R.id.title);
 /*
         mMenuIcon.bringToFront();
         mToolbar.invalidate();

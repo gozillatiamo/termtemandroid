@@ -41,7 +41,7 @@ public class FragmentTopup extends Fragment {
     public class ViewHolder{
         private CardView mBtnAis, mBtnTruemove, mBtnDtac;
         private View mIncludeMyWallet;
-        private ImageView mImageTrue;
+        private ImageView mImageTrue, mImageAis;
 
         public ViewHolder(View itemview){
             mBtnAis = (CardView) itemview.findViewById(R.id.btn_ais);
@@ -49,6 +49,7 @@ public class FragmentTopup extends Fragment {
             mBtnDtac = (CardView) itemview.findViewById(R.id.btn_dtac);
             mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
             mImageTrue = (ImageView) itemview.findViewById(R.id.img_true);
+            mImageAis = (ImageView) itemview.findViewById(R.id.img_ais);
 
         }
     }
@@ -77,6 +78,7 @@ public class FragmentTopup extends Fragment {
 
         switch (mTopup){
             case PIN:
+                mHolder.mImageAis.setImageResource(R.drawable.logo_ais_pin);
                 mHolder.mImageTrue.setImageResource(R.drawable.logo_truemoney);
                 mHolder.mBtnDtac.setVisibility(View.GONE);
                 break;

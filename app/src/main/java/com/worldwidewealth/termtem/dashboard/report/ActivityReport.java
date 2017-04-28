@@ -38,6 +38,7 @@ import com.worldwidewealth.termtem.model.SalerptResponseModel;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -139,17 +140,24 @@ public class ActivityReport extends MyAppcompatActivity {
                     mCurrentType = typeReport;
                     switch (mCurrentType){
                         case "TOPUP":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_topup);
-                            mHolder.mTextType.setText(R.string.report_topup);
+                            mHolder.mIconType.setImageResource(R.drawable.ic_report_topup);
+                            mHolder.mTextType.setText(R.string.topup);
+                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_topup);
+                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
                             break;
                         case "EPIN":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_pin_code);
-                            mHolder.mTextType.setText(R.string.report_epin);
+                            mHolder.mIconType.setImageResource(R.drawable.ic_report_epin);
+                            mHolder.mTextType.setText(R.string.dashboard_pin);
+                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_epin);
+                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
                             break;
                         case "CASHIN":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_agent_cashin_primary);
-                            mHolder.mTextType.setText(R.string.report_cashin_agent);
+                            mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
+                            mHolder.mTextType.setText(R.string.add_credit_agent);
+                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
+                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
+
                             break;
 
                     }
@@ -288,10 +296,11 @@ public class ActivityReport extends MyAppcompatActivity {
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
 
-                    NumberFormat format = NumberFormat.getInstance();
+                    DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
                     format.setMaximumFractionDigits(2);
                     format.setMinimumFractionDigits(2);
                     double total = 0;
+                    double debit = 0;
 
                     if (modelList.size() == 0){
                         findViewById(R.id.txt_not_found_report).setVisibility(View.VISIBLE);
@@ -301,10 +310,12 @@ public class ActivityReport extends MyAppcompatActivity {
 
                         for (SalerptResponseModel model : modelList){
                             total += model.getCHECKTOTAL();
+                            debit += model.getAMOUNT();
                         }
                     }
 
                     mHolder.mTextReportTotal.setText(format.format(total));
+                    mHolder.mTextDebitTotal.setText(format.format(debit));
                     mAdapter.updateAll(modelList);
 
 
@@ -383,15 +394,18 @@ public class ActivityReport extends MyAppcompatActivity {
     private class ViewHolder{
         private RecyclerView mListReport;
         private Toolbar mToolbar;
-        private TextView mTextReportTotal, mTextType;
+        private TextView mTextReportTotal, mTextDebitTotal, mTextType;
         private ImageView mIconType;
+        private ImageView mLogoIcon;
 
         public ViewHolder(Activity itemView){
             mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
             mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
             mTextReportTotal = (TextView) itemView.findViewById(R.id.txt_report_total);
+            mTextDebitTotal = (TextView) itemView.findViewById(R.id.txt_debit_total);
             mTextType = (TextView) itemView.findViewById(R.id.text_type_report);
             mIconType = (ImageView) itemView.findViewById(R.id.icon_type_report);
+            mLogoIcon = (ImageView) itemView.findViewById(R.id.logo_menu);
         }
     }
 }

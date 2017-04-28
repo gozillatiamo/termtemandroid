@@ -96,7 +96,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/text_hint_pin"
+                    android:id="@+id/text_hint"
                     style="@style/TextAppearance.AppCompat.Display1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

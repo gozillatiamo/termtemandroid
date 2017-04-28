@@ -52,4 +52,16 @@
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/logo_menu"
+        android:layout_width="@dimen/icon_big_size"
+        android:layout_height="@dimen/icon_big_size"
+        android:src="@drawable/ic_agent_cashin"
+        app:layout_anchor="@+id/toolbar"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="@dimen/activity_space"
+        android:elevation="8dp"
+        />
+
 </android.support.design.widget.CoordinatorLayout>

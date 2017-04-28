@@ -7,7 +7,7 @@
         android:id="@+id/icon_submenu"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_agent_cashin_primary"
+        android:src="@drawable/ic_report_cashin"
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/activity_vertical_margin"/>
     <TextView

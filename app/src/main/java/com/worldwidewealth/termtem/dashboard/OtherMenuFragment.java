@@ -3,6 +3,7 @@ package com.worldwidewealth.termtem.dashboard;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class OtherMenuFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        ((AppCompatActivity)getContext()).findViewById(R.id.logo_menu).setVisibility(View.GONE);
         mMenuSupport.dismiss();
         mMenuSetUp.dismiss();
 

@@ -460,10 +460,11 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.PIN);
                     break;
                 case OTHER:
+                    ((AppCompatActivity)getContext()).findViewById(R.id.logo_menu).setVisibility(VISIBLE);
                     ((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
                                     android.R.anim.fade_in, android.R.anim.fade_out)
-                            .replace(R.id.container_menu, OtherMenuFragment.newInstance())
+                            .replace(R.id.layout_main_content, OtherMenuFragment.newInstance())
                             .addToBackStack(null)
                             .commit();
                     setsClickable(true);

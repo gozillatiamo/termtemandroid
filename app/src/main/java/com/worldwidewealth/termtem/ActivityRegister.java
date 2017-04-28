@@ -254,7 +254,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
 
             webCodition.getSettings().setJavaScriptEnabled(true);
             webCodition.setWebChromeClient(new WebChromeClient());
-            webCodition.loadUrl("http://180.128.21.81/wealthweb/terms.htm");
+            webCodition.loadUrl("https://wwwealth.co/wealthservice/tc.html");
 
             checkboxSubmit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
