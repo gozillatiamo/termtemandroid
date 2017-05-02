@@ -13,12 +13,13 @@
     <string name="bbl_promptpay_account_number">0-1055-59135-27-4</string>
 
 
-    <string name="content_version">เวอร์ชั่น:</string>
+    <string name="content_version">เวอร์ชั่น :</string>
     <string name="app_name_th">เติมเต็ม</string>
     <string name="main_menu">เมนูหลัก</string>
     <string name="in_box">กล่องข้อความ</string>
-    <string name="saving_account">บัญชีออมทรัพย์</string>
-    <string name="promptpay_account">บัญชีพร้อมเพย์</string>
+    <string name="saving_account">บัญชีออมทรัพย์ :</string>
+    <string name="promptpay_account">บัญชีพร้อมเพย์ :</string>
+    <string name="promptpay_title">พร้อมเพย์ :</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -41,8 +42,8 @@
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
     <string name="balance">ยอดเงิน</string>
-    <string name="balance_toup_preview">บัญชีคงเหลือ(บาท)</string>
-    <string name="markup">ค่าดำเนินการ(บาท)</string>
+    <string name="balance_toup_preview">บัญชีคงเหลือ (บาท) :</string>
+    <string name="markup">ค่าดำเนินการ (บาท) :</string>
     <string name="home">หน้าหลัก</string>
     <string name="help">ช่วยเหลือ</string>
     <string name="report">รายงาน</string>
@@ -84,14 +85,14 @@
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
     <string name="commission">Commission :</string>
-    <string name="total">ยอดที่ชำระ</string>
-    <string name="all_total">รวมยอดเติม (บาท)</string>
+    <string name="total">ยอดที่ชำระ (บาท) :</string>
+    <string name="all_total">รวมยอดเติม (บาท) :</string>
     <string name="total_coin">Total Coin :</string>
     <string name="btn_transfer">TRANSFER</string>
     <string name="title_mt">Money Transfer</string>
     <string name="balance_transfer">ยอดเงินที่โอน :</string>
     <string name="currency">บาท</string>
-    <string name="currency_hint">(บาท)</string>
+    <string name="currency_hint">" "(บาท) :</string>
     <string name="date_transfer">วันที่โอน :</string>
     <string name="time">เวลา :</string>
     <string name="evidance">หลักฐาน :</string>
@@ -140,9 +141,9 @@
     <string name="title_topup">เติมเงินมือถือ</string>
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
-    <string name="amount">ยอดเติม (บาท)</string>
-    <string name="debit">หักบัญชี (บาท)</string>
-    <string name="all_debit">รวมยอดหักบัญชี (บาท)</string>
+    <string name="amount">ยอดเติม (บาท) :</string>
+    <string name="debit">หักบัญชี (บาท) :</string>
+    <string name="all_debit">รวมยอดหักบัญชี (บาท) :</string>
     <string name="paycode">Paycode :</string>
     <string name="carrier">เครือข่าย :</string>
     <string name="phone_num_second">หมายเลขโทรศัพท์มือถือ :</string>
@@ -197,8 +198,8 @@
     <string name="please_select_bank_end">กรุณาเลือก ธนาคารปลายทาง</string>
     <string name="airtime">ยอดเติมเงิน</string>
     <string name="vas">VAS</string>
-    <string name="bank_mt_start">ธนาคารต้นทาง:</string>
-    <string name="bank_mt_end">ธนาคารปลายทาง:</string>
+    <string name="bank_mt_start">ธนาคารต้นทาง :</string>
+    <string name="bank_mt_end">ธนาคารปลายทาง :</string>
     <string name="date_transfer_preview">วันที่-เวลา ในการโอน</string>
     <string name="bank_preview">โอนจากธนาคาร ต้นทาง-ปลายทาง</string>
     <string name="use_wifi">ใช้ wifi</string>
@@ -213,11 +214,11 @@
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
     <string name="menu_contact">สอบถามข้อมูล/ลืมรหัสผ่าน</string>
     <string name="menu_bank_detail">ข้อมูลธนาคาร</string>
-    <string name="bank">ธนาคาร:</string>
-    <string name="bank_account_number">เลขที่บัญชี:</string>
-    <string name="title_bank_account_name">ชื่อบัญชี:</string>
-    <string name="title_bank_account_type">ประเภทบัญชี:</string>
-    <string name="title_branch">สาขา:</string>
+    <string name="bank">ธนาคาร :</string>
+    <string name="bank_account_number">เลขที่บัญชี :</string>
+    <string name="title_bank_account_name">ชื่อบัญชี :</string>
+    <string name="title_bank_account_type">ประเภทบัญชี :</string>
+    <string name="title_branch">สาขา :</string>
     <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
     <string name="msg_upload">กรุณารอสักครู่.....</string>
     <string name="warning">เพื่อทราบ</string>
@@ -244,8 +245,8 @@
     <string name="update">อัพเดท</string>
     <string name="update_app_title">อัพเดทแอพพลิเคชั่น</string>
     <string name="later">ไว้ภายหลัง</string>
-    <string name="agent">Agent:</string>
-    <string name="agent_name">ชื่อ-นามสกุล Agent:</string>
+    <string name="agent">Agent :</string>
+    <string name="agent_name">ชื่อ-นามสกุล Agent :</string>
     <string name="type_report">เลือกประเภทประวัติรายการ</string>
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
     <string name="report_epin">ประวัติการขายบัตรเติมเงิน</string>

@@ -61,6 +61,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private boolean isLoading;
     private int visibleThreshold = 1;
     private int lastVisibleItem,totalItemCount;
+    private int mPage;
     private List<InboxResponse> mListInbox;
     private InboxFragment mFragment;
     private OnItemLongClickListener longClickListener;
@@ -79,9 +80,10 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    public InboxAdapter(InboxFragment fragment, RecyclerView recyclerView, List<InboxResponse> listdata) {
+    public InboxAdapter(InboxFragment fragment, RecyclerView recyclerView, List<InboxResponse> listdata, int page) {
         this.mListInbox = listdata;
         this.mFragment = fragment;
+        this.mPage = page;
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -138,51 +140,61 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 //            inboxViewHolder.mItemInbox.setLengthVideo(getItem(position).getTimeLength());
 
-
             inboxViewHolder.mItemInbox.setDate(getItem(position).getCreate_Date());
 
-            if (position == 0){
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                mListImage.add("http://placehold.it/120x120&text=image2");
-                mListImage.add("http://placehold.it/120x120&text=image3");
-                mListImage.add("http://placehold.it/120x120&text=image4");
-                mListImage.add("http://placehold.it/120x120&text=image4");
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
-            } else if (position == 1){
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                mListImage.add("http://placehold.it/120x120&text=image2");
-                mListImage.add("http://placehold.it/120x120&text=image3");
-                mListImage.add("http://placehold.it/120x120&text=image4");
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+            switch (mPage){
+                case InboxPagerAdapter.ALL:
+                    inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
+                    break;
+                case InboxPagerAdapter.TEXT:
+                    inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
+                    break;
+                case InboxPagerAdapter.IMAGE:
+                    int countImage = position % 5;
+                    if (countImage == 0){
+                        List<String> mListImage = new ArrayList<>();
+                        mListImage.add("http://placehold.it/120x120&text=image1");
+                        mListImage.add("http://placehold.it/120x120&text=image2");
+                        mListImage.add("http://placehold.it/120x120&text=image3");
+                        mListImage.add("http://placehold.it/120x120&text=image4");
+                        mListImage.add("http://placehold.it/120x120&text=image4");
+                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
-            } else if (position == 2){
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                mListImage.add("http://placehold.it/120x120&text=image2");
-                mListImage.add("http://placehold.it/120x120&text=image3");
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+                    } else if (countImage == 1){
+                        List<String> mListImage = new ArrayList<>();
+                        mListImage.add("http://placehold.it/120x120&text=image1");
+                        mListImage.add("http://placehold.it/120x120&text=image2");
+                        mListImage.add("http://placehold.it/120x120&text=image3");
+                        mListImage.add("http://placehold.it/120x120&text=image4");
+                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
-            } else if (position == 3){
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                mListImage.add("http://placehold.it/120x120&text=image2");
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+                    } else if (countImage == 2){
+                        List<String> mListImage = new ArrayList<>();
+                        mListImage.add("http://placehold.it/120x120&text=image1");
+                        mListImage.add("http://placehold.it/120x120&text=image2");
+                        mListImage.add("http://placehold.it/120x120&text=image3");
+                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
-            } else if (position == 4){
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+                    } else if (countImage == 3){
+                        List<String> mListImage = new ArrayList<>();
+                        mListImage.add("http://placehold.it/120x120&text=image1");
+                        mListImage.add("http://placehold.it/120x120&text=image2");
+                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
 
-            } else {
-                inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
+                    } else if (countImage == 4){
+                        List<String> mListImage = new ArrayList<>();
+                        mListImage.add("http://placehold.it/120x120&text=image1");
+                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
+                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
+
+                    }
+
+                    break;
             }
             inboxViewHolder.mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
             inboxViewHolder.mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
@@ -215,7 +227,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onInformationViewClick(InboxViewHolder holder, int position) {
         if (position == -1) return;
         if (!mFragment.isSelectable()) {
-            BottomSheetDialogFragment bottomSheetDialogFragment = InboxBottomSheetDialogFragment.newInstance(getItem(position), position);
+            BottomSheetDialogFragment bottomSheetDialogFragment = InboxBottomSheetDialogFragment.newInstance(getItem(position), position, mPage);
             bottomSheetDialogFragment.setTargetFragment(mFragment, 0);
             bottomSheetDialogFragment.show(mFragment.getFragmentManager(), bottomSheetDialogFragment.getTag());
         } else {

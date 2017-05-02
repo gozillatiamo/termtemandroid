@@ -52,6 +52,7 @@
                     style="@style/Base.TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="@string/currency"
                     android:textColor="@android:color/black" />
 
@@ -83,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorAccent"
+                app:backgroundTint="@color/colorAccent"
                 android:text="@string/cancel"
                 android:textColor="@android:color/white"
                 android:visibility="visible" />
@@ -94,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@color/colorPrimary"
                 android:text="@string/confirm_order"
                 android:textColor="@android:color/white" />
 

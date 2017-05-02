@@ -55,6 +55,7 @@ import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -77,6 +78,7 @@ import retrofit2.Response;
 public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     public static final String KEY_INBOX_RESPONSE = "inboxresponse";
+    public static final String KEY_INBOX_PAGE = "page";
 
     private InboxResponse mDataInbox;
     private APIServices services = APIServices.retrofit.create(APIServices.class);
@@ -84,6 +86,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
     private WidgetTypeInbox mWidgetType;
+    private int mPage;
 
     public static final int BUFFER_SEGMENT_SIZE = 16 * 1024; // Original value was 64 * 1024
     public static final int VIDEO_BUFFER_SEGMENTS = 50; // Original value was 200
@@ -104,12 +107,13 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         }
     };
 
-     public static InboxBottomSheetDialogFragment newInstance(InboxResponse response, int position) {
+     public static InboxBottomSheetDialogFragment newInstance(InboxResponse response, int position, int page) {
          Bundle args = new Bundle();
 
          InboxBottomSheetDialogFragment fragment = new InboxBottomSheetDialogFragment();
          args.putParcelable(KEY_INBOX_RESPONSE, response);
          args.putInt(InboxFragment.POSITION, position);
+         args.putInt(KEY_INBOX_PAGE, page);
          fragment.setArguments(args);
         return fragment;
     }
@@ -117,6 +121,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mDataInbox = getArguments().getParcelable(KEY_INBOX_RESPONSE);
+        mPage = getArguments().getInt(KEY_INBOX_PAGE);
         getArguments().remove(KEY_INBOX_RESPONSE);
         super.onCreate(savedInstanceState);
     }
@@ -212,16 +217,8 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         });
 
+        setupType(mPage);
 
-
-
-        mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.IMAGE.getWidgetType());
-        List<String> mListImage = new ArrayList<>();
-        mListImage.add("http://placehold.it/120x120&text=image1");
-        mListImage.add("http://placehold.it/120x120&text=image2");
-        mListImage.add("http://placehold.it/120x120&text=image3");
-        mListImage.add("http://placehold.it/120x120&text=image4");
-        mWidgetType.setImage(mListImage);
 
 //        handleVideo();
 //        handleExoplayer();
@@ -249,6 +246,30 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             });
         }
 
+    }
+
+    public void setupType(int page){
+        mPage = page;
+
+        switch (mPage){
+            case InboxPagerAdapter.ALL:
+            case InboxPagerAdapter.TEXT:
+                mWidgetType.setWidgetType(-1);
+
+                break;
+
+            case InboxPagerAdapter.IMAGE:
+                mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.IMAGE.getWidgetType());
+                List<String> mListImage = new ArrayList<>();
+                mListImage.add("http://placehold.it/120x120&text=image1");
+                mListImage.add("http://placehold.it/120x120&text=image2");
+                mListImage.add("http://placehold.it/120x120&text=image3");
+                mListImage.add("http://placehold.it/120x120&text=image4");
+                mWidgetType.setImage(mListImage);
+
+                break;
+
+        }
     }
 
     private void handleExoplayer(){

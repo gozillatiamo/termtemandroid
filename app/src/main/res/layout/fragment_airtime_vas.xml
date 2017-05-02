@@ -17,7 +17,7 @@
             android:background="@color/colorTabAirtime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="4dp"
+            android:paddingLeft="4dp"N
             android:paddingRight="4dp"
             app:tabMaxWidth="0dp"
             style="@style/MyTabLayoutStyle"

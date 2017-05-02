@@ -62,8 +62,8 @@ public class TermTemDialog {
                             mCalendar.get(Calendar.YEAR));
 
 */
-            setDateFrom(System.currentTimeMillis());
-            setDateTo(System.currentTimeMillis());
+            setDateFrom(mPreviousDateFrom);
+            setDateTo(mPeviousDateTo);
 
             btnDateForm.setOnClickListener(new View.OnClickListener() {
                 @Override

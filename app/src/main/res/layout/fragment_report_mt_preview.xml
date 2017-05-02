@@ -71,13 +71,6 @@
                         android:layout_marginTop="@dimen/activity_space"
                         android:orientation="horizontal"
                         android:gravity="center">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="24sp"
-                            android:layout_marginRight="4dp"
-                            android:textColor="@android:color/black"
-                            android:text="THB"/>
 
                         <TextView
                             android:id="@+id/txt_amount_mt"
@@ -88,6 +81,15 @@
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold"
                             android:text="200.00"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp"
+                            android:layout_marginLeft="4dp"
+                            android:textColor="@android:color/black"
+                            android:text="@string/currency"/>
+
 
                     </LinearLayout>
 
@@ -201,8 +203,9 @@
                             android:gravity="left|center">
                             <ImageView
                                 android:id="@+id/icon_bank_end"
-                                android:layout_width="@dimen/icon_size"
+                                android:layout_width="wrap_content"
                                 android:layout_height="@dimen/icon_size"
+                                android:adjustViewBounds="true"
                                 android:src="@drawable/kbank"/>
 
                             <TextView
@@ -239,14 +242,16 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_vertical_margin">
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_done"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:backgroundTint="@android:color/holo_orange_dark"
+                    app:backgroundTint="@android:color/holo_orange_dark"
                     android:text="@string/back_to_main"
-                    style="@style/MyButton"/>
+                    style="@style/MyButton"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
 
         </LinearLayout>

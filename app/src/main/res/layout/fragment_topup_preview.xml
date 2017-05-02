@@ -203,6 +203,8 @@
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
                     android:text="@string/debit" />
 
                 <LinearLayout

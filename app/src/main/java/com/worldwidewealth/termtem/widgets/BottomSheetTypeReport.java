@@ -48,7 +48,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
 //    private AppCompatButton mMenuTopup, mMenuCashInAgent;
     private RecyclerView mRecyclerSubMenu;
-    private List<ContentValues> mListSubmenu;
     private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
 /*
     private BottomSheetBehavior mBottomSheetBehavior;
@@ -78,7 +77,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setContentView(R.layout.bottomsheet_type_report);
 //        mBottomSheetBehavior = BottomSheetBehavior.from(getwi)
-        mListSubmenu = new ArrayList<>();
 
         initWidgets();
         bindDataSubmenu();
@@ -210,16 +208,39 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
         private String[] mListType;
         private TypedArray mListIcon;
         private Context mContext;
+        private List<ContentValues> mListData;
 
         private static final int TOPUP = 0;
         private static final int EPIN = 1;
         private static final int CASHIN = 2;
+        private static final String TITLE = "title";
+        private static final String TYPE = "type";
+        private static final String ICON = "icon";
 
         public SubMenuHistoryAdapter(Context context) {
             this.mContext = context;
             mListTitle = mContext.getResources().getStringArray(R.array.list_submenu_history);
             mListType = mContext.getResources().getStringArray(R.array.type_history_report);
             mListIcon = mContext.getResources().obtainTypedArray(R.array.ic_list_submenu_history);
+            mListData = new ArrayList<>();
+            for (int i = 0; i < mListType.length; i++){
+                ContentValues values = new ContentValues();
+                values.put(TITLE, mListTitle[i]);
+                values.put(TYPE, mListType[i]);
+                values.put(ICON, mListIcon.getResourceId(i, -1));
+                mListData.add(values);
+            }
+
+            if (!sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType())){
+                mListData.remove(0);
+            }
+            if (!sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType())){
+                mListData.remove(1);
+            }
+            if (!sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType())){
+                mListData.remove(2);
+            }
+
         }
 
         @Override
@@ -231,8 +252,19 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            boolean isShow = false;
+//            boolean isShow = false;
 
+            holder.mIconTitle.setImageResource(mListData.get(position).getAsInteger(ICON));
+            holder.mTextTitle.setText(mListData.get(position).getAsString(TITLE));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mTypeCurrent = mListData.get(position).getAsString(TYPE);
+                    dismiss();
+                }
+            });
+
+/*
             switch (position){
                 case TOPUP:
                     isShow = sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType());
@@ -245,25 +277,20 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                     break;
             }
 
+*/
+/*
             if (isShow) {
-                holder.mIconTitle.setImageResource(mListIcon.getResourceId(position, -1));
-                holder.mTextTitle.setText(mListTitle[position]);
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mTypeCurrent = mListType[position];
-                        dismiss();
-                    }
-                });
+
                 holder.itemView.setVisibility(View.VISIBLE);
             } else {
                 holder.itemView.setVisibility(View.GONE);
             }
+*/
         }
 
         @Override
         public int getItemCount() {
-            return mListTitle.length;
+            return mListData.size();
         }
 
 //        public ContentValues getItem(int postion){

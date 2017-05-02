@@ -51,7 +51,7 @@
         android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:padding="@dimen/activity_vertical_margin"
-        android:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/colorAccent"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
 

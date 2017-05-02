@@ -239,14 +239,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_back_to_dashboard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/back_to_main"
                     android:textAllCaps="false"
-                    android:backgroundTint="@android:color/holo_red_dark"
+                    app:backgroundTint="@color/colorAccent"
                     style="@style/MyButton"
                     />
 

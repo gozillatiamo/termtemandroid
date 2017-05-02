@@ -26,6 +26,16 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
+
+    <FrameLayout
+        android:id="@+id/container_report_mt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    </FrameLayout>
+
     <ImageView
         android:id="@+id/logo_menu"
         android:layout_width="@dimen/icon_big_size"
@@ -37,13 +47,5 @@
         android:elevation="8dp"
         />
 
-    <FrameLayout
-        android:id="@+id/container_report_mt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

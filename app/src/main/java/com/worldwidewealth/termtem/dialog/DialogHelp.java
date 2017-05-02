@@ -146,8 +146,12 @@ public class DialogHelp extends Dialog {
 
                     title.setText(bank.getName());
                     Drawable drawable = ContextCompat.getDrawable(getContext(), bank.getLogo());
-                    int logoSize = getContext().getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
-                    drawable.setBounds(0, 0, logoSize, logoSize);
+                    int logoSize = getContext().getResources().getDimensionPixelSize(R.dimen.icon_size);
+                    if (childPosition == 0) {
+                        int widesize = getContext().getResources().getDimensionPixelSize(R.dimen.icon_big_size);
+                        drawable.setBounds(0, 0, widesize, logoSize);
+                    }else
+                        drawable.setBounds(0, 0, logoSize, logoSize);
                     title.setCompoundDrawables(drawable, null, null, null);
                     title.setCompoundDrawablePadding(getContext().getResources().getDimensionPixelSize(R.dimen.activity_small_space));
                     convertView.setOnClickListener(new View.OnClickListener() {
@@ -186,10 +190,11 @@ public class DialogHelp extends Dialog {
             dialogBuilder.setView(dialogView);
 //            alertDialog.setContentView(R.layout.item_bank_detail);
 
-            TextView mBankName, mAccountSaving, mAccountPromptPay, mAccountName, mBankBranch;
+            TextView mBankName, mAccountSaving, mAccountPromptPay, mAccountName, mBankBranch, mTitleBank;
             ImageView mBankLogo;
 
             mBankName = (TextView) dialogView.findViewById(R.id.bank_name);
+            mTitleBank = (TextView) dialogView.findViewById(R.id.title_bank);
             mAccountSaving = (TextView) dialogView.findViewById(R.id.saving_account_id);
             mAccountPromptPay = (TextView) dialogView.findViewById(R.id.promptpay_account_id);
             mAccountName = (TextView) dialogView.findViewById(R.id.account_name);
@@ -204,6 +209,7 @@ public class DialogHelp extends Dialog {
                 dialogView.findViewById(R.id.layout_bank_saving_id).setVisibility(View.GONE);
             }
             if (bank.getPromptpay_account() != null){
+                mTitleBank.setText(R.string.promptpay_title);
                 mAccountPromptPay.setText(bank.getPromptpay_account());
                 dialogView.findViewById(R.id.layout_promptpay_id).setVisibility(View.VISIBLE);
             } else {

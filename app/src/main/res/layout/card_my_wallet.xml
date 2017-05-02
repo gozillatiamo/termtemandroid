@@ -81,7 +81,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageButton
+
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/btn_refresh_wallet"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"

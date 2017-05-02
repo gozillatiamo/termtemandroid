@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_small_space"
         android:fillViewport="true"
+        android:nestedScrollingEnabled="false"
         android:visibility="visible"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/exoplayer_view"

@@ -8,9 +8,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
         android:id="@+id/icon_bank"
-        android:layout_width="@dimen/icon_size"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_add_a_photo"
+        android:src="@drawable/kbank"
         android:adjustViewBounds="true"
         android:layout_marginRight="@dimen/activity_space"
         android:visibility="gone"

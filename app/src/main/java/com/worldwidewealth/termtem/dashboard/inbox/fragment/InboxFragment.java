@@ -268,7 +268,7 @@ public class InboxFragment extends Fragment {
                     break;
             }
 */
-            mInboxAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox);
+            mInboxAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox, mPageType);
             animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
             animationAdapter.setInterpolator(new OvershootInterpolator());
             animationAdapter.setDuration(700);

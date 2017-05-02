@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ import retrofit2.Response;
 
 public class MenuButtonView extends FrameLayout implements View.OnClickListener{
     private CardView mCardButton;
-    private ImageView mIconMenu;
+    private AppCompatImageView mIconMenu;
     private TextView mTitleMenu;
     private MenuClickListener menuClickListener;
 
@@ -321,7 +322,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     private void bindview(){
         mCardButton = (CardView) findViewById(R.id.menu_button);
-        mIconMenu = (ImageView) findViewById(R.id.menu_icon);
+        mIconMenu = (AppCompatImageView) findViewById(R.id.menu_icon);
         mTitleMenu = (TextView) findViewById(R.id.menuo_title);
     }
 

@@ -84,6 +84,12 @@ public class OtherMenuFragment extends Fragment {
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getContext()).findViewById(R.id.logo_menu).setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         mMenuSupport.dismiss();
         mMenuSetUp.dismiss();
 

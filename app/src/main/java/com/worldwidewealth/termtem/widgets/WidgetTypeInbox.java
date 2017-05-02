@@ -164,7 +164,7 @@ public class WidgetTypeInbox extends FrameLayout{
         mExoPlayerView.setVisibility(GONE);
         mLayoutVrView.setVisibility(GONE);
         mRecyclerImage.setVisibility(GONE);
-
+        if (type == -1) return;
         switch (WIDGET_TYPE.values()[type]){
             case VIDEO:
                 mExoPlayerView.setVisibility(VISIBLE);
@@ -285,12 +285,12 @@ public class WidgetTypeInbox extends FrameLayout{
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(new ImageView(getContext()));
+            return new ViewHolder(new MyImageView(getContext()));
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            ImageView image = (ImageView) holder.itemView;
+            MyImageView image = (MyImageView) holder.itemView;
             image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //            int sizePadding = getResources().getDimensionPixelSize(R.dimen.activity_small_space);
@@ -323,6 +323,7 @@ public class WidgetTypeInbox extends FrameLayout{
             }
             image.setTag(position);
             image.setOnClickListener(this);
+
         }
 
         @Override
