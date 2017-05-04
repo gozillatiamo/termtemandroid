@@ -61,6 +61,7 @@ import com.worldwidewealth.termtem.widgets.TermTemLoading;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import me.grantland.widget.AutofitTextView;
@@ -260,66 +261,74 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b){
-                        checkboxSubmit.toggle();
-                        mDialogCondition.cancel();
 
                         if (mLoading == null){
                             mLoading = new TermTemLoading(ActivityRegister.this, (ViewGroup) findViewById(R.id.layout_parent));
                         }
 
-                        mLoading.show();
-
-                        Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
-                                mHolder.mEditTitleName.getText().toString(),
-                                mFirstName,
-                                mLastName,
-                                mCalendar.getTimeInMillis(),
-                                mEmail,
-                                mTel,
-                                mIden,
-                                mPerson,
-                                Util.encodeBitmapToUpload(mBitmapImage)
-                        )));
-
-                        APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
+                        new Handler().postDelayed(new Runnable() {
                             @Override
-                            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                            public void run() {
 
-                                if(response.body().getStatus() == APIServices.SUCCESS){
+                                mDialogCondition.cancel();
+                                mLoading.show();
 
-                                    final TextView message = new TextView(ActivityRegister.this);
-                                    message.setPadding(20, 20, 20, 20);
-                                    final SpannableString s =
-                                            new SpannableString(ActivityRegister.this.getText(R.string.register_done));
-                                    Linkify.addLinks(s, Linkify.WEB_URLS);
-                                    message.setText(s);
-                                    message.setMovementMethod(LinkMovementMethod.getInstance());
+                                Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
+                                        mHolder.mEditTitleName.getText().toString(),
+                                        mFirstName,
+                                        mLastName,
+                                        mCalendar.getTimeInMillis(),
+                                        mEmail,
+                                        mTel,
+                                        mIden,
+                                        mPerson,
+                                        Util.encodeBitmapToUpload(mBitmapImage)
+                                )));
 
-                                    AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
-                                            .setView(message)
-                                            .setCancelable(false)
-                                            .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    ActivityRegister.this.finish();
-                                                }
-                                            }).show();
-                                    alertdialog.setOnShowListener(new MyShowListener());
+                                APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
 
-                                } else {
-                                    Toast.makeText(ActivityRegister.this, response.body().getMsg(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                                mLoading.hide();
+                                        if(response.body().getStatus() == APIServices.SUCCESS){
+
+                                            final TextView message = new TextView(ActivityRegister.this);
+                                            message.setPadding(20, 20, 20, 20);
+                                            final SpannableString s =
+                                                    new SpannableString(ActivityRegister.this.getText(R.string.register_done));
+                                            Linkify.addLinks(s, Linkify.WEB_URLS);
+                                            message.setText(s);
+                                            message.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+                                            AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
+                                                    .setView(message)
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            ActivityRegister.this.finish();
+                                                        }
+                                                    }).show();
+                                            alertdialog.setOnShowListener(new MyShowListener());
+
+                                        } else {
+                                            Toast.makeText(ActivityRegister.this, response.body().getMsg(),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                        mLoading.hide();
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                        mLoading.hide();
+                                        new ErrorNetworkThrowable(t).networkError(ActivityRegister.this, call, this);
+                                        checkboxSubmit.toggle();
+                                    }
+                                });
 
                             }
-
-                            @Override
-                            public void onFailure(Call<ResponseModel> call, Throwable t) {
-                                mLoading.hide();
-                                new ErrorNetworkThrowable(t).networkError(ActivityRegister.this, call, this);
-                            }
-                        });
+                        }, 1000);
 
                     }
                 }
@@ -367,6 +376,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         if (editText == null) return;
         Toast.makeText(ActivityRegister.this, "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show();
         editText.setCompoundDrawablesWithIntrinsicBounds(null, null, imgCheck, null);
+        editText.setText("");
         editText.requestFocus();
 
 
@@ -377,6 +387,15 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         mDateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                int currentYear = calendar.get(Calendar.YEAR);
+                boolean yearOld = (currentYear - year) >= 20;
+                if (!yearOld){
+                    Toast.makeText(ActivityRegister.this, getString(R.string.year_old_wrong), Toast.LENGTH_SHORT).show();
+                    setupError(BIRTH);
+                    return;
+                }
                 mHolder.mEditBirth.setText(dayOfMonth+"/"+(month+1)+"/"+year);
                 mCalendar.set(Calendar.YEAR, year);
                 mCalendar.set(Calendar.MONTH, month);

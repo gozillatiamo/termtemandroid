@@ -49,6 +49,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 //    private AppCompatButton mMenuTopup, mMenuCashInAgent;
     private RecyclerView mRecyclerSubMenu;
     private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+    private SubMenuHistoryAdapter mAdapter;
 /*
     private BottomSheetBehavior mBottomSheetBehavior;
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
@@ -103,7 +104,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     @Override
     public void show() {
 
-        if (sparseBooleanArray.size() <= 1){
+        if (sparseBooleanArray.size() <= 1 || mAdapter.getItemCount() == 0){
             return;
         }
 
@@ -199,14 +200,12 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
     private void setupMenu(){
         mRecyclerSubMenu.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mRecyclerSubMenu.setAdapter(new SubMenuHistoryAdapter(getContext()));
+        mAdapter = new SubMenuHistoryAdapter(getContext());
+        mRecyclerSubMenu.setAdapter(mAdapter);
     }
 
     public class SubMenuHistoryAdapter extends RecyclerView.Adapter<SubMenuHistoryAdapter.ViewHolder>{
 
-        private String[] mListTitle;
-        private String[] mListType;
-        private TypedArray mListIcon;
         private Context mContext;
         private List<ContentValues> mListData;
 
@@ -219,29 +218,34 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
         public SubMenuHistoryAdapter(Context context) {
             this.mContext = context;
-            mListTitle = mContext.getResources().getStringArray(R.array.list_submenu_history);
-            mListType = mContext.getResources().getStringArray(R.array.type_history_report);
-            mListIcon = mContext.getResources().obtainTypedArray(R.array.ic_list_submenu_history);
+
             mListData = new ArrayList<>();
-            for (int i = 0; i < mListType.length; i++){
+
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType())){
                 ContentValues values = new ContentValues();
-                values.put(TITLE, mListTitle[i]);
-                values.put(TYPE, mListType[i]);
-                values.put(ICON, mListIcon.getResourceId(i, -1));
+                values.put(TITLE, getContext().getString(R.string.report_topup));
+                values.put(TYPE, "TOPUP");
+                values.put(ICON, R.drawable.ic_report_topup);
+                mListData.add(values);
+            }
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType())){
+                ContentValues values = new ContentValues();
+                values.put(TITLE, getContext().getString(R.string.report_epin));
+                values.put(TYPE, "EPIN");
+                values.put(ICON, R.drawable.ic_report_epin);
                 mListData.add(values);
             }
 
-            if (!sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType())){
-                mListData.remove(0);
-            }
-            if (!sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType())){
-                mListData.remove(1);
-            }
-            if (!sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType())){
-                mListData.remove(2);
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType())){
+                ContentValues values = new ContentValues();
+                values.put(TITLE, getContext().getString(R.string.report_cashin_agent));
+                values.put(TYPE, "CASHIN");
+                values.put(ICON, R.drawable.ic_report_cashin);
+                mListData.add(values);
             }
 
         }
+
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

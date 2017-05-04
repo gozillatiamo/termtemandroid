@@ -27,7 +27,8 @@
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
     <string name="next">ถัดไป</string>
     <string name="send">ส่ง</string>
-    <string name="hint_birthday">กรุณาเลือกวันเกิด</string>
+    <string name="hint_birthday">วัน/เดือน/ปี เกิด</string>
+    <string name="year_old_wrong">อายุของท่านต่ำกว่าเกณฑ์ที่กำหนด (20 ปี)</string>
     <string name="email">อีเมล (ถ้ามี)</string>
     <string name="password">รหัสผ่าน</string>
     <string name="forgot_password">ลืมรหัสผ่าน?</string>

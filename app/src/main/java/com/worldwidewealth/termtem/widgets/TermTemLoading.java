@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.LineSpinFadeLoaderIndicator;
+import com.worldwidewealth.termtem.R;
 
 /**
  * Created by user on 17-Apr-17.
@@ -54,8 +55,12 @@ public class TermTemLoading extends RelativeLayout {
         this.setBackgroundColor(Color.parseColor("#50000000"));
         AVLoadingIndicatorView loadingIndicatorView = new AVLoadingIndicatorView(getContext());
         loadingIndicatorView.setIndicator(new LineSpinFadeLoaderIndicator());
+        int size = getResources().getDimensionPixelSize(R.dimen.icon_large_size);
+        loadingIndicatorView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
+
         loadingIndicatorView.show();
         this.addView(loadingIndicatorView);
+
         LayoutParams layoutParams = (LayoutParams) loadingIndicatorView.getLayoutParams();
         layoutParams.addRule(CENTER_IN_PARENT, TRUE);
         loadingIndicatorView.setLayoutParams(layoutParams);
