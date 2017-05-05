@@ -254,7 +254,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         switch (mPage){
             case InboxPagerAdapter.ALL:
             case InboxPagerAdapter.TEXT:
-                mWidgetType.setWidgetType(-1);
+                mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.VIDEO.getWidgetType());
 
                 break;
 

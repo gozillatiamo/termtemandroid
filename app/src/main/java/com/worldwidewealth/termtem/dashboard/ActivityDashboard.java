@@ -56,10 +56,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
         setContentView(R.layout.activity_dashboard);
         registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
         mHolder = new ViewHolder(this);
-        mUserMenuList = Global.getInstance().getUserMenuList();
 
         initToolbar();
-        initBtnMenu();
 
     }
 
@@ -67,6 +65,9 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onResume() {
         super.onResume();
         updateBalance();
+        mUserMenuList = Global.getInstance().getUserMenuList();
+        initBtnMenu();
+
         MenuButtonView.setsClickable(true);
     }
 

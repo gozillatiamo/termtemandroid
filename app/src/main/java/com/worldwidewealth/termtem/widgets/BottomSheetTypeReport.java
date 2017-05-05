@@ -44,7 +44,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 */
 
     public OnResultTypeListener onResultTypeListener;
-    public String mTypeCurrent = "TOPUP";
+    public String mTypeCurrent = null;
 
 //    private AppCompatButton mMenuTopup, mMenuCashInAgent;
     private RecyclerView mRecyclerSubMenu;
@@ -127,9 +127,14 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
         return sparseBooleanArray.size();
     }
 
+    public String getCurrentType(){
+        return mTypeCurrent;
+    }
+
     private void initWidgets(){
         mRecyclerSubMenu = (RecyclerView) findViewById(R.id.list_submenu_history);
     }
+
 
     private void bindDataSubmenu(){
 
@@ -162,46 +167,12 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 //        createListForSubmenu(sparseBooleanArray);
     }
 
-/*
-    private void createListForSubmenu(SparseBooleanArray sparseBooleanArray){
-
-        String title = null, type = null;
-        int icon = -1;
-
-        for (int i = 0; i < sparseBooleanArray.size(); i++){
-            if (sparseBooleanArray.valueAt(i)){
-                MenuButtonView.TYPE menuType = MenuButtonView.TYPE.values()[sparseBooleanArray.keyAt(i)];
-                switch (menuType){
-                    case TOPUP:
-                        title = getContext().getString(R.string.report_topup);
-                        icon = R.drawable.ic_topup;
-                        type = TOPUP_REPORT;
-                        break;
-                    case EPIN:
-                        title = getContext().getString(R.string.report_epin);
-                        icon = R.drawable.ic_pin_code;
-                        type = EPIN_REPORT;
-                        break;
-                    case AGENTCASHIN:
-                        title = getContext().getString(R.string.report_cashin_agent);
-                        icon = R.drawable.ic_agent_cashin_primary;
-                        type = CASHIN_REPORT;
-                        break;
-                }
-                ContentValues values = new ContentValues();
-                values.put(TITLE, title);
-                values.put(ICON, icon);
-                values.put(TYPEREPORT, type);
-                mListSubmenu.add(values);
-            }
-        }
-    }
-*/
-
     private void setupMenu(){
         mRecyclerSubMenu.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new SubMenuHistoryAdapter(getContext());
         mRecyclerSubMenu.setAdapter(mAdapter);
+        if (mAdapter.getItemCount() > 0)
+            mTypeCurrent = mAdapter.getItem(0).getAsString(SubMenuHistoryAdapter.TYPE);
     }
 
     public class SubMenuHistoryAdapter extends RecyclerView.Adapter<SubMenuHistoryAdapter.ViewHolder>{
@@ -268,38 +239,16 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 }
             });
 
-/*
-            switch (position){
-                case TOPUP:
-                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType());
-                    break;
-                case EPIN:
-                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType());
-                    break;
-                case CASHIN:
-                    isShow = sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType());
-                    break;
-            }
+        }
 
-*/
-/*
-            if (isShow) {
-
-                holder.itemView.setVisibility(View.VISIBLE);
-            } else {
-                holder.itemView.setVisibility(View.GONE);
-            }
-*/
+        public ContentValues getItem(int position){
+            return mListData.get(position);
         }
 
         @Override
         public int getItemCount() {
             return mListData.size();
         }
-
-//        public ContentValues getItem(int postion){
-//            return mListSubmenu.get(postion);
-//        }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             private ImageView mIconTitle;

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import com.worldwidewealth.termtem.model.SalerptRequestModel;
 import com.worldwidewealth.termtem.model.SalerptResponseModel;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -66,6 +68,7 @@ public class ActivityReport extends MyAppcompatActivity {
     private String mCurrentType;
     private boolean mCanCashIn;
     private boolean canShowTutorial = true;
+    private TermTemLoading loading;
 
     private static final int FORM = 0;
     private static final int TO = 1;
@@ -79,7 +82,6 @@ public class ActivityReport extends MyAppcompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        mCurrentType = TOPUP_REPORT;
         mCanCashIn = getIntent().getExtras().getBoolean(CASHIN_REPORT);
         Log.e(TAG, "Dashboard Can CashIn: "+mCanCashIn);
         mHolder = new ViewHolder(this);
@@ -131,38 +133,13 @@ public class ActivityReport extends MyAppcompatActivity {
 
     private void initBottomAction(){
         mBottomSheet = new BottomSheetTypeReport(ActivityReport.this);
-
+        mCurrentType = mBottomSheet.getCurrentType();
         if (mBottomSheet.getMenuSize() > 1) {
 
             mBottomSheet.setOnResultTypeListener(new BottomSheetTypeReport.OnResultTypeListener() {
                 @Override
                 public void onResult(String typeReport) {
                     mCurrentType = typeReport;
-                    switch (mCurrentType){
-                        case "TOPUP":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_report_topup);
-                            mHolder.mTextType.setText(R.string.topup);
-                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_topup);
-                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-                            break;
-                        case "EPIN":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_report_epin);
-                            mHolder.mTextType.setText(R.string.dashboard_pin);
-                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_epin);
-                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-
-                            break;
-                        case "CASHIN":
-                            mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
-                            mHolder.mTextType.setText(R.string.add_credit_agent);
-                            mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
-                            mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-
-                            break;
-
-                    }
-
-                    findViewById(R.id.card_title_type).setVisibility(View.VISIBLE);
                 }
             });
 
@@ -279,7 +256,38 @@ public class ActivityReport extends MyAppcompatActivity {
     }
 
     private void salerptService(String timeFrom, String timeTo){
-        new DialogCounterAlert.DialogProgress(this).show();
+        if (mCurrentType == null) return;
+        switch (mCurrentType){
+            case "TOPUP":
+                mHolder.mIconType.setImageResource(R.drawable.ic_report_topup);
+                mHolder.mTextType.setText(R.string.topup);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_topup);
+                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
+                break;
+            case "EPIN":
+                mHolder.mIconType.setImageResource(R.drawable.ic_report_epin);
+                mHolder.mTextType.setText(R.string.dashboard_pin);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_epin);
+                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
+
+                break;
+            case "CASHIN":
+                mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
+                mHolder.mTextType.setText(R.string.add_credit_agent);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
+                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
+
+                break;
+
+        }
+
+        findViewById(R.id.card_title_type).setVisibility(View.VISIBLE);
+
+        if (loading == null)
+            loading = new TermTemLoading(this, (ViewGroup) findViewById(R.id.activity_report));
+
+        loading.show();
+//        new DialogCounterAlert.DialogProgress(this).show();
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
@@ -290,7 +298,8 @@ public class ActivityReport extends MyAppcompatActivity {
                 if (responseValues == null) return;
 
                 if (!(responseValues instanceof ResponseModel)){
-                    DialogCounterAlert.DialogProgress.dismiss();
+                    loading.hide();
+//                    DialogCounterAlert.DialogProgress.dismiss();
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     List<SalerptResponseModel> modelList = gson
                             .fromJson((String)responseValues,
@@ -320,8 +329,8 @@ public class ActivityReport extends MyAppcompatActivity {
 
 
                 } else {
-                    DialogCounterAlert.DialogProgress.dismiss();
-
+//                    DialogCounterAlert.DialogProgress.dismiss();
+                    loading.hide();
                 }
 
                 /*
@@ -343,6 +352,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                loading.hide();
                 new ErrorNetworkThrowable(t).networkError(ActivityReport.this, call, this);
             }
         });

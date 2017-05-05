@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/exoplayer_view"
+    <com.worldwidewealth.termtem.widgets.VideoView
+        android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        app:layout_heightPercent="40%">
 
+    </com.worldwidewealth.termtem.widgets.VideoView>
     <RelativeLayout
         android:id="@+id/layout_360_view"
         android:layout_width="match_parent"
@@ -40,10 +41,10 @@
         android:padding="@dimen/activity_small_space"
         android:fillViewport="true"
         android:nestedScrollingEnabled="false"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/exoplayer_view"
         android:layout_toEndOf="@+id/exoplayer_view">
 
     </android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

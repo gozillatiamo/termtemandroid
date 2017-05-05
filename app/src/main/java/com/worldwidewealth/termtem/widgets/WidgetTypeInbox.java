@@ -53,19 +53,9 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 
 public class WidgetTypeInbox extends FrameLayout{
 
-    private SimpleExoPlayerView mExoPlayerView;
-    private SimpleExoPlayer player;
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private DefaultTrackSelector trackSelector;
-    private EventLoggerVideo eventLogger;
-    private DataSource.Factory mediaDataSourceFactory;
-    private Handler mainHandler;
-
-
-    private VrVideoView mVrVideoView;
-    private SeekBar mSeekbar;
     private RecyclerView mRecyclerImage;
     private View mLayoutVrView;
+    private VideoView mVideoView;
 
     private int mWidgetType;
     private List<String> mListImage;
@@ -141,11 +131,9 @@ public class WidgetTypeInbox extends FrameLayout{
     }
 
     private void bindView(){
-        mExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoplayer_view);
-        mVrVideoView = (VrVideoView) findViewById(R.id.vr_view);
-        mSeekbar = (SeekBar) findViewById(R.id.seek_vr);
         mRecyclerImage = (RecyclerView) findViewById(R.id.list_image);
         mLayoutVrView = findViewById(R.id.layout_360_view);
+        mVideoView = (VideoView) findViewById(R.id.video_view);
     }
 
     private void setupStyleable(AttributeSet attrs){
@@ -161,15 +149,18 @@ public class WidgetTypeInbox extends FrameLayout{
 
     public void setWidgetType(int type){
         this.mWidgetType = type;
-        mExoPlayerView.setVisibility(GONE);
+//        mExoPlayerView.setVisibility(GONE);
+        mVideoView.setVisibility(GONE);
         mLayoutVrView.setVisibility(GONE);
         mRecyclerImage.setVisibility(GONE);
         if (type == -1) return;
         switch (WIDGET_TYPE.values()[type]){
             case VIDEO:
-                mExoPlayerView.setVisibility(VISIBLE);
+                mVideoView.setVisibility(VISIBLE);
+                mVideoView.play();
+//                mExoPlayerView.setVisibility(VISIBLE);
                 if (isInEditMode()) return;
-                setVideo(Uri.parse("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"));
+//                setVideo(Uri.parse("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"));
                 break;
             case VIDEO_VR:
                 mLayoutVrView.setVisibility(VISIBLE);
@@ -209,41 +200,6 @@ public class WidgetTypeInbox extends FrameLayout{
     }
 
 
-    private void setVideo(Uri uri){
-        Activity activity = (Activity) getContext();
-        @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode =
-                ((MyApplication)activity.getApplication()).useExtensionRenderers()
-                    ? SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON:
-                        SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
-
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-        mediaDataSourceFactory = buildDataSourceFactory(true);
-        mainHandler = new Handler();
-
-        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
-//        eventLogger = new EventLoggerVideo();
-/*
-        player.addListener(eventLogger);
-        player.setAudioDebugListener(eventLogger);
-        player.setVideoDebugListener(eventLogger);
-        player.setMetadataOutput(eventLogger);
-*/
-        mExoPlayerView.setPlayer(player);
-        player.setPlayWhenReady(true);
-
-        MediaSource mediaSources = new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
-
-        player.prepare(mediaSources);
-
-    }
-
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        Activity activity = (Activity) getContext();
-        return ((MyApplication) activity.getApplication())
-                .buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
 
 
     private static class SaveState extends BaseSavedState{

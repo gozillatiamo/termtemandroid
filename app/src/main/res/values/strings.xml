@@ -260,6 +260,7 @@
     <string name="confirm_delete_title">ลบข้อความ</string>
     <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>
     <string name="username">รหัสผู้ใช้งาน</string>
+    <string name="resolution_video">คุณภาพ\t&#183;\t</string>
     <string name="error_image_identity">กรุณาแนบภาพบัตรประชาชน</string>
 
     <string-array name="str_list_dashboard">

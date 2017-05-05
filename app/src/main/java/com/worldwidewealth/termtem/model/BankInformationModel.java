@@ -34,7 +34,7 @@ public class BankInformationModel {
                     mContext.getString(R.string.kbank_branch)
             ),
             new Bank(
-                    mContext.getString(R.string.bbl),
+                    mContext.getString(R.string.bbl).replace("ธนาคาร", ""),
                     R.drawable.bbl,
                     mContext.getString(R.string.bbl_saving_account_number),
                     null,
