@@ -20,13 +20,14 @@
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium.Inverse"
+                style="@style/TextAppearance.AppCompat.Small.Inverse"
                 android:text="Title"/>
             <TextView
                 android:id="@+id/text_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Small.Inverse"
+                android:textColor="?android:attr/textColorTertiaryInverse"
+                style="@style/TextAppearance.AppCompat.Caption"
                 android:text="subtitle"/>
 
         </LinearLayout>
@@ -39,25 +40,45 @@
             android:text="@string/resolution_video"
             android:textSize="@dimen/my_text_size"
             android:drawableLeft="@drawable/ic_settings"
+            android:drawableTint="?android:attr/textColorTertiaryInverse"
             android:drawablePadding="@dimen/activity_space"
-            android:textColor="@android:color/white"
+            android:textColor="?android:attr/textColorTertiaryInverse"
             />
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="#20000000">
 
-        <android.support.v7.widget.AppCompatImageButton
+        <ImageButton
             android:id="@id/exo_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_play_arrow"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+            android:tint="#E0FFFFFF"
+            style="@style/ExoMediaButton.Play"/>
+
+        <ImageButton android:id="@id/exo_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="#E0FFFFFF"
+            android:layout_centerInParent="true"
+            style="@style/ExoMediaButton.Pause"/>
+
+        <ProgressBar
+            android:id="@+id/progress_video"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#E0FFFFFF"
+            android:visibility="visible"
+            />
+
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

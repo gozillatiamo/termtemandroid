@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -35,7 +36,7 @@ import com.worldwidewealth.termtem.R;
 
 public class VideoView extends FrameLayout{
 
-    private SimpleExoPlayerView mExoPlayerView;
+    private CustomExoPlayerView mExoPlayerView;
     private SimpleExoPlayer player;
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private DefaultTrackSelector trackSelector;
@@ -64,13 +65,6 @@ public class VideoView extends FrameLayout{
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public VideoView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setup(attrs);
-
-    }
-
     private void setup(AttributeSet attrs){
         inflate(getContext(), R.layout.widget_video_view, this);
         bindView();
@@ -79,7 +73,8 @@ public class VideoView extends FrameLayout{
     }
 
     private void bindView(){
-        mExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoplayer_view);
+        mExoPlayerView = (CustomExoPlayerView) findViewById(R.id.exoplayer_view);
+
 //        mVrVideoView = (VrVideoView) findViewById(R.id.vr_view);
 
     }
@@ -119,7 +114,6 @@ public class VideoView extends FrameLayout{
         MediaSource mediaSources = new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
 
         player.prepare(mediaSources);
-
     }
 
     public void play(){

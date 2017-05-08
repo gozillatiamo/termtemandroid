@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    <com.worldwidewealth.termtem.widgets.CustomExoPlayerView
         android:id="@+id/exoplayer_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-    
+        android:layout_height="match_parent">
+    </com.worldwidewealth.termtem.widgets.CustomExoPlayerView>
 
-    <ProgressBar
-        android:id="@+id/progress_video"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:indeterminateTint="#E0FFFFFF"
-        android:visibility="gone"
-        />
+
 
 </FrameLayout>
