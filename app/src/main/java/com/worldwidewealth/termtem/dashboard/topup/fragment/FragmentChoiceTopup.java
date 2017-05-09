@@ -47,7 +47,6 @@ public class FragmentChoiceTopup extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mRecyclerBtnTopup = new RecyclerView(getActivity());
-        mRecyclerBtnTopup.setBackgroundColor(getResources().getColor(android.R.color.white));
         mRecyclerBtnTopup.setScrollbarFadingEnabled(true);
         initGrid();
         Util.setupUI(mRecyclerBtnTopup);

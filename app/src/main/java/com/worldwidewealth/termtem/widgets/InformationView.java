@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
+import com.worldwidewealth.termtem.model.AttachResponseModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,7 +45,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private boolean isRead;
     private boolean isCheck;
     private int mType;
-    private List<String> mListImage;
+    private List<AttachResponseModel> mListImage;
 
     private int mThumbnailResource;
     private InformationClickListener informationClickListener;
@@ -53,9 +54,9 @@ public class InformationView extends FrameLayout implements View.OnClickListener
     private int mPosition = -1;
 
     public enum TYPE{
-        TEXT(0),
-        IMAGE(1),
-        VIDEO(2);
+        TEXT(4),
+        IMAGE(2),
+        VIDEO(3);
 
         private int type;
         TYPE(int i) {
@@ -64,6 +65,16 @@ public class InformationView extends FrameLayout implements View.OnClickListener
 
         public int getType() {
             return type;
+        }
+
+        public static TYPE getTypeAt(int typeValue){
+
+            for (TYPE type : TYPE.values()){
+                if (type.getType() == typeValue)
+                    return type;
+            }
+
+            return TEXT;
         }
     }
 
@@ -192,9 +203,9 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         mListImage = null;
 
         this.mType = type;
-        if (mType == -1) return;
+        if (mType == 0) return;
 
-        switch (TYPE.values()[mType]){
+        switch (TYPE.getTypeAt(mType)){
             case TEXT:
                 mImageLogo.setVisibility(VISIBLE);
                 break;
@@ -206,7 +217,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         }
     }
 
-    public void setImageThumbnail(List<String> listImage){
+    public void setImageThumbnail(List<AttachResponseModel> listImage){
         this.mListImage = listImage;
         if (mListImage == null) return;
         mImageThumbnailView.setImageThumbnail(listImage);
@@ -373,7 +384,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         boolean isRead;
         boolean isCheck;
         int mType;
-        List<String> mListImage;
+        List<AttachResponseModel> mListImage;
 
         public SavedState(Parcel source) {
             super(source);
@@ -386,7 +397,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             this.isRead = source.readByte() != 0;
             this.isCheck = source.readByte() != 0;
             this.mType = source.readInt();
-            source.readStringList(this.mListImage);
+            this.mListImage = source.readArrayList(source.getClass().getClassLoader());
         }
 
         public SavedState(Parcelable superState) {
@@ -405,7 +416,7 @@ public class InformationView extends FrameLayout implements View.OnClickListener
             out.writeByte((byte) (this.isRead ? 1:0));
             out.writeByte((byte) (this.isCheck ? 1:0));
             out.writeInt(this.mType);
-            out.writeStringList(this.mListImage);
+            out.writeList(this.mListImage);
         }
 
         public static final Creator<InformationView.SavedState> CREATOR = new Creator<InformationView.SavedState>() {

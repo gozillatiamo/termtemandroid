@@ -67,6 +67,7 @@ public interface APIServices {
     public static final String ACTION_GET_OTP_EPIN = "GETOTPEPIN";
     public static final String ACTION_SUBMIT_TOPUP_EPIN = "SUBMITTOPUPEPIN";
     public static final String ACTION_ESLIP_EPIN = "ESLIPEPIN";
+    public static final String ACTION_SERVICE_PRO = "SERVICEPRO";
 
 
 

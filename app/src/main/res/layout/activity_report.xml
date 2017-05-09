@@ -8,13 +8,14 @@
     tools:context="com.worldwidewealth.termtem.dashboard.report.ActivityReport">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:theme="@style/ToolbarColored">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
@@ -57,6 +58,7 @@
                         android:id="@+id/icon_type_report"
                         android:layout_width="@dimen/icon_large_size"
                         android:layout_height="@dimen/icon_large_size"
+                        android:visibility="gone"
                         app:srcCompat="@drawable/ic_topup"/>
                     <TextView
                         android:id="@+id/text_type_report"

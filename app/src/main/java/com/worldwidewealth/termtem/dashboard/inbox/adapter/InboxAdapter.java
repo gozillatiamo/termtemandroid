@@ -29,6 +29,7 @@ import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxBottomSheetDialogFragment;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
+import com.worldwidewealth.termtem.model.InboxRequest;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -141,16 +142,15 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //            inboxViewHolder.mItemInbox.setLengthVideo(getItem(position).getTimeLength());
 
             inboxViewHolder.mItemInbox.setDate(getItem(position).getCreate_Date());
-
-
-            switch (mPage){
-                case InboxPagerAdapter.ALL:
-                    inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
+            Log.e(TAG, getItem(position).get_type()+"");
+            inboxViewHolder.mItemInbox.setType(getItem(position).get_type());
+            switch (InformationView.TYPE.getTypeAt(getItem(position).get_type())){
+                case IMAGE:
+                    inboxViewHolder.mItemInbox.setImageThumbnail(getItem(position).getAttachlist());
                     break;
-                case InboxPagerAdapter.TEXT:
-                    inboxViewHolder.mItemInbox.setType(InformationView.TYPE.TEXT.getType());
-                    break;
-                case InboxPagerAdapter.IMAGE:
+
+/*
+                case InboxRequest.TYPE_ALL:
                     int countImage = position % 5;
                     if (countImage == 0){
                         List<String> mListImage = new ArrayList<>();
@@ -195,6 +195,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
 
                     break;
+*/
             }
             inboxViewHolder.mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
             inboxViewHolder.mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);

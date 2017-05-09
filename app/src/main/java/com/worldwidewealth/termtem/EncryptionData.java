@@ -163,7 +163,8 @@ public class EncryptionData {
         try {
             strRespone = response.string();
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
-
+            Log.e(TAG, "Response: "+ strRespone);
+            if (responseModel == null) return null;
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
 

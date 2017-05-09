@@ -3,21 +3,14 @@ package com.worldwidewealth.termtem.dashboard.inbox.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,17 +22,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
+import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.model.InboxRepuest;
+import com.worldwidewealth.termtem.model.InboxRequest;
 import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
-import com.worldwidewealth.termtem.widgets.MultiSelector;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 
 import java.util.ArrayList;
@@ -73,12 +65,6 @@ public class InboxFragment extends Fragment {
     public static final String TAG = InboxFragment.class.getSimpleName();
     public static final int DELETE_INBOX = 0x0;
     public static final int READ_INBOX = 0x1;
-
-
-    public static final int ALL = 0;
-    public static final int TEXT = 1;
-    public static final int VIDEO = 2;
-    public static final int IMAGE = 3;
 
     private RecyclerView mInboxRecycler;
     private InboxAdapter mInboxAdapter;
@@ -401,9 +387,25 @@ public class InboxFragment extends Fragment {
 
         }
 
+        int typePage = -1;
+        switch (mPageType){
+            case InboxPagerAdapter.ALL:
+                typePage = InboxRequest.TYPE_ALL;
+                break;
+            case InboxPagerAdapter.TEXT:
+                typePage = InboxRequest.TYPE_TEXT;
+                break;
+            case InboxPagerAdapter.IMAGE:
+                typePage = InboxRequest.TYPE_IMAGE;
+                break;
+            case InboxPagerAdapter.VIDEO:
+                typePage = InboxRequest.TYPE_VIDEO;
+                break;
+        }
+
         call = services.service(
                 new RequestModel(APIServices.ACTIONLOADINBOX,
-                        new InboxRepuest(mPageList, mDateFrom, mDateTo, mText)));
+                        new InboxRequest(mPageList, mDateFrom, mDateTo, mText, typePage)));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

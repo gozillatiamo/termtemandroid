@@ -60,6 +60,7 @@ import com.worldwidewealth.termtem.model.InboxResponse;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.widgets.InformationView;
 import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 
 import java.io.IOException;
@@ -78,7 +79,6 @@ import retrofit2.Response;
 public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     public static final String KEY_INBOX_RESPONSE = "inboxresponse";
-    public static final String KEY_INBOX_PAGE = "page";
 
     private InboxResponse mDataInbox;
     private APIServices services = APIServices.retrofit.create(APIServices.class);
@@ -86,7 +86,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private TextView mTitle, mDes;
     private ImageView mBtnDel;
     private WidgetTypeInbox mWidgetType;
-    private int mPage;
 
     public static final int BUFFER_SEGMENT_SIZE = 16 * 1024; // Original value was 64 * 1024
     public static final int VIDEO_BUFFER_SEGMENTS = 50; // Original value was 200
@@ -113,7 +112,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
          InboxBottomSheetDialogFragment fragment = new InboxBottomSheetDialogFragment();
          args.putParcelable(KEY_INBOX_RESPONSE, response);
          args.putInt(InboxFragment.POSITION, position);
-         args.putInt(KEY_INBOX_PAGE, page);
          fragment.setArguments(args);
         return fragment;
     }
@@ -121,7 +119,6 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mDataInbox = getArguments().getParcelable(KEY_INBOX_RESPONSE);
-        mPage = getArguments().getInt(KEY_INBOX_PAGE);
         getArguments().remove(KEY_INBOX_RESPONSE);
         super.onCreate(savedInstanceState);
     }
@@ -217,7 +214,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         });
 
-        setupType(mPage);
+        setupType(mDataInbox.get_type());
 
 
 //        handleVideo();
@@ -248,24 +245,16 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     }
 
-    public void setupType(int page){
-        mPage = page;
+    public void setupType(int type){
 
-        switch (mPage){
-            case InboxPagerAdapter.ALL:
-            case InboxPagerAdapter.TEXT:
+        switch (InformationView.TYPE.getTypeAt(type)){
+            case TEXT:
                 mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.VIDEO.getWidgetType());
-
                 break;
 
-            case InboxPagerAdapter.IMAGE:
+            case IMAGE:
                 mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.IMAGE.getWidgetType());
-                List<String> mListImage = new ArrayList<>();
-                mListImage.add("http://placehold.it/120x120&text=image1");
-                mListImage.add("http://placehold.it/120x120&text=image2");
-                mListImage.add("http://placehold.it/120x120&text=image3");
-                mListImage.add("http://placehold.it/120x120&text=image4");
-                mWidgetType.setImage(mListImage);
+                mWidgetType.setImage(mDataInbox.getAttachlist());
 
                 break;
 

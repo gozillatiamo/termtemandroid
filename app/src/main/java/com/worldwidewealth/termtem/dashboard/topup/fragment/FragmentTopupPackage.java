@@ -113,8 +113,8 @@ public class FragmentTopupPackage extends  Fragment{
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
 //        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
         initPageTopup();
-        initData();
         initBtn();
+        initData();
         mHolder.mEditPhone.requestFocus();
 
         return rootView;
@@ -225,9 +225,12 @@ public class FragmentTopupPackage extends  Fragment{
         switch (mTopup){
             case FragmentTopup.MOBILE:
                 mHolder.mTextHint.setText(R.string.topup);
+                mBottomAction.setTitleAmount(getString(R.string.topup_title_amount));
                 break;
             case FragmentTopup.PIN:
                 mHolder.mTextHint.setText(R.string.dashboard_pin);
+                mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+
                 break;
         }
     }

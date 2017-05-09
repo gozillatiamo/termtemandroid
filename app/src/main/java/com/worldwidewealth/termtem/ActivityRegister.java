@@ -387,10 +387,17 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         mDateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                int currentYear = calendar.get(Calendar.YEAR);
-                boolean yearOld = (currentYear - year) >= 20;
+                Calendar currentDate = Calendar.getInstance();
+                Calendar birthDate = Calendar.getInstance();
+                birthDate.set(year, month, dayOfMonth);
+
+                int age = currentDate.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+
+                age = (currentDate.get(Calendar.MONTH) < birthDate.get(Calendar.MONTH)) ||
+                        ((currentDate.get(Calendar.MONTH) == birthDate.get(Calendar.MONTH)) &&
+                            currentDate.get(Calendar.DAY_OF_MONTH) < birthDate.get(Calendar.DAY_OF_MONTH)) ? --age:age;
+
+                boolean yearOld = age >= 20;
                 if (!yearOld){
                     Toast.makeText(ActivityRegister.this, getString(R.string.year_old_wrong), Toast.LENGTH_SHORT).show();
                     setupError(BIRTH);

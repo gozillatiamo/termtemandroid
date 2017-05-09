@@ -42,6 +42,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.model.AttachResponseModel;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class WidgetTypeInbox extends FrameLayout{
     private VideoView mVideoView;
 
     private int mWidgetType;
-    private List<String> mListImage;
+    private List<AttachResponseModel> mListImage;
 
     public enum WIDGET_TYPE{
         VIDEO(0),
@@ -172,7 +173,7 @@ public class WidgetTypeInbox extends FrameLayout{
         }
     }
 
-    public void setImage(List<String> listImage){
+    public void setImage(List<AttachResponseModel> listImage){
         this.mListImage = listImage;
 
         int spanCount;
@@ -205,7 +206,7 @@ public class WidgetTypeInbox extends FrameLayout{
     private static class SaveState extends BaseSavedState{
 
         int mWidgetType;
-        List<String> mListImage;
+        List<AttachResponseModel> mListImage;
         public SaveState(Parcel source) {
             super(source);
             this.mWidgetType = source.readInt();
@@ -220,7 +221,7 @@ public class WidgetTypeInbox extends FrameLayout{
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(this.mWidgetType);
-            out.writeStringList(this.mListImage);
+            out.writeList(this.mListImage);
         }
 
         public static final Creator<SaveState> CREATOR = new Creator<SaveState>() {
@@ -263,7 +264,7 @@ public class WidgetTypeInbox extends FrameLayout{
 //            image.(sizePadding, sizePadding, sizePadding, sizePadding);
             if (getItemCount() > 1){
                 Glide.with(getContext())
-                        .load(mListImage.get(position))
+                        .load(mListImage.get(position).getURLFILE())
                         .override(300, 300)
                         .crossFade()
                         .centerCrop()
@@ -271,7 +272,7 @@ public class WidgetTypeInbox extends FrameLayout{
                         .into(image);
             } else {
                 Glide.with(getContext())
-                        .load(mListImage.get(position))
+                        .load(mListImage.get(position).getURLFILE())
                         .override(300, 300)
                         .crossFade()
                         .placeholder(R.drawable.ic_picture)
@@ -292,7 +293,7 @@ public class WidgetTypeInbox extends FrameLayout{
             ZoomView.zoomImageFromThumb(getContext(),
                     WidgetTypeInbox.this.getRootView(),
                     view,
-                    mListImage.get((Integer) view.getTag()));
+                    mListImage.get((Integer) view.getTag()).getURLFILE());
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.model.AttachResponseModel;
 
 import java.util.List;
 
@@ -92,29 +93,29 @@ public class ImageThumbnailView extends FrameLayout{
         mTextMore = (TextView) findViewById(R.id.text_more);
     }
 
-    public void setImageThumbnail(List<String> listImage){
+    public void setImageThumbnail(List<AttachResponseModel> listImage){
         mThumb2.setVisibility(GONE);
         mThumb3.setVisibility(GONE);
         mLastThmb.setVisibility(GONE);
         mTextMore.setVisibility(GONE);
 
-        setImage(mThumb1, listImage.get(0));
+        setImage(mThumb1, listImage.get(0).getURLFILE());
 
         if (listImage.size() > 1){
             mThumb2.setVisibility(VISIBLE);
-            setImage(mThumb2, listImage.get(1));
+            setImage(mThumb2, listImage.get(1).getURLFILE());
 
         }
 
         if (listImage.size() > 2){
             mThumb3.setVisibility(VISIBLE);
-            setImage(mThumb3, listImage.get(2));
+            setImage(mThumb3, listImage.get(2).getURLFILE());
 
         }
 
         if (listImage.size() > 3){
             mLastThmb.setVisibility(VISIBLE);
-            setImage(mThumb4, listImage.get(3));
+            setImage(mThumb4, listImage.get(3).getURLFILE());
         }
 
         if (listImage.size() > 4){

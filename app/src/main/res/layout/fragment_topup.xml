@@ -17,6 +17,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
+        android:visibility="gone"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardElevation="@dimen/cardview_default_elevation"
         >
@@ -40,6 +41,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
+        android:visibility="gone"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardElevation="@dimen/cardview_default_elevation"
         >
@@ -63,6 +65,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="@dimen/cardview_default_radius"
+        android:visibility="gone"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardElevation="@dimen/cardview_default_elevation"
         >

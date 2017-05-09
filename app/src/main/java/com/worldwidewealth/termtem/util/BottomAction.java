@@ -36,6 +36,10 @@ public class BottomAction {
         swichType(type, listener);
     }
 
+    public void setTitleAmount(String titleAmount){
+        mHolder.mTextTitleAmount.setText(titleAmount);
+    }
+
     public void swichType(int type, View.OnClickListener listener){
         mCurrentType = type;
         switch (mCurrentType){
@@ -97,7 +101,7 @@ public class BottomAction {
     private class ViewHolder extends RecyclerView.ViewHolder{
 
         private Button mBtnNext, mBtnSubmit, mBtnCancel;
-        private TextView mTextPrice;
+        private TextView mTextPrice, mTextTitleAmount;
         private View mLayoutSubmit, mLayoutAmountPreview;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,6 +111,7 @@ public class BottomAction {
             mTextPrice = (TextView) itemView.findViewById(R.id.text_price);
             mLayoutSubmit = (View) itemView.findViewById(R.id.layout_btn_submit);
             mLayoutAmountPreview = (View) itemView.findViewById(R.id.layout_amout_preview);
+            mTextTitleAmount = (TextView) itemView.findViewById(R.id.text_title_amount);
         }
     }
 }

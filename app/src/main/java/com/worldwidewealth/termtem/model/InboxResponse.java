@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by user on 14-Feb-17.
@@ -18,12 +19,22 @@ public class InboxResponse implements Parcelable {
     private int Thumbnail = -1;
     private String Url;
     private String TimeLength;
+    private int _type;
+    private List<AttachResponseModel> attachlist;
 
     public InboxResponse() {
     }
 
     public void setMsgid(String msgid) {
         this.msgid = msgid;
+    }
+
+    public int get_type() {
+        return _type;
+    }
+
+    public List<AttachResponseModel> getAttachlist() {
+        return attachlist;
     }
 
     public void setTitle(String title) {
@@ -104,6 +115,8 @@ public class InboxResponse implements Parcelable {
         Thumbnail = in.readInt();
         Url = in.readString();
         TimeLength = in.readString();
+        _type = in.readInt();
+        attachlist = in.readArrayList(in.getClass().getClassLoader());
     }
 
     @Override
@@ -116,6 +129,8 @@ public class InboxResponse implements Parcelable {
         dest.writeInt(Thumbnail);
         dest.writeString(Url);
         dest.writeString(TimeLength);
+        dest.writeInt(_type);
+        dest.writeList(attachlist);
     }
 
     public static final Creator<InboxResponse> CREATOR = new Creator<InboxResponse>() {

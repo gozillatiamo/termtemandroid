@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,9 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.model.ServiceProRequestModel;
+import com.worldwidewealth.termtem.model.ServiceProResponseModel;
+import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.TermTemLoading;
+
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -23,7 +40,8 @@ public class FragmentTopup extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
     private String mTopup;
-
+    private APIServices services = APIServices.retrofit.create(APIServices.class);
+    private TermTemLoading loading;
 
     public static final String keyTopup = "topup";
     public static final String MOBILE = "mobile";
@@ -75,13 +93,64 @@ public class FragmentTopup extends Fragment {
     }
 
     private void initBtnServices(){
+        if (loading == null){
+            loading = new TermTemLoading(getContext(), (ViewGroup) getActivity().findViewById(R.id.activity_topup));
+        }
 
+        loading.show();
+        ServiceProRequestModel servicePro = null;
         switch (mTopup){
+            case MOBILE:
+                servicePro = new ServiceProRequestModel(ServiceProRequestModel.SCODE_TOPUP);
+                break;
             case PIN:
+                servicePro = new ServiceProRequestModel(ServiceProRequestModel.SCODE_EPIN);
                 mHolder.mImageAis.setImageResource(R.drawable.logo_ais_pin);
                 mHolder.mImageTrue.setImageResource(R.drawable.logo_truemoney);
                 mHolder.mBtnDtac.setVisibility(View.GONE);
                 break;
+        }
+        if (servicePro != null) {
+            Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTION_SERVICE_PRO, servicePro));
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                    if (responseValues instanceof String){
+                        List<ServiceProResponseModel> models = new Gson()
+                                .fromJson((String)responseValues,
+                                        new TypeToken<List<ServiceProResponseModel>>(){}.getType());
+
+                        for (ServiceProResponseModel model : models){
+                            switch (model.getCARRIERCODE()){
+                                case APIServices.AIS:
+                                    mHolder.mBtnAis.setVisibility(View.VISIBLE);
+                                    break;
+                                case APIServices.TRUEMOVE:
+                                    mHolder.mBtnTruemove.setVisibility(View.VISIBLE);
+                                    break;
+                                case APIServices.DTAC:
+                                    mHolder.mBtnDtac.setVisibility(View.VISIBLE);
+                                    break;
+                            }
+                        }
+                    } else if (responseValues == null && (getString(R.string.server).contains("test") ||
+                            getString(R.string.server).contains("203.154.162.119"))){
+                        mHolder.mBtnAis.setVisibility(View.VISIBLE);
+                        mHolder.mBtnTruemove.setVisibility(View.VISIBLE);
+                        mHolder.mBtnDtac.setVisibility(View.VISIBLE);
+                    }
+
+                    loading.hide();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    loading.hide();
+                    new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
+                }
+            });
         }
 
 
