@@ -35,10 +35,10 @@
     <string name="change_password">เปลี่ยนรหัสผ่าน</string>
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
-    <string name="register_done"> - บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
-        \n\n - กรุณาส่งใบสมัครและเอกสารประกอบมายังบริษัท\nโดยดาวน์โหลดเอกสารได้ที่เว็บไซต์ TermTem
-        \n\n - รอรับ user/password เมื่อได้รัการอนุมัติจากบริษัท(ภายใน 7 วันทำการหลังได้รับเอกสาร)
-        \n\n - ห้าม!! โอนเงินเข้าบัญชีบริษัทก่อนได้รับการอนุมัติ</string>
+    <string name="register_done">&#9679;\t บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
+        \n\n &#9679;\t รอรับ “รหัสผู้ใช้งาน” และ “รหัสผ่าน” เมื่อได้รับการอนุมัติจากบริษัท (ภายใน 3 วันทำการ)
+        \n\n &#9679;\t สอบถามเพิ่มเติม ติดต่อ 02-331-4788</string>
+    <string name="thank_register_done">ขอบคุณท่านที่ให้ความสนใจบริการเติมเต็ม</string>
     <string name="register_device_done">ลงทะเบียนเสร็จสิ้น ทางบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
     <string name="back_to_main">กลับสู่เมนูหลัก</string>
@@ -85,7 +85,7 @@
     <string name="payment">ชำระเงิน</string>
     <string name="recipient_sets">Recipient sets :</string>
     <string name="fee">FEE :</string>
-    <string name="commission">Commission :</string>
+    <string name="commission">Commission (บาท) :</string>
     <string name="total">ยอดที่ชำระ (บาท) :</string>
     <string name="all_total">รวมยอดเติม (บาท) :</string>
     <string name="total_coin">Total Coin :</string>
@@ -162,6 +162,7 @@
     <string name="please_choice_topup">กรุณาเลือกจำนวนที่ท่านต้องการจะเติม</string>
     <string name="balance_not_enough">ยอดเงินคงเหลือของท่านไม่พอที่จะทำรายการ</string>
     <string name="register">ลงทะเบียน</string>
+    <string name="register_done_title">ลงทะเบียนสำเร็จ</string>
     <string name="msg_progress">กรุณารอสักครู่...</string>
     <string name="please_phone_topup_error">หมายเลขโทรศัพท์ไม่ถูกต้อง</string>
     <string name="save_slip_success">บันทึก E-Slip สำเร็จ!!!</string>
@@ -265,6 +266,7 @@
     <string name="topup_title_amount">ยอดเติมเงิน (บาท)</string>
     <string name="epin_title_amount">จำนวนเงิน (บาท)</string>
     <string name="menu">เมนู</string>
+    <string name="messages_not_have">ไม่มีข้อความ</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

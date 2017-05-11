@@ -45,7 +45,6 @@ import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
-import com.www.ARFPS.UnityPlayerNativeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -471,7 +470,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     setsClickable(true);
                     break;
                 case AR:
-                    intent = new Intent(getContext(), UnityPlayerNativeActivity.class);
+//                    intent = new Intent(getContext(), UnityPlayerNativeActivity.class);
                     break;
             }
 

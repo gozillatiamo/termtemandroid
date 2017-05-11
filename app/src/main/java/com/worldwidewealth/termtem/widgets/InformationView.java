@@ -20,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 import com.worldwidewealth.termtem.model.AttachResponseModel;
+import com.worldwidewealth.termtem.model.InboxRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -203,7 +204,9 @@ public class InformationView extends FrameLayout implements View.OnClickListener
         mListImage = null;
 
         this.mType = type;
-        if (mType == 0) return;
+        if (mType == 0) {
+            mType = InboxRequest.TYPE_TEXT;
+        }
 
         switch (TYPE.getTypeAt(mType)){
             case TEXT:

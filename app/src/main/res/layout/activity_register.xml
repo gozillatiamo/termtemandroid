@@ -384,7 +384,8 @@
                     android:singleLine="true"
                     android:text="@string/sign_in"
                     android:textAllCaps="true"
-                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorAccent"
                     app:sizeToFit="true" />
             </LinearLayout>
 

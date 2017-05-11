@@ -95,7 +95,7 @@ public class ImageThumbnailView extends FrameLayout{
 
     public void setImageThumbnail(List<AttachResponseModel> listImage){
         mThumb2.setVisibility(GONE);
-        mThumb3.setVisibility(GONE);
+        findViewById(R.id.layout_image_row2).setVisibility(GONE);
         mLastThmb.setVisibility(GONE);
         mTextMore.setVisibility(GONE);
 
@@ -108,7 +108,7 @@ public class ImageThumbnailView extends FrameLayout{
         }
 
         if (listImage.size() > 2){
-            mThumb3.setVisibility(VISIBLE);
+            findViewById(R.id.layout_image_row2).setVisibility(GONE);
             setImage(mThumb3, listImage.get(2).getURLFILE());
 
         }

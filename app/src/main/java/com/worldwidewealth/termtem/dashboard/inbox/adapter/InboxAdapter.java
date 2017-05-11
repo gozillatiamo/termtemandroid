@@ -142,7 +142,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //            inboxViewHolder.mItemInbox.setLengthVideo(getItem(position).getTimeLength());
 
             inboxViewHolder.mItemInbox.setDate(getItem(position).getCreate_Date());
-            Log.e(TAG, getItem(position).get_type()+"");
             inboxViewHolder.mItemInbox.setType(getItem(position).get_type());
             switch (InformationView.TYPE.getTypeAt(getItem(position).get_type())){
                 case IMAGE:

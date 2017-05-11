@@ -25,6 +25,7 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,6 +64,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.zip.Inflater;
 
 import me.grantland.widget.AutofitTextView;
 import retrofit2.Call;
@@ -113,7 +115,6 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         initNext();
         setupDialogCondition();
         setupCalendar();
-
     }
 
     @Override
@@ -269,9 +270,9 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
-                                mDialogCondition.cancel();
                                 mLoading.show();
+                                mDialogCondition.cancel();
+
 
                                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                                         mHolder.mEditTitleName.getText().toString(),
@@ -291,6 +292,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
 
                                         if(response.body().getStatus() == APIServices.SUCCESS){
 
+/*
                                             final TextView message = new TextView(ActivityRegister.this);
                                             message.setPadding(20, 20, 20, 20);
                                             final SpannableString s =
@@ -298,10 +300,13 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                             Linkify.addLinks(s, Linkify.WEB_URLS);
                                             message.setText(s);
                                             message.setMovementMethod(LinkMovementMethod.getInstance());
+*/
 
 
-                                            AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this)
-                                                    .setView(message)
+                                            AlertDialog alertdialog = new AlertDialog.Builder(ActivityRegister.this, R.style.MyAlertDialogWarning)
+                                                    .setTitle(R.string.register_done_title)
+                                                    .setView(LayoutInflater.from(ActivityRegister.this)
+                                                            .inflate(R.layout.dialog_register_done, null))
                                                     .setCancelable(false)
                                                     .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                                                         @Override
@@ -328,7 +333,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                 });
 
                             }
-                        }, 1000);
+                        }, 500);
 
                     }
                 }

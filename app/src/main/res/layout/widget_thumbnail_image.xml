@@ -5,37 +5,38 @@
     android:orientation="vertical"
     >
     <LinearLayout
+        android:id="@+id/layout_image_row1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_weight="1">
         <ImageView
             android:id="@+id/image_thumbnail_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/thumbnail_video"
             android:scaleType="centerCrop"
             android:layout_weight="1"/>
         <ImageView
             android:id="@+id/image_thumbnail_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/thumbnail_video"
             android:scaleType="centerCrop"
             android:layout_weight="1"/>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_image_row2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:layout_weight="1">
+
         <ImageView
             android:id="@+id/image_thumbnail_3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/thumbnail_video"
             android:scaleType="centerCrop"
             android:visibility="visible"
             android:layout_weight="1"/>
@@ -52,7 +53,6 @@
                 android:id="@+id/image_thumbnail_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/thumbnail_video"
                 android:scaleType="centerCrop"
 
                 />

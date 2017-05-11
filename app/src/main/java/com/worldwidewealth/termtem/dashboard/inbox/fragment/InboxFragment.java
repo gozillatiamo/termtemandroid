@@ -4,9 +4,12 @@ package com.worldwidewealth.termtem.dashboard.inbox.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -33,6 +36,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
+import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,8 +71,10 @@ public class InboxFragment extends Fragment {
     public static final int READ_INBOX = 0x1;
 
     private RecyclerView mInboxRecycler;
+    private SwipeRefreshLayout mRefresh;
     private InboxAdapter mInboxAdapter;
     private ScaleInAnimationAdapter animationAdapter;
+    private TermTemLoading mLoading;
 
     private int mPageType;
     private OnActiveFragment mCallback;
@@ -166,6 +172,8 @@ public class InboxFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_inbox, container, false);
             Util.setupUI(rootView.findViewById(R.id.layout_parent));
             mInboxRecycler = (RecyclerView) rootView.findViewById(R.id.inbox_recyclear);
+            mRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+            mRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         }
 
 
@@ -176,6 +184,12 @@ public class InboxFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (mListInbox == null) {
+            if (mLoading == null){
+                mLoading = new TermTemLoading(getContext(), (ViewGroup) getActivity().findViewById(R.id.layout_parent));
+            }
+
+            mLoading.show();
+
             loadDataInbox();
         } else {
 
@@ -243,17 +257,6 @@ public class InboxFragment extends Fragment {
         if (mInboxAdapter == null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mInboxRecycler.setLayoutManager(layoutManager);
-/*
-            switch (mPageType){
-                case ALL:
-                    mListInbox.addAll(mListMockUp);
-                    break;
-                case VIDEO:
-                case IMAGE:
-                    mListInbox = mListMockUp;
-                    break;
-            }
-*/
             mInboxAdapter = new InboxAdapter(this, mInboxRecycler, mListInbox, mPageType);
             animationAdapter = new ScaleInAnimationAdapter(mInboxAdapter);
             animationAdapter.setInterpolator(new OvershootInterpolator());
@@ -278,6 +281,15 @@ public class InboxFragment extends Fragment {
                         setSelectable(true);
                         setItemChecked(position, true);
                     }
+                }
+            });
+
+            //SwipeRefresh
+            mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mPageList = 1;
+                    loadDataInbox();
                 }
             });
 
@@ -403,6 +415,7 @@ public class InboxFragment extends Fragment {
                 break;
         }
 
+
         call = services.service(
                 new RequestModel(APIServices.ACTIONLOADINBOX,
                         new InboxRequest(mPageList, mDateFrom, mDateTo, mText, typePage)));
@@ -412,48 +425,68 @@ public class InboxFragment extends Fragment {
                 Object objectResponse = EncryptionData.getModel(
                         getContext(), call, response.body(), this);
 
-                if (objectResponse instanceof String){
+                if (objectResponse instanceof String) {
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     final ArrayList<InboxResponse> listinbox = gson
-                            .fromJson((String)objectResponse,
-                                    new TypeToken<ArrayList<InboxResponse>>(){}.getType());
+                            .fromJson((String) objectResponse,
+                                    new TypeToken<ArrayList<InboxResponse>>() {
+                                    }.getType());
 
-                    if (listinbox.size() == 0 && mInboxAdapter != null ){
+                    if (listinbox.size() == 0 && mInboxAdapter != null) {
                         mInboxAdapter.setLoaded();
                         mInboxAdapter.setMaxInbox(true);
-                        return;
-                    }
-
-                    if (mPageList == 1) {
-                        mListInbox = listinbox;
-                        initListInbox();
                     } else {
-                        mListInbox.add(null);
-                        mInboxAdapter.notifyItemInserted(mListInbox.size() - 1);
-                        //Load more data for reyclerview
-                        new Handler().postDelayed(new Runnable() {
-                            @Override public void run() {
-                                //Remove loading item
-                                mListInbox.remove(mListInbox.size() - 1);
-                                mInboxAdapter.notifyItemRemoved(mListInbox.size());
-                                //Load data
+
+                        if (mPageList == 1) {
+                            mListInbox = listinbox;
+                            initListInbox();
+                        } else {
+                            mListInbox.add(null);
+                            mInboxAdapter.notifyItemInserted(mListInbox.size() - 1);
+                            //Load more data for reyclerview
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Remove loading item
+                                    mListInbox.remove(mListInbox.size() - 1);
+                                    mInboxAdapter.notifyItemRemoved(mListInbox.size());
+                                    //Load data
 /*
                                 int index = mListInbox.size();
                                 int end = index + 20;
 */
-                                for (InboxResponse model:listinbox){
-                                    mListInbox.add(model);
+                                    for (InboxResponse model : listinbox) {
+                                        mListInbox.add(model);
+                                    }
+                                    mInboxAdapter.notifyItemChanged(mInboxAdapter.getItemCount());
+                                    mInboxAdapter.setLoaded();
                                 }
-                                mInboxAdapter.notifyItemChanged(mInboxAdapter.getItemCount());
-                                mInboxAdapter.setLoaded();
-                            }
-                        }, 1000);
+                            }, 1000);
+                        }
                     }
+
+                }
+
+                if (mInboxAdapter == null || mInboxAdapter.getItemCount() == 0) {
+                    getView().findViewById(R.id.msg_not_have).setVisibility(View.VISIBLE);
+                } else {
+                    getView().findViewById(R.id.msg_not_have).setVisibility(View.GONE);
+                }
+
+
+                    mLoading.hide();
+                if (mRefresh.isShown()){
+                    mRefresh.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mLoading.hide();
+                if (mRefresh.isShown()){
+                    mRefresh.setRefreshing(false);
+                }
+
                 new ErrorNetworkThrowable(t).networkError(getContext(), call, this);
             }
         });
@@ -466,6 +499,12 @@ public class InboxFragment extends Fragment {
         this.mPageList = 1;
 
         mCallback.onUpdateDataSearch(mText, mDateFrom, mDateTo);
+        if (mLoading == null){
+            mLoading = new TermTemLoading(getContext(), (ViewGroup) getActivity().findViewById(R.id.layout_parent));
+        }
+
+        mLoading.show();
+
         loadDataInbox();
     }
 

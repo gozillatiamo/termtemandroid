@@ -165,7 +165,6 @@ public class WidgetTypeInbox extends FrameLayout{
                 break;
             case VIDEO_VR:
                 mLayoutVrView.setVisibility(VISIBLE);
-
                 break;
             case IMAGE:
                 mRecyclerImage.setVisibility(VISIBLE);

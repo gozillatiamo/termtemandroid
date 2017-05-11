@@ -256,7 +256,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                 if (values instanceof ResponseModel){
                                     ResponseModel model = (ResponseModel) values;
                                     count = model.getIdlelimit();
-                                    T= new Timer();
+                                    T = new Timer();
                                     T.scheduleAtFixedRate(new TimerTask() {
                                         @Override
                                         public void run() {
@@ -271,6 +271,13 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                         Util.logoutAPI(null, true);
                                                         T.cancel();
                                                         T = null;
+                                                    }
+
+                                                    if (count < 0){
+                                                        T.cancel();
+                                                        T = null;
+                                                        mThread.interrupt();
+                                                        mThread = null;
                                                     }
                                                 }
                                             });

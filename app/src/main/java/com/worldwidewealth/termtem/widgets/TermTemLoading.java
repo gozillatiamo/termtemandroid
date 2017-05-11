@@ -53,6 +53,7 @@ public class TermTemLoading extends RelativeLayout {
     private void setupView(){
         this.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         this.setBackgroundColor(Color.parseColor("#50000000"));
+        this.setOnClickListener(null);
         AVLoadingIndicatorView loadingIndicatorView = new AVLoadingIndicatorView(getContext());
         loadingIndicatorView.setIndicator(new LineSpinFadeLoaderIndicator());
         int size = getResources().getDimensionPixelSize(R.dimen.icon_large_size);
@@ -71,6 +72,7 @@ public class TermTemLoading extends RelativeLayout {
     }
 
     public void show(){
+        if (this.isShown()) return;
         this.animate()
                 .alpha(1.0f)
                 .setDuration(300)
@@ -85,6 +87,7 @@ public class TermTemLoading extends RelativeLayout {
     }
 
     public void hide(){
+        if (!this.isShown()) return;
         this.animate()
                 .alpha(0.0f)
                 .setDuration(300)

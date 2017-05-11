@@ -249,7 +249,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         switch (InformationView.TYPE.getTypeAt(type)){
             case TEXT:
-                mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.VIDEO.getWidgetType());
+//                mWidgetType.setWidgetType(WidgetTypeInbox.WIDGET_TYPE.VIDEO.getWidgetType());
                 break;
 
             case IMAGE:

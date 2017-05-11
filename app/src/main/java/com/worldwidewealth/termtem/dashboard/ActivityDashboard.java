@@ -7,14 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.EncryptionData;
@@ -32,6 +35,7 @@ import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.MenuButtonView;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -163,10 +167,19 @@ public class ActivityDashboard extends MyAppcompatActivity{
     }
 
     private void initBtnMenu(){
-        String username = PhoneNumberUtils.formatNumber(
-                EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
-                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID())
-        );
+        String userDecoded = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        String username = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            username = PhoneNumberUtils.formatNumber(userDecoded, Locale.JAPAN.getCountry());
+        } else {
+            EditText editText = new EditText(this);
+            editText.setText(userDecoded);
+            PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+            username = editText.getText().toString();
+        }
+
+
         mHolder.mTextUserName.setText(username);
         if (mUserMenuList == null) return;
         for (UserMenuModel model : mUserMenuList){

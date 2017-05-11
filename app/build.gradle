@@ -19,7 +19,7 @@ android {
         config {
             keyAlias 'www'
             keyPassword 'wwwholding'
-            storeFile file('/Users/gozillatiamo/Documents/Andriod/termtemandroid/keystore/termtem.jks')
+            storeFile file('D:/Android/TermTem/keystore/termtem.jks')
             storePassword 'termtemholding'
         }
     }
@@ -50,10 +50,21 @@ android {
             minifyEnabled true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            proguardFiles.add(file('../../proguard-gvr.txt'))
+            proguardFiles.add(file('proguard-gvr.txt'))
 
             signingConfig signingConfigs.config
         }
+
+        debug {
+            shrinkResources true
+            minifyEnabled true
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles.add(file('proguard-gvr.txt'))
+
+            signingConfig signingConfigs.config
+        }
+
     }
 
 
@@ -67,6 +78,7 @@ android {
             versionCode 24
             applicationIdSuffix ".demo"
             versionNameSuffix "19-demo"
+
         }
 
         dev {
@@ -103,9 +115,9 @@ dependencies {
     compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesVersion"
     compile "com.android.support:percent:$rootProject.ext.supportLibraryVersion"
     /*
-                    compile 'com.google.vr:sdk-audio:1.10.0'
-                    compile 'com.google.vr:sdk-base:1.10.0'
-                */
+                            compile 'com.google.vr:sdk-audio:1.10.0'
+                            compile 'com.google.vr:sdk-base:1.10.0'
+                        */
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
@@ -127,6 +139,5 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     testCompile 'junit:junit:4.12'
-    compile project(':termtemar-android')
 }
 apply plugin: 'com.google.gms.google-services'

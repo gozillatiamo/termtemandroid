@@ -226,7 +226,7 @@
                                     app:mbv_icon="@drawable/mpay_icon"
                                     app:mbv_title="@string/dashboard_ar"
                                     app:mbv_type="ar"
-                                    app:mbv_visibility="show"></com.worldwidewealth.termtem.widgets.MenuButtonView>
+                                    app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
 
                             </LinearLayout>
                         </FrameLayout>

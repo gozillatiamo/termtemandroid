@@ -140,6 +140,8 @@ public class ActivityReport extends MyAppcompatActivity {
                 @Override
                 public void onResult(String typeReport) {
                     mCurrentType = typeReport;
+                    mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
+                    mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
                 }
             });
 
