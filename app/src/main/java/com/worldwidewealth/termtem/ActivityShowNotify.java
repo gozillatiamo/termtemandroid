@@ -9,9 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.worldwidewealth.termtem.model.AttachResponseModel;
+import com.worldwidewealth.termtem.model.FileListNotifyResponseModel;
 import com.worldwidewealth.termtem.model.ReadMsgRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.widgets.InformationView;
+import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -25,6 +32,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityShowNotify extends MyAppcompatActivity {
     private String mStrTitle, mStrBox, mMsgid;
+    private int mType;
+    private ArrayList<FileListNotifyResponseModel> mFileList;
+
     private ViewHolder mHolder;
     private APIServices services;
     public static final String TAG = ActivityShowNotify.class.getSimpleName();
@@ -57,6 +67,22 @@ public class ActivityShowNotify extends MyAppcompatActivity {
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
             mStrBox = bundle.getString(MyFirebaseMessagingService.BOX);
             mMsgid = bundle.getString(MyFirebaseMessagingService.MSGID);
+            if (bundle.containsKey(MyFirebaseMessagingService.FILELIST)){
+                mFileList = bundle.getParcelableArrayList(MyFirebaseMessagingService.FILELIST);
+            }
+
+            if (bundle.containsKey(MyFirebaseMessagingService.TYPE)){
+                mType = bundle.getInt(MyFirebaseMessagingService.TYPE);
+                mHolder.mTypeInbox.setWidgetType(mType);
+                switch (InformationView.TYPE.getTypeAt(mType)){
+                    case IMAGE:
+                        setImage();
+                        break;
+                }
+
+
+            }
+
             if (mMsgid != null && !mMsgid.equals("")) {
                 Call<ResponseBody> call = services.service(
                         new RequestModel(APIServices.ACTIONREADMSG,
@@ -80,13 +106,30 @@ public class ActivityShowNotify extends MyAppcompatActivity {
 
     }
 
+    private void setImage(){
+        List<AttachResponseModel> listImage = new ArrayList<>();
+        for (FileListNotifyResponseModel model : mFileList){
+            AttachResponseModel attach = new AttachResponseModel();
+            attach.setCONTENTTYPE(model.getContentype());
+            attach.setFILETYPE(model.getFiletype());
+            attach.setFILESIZE(model.getSize());
+            attach.setURLFILE(model.getUrl());
+
+            listImage.add(attach);
+        }
+
+        mHolder.mTypeInbox.setImage(listImage);
+    }
+
     private class ViewHolder{
 
         private TextView mTextTitle, mTextBox;
+        private WidgetTypeInbox mTypeInbox;
 
         public ViewHolder(Activity itemView){
             mTextTitle = (TextView) itemView.findViewById(R.id.txt_title);
             mTextBox = (TextView) itemView.findViewById(R.id.txt_box);
+            mTypeInbox = (WidgetTypeInbox) itemView.findViewById(R.id.widget_type);
         }
     }
 }

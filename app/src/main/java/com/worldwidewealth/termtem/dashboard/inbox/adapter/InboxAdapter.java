@@ -24,7 +24,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.squareup.otto.Subscribe;
 import com.worldwidewealth.termtem.ActivityShowNotify;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxBottomSheetDialogFragment;
@@ -85,6 +87,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mListInbox = listdata;
         this.mFragment = fragment;
         this.mPage = page;
+
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -148,53 +151,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     inboxViewHolder.mItemInbox.setImageThumbnail(getItem(position).getAttachlist());
                     break;
 
-/*
-                case InboxRequest.TYPE_ALL:
-                    int countImage = position % 5;
-                    if (countImage == 0){
-                        List<String> mListImage = new ArrayList<>();
-                        mListImage.add("http://placehold.it/120x120&text=image1");
-                        mListImage.add("http://placehold.it/120x120&text=image2");
-                        mListImage.add("http://placehold.it/120x120&text=image3");
-                        mListImage.add("http://placehold.it/120x120&text=image4");
-                        mListImage.add("http://placehold.it/120x120&text=image4");
-                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
-
-                    } else if (countImage == 1){
-                        List<String> mListImage = new ArrayList<>();
-                        mListImage.add("http://placehold.it/120x120&text=image1");
-                        mListImage.add("http://placehold.it/120x120&text=image2");
-                        mListImage.add("http://placehold.it/120x120&text=image3");
-                        mListImage.add("http://placehold.it/120x120&text=image4");
-                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
-
-                    } else if (countImage == 2){
-                        List<String> mListImage = new ArrayList<>();
-                        mListImage.add("http://placehold.it/120x120&text=image1");
-                        mListImage.add("http://placehold.it/120x120&text=image2");
-                        mListImage.add("http://placehold.it/120x120&text=image3");
-                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
-
-                    } else if (countImage == 3){
-                        List<String> mListImage = new ArrayList<>();
-                        mListImage.add("http://placehold.it/120x120&text=image1");
-                        mListImage.add("http://placehold.it/120x120&text=image2");
-                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
-
-                    } else if (countImage == 4){
-                        List<String> mListImage = new ArrayList<>();
-                        mListImage.add("http://placehold.it/120x120&text=image1");
-                        inboxViewHolder.mItemInbox.setType(InformationView.TYPE.IMAGE.getType());
-                        inboxViewHolder.mItemInbox.setImageThumbnail(mListImage);
-
-                    }
-
-                    break;
-*/
             }
             inboxViewHolder.mItemInbox.setInformationClickListener(this, (InboxViewHolder) holder, position);
             inboxViewHolder.mItemInbox.setInformationLongClickListener(this, (InboxViewHolder) holder);
@@ -261,6 +217,31 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return maxInbox;
     }
 
+    public void readById(String id){
+        if (mListInbox == null) return;
+        for(InboxResponse inbox : mListInbox){
+            if (inbox.getMsgid().equals(id) && !inbox.isReaded()){
+                inbox.setReaded(true);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+    public void removeByObject(InboxResponse object){
+        if (mListInbox == null) return;
+        for (int i = 0; i < mListInbox.size(); i++){
+            if (mListInbox.get(i).getMsgid().equals(object.getMsgid())){
+                mListInbox.remove(mListInbox.get(i));
+                this.notifyItemRemoved(i);
+                this.notifyItemRangeChanged(i, getItemCount());
+
+                break;
+            }
+        }
+    }
+
+
     public void clearAll(){
         mListInbox = null;
         notifyDataSetChanged();
@@ -275,9 +256,11 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         for (int i = 0; i < items.size(); i++) {
             serviceRemove(items.get(i)-i);
+/*
             mListInbox.remove(items.get(i)-i);
             this.notifyItemRemoved(items.get(i)-i);
             this.notifyItemRangeChanged(items.get(i)-i, getItemCount());
+*/
 
         }
 //            mListInbox.remove(item);
@@ -286,12 +269,15 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void removeItem(int position){
         serviceRemove(position);
+/*
         mListInbox.remove(position);
         this.notifyItemRemoved(position);
         this.notifyItemRangeChanged(position, getItemCount());
+*/
     }
 
     private void serviceRemove(int position){
+
             Call<ResponseBody> call = services.service(
                     new RequestModel(APIServices.ACTIONREMOVEMSG,
                             new ReadMsgRequest(getItem(position).getMsgid())));
@@ -306,6 +292,9 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 }
             });
+
+        MyApplication.getBus().post(getItem(position));
+
     }
 
 

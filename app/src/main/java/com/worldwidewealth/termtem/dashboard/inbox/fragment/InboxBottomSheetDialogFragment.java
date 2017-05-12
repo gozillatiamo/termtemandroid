@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.model.InboxResponse;
@@ -223,6 +224,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private void callRead(){
         if (!mDataInbox.isReaded()) {
+            MyApplication.getBus().post(mDataInbox.getMsgid());
             Call<ResponseBody> call = services.service(
                     new RequestModel(APIServices.ACTIONREADMSG,
                             new ReadMsgRequest(mDataInbox.getMsgid())));

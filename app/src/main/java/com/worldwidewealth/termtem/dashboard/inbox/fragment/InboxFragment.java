@@ -23,7 +23,9 @@ import android.view.animation.OvershootInterpolator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.otto.Subscribe;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxAdapter;
 import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
@@ -100,6 +102,22 @@ public class InboxFragment extends Fragment {
     }
 */
 
+    @Subscribe
+    public void readMessage(String id){
+        if (mInboxAdapter == null) return;
+
+        mInboxAdapter.readById(id);
+    }
+
+    @Subscribe
+    public void removeMessage(InboxResponse object){
+        if (mInboxAdapter == null) return;
+
+        mInboxAdapter.removeByObject(object);
+    }
+
+
+
     public interface OnActiveFragment{
         void onUpdateDataSearch(String text, long datefrom, long dateto);
         void onCallSelectMode(int count);
@@ -143,25 +161,6 @@ public class InboxFragment extends Fragment {
         if (getArguments() != null) {
             mPageType = getArguments().getInt(PAGE_TYPE);
         }
-
-/*
-        mListMockUp = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++){
-            InboxResponse response = new InboxResponse();
-            response.setTitle("Title "+(i+1));
-            response.setCreate_Date(new Date());
-            response.setMsg("Description "+(i+1));
-            response.setReaded(true);
-            response.setThumbnail(R.drawable.thumbnail_video);
-            if (mPageType == VIDEO){
-                response.setTimeLength(i+":00");
-                response.setUrl("https://video"+i+".co.th");
-            }
-            mListMockUp.add(response);
-        }
-*/
-
 
     }
 
@@ -223,9 +222,17 @@ public class InboxFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        MyApplication.getBus().register(this);
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         Log.e(TAG, "DestroyView");
+        MyApplication.getBus().unregister(this);
     }
 
     @Override

@@ -25,6 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Title"
+            android:autoLink="all"
+            android:linksClickable="true"
             style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"/>
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/btn_del"

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "226969355297-s8d2evbecp8ac8137v7con0p3d91cdji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.worldwidewealth.termtem",
+            "certificate_hash": "4c518a434ad3fccf9e7122c28c2435180e618c42"
+          }
+        },
+        {
           "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,21 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226969355297-4rnknpnmsepilfsu9gg2oubcc33lv1kt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.wwwholding.termtem",
+                "app_store_id": "1217802662"
+              }
+            },
+            {
+              "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -46,6 +67,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "226969355297-t9n4nnlfbvr9qaj73j4he8god1lfhhe4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.worldwidewealth.termtem.demo",
+            "certificate_hash": "4c518a434ad3fccf9e7122c28c2435180e618c42"
+          }
+        },
+        {
           "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -60,8 +89,21 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226969355297-4rnknpnmsepilfsu9gg2oubcc33lv1kt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.wwwholding.termtem",
+                "app_store_id": "1217802662"
+              }
+            },
+            {
+              "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -77,6 +119,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "226969355297-f8n9ishtvbnmapf6igjmv2gffa6u0ttv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.worldwidewealth.termtem.dev",
+            "certificate_hash": "4c518a434ad3fccf9e7122c28c2435180e618c42"
+          }
+        },
+        {
           "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -91,8 +141,21 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226969355297-4rnknpnmsepilfsu9gg2oubcc33lv1kt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.wwwholding.termtem",
+                "app_store_id": "1217802662"
+              }
+            },
+            {
+              "client_id": "226969355297-udiho7u5bi0geifrq4ibmhno91e88vsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

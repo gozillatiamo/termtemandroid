@@ -108,8 +108,9 @@ public class ImageThumbnailView extends FrameLayout{
         }
 
         if (listImage.size() > 2){
-            findViewById(R.id.layout_image_row2).setVisibility(GONE);
+            findViewById(R.id.layout_image_row2).setVisibility(VISIBLE);
             setImage(mThumb3, listImage.get(2).getURLFILE());
+
 
         }
 

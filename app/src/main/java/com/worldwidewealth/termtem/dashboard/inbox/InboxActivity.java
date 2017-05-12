@@ -32,6 +32,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class InboxActivity extends MyAppcompatActivity implements InboxFragment.OnActiveFragment{
@@ -51,6 +52,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private int statusBarColor;
     private static InboxFragment mCurrentInbox;
     private ActionMode mActionMode;
+    private Calendar defaultCalendar;
     public static final String TAG = InboxActivity.class.getSimpleName();
 
     private ActionMode.Callback mDeleteMode = new ActionMode.Callback() {
@@ -107,6 +109,9 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     public void onUpdateDataSearch(String text, long datefrom, long dateto) {
         //searchView.setQuery(text, false);
         mText = text;
+        if (datefrom == Util.getTimestamp(defaultCalendar.getTimeInMillis(), 0, 0, 0)){
+            datefrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
+        }
         mSearchDateRange.setDateFrom(datefrom);
         mSearchDateRange.setDateTo(dateto);
     }
@@ -132,9 +137,9 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         setContentView(R.layout.activity_inbox);
         services = APIServices.retrofit.create(APIServices.class);
         Util.setupUI(findViewById(R.id.layout_parent));
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, 1, 1);
-        mDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
+        defaultCalendar = Calendar.getInstance();
+        defaultCalendar.set(2016, 0, 1);
+        mDateFrom = Util.getTimestamp(defaultCalendar.getTimeInMillis(), 0, 0, 0);
         mDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
         bindView();
         initToolbar();
@@ -181,7 +186,14 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
             txt.setTextColor(getResources().getColor(android.R.color.black));
             ImageView close = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
             close.setColorFilter(getResources().getColor(android.R.color.holo_red_dark));
-
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    mInboxViewPager.setPagingEnabled(true);
+                    mInboxTabLayout.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            });
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -200,6 +212,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
                     mText = newText;
                     if (newText.equals("")){
                         mPage = 1;
+                        mDateFrom = Util.getTimestamp(defaultCalendar.getTimeInMillis(), 0, 0, 0);
                         searchInbox(mText, mDateFrom, mDateTo);
 
 //                        loadDataInbox();
@@ -227,6 +240,10 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
             case R.id.action_date_range:
                 mSearchDateRange.show();
                 break;
+            case R.id.action_search:
+                mInboxViewPager.setPagingEnabled(false);
+                mInboxTabLayout.setVisibility(View.GONE);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -234,6 +251,7 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
     private void initViewPager(){
         mInboxViewPager.setAdapter(new InboxPagerAdapter(getSupportFragmentManager(), this));
         mInboxTabLayout.setupWithViewPager(mInboxViewPager);
+        mInboxViewPager.setOffscreenPageLimit(0);
 
         mInboxViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -260,7 +278,9 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
         mCurrentInbox = (InboxFragment) getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.pager_inbox + ":"
                         + mInboxViewPager.getCurrentItem());
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(datefrom);
+        Log.e(TAG, calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
         if (mCurrentInbox != null){
             mCurrentInbox.search(text, datefrom, dateto);
         }

@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -49,6 +50,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context mContext;
+    private static Bus mBus;
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
     public static boolean clickable = true;
@@ -56,6 +58,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static boolean isUpload = false;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
+
 
     protected String userAgent;
 
@@ -79,7 +82,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
         userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
-
+        mBus = new Bus();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Mitr-Regular.ttf")
@@ -111,6 +114,9 @@ public class MyApplication extends Application implements Application.ActivityLi
         return mContext;
     }
 
+    public static Bus getBus() {
+        return mBus;
+    }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

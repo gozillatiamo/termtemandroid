@@ -23,6 +23,9 @@ public class AttachResponseModel implements Parcelable {
     private int ACTIVE;
     private int SORTNO;
 
+    public AttachResponseModel() {
+    }
+
     protected AttachResponseModel(Parcel in) {
         TXID = in.readString();
         MSGID = in.readString();
@@ -98,6 +101,53 @@ public class AttachResponseModel implements Parcelable {
         return SORTNO;
     }
 
+    public void setTXID(String TXID) {
+        this.TXID = TXID;
+    }
+
+    public void setMSGID(String MSGID) {
+        this.MSGID = MSGID;
+    }
+
+    public void setURLFILE(String URLFILE) {
+        this.URLFILE = URLFILE;
+    }
+
+    public void setFILETYPE(String FILETYPE) {
+        this.FILETYPE = FILETYPE;
+    }
+
+    public void setCONTENTTYPE(String CONTENTTYPE) {
+        this.CONTENTTYPE = CONTENTTYPE;
+    }
+
+    public void setFILESIZE(Double FILESIZE) {
+        this.FILESIZE = FILESIZE;
+    }
+
+    public void setCREATED_DATE(Date CREATED_DATE) {
+        this.CREATED_DATE = CREATED_DATE;
+    }
+
+    public void setCREATED_BY(String CREATED_BY) {
+        this.CREATED_BY = CREATED_BY;
+    }
+
+    public void setUPDATR_DATE(Date UPDATR_DATE) {
+        this.UPDATR_DATE = UPDATR_DATE;
+    }
+
+    public void setUPDATE_BY(String UPDATE_BY) {
+        this.UPDATE_BY = UPDATE_BY;
+    }
+
+    public void setACTIVE(int ACTIVE) {
+        this.ACTIVE = ACTIVE;
+    }
+
+    public void setSORTNO(int SORTNO) {
+        this.SORTNO = SORTNO;
+    }
 
     @Override
     public int describeContents() {
