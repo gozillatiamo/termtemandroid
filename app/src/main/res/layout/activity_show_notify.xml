@@ -38,10 +38,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="Get luck from Laos telecom\nplease visit today click\nhttp://180.128.21.31/game.html"
-                    android:autoLink="all"
-                    android:linksClickable="true"
-                    android:autoText="true" />
+                    android:text=" Get luck from Laos telecom\nplease visit today click\nhttp://180.128.21.31/game.html\nTel:0860254055"
+                    />
 
             </LinearLayout>
 

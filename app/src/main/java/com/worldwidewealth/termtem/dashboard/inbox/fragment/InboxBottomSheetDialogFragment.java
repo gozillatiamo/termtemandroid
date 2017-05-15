@@ -15,9 +15,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -67,6 +69,8 @@ import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -179,6 +183,19 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private void setupView(){
         mTitle.setText(mDataInbox.getTitle());
         mDes.setText(mDataInbox.getMsg());
+
+        Linkify.TransformFilter filter = new Linkify.TransformFilter() {
+            public final String transformUrl(final Matcher match, String url) {
+                return match.group();
+            }
+        };
+
+        Pattern pattern = Pattern.compile("(\\d{4,})");
+        Linkify.addLinks(mDes, pattern, "tel:", null, filter);
+
+        Pattern urlPattern = Patterns.WEB_URL;
+        Linkify.addLinks(mDes, urlPattern, null, null, filter);
+
 
         mBtnDel.setOnClickListener(new View.OnClickListener() {
             @Override

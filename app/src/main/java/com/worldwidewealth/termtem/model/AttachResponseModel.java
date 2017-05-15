@@ -166,8 +166,10 @@ public class AttachResponseModel implements Parcelable {
         parcel.writeInt(ACTIVE);
         parcel.writeInt(SORTNO);
         parcel.writeDouble(FILESIZE);
-        parcel.writeLong(CREATED_DATE.getTime());
-        parcel.writeLong(UPDATR_DATE.getTime());
+        if(CREATED_DATE != null && UPDATR_DATE != null) {
+            parcel.writeLong(CREATED_DATE.getTime());
+            parcel.writeLong(UPDATR_DATE.getTime());
+        }
     }
 
 

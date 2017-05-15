@@ -229,10 +229,15 @@ public class InboxFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getBus().unregister(this);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         Log.e(TAG, "DestroyView");
-        MyApplication.getBus().unregister(this);
     }
 
     @Override

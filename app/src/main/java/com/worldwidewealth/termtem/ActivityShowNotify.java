@@ -6,7 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.model.AttachResponseModel;
@@ -19,6 +25,9 @@ import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -102,6 +111,22 @@ public class ActivityShowNotify extends MyAppcompatActivity {
             Log.e(TAG, "txt: " + mStrTitle + "\nbox: " + mStrBox + "\nmsgid: " + mMsgid);
             mHolder.mTextTitle.setText(mStrTitle);
             mHolder.mTextBox.setText(mStrBox);
+
+            Linkify.TransformFilter filter = new Linkify.TransformFilter() {
+                public final String transformUrl(final Matcher match, String url) {
+                    return match.group();
+                }
+            };
+
+            Pattern pattern = Pattern.compile("(\\d{4,})");
+            Linkify.addLinks(mHolder.mTextBox, pattern, "tel:", null, filter);
+
+            Pattern urlPattern = Patterns.WEB_URL;
+            Linkify.addLinks(mHolder.mTextBox, urlPattern, "http://", null, filter);
+
+            Pattern urlsPattern = Patterns.WEB_URL;
+            Linkify.addLinks(mHolder.mTextBox, urlsPattern, "https://", null, filter);
+
         }
 
     }

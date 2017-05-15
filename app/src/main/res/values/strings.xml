@@ -214,8 +214,8 @@
     <string name="msg_leave_app">หากคุณออกจากแอพพลิเคชั่น\nระบบจะทำการ "ออกจากระบบ" ให้คุณโดยอัตโนมัติ\nคุณต้องการออกจากแอพพลิเคชั่นหรือไม่?</string>
     <string name="save_eslip_success">บันทึก E-Slip ลงใน "อัลบั้มรูปภาพ" ของคุณเรียบร้อยแล้ว</string>
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
-    <string name="menu_contact">สอบถามข้อมูล/ลืมรหัสผ่าน</string>
-    <string name="menu_bank_detail">ข้อมูลธนาคาร</string>
+    <string name="menu_contact">&#9679;\tติดต่อเรา</string>
+    <string name="menu_bank_detail">&#9679;\tเลขที่บัญชีสำหรับฝากเงินเข้าบัญชีเติมเต็ม</string>
     <string name="bank">ธนาคาร :</string>
     <string name="bank_account_number">เลขที่บัญชี :</string>
     <string name="title_bank_account_name">ชื่อบัญชี :</string>
@@ -412,6 +412,12 @@
         <item>BBL</item>
     </string-array>
 
+
+    •
+    ‘รูปโทรศัพท์’             เวลาทำการ จ.-ศ. 08:30-17:00 น.  โทร 02-331-4788
+    นอกเวลาทำการ โทร 095-162-8477 และ 095-162-0577
+    ‘รูป logo FB’            termtemapplication
+    ‘รูป logo website’  http://www.termtemapp.com
 
     <string-array name="menu_help">
         <item>@string/menu_bank_detail</item>
