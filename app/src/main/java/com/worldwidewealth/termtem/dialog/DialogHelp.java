@@ -3,14 +3,21 @@ package com.worldwidewealth.termtem.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +25,7 @@ import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
@@ -64,14 +72,14 @@ public class DialogHelp extends Dialog {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            switch (groupPosition){
+            /*switch (groupPosition){
                 case 0:
                     return bankInformationModel.getmListBank().size();
                 case 1:
                     return 1;
             }
-
-            return -1;
+*/
+            return 1;
         }
 
         @Override
@@ -111,14 +119,18 @@ public class DialogHelp extends Dialog {
             if (convertView == null){
                 infalInflater = (LayoutInflater) getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
+                convertView = infalInflater.inflate(android.R.layout.simple_expandable_list_item_2, parent, false);
 
             }
+
             TextView title = (TextView) convertView.findViewById(android.R.id.text1);
             title.setText((String)getGroup(groupPosition));
-            title.setTypeface(Typeface.DEFAULT_BOLD);
-            title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.my_text_size));
-
+            RelativeLayout.LayoutParams layoutParams =
+                    (RelativeLayout.LayoutParams)title.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+            title.setGravity(Gravity.CENTER_VERTICAL);
+            title.setTextSize(14);
+            title.setLayoutParams(layoutParams);
 
             return convertView;
         }
@@ -129,7 +141,20 @@ public class DialogHelp extends Dialog {
             switch (groupPosition) {
                 case 0:
                     final BankInformationModel.Bank bank = bankInformationModel.getmListBank().get(childPosition);
-                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_bank_detail, null);
+
+                    TextView kbank = (TextView) convertView.findViewById(R.id.bank_account_kbank);
+                    Pattern kbankPattern = Pattern.compile(kbank.getText().toString());
+                    Linkify.addLinks(kbank, kbankPattern, "tel:");
+
+                    TextView bbl = (TextView) convertView.findViewById(R.id.bank_account_bbl);
+                    Pattern bblPattern = Pattern.compile(bbl.getText().toString());
+                    Linkify.addLinks(bbl, bblPattern, "tel:");
+
+                    TextView promptpay = (TextView) convertView.findViewById(R.id.bank_account_promptpay);
+                    Pattern promptpayPattern = Pattern.compile(promptpay.getText().toString());
+                    Linkify.addLinks(promptpay, promptpayPattern, "tel:");
+/*
                     TypedValue typedValue = new TypedValue();
 
                     getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
@@ -160,22 +185,54 @@ public class DialogHelp extends Dialog {
                             showBankInformation(bank);
                         }
                     });
+*/
                     break;
                 case 1:
-                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_contact, null);
+/*
                     title = (TextView) convertView.findViewById(android.R.id.text1);
                     title.setText(getContext().getString(R.string.contact_phone_no));
                     title.setTypeface(Typeface.DEFAULT_BOLD);
                     title.setTextColor(getContext().getResources().getColor(android.R.color.secondary_text_dark));
                     title.setLinkTextColor(getContext().getResources().getColor(R.color.colorPrimary));
                     title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.small_text_size));
+*/
+                    TextView textPhone = (TextView) convertView.findViewById(R.id.text_phone_contact);
                     Pattern pattern = Pattern.compile("(0\\d+)-\\d{3}-\\d{4}");
+                    Linkify.addLinks(textPhone, pattern, "tel:");
 
-                    Linkify.addLinks(title, pattern, "tel:");
+                    TextView textFB = (TextView) convertView.findViewById(R.id.text_termtem_fb);
+/*
+                    Pattern patternFB = Pattern.compile(textFB.getText().toString());
+                    Linkify.addLinks(textFB, patternFB, null);
+                    textFB.setLinksClickable(true);
+*/
+                    textFB.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                            String facebookUrl = getFacebookPageURL(getContext());
+                            facebookIntent.setData(Uri.parse(facebookUrl));
+                            getContext().startActivity(facebookIntent);
+                        }
+                    });
 
                     break;
             }
             return convertView;
+        }
+
+
+        //method to get the right URL to use in the intent
+        public String getFacebookPageURL(Context context) {
+            PackageManager packageManager = context.getPackageManager();
+            try {
+                packageManager.getPackageInfo("com.facebook.katana", 0);
+                return "fb://page/" + getContext().getString(R.string.facebook_page_id);
+
+            } catch (PackageManager.NameNotFoundException e) {
+                return getContext().getString(R.string.facebook_url); //normal web url
+            }
         }
 
         @Override
@@ -183,6 +240,7 @@ public class DialogHelp extends Dialog {
             return false;
         }
 
+/*
         private void showBankInformation(BankInformationModel.Bank bank){
             AlertDialog alertDialog;
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -230,6 +288,7 @@ public class DialogHelp extends Dialog {
             alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             alertDialog.show();
         }
+*/
 
     }
 }

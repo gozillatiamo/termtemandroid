@@ -198,6 +198,12 @@ public class Global {
         mEditor.commit();
     }
 
+    public void clearUserName(){
+        mEditor.putString(USERNAME, null);
+        mEditor.putString(PASSWORD, null);
+        mEditor.commit();
+    }
+
     public void clearUserData(boolean clearall){
 
         if (clearall) {

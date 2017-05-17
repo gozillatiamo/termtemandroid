@@ -207,7 +207,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                     T = null;
                 }
 
-                if (Global.getInstance().getTXID() == null) {
+                if (Global.getInstance().getUSERNAME() == null) {
                     Util.backToSignIn(activity);
                     return;
                 }
@@ -262,34 +262,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                 if (values instanceof ResponseModel){
                                     ResponseModel model = (ResponseModel) values;
                                     count = model.getIdlelimit();
-                                    T = new Timer();
-                                    T.scheduleAtFixedRate(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            activity.runOnUiThread(new Runnable()
-                                            {
-                                                @Override
-                                                public void run()
-                                                {
-                                                    Log.e(TAG, ""+count);
-                                                    count--;
-                                                    if (count == 0){
-                                                        Util.logoutAPI(null, true);
-                                                        T.cancel();
-                                                        T = null;
-                                                    }
-
-                                                    if (count < 0){
-                                                        T.cancel();
-                                                        T = null;
-                                                        mThread.interrupt();
-                                                        mThread = null;
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }, 1000, 1000);
-
+                                    countDownLogout(activity);
 //                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                                 }
                             }
@@ -297,6 +270,9 @@ public class MyApplication extends Application implements Application.ActivityLi
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                                mHandler.postDelayed(mRunable, 60000);
+                                count = 60;
+                                countDownLogout(activity);
+
                             }
                         });
                     }
@@ -306,6 +282,39 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             }
         }
+
+        private static void countDownLogout(final Activity activity){
+            T = new Timer();
+            T.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Log.e(TAG, ""+count);
+                            count--;
+                            if (count == 0){
+                                Global.getInstance().clearUserName();
+                                Util.logoutAPI(null, true);
+                                T.cancel();
+                                T = null;
+                            }
+
+                            if (count < 0){
+                                T.cancel();
+                                T = null;
+                                mThread.interrupt();
+                                mThread = null;
+                            }
+                        }
+                    });
+                }
+            }, 1000, 1000);
+
+        }
+
     }
 
     private boolean canUseLeaving(Activity activity){

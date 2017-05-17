@@ -190,11 +190,14 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
         };
 
-        Pattern pattern = Pattern.compile("(\\d{4,})");
+        Pattern pattern = Pattern.compile("(\\d{9,13})");
         Linkify.addLinks(mDes, pattern, "tel:", null, filter);
 
         Pattern urlPattern = Patterns.WEB_URL;
-        Linkify.addLinks(mDes, urlPattern, null, null, filter);
+        Linkify.addLinks(mDes, urlPattern, "http://", null, filter);
+
+        Pattern urlsPattern = Patterns.WEB_URL;
+        Linkify.addLinks(mDes, urlsPattern, "https://", null, filter);
 
 
         mBtnDel.setOnClickListener(new View.OnClickListener() {

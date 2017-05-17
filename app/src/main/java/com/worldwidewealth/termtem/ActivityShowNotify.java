@@ -118,7 +118,7 @@ public class ActivityShowNotify extends MyAppcompatActivity {
                 }
             };
 
-            Pattern pattern = Pattern.compile("(\\d{4,})");
+            Pattern pattern = Pattern.compile("(\\d{9,13})");
             Linkify.addLinks(mHolder.mTextBox, pattern, "tel:", null, filter);
 
             Pattern urlPattern = Patterns.WEB_URL;
@@ -132,6 +132,7 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     }
 
     private void setImage(){
+        if (mFileList == null) return;
         List<AttachResponseModel> listImage = new ArrayList<>();
         for (FileListNotifyResponseModel model : mFileList){
             AttachResponseModel attach = new AttachResponseModel();

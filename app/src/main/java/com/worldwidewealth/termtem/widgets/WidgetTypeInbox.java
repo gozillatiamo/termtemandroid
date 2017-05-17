@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -155,7 +156,7 @@ public class WidgetTypeInbox extends FrameLayout{
         mLayoutVrView.setVisibility(GONE);
         mRecyclerImage.setVisibility(GONE);
         if (type == -1) return;
-        switch (WIDGET_TYPE.values()[type]){
+        switch (InformationView.TYPE.getTypeAt(type)){
             case VIDEO:
                 mVideoView.setVisibility(VISIBLE);
                 mVideoView.play();
@@ -163,9 +164,11 @@ public class WidgetTypeInbox extends FrameLayout{
                 if (isInEditMode()) return;
 //                setVideo(Uri.parse("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"));
                 break;
+/*
             case VIDEO_VR:
                 mLayoutVrView.setVisibility(VISIBLE);
                 break;
+*/
             case IMAGE:
                 mRecyclerImage.setVisibility(VISIBLE);
                 break;
@@ -239,6 +242,8 @@ public class WidgetTypeInbox extends FrameLayout{
     private class ImageInboxAdapter extends RecyclerView.Adapter<ImageInboxAdapter.ViewHolder>
         implements OnClickListener{
 
+        boolean canClick = true;
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(new MyImageView(getContext()));
@@ -265,6 +270,8 @@ public class WidgetTypeInbox extends FrameLayout{
                 Glide.with(getContext())
                         .load(mListImage.get(position).getURLFILE())
                         .override(300, 300)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .thumbnail(0.5f)
                         .crossFade()
                         .centerCrop()
                         .placeholder(R.drawable.ic_picture)
@@ -273,6 +280,8 @@ public class WidgetTypeInbox extends FrameLayout{
                 Glide.with(getContext())
                         .load(mListImage.get(position).getURLFILE())
                         .override(300, 300)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .thumbnail(0.5f)
                         .crossFade()
                         .placeholder(R.drawable.ic_picture)
                         .into(image);
@@ -289,10 +298,15 @@ public class WidgetTypeInbox extends FrameLayout{
 
         @Override
         public void onClick(View view) {
-            ZoomView.zoomImageFromThumb(getContext(),
-                    WidgetTypeInbox.this.getRootView(),
-                    view,
-                    mListImage.get((Integer) view.getTag()).getURLFILE());
+
+            if (canClick) {
+                canClick = false;
+                ZoomView.zoomImageFromThumb(getContext(),
+                        WidgetTypeInbox.this.getRootView(),
+                        view,
+                        mListImage.get((Integer) view.getTag()).getURLFILE());
+                canClick = true;
+            }
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{

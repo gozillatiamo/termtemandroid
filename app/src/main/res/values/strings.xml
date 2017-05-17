@@ -11,6 +11,8 @@
     <string name="kbank_saving_account_number">019-8-36814-8</string>
     <string name="bbl_saving_account_number">902-7-11486-8</string>
     <string name="bbl_promptpay_account_number">0-1055-59135-27-4</string>
+    <string name="facebook_url">https://www.facebook.com/367718776940311</string>
+    <string name="facebook_page_id">367718776940311</string>
 
 
     <string name="content_version">เวอร์ชั่น :</string>
@@ -67,7 +69,7 @@
     <string name="tmb">ธนาคารทหารไทย</string>
     <string name="gsb">ธนาคารออมสิน</string>
     <string name="kbank">กสิกรไทย</string>
-    <string name="bbl">ธนาคารกรุงเทพ</string>
+    <string name="bbl">กรุงเทพ</string>
     <string name="ppay">พร้อมเพย์</string>
     <string name="ktb">ธนาคารกรุงไทย</string>
     <string name="tnch">ธนาคารธนชาต</string>
@@ -214,8 +216,8 @@
     <string name="msg_leave_app">หากคุณออกจากแอพพลิเคชั่น\nระบบจะทำการ "ออกจากระบบ" ให้คุณโดยอัตโนมัติ\nคุณต้องการออกจากแอพพลิเคชั่นหรือไม่?</string>
     <string name="save_eslip_success">บันทึก E-Slip ลงใน "อัลบั้มรูปภาพ" ของคุณเรียบร้อยแล้ว</string>
     <string name="save_eslip_fail">พื้นที่ในโทรศัพท์ของคุณอาจไม่เพียงพอต่อการบันทึก E-Slip คุณสามารถกลับมาบันทึกใหม่ได้อีกครั้งในเมนู "ประวัติรายการ"</string>
-    <string name="menu_contact">&#9679;\tติดต่อเรา</string>
-    <string name="menu_bank_detail">&#9679;\tเลขที่บัญชีสำหรับฝากเงินเข้าบัญชีเติมเต็ม</string>
+    <string name="menu_contact">สอบถามข้อมูล/ลืมรหัสผ่าน</string>
+    <string name="menu_bank_detail">เลขที่บัญชีสำหรับฝากเงินเข้าบัญชีเติมเต็ม</string>
     <string name="bank">ธนาคาร :</string>
     <string name="bank_account_number">เลขที่บัญชี :</string>
     <string name="title_bank_account_name">ชื่อบัญชี :</string>
@@ -267,6 +269,9 @@
     <string name="epin_title_amount">จำนวนเงิน (บาท)</string>
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
+    <string name="note">หมายเหตุ :</string>
+    <string name="note_detail">กรุณาเก็บหลักฐานการฝากหรือโอนเงินไว้แจ้งผ่านเมนู ‘แจ้งโอนผ่านธนาคาร’ ในแอพฯเติมเต็ม</string>
+    <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
@@ -411,13 +416,6 @@
         <item>KBANK</item>
         <item>BBL</item>
     </string-array>
-
-
-    •
-    ‘รูปโทรศัพท์’             เวลาทำการ จ.-ศ. 08:30-17:00 น.  โทร 02-331-4788
-    นอกเวลาทำการ โทร 095-162-8477 และ 095-162-0577
-    ‘รูป logo FB’            termtemapplication
-    ‘รูป logo website’  http://www.termtemapp.com
 
     <string-array name="menu_help">
         <item>@string/menu_bank_detail</item>

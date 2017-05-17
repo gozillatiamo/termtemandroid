@@ -29,8 +29,8 @@ android {
         applicationId "com.worldwidewealth.termtem"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.2."
+        versionCode 10
+        versionName "1.3."
 //        vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
@@ -71,7 +71,7 @@ android {
     productFlavors {
 
         production {
-            versionNameSuffix "1"
+            versionNameSuffix "0"
         }
 
         demo {

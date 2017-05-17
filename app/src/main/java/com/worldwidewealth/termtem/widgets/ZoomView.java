@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -40,7 +41,8 @@ public class ZoomView {
         Glide.with(context).load(urlImage)
                 .placeholder(R.drawable.ic_picture)
                 .crossFade()
-                .thumbnail(0.3f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.5f)
                 .into(expandedImageView);
 
         // Calculate the starting and ending bounds for the zoomed-in image.

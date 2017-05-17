@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.model.AttachResponseModel;
 
@@ -128,7 +129,8 @@ public class ImageThumbnailView extends FrameLayout{
 
     private void setImage(ImageView imageView, String urlImage){
         Glide.with(getContext()).load(urlImage)
-                .thumbnail(0.3f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.5f)
                 .override(100, 100)
                 .crossFade()
                 .placeholder(R.drawable.ic_picture)

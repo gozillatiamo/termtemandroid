@@ -101,10 +101,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), iUniqueId, intent, 0);
 
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_2);
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher_2)
                 .setContentTitle(bundle.getString(TEXT))
+                .setSmallIcon(R.drawable.ic_launcher_2)
                 .setContentText(bundle.getString(BOX))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
@@ -114,11 +116,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             switch (InformationView.TYPE.getTypeAt(mType)){
                 case TEXT:
+                    notificationBuilder.setLargeIcon(largeIcon);
+
                     break;
                 case IMAGE:
                     Bitmap bitmapPreview = getBitmapfromUrl(urlImagePreview);
                     notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle()
                             .bigPicture(bitmapPreview)
+                            .bigLargeIcon(largeIcon)
                             .setSummaryText(bundle.getString(BOX)));
                     notificationBuilder.setLargeIcon(bitmapPreview);
                     break;
