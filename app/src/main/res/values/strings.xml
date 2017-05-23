@@ -273,6 +273,16 @@
     <string name="note_detail">กรุณาเก็บหลักฐานการฝากหรือโอนเงินไว้แจ้งผ่านเมนู ‘แจ้งโอนผ่านธนาคาร’ ในแอพฯเติมเต็ม</string>
     <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
 
+    //Chat bot
+    <string name="hint_input">Enter your message</string>
+    <string name="chat_hello_term_tem">สวัสดีครับ ผมคือน้องเติมเต็ม ครับ Click ที่นี่</string>
+    <string name="chat_register">ลงทะเบียน</string>
+    <string name="chat_how_to">วิธีเติมเงินเข้ากระเป๋า</string>
+    <string name="chat_ask">สอบถามข้อมูล</string>
+    <string name="chat_news">ข่าวสาร Promotion</string>
+    <string name="chat_manual">คู่มือการใช้งาน</string>
+
+
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
         <item>@string/dashboard_card_to_card</item>

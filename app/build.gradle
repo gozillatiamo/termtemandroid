@@ -19,7 +19,7 @@ android {
         config {
             keyAlias 'www'
             keyPassword 'wwwholding'
-            storeFile file('D:/Android/TermTem/keystore/termtem.jks')
+            storeFile file('C:/Users/Santipong/Desktop/termtemandroid/keystore/termtem.jks')
             storePassword 'termtemholding'
         }
     }
@@ -138,6 +138,10 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'com.squareup:otto:1.3.8'
+
+    //chat bot
+    compile 'com.github.stfalcon:chatkit:0.2.1'
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
     compile "com.google.firebase:firebase-core:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.ext.playServicesVersion"

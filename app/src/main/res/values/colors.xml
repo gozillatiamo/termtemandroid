@@ -18,6 +18,12 @@
     <color name="color_bg_card">#009688</color>
     <color name="disable_btn_color">#ccccccd0</color>
 
+    //Chat bot
+    <color name="grayLight">#e2e2e2</color>
+    <color name="grayDarkTransparent">#9d9f9f9f</color>
+    <color name="green">#4CAF50</color>
+    <color name="greenDark">#3e8f41</color>
+
     <array name="color_list_dashboard">
         <item>#32b7b3</item>
         <item>#209ea8</item>

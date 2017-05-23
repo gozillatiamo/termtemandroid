@@ -41,4 +41,8 @@
     @com.squareup.otto.Produce public *;
 }
 
+#shape image
+-dontwarn com.github.siyamed.**
+-keep class com.github.siyamed.shapeimageview.**{ *; }
+
 

@@ -19,32 +19,48 @@
         android:paddingBottom="@dimen/icon_large_size"
 
         >
+
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/login_background"/>
+            android:src="@drawable/login_background" />
 
         <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/icon_size"
             android:adjustViewBounds="true"
-            android:src="@drawable/termtem_logo"
-            android:id="@+id/imageView3"
-             />
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:src="@drawable/termtem_logo" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/activity_space"
-            android:textSize="@dimen/small_text_size"
-            android:textColor="@android:color/darker_gray"
             android:alpha="0.5"
-            android:text="@string/versionName"/>
+            android:text="@string/versionName"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/small_text_size" />
+
+        <Button
+            android:id="@+id/term_tem_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="คลิกที่นี่"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/my_text_size"
+            android:minHeight="30dp"
+            android:typeface="monospace"
+            android:background="@drawable/ripple_button" />
+
     </RelativeLayout>
 
     <LinearLayout
