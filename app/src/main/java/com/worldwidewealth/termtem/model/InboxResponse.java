@@ -116,7 +116,7 @@ public class InboxResponse implements Parcelable {
         Url = in.readString();
         TimeLength = in.readString();
         _type = in.readInt();
-        attachlist = in.readArrayList(in.getClass().getClassLoader());
+        in.readList(attachlist, getClass().getClassLoader());
     }
 
     @Override
@@ -124,6 +124,7 @@ public class InboxResponse implements Parcelable {
         dest.writeString(msgid);
         dest.writeString(title);
         dest.writeString(msg);
+        dest.writeByte((byte) (Readed ? 1:0));
         dest.writeByte((byte) (Readed ? 1:0));
         dest.writeLong(Create_Date.getTime());
         dest.writeInt(Thumbnail);
