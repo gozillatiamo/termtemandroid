@@ -142,6 +142,8 @@ dependencies {
     //chat bot
     compile 'com.github.stfalcon:chatkit:0.2.1'
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
+
 
     compile "com.google.firebase:firebase-core:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.ext.playServicesVersion"

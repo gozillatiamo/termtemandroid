@@ -5,39 +5,83 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <com.stfalcon.chatkit.messages.MessagesList
-        android:id="@+id/messagesList"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/input"
-        app:incomingAvatarHeight="56dp"
-        app:incomingAvatarWidth="56dp"
-        app:incomingBubbleDrawable="@drawable/bg_custom_incoming_message"
-        app:outcomingBubbleDrawable="@drawable/bg_custom_outcoming_message"
-        app:outcomingTimeTextColor="@color/grayDarkTransparent"/>
+        android:layout_above="@+id/expandable_layout">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/input"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/grayLight"/>
+        <com.stfalcon.chatkit.messages.MessagesList
+            android:id="@+id/messagesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/view_typing"
+            app:incomingAvatarHeight="56dp"
+            app:incomingAvatarWidth="56dp"
+            app:incomingBubbleDrawable="@drawable/bg_custom_incoming_message"
+            app:outcomingBubbleDrawable="@drawable/bg_custom_outcoming_message"
+            app:outcomingTimeTextColor="@color/grayDarkTransparent"/>
 
-    <com.stfalcon.chatkit.messages.MessageInput
-        android:id="@+id/input"
+        <RelativeLayout
+            android:id="@+id/view_typing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/typing_left"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+            <ImageView
+                android:id="@+id/typing_right"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/expandable_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:attachmentButtonBackground="?attr/selectableItemBackgroundBorderless"
-        app:attachmentButtonDefaultIconColor="@color/green"
-        app:attachmentButtonDefaultIconPressedColor="@color/greenDark"
-        app:attachmentButtonHeight="27dp"
-        app:attachmentButtonWidth="27dp"
-        app:inputButtonBackground="@drawable/bg_custom_layout_send"
-        app:inputButtonDefaultIconColor="@color/white"
-        app:inputButtonDefaultIconDisabledColor="@color/white60"
-        app:inputHint="@string/hint_input"
-        app:showAttachmentButton="true"/>
+        app:el_duration="1000"
+        app:el_expanded="false"
+        app:el_parallax="0.5">
+
+       <LinearLayout
+           android:id="@+id/view_input"
+           android:layout_width="match_parent"
+           android:orientation="vertical"
+           android:layout_marginBottom="10dp"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true">
+
+            <include
+                android:id="@+id/input_tutorial"
+                layout="@layout/view_input_tutorial"
+                android:visibility="gone"/>
+
+           <include
+               android:id="@+id/input_confirm"
+               layout="@layout/view_input_confirm_register"
+               android:visibility="gone"/>
+
+           <include
+               android:id="@+id/input_register"
+               layout="@layout/view_input_register"
+               android:visibility="gone"/>
+
+       </LinearLayout>
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
 
 </RelativeLayout>

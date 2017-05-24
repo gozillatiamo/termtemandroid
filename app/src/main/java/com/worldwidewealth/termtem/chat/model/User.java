@@ -8,11 +8,13 @@ public class User implements IUser {
     private String id;
     private String name;
     private String avatar;
+    private boolean isMe;
 
-    public User(String id, String name, String avatar) {
+    public User(String id, String name, String avatar, boolean isMe) {
         this.id = id;
         this.name = name;
         this.avatar = avatar;
+        this.isMe = isMe;
     }
 
     @Override
@@ -30,12 +32,16 @@ public class User implements IUser {
         return avatar;
     }
 
+    public boolean isMe() {
+        return isMe;
+    }
+
     public static User getTermTemUser(){
-        return new User("001", "Term Tem", null);
+        return new User("001", "Term Tem", null, false);
     }
 
     public static User getUser(){
-        return new User("002", "You", null);
+        return new User("002", "You", null, true);
     }
 
 }

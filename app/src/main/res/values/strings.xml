@@ -281,6 +281,13 @@
     <string name="chat_ask">สอบถามข้อมูล</string>
     <string name="chat_news">ข่าวสาร Promotion</string>
     <string name="chat_manual">คู่มือการใช้งาน</string>
+    <string name="chat_bye">บ๊าย บาย</string>
+    <string name="chat_yes">เคย</string>
+    <string name="chat_no">ไม่เคย</string>
+    <string name="chat_is_have_account">คุณเคยลงทะเบียนกับเติมเต็มมาก่อนไหมครับ</string>
+    <string name="chat_thank_again">ขอบคุณครับ  หากต้องการให้น้องเติมเต็มช่วยเหลือ สามารถคลิ๊กที่ตัวน้องเติมเต็มได้นะครับ</string>
+    <string name="chat_how_to_register">ต้องการทราบวิธีลงทะเบียนกับเติมเต็ม</string>
+    <string name="chat_register_now">ลงทะเบียนกับเติมเต็มตอนนี้</string>
 
 
     <string-array name="str_list_dashboard">
