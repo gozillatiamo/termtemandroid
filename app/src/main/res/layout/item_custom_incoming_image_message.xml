@@ -26,10 +26,22 @@
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"/>
 
+    <TextView
+        android:id="@+id/title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:visibility="visible"
+        android:text="น้องเติมเต็ม"
+        android:layout_marginStart="16dp"/>
+
     <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
         android:id="@id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_below="@id/title_name"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="@dimen/message_incoming_bubble_margin_right"
         android:layout_marginRight="@dimen/message_incoming_bubble_margin_right"
         android:layout_toEndOf="@id/messageUserAvatar"

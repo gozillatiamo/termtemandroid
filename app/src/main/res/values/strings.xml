@@ -288,6 +288,35 @@
     <string name="chat_thank_again">ขอบคุณครับ  หากต้องการให้น้องเติมเต็มช่วยเหลือ สามารถคลิ๊กที่ตัวน้องเติมเต็มได้นะครับ</string>
     <string name="chat_how_to_register">ต้องการทราบวิธีลงทะเบียนกับเติมเต็ม</string>
     <string name="chat_register_now">ลงทะเบียนกับเติมเต็มตอนนี้</string>
+    <string name="chat_hello_i_am_term_tem">สวัสดีครับ ผมคือน้องเติมเต็ม</string>
+    <string name="chat_need_help">อยากให้น้องเติมช่วยอะไรครับ</string>
+    <string name="chat_how_to_transfer_money_to_bank">วิธีแจ้งโอนเงินผ่านธนาคาร</string>
+    <string name="chat_how_to_transfer_money_to_account">สอบถามวิธีโอนเงินเข้าบัญชีเติมเต็ม</string>
+    <string name="chat_register_account">สมัครตัวแทน</string>
+    <string name="chat_use_bank">โอนเข้าบัญชีธนาคาร</string>
+    <string name="chat_use_mpay">โอนผ่านเอ็มเปย์สเตชั่น</string>
+    <string name="chat_use_mpay_station">ผ่านจุดบริการเอ็มเปย์สเตชั่น</string>
+    <string name="chat_use_mpay_atm">ผ่านตู้ ATM</string>
+    <string name="chat_dont_forgot">เมื่อโอนเงินแล้วต้องแจ้งโอนเงินในโปรแกรมด้วยนะครับ</string>
+    <string name="chat_register_tutorial">น้องเติมเต็มขอช่วยลงทะเบียนให้เลยนะครับ</string>
+    <string name="chat_add_name">รบกวนขอทราบชื่อ-นามสกุลตามบัตรประชาชนด้วยนะครับ</string>
+    <string name="chat_mr">นาย</string>
+    <string name="chat_ms">นาง</string>
+    <string name="chat_miss">นางสาว</string>
+    <string name="surname">นามสกุล</string>
+    <string name="chat_please_select_prefix">ขอโทษด้วยครับ กรุณาเลือกคำนำหน้าชื่อ</string>
+    <string name="chat_please_enter_name">ขอโทษด้วยครับ กรุณาากรอกชื่อ</string>
+    <string name="chat_please_enter_last_name">ขอโทษด้วยครับ กรุณากรอกนามสกุล</string>
+    <string name="chat_enter_birthday">ช่วยกรอกวันเดือนปีเกิดให้เติมเต็มด้วยครับ</string>
+    <string name="chat_enter_phone_number">เติมเต็มขอเบอร์โทรศัพท์มือถือด้วยครับ</string>
+    <string name="chat_please_enter_birth">ขอโทษด้วยครับ กรุณากรอกวันเดือนปีเกิด</string>
+    <string name="chat_please_enter_phone">ต้องใส่หมายเลขเบอร์โทรศัพท์เพื่อลงทะเบียนกับเติมเต็มนะครับ เติมเต็มขอเบอร์โทรด้วยนะครับ</string>
+    <string name="chat_please_enter_phone_number_is_invalid">ใส่หมายเลขเบอร์โทรศัพท์ไม่ถูกต้องนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
+    <string name="chat_enter_id_card_number">เพื่อเป็นไปตามนโยบายของธนาคารแห่งประเทศไทยในการยืนยันพิสูจน์ตัวตน กรุณาระบุหมายเลขบัตรประชาชน 13 หลัก และถ่ายรูปบัตรประชาชนแนบ ให้น้องเติมเต็มด้วยครับ</string>
+    <string name="chat_please_check">ช่วยตรวจสอบความถูกต้อง ข้อมูลการสมัคร ด้วยครับ</string>
+    <string name="chat_id_card_is_invalid">ใส่เลขบัตรประชาชนไม่ถูกต้องนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
+    <string name="chat_please_enter_id">ใส่เลขบัตรประชาชนไม่ครบ 13 หลักนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
+    <string name="chat_please_select_image">เติมเต็มขอรูปบัตรประจำตัวประชาชนด้วยครับ</string>
 
 
     <string-array name="str_list_dashboard">

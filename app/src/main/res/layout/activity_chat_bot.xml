@@ -71,13 +71,23 @@
                 android:visibility="gone"/>
 
            <include
-               android:id="@+id/input_confirm"
-               layout="@layout/view_input_confirm_register"
+               android:id="@+id/input_register_name"
+               layout="@layout/view_input_name"
                android:visibility="gone"/>
 
            <include
-               android:id="@+id/input_register"
-               layout="@layout/view_input_register"
+               android:id="@+id/input_birth"
+               layout="@layout/view_input_birth"
+               android:visibility="gone"/>
+
+           <include
+               android:id="@+id/input_phone"
+               layout="@layout/view_input_phone_number"
+               android:visibility="gone"/>
+
+           <include
+               android:id="@+id/input_id_card"
+               layout="@layout/view_input_id_card"
                android:visibility="gone"/>
 
        </LinearLayout>
