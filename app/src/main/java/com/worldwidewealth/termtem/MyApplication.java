@@ -23,6 +23,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.squareup.otto.Bus;
+import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -322,7 +323,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 //                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister |
-                activity instanceof ActivityShowNotify);
+                activity instanceof ActivityShowNotify |
+                activity instanceof ChatBotActivity);
     }
 
     public static void showNotifyUpload(){

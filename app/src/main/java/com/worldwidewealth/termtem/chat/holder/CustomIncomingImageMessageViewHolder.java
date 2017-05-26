@@ -10,11 +10,8 @@ import com.worldwidewealth.termtem.chat.model.Message;
 public class CustomIncomingImageMessageViewHolder
         extends MessageHolders.IncomingImageMessageViewHolder<Message> {
 
-    private View onlineIndicator;
-
     public CustomIncomingImageMessageViewHolder(View itemView) {
         super(itemView);
-        onlineIndicator = itemView.findViewById(R.id.onlineIndicator);
     }
 
     @Override

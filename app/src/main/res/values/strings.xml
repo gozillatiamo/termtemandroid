@@ -79,6 +79,7 @@
     <string name="enter_reference">ใส่หมายเลขอ้างอิง</string>
     <string name="reference">หมายเลขอ้างอิง :</string>
     <string name="confirm">ยืนยัน</string>
+    <string name="edit">แก้ไข</string>
     <string name="cancel">ยกเลิก</string>
     <string name="recipient">Recipient :</string>
     <string name="mid_market_rate">Mid-Market rate :</string>
@@ -317,7 +318,6 @@
     <string name="chat_id_card_is_invalid">ใส่เลขบัตรประชาชนไม่ถูกต้องนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_enter_id">ใส่เลขบัตรประชาชนไม่ครบ 13 หลักนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_select_image">เติมเต็มขอรูปบัตรประจำตัวประชาชนด้วยครับ</string>
-
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

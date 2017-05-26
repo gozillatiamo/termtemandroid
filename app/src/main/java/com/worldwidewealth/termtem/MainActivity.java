@@ -17,9 +17,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
@@ -54,6 +56,7 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
         initEditText();
 //        initBtn();
 
+        Glide.with(this).load(R.raw.app_chatbox_button).asGif().dontTransform().into(mHolder.mTermTemImage);
     }
 
     @Override
@@ -369,7 +372,7 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                 case R.id.help:
                     new DialogHelp(MainActivity.this).show();
                     break;
-                case R.id.term_tem_bot:
+                case R.id.view_chat_bot:
                     startActivity(ChatBotActivity.create(this));
                     break;
 
@@ -386,7 +389,8 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
         private EditText mPassword;
         private AutoCompleteTextView mPhone;
         private TextView mHelp;
-        private Button mChat;
+        private LinearLayout mChatBotView;
+        private ImageView mTermTemImage;
 
         public ViewHolder(AppCompatActivity view){
 
@@ -401,8 +405,9 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
             mHelp = (TextView) view.findViewById(R.id.help);
             mHelp.setOnClickListener(MainActivity.this);
 
-            mChat = (Button) findViewById(R.id.term_tem_bot);
-            mChat.setOnClickListener(MainActivity.this);
+            mChatBotView = (LinearLayout) findViewById(R.id.view_chat_bot);
+            mTermTemImage = (ImageView) findViewById(R.id.iv_chat_bot);
+            mChatBotView.setOnClickListener(MainActivity.this);
 
         }
     }

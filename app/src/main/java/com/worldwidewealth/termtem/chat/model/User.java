@@ -37,11 +37,11 @@ public class User implements IUser {
     }
 
     public static User getTermTemUser(){
-        return new User("001", "Term Tem", null, false);
+        return new User("1", "Term Tem", null, false);
     }
 
     public static User getUser(){
-        return new User("002", "You", null, true);
+        return new User("0", "You", null, true);
     }
 
 }

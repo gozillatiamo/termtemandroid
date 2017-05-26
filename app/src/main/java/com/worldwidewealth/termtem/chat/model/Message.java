@@ -103,7 +103,7 @@ public class Message implements IMessage,
     }
 
     public static Message getImageMessage(User user, String url) {
-        Message message = new Message(getRandomId(), User.getTermTemUser(), null);
+        Message message = new Message(getRandomId(), user, null);
         message.setImage(new Message.Image(url));
         return message;
     }

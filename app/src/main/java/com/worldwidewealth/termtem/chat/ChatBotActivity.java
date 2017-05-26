@@ -3,8 +3,10 @@ package com.worldwidewealth.termtem.chat;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
@@ -14,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,6 +26,7 @@ import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import com.stfalcon.chatkit.utils.DateFormatter;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.chat.holder.CustomIncomingImageMessageViewHolder;
 import com.worldwidewealth.termtem.chat.holder.CustomIncomingTextMessageViewHolder;
@@ -31,9 +35,12 @@ import com.worldwidewealth.termtem.chat.holder.CustomOutcomingTextMessageViewHol
 import com.worldwidewealth.termtem.chat.model.Message;
 import com.worldwidewealth.termtem.chat.model.User;
 import com.worldwidewealth.termtem.util.CheckSyntaxData;
+import com.worldwidewealth.termtem.util.Util;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -59,6 +66,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private ExpandableLayout expandableLayout;
     private Calendar calendar = Calendar.getInstance();
     private DatePickerDialog pickerDialog;
+    private ImageView termTem;
 
     //view first menu
     private View inputTutorial;
@@ -72,6 +80,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private View inputBirth;
     private View inputPhoneNumber;
     private View inputIdCard;
+    private View inputImage;
+    private View inputConfirm;
     private EditText edtName;
     private EditText edtLastName;
     private RadioGroup groupPrefixName;
@@ -86,7 +96,13 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private EditText edtIdCard;
     private Button btnConfirmId;
     private Button btnCancelId;
-
+    private Button btnConfirmImage;
+    private Button btnCancelImage;
+    private ImageView idCardImage;
+    private TextView tvCapture;
+    private Button btnConfirmData;
+    private Button btnEdit;
+    private Button btnCancelData;
 
     private int step = 0;
     private int registerStep = 0;
@@ -97,6 +113,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private String lastName;
     private String phoneNumber;
     private String idCard;
+    private Uri photoURI;
+    private String imgPath;
 
     public static Intent create(Context context){
         return new Intent(context, ChatBotActivity.class);
@@ -120,6 +138,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         typingLeft = (ImageView) findViewById(R.id.typing_left);
         typingRight = (ImageView) findViewById(R.id.typing_right);
         expandableLayout = (ExpandableLayout) findViewById(R.id.expandable_layout);
+        termTem = (ImageView) findViewById(R.id.term_tem);
 
         inputTutorial = (View) findViewById(R.id.input_tutorial);
         btnRegister = (Button) findViewById(R.id.btn_register);
@@ -131,6 +150,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         inputBirth = (View) findViewById(R.id.input_birth);
         inputPhoneNumber = (View) findViewById(R.id.input_phone);
         inputIdCard = (View) findViewById(R.id.input_id_card);
+        inputImage = (View) findViewById(R.id.input_image);
+        inputConfirm = (View) findViewById(R.id.input_confirm_edit);
         edtName = (EditText) findViewById(R.id.name);
         edtLastName = (EditText) findViewById(R.id.surname);
         btnConfirmName = (Button) findViewById(R.id.btn_confirm);
@@ -145,7 +166,13 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         btnConfirmId = (Button) findViewById(R.id.btn_confirm_id);
         btnCancelId = (Button) findViewById(R.id.btn_cancel_id);
         edtIdCard = (EditText) findViewById(R.id.id_card);
-
+        btnConfirmImage = (Button) findViewById(R.id.btn_confirm_image);
+        btnCancelImage = (Button) findViewById(R.id.btn_cancel_image);
+        tvCapture = (TextView) findViewById(R.id.text_capture);
+        idCardImage = (ImageView) findViewById(R.id.id_card_image);
+        btnConfirmData = (Button) findViewById(R.id.btn_confirm_edit);
+        btnCancelData = (Button) findViewById(R.id.btn_cancel_edit);
+        btnEdit = (Button) findViewById(R.id.btn_edit);
     }
 
     private void setUpView(){
@@ -153,13 +180,15 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
-                Glide.with(ChatBotActivity.this).load(url).diskCacheStrategy(DiskCacheStrategy.ALL ).into(imageView);
+                Glide.with(getContext()).load(url).diskCacheStrategy(DiskCacheStrategy.ALL ).into(imageView);
             }
         };
 
+        Glide.with(getContext()).load(R.raw.app_chatbox2).asGif().dontTransform().into(termTem);
+
         //set typing image
-        Glide.with(this).load(R.raw.typing).asGif().into(typingLeft);
-        Glide.with(this).load(R.raw.typing).asGif().into(typingRight);
+        Glide.with(getContext()).load(R.raw.typing).asGif().into(typingLeft);
+        Glide.with(getContext()).load(R.raw.typing).asGif().into(typingRight);
 
         //set on button click
         btnFinish.setOnClickListener(this);
@@ -174,6 +203,12 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         btnCancelPhone.setOnClickListener(this);
         btnCancelId.setOnClickListener(this);
         btnConfirmId.setOnClickListener(this);
+        btnConfirmImage.setOnClickListener(this);
+        btnCancelImage.setOnClickListener(this);
+        idCardImage.setOnClickListener(this);
+        btnConfirmData.setOnClickListener(this);
+        btnCancelData.setOnClickListener(this);
+        btnEdit.setOnClickListener(this);
 
         setupCalendar();
         edtBirth.setOnTouchListener(new View.OnTouchListener() {
@@ -240,17 +275,47 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             case R.id.btn_confirm_id:
                 confirmIdClick();
                 break;
+            case R.id.btn_confirm_image:
+                confirmImageClick();
+                break;
+            case R.id.btn_cancel_image:
+                cancelClick();
+                break;
+            case R.id.id_card_image:
+                captureImageClick();
+                break;
+            case R.id.btn_cancel_edit:
+                cancelClick();
+                break;
+            case R.id.btn_confirm_edit:
+
+                break;
+            case R.id.btn_edit:
+
+                break;
         }
+    }
+
+    private Context getContext(){
+        return this;
     }
 
     private void initAdapter(){
         MessageHolders holdersConfig = new MessageHolders()
-                .setIncomingTextConfig(CustomIncomingTextMessageViewHolder.class, R.layout.item_custom_incoming_text_message)
-                .setOutcomingTextConfig(CustomOutcomingTextMessageViewHolder.class, R.layout.item_custom_outcoming_text_message)
-                .setIncomingImageConfig(CustomIncomingImageMessageViewHolder.class, R.layout.item_custom_incoming_image_message)
-                .setOutcomingImageConfig(CustomOutcomingImageMessageViewHolder.class, R.layout.item_custom_outcoming_image_message);
+                .setIncomingTextConfig(
+                        CustomIncomingTextMessageViewHolder.class,
+                        R.layout.item_custom_incoming_text_message)
+                .setOutcomingTextConfig(
+                        CustomOutcomingTextMessageViewHolder.class,
+                        R.layout.item_custom_outcoming_text_message)
+                .setIncomingImageConfig(
+                        CustomIncomingImageMessageViewHolder.class,
+                        R.layout.item_custom_incoming_image_message)
+                .setOutcomingImageConfig(
+                        CustomOutcomingImageMessageViewHolder.class,
+                        R.layout.item_custom_outcoming_image_message);
 
-        messagesAdapter = new MessagesListAdapter<>("002", holdersConfig, imageLoader);
+        messagesAdapter = new MessagesListAdapter<>("0", holdersConfig, imageLoader);
         messagesAdapter.setDateHeadersFormatter(this);
         messagesList.setAdapter(messagesAdapter);
         addTextMessage(getString(R.string.chat_hello_i_am_term_tem), User.getTermTemUser());
@@ -283,6 +348,11 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         }, MESSAGE_DELAY_TIME);
     }
 
+    //Add message tex
+    private void addTextMessageNotDelay(String text, final User user){
+        messagesAdapter.addToStart(Message.getTextMessage(user, text), true);
+    }
+
     //Add message image
     private void addImageMessage(final String url, final User user){
         handler.postDelayed(new Runnable() {
@@ -294,6 +364,11 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         }, MESSAGE_DELAY_TIME);
     }
 
+    //Add message image
+    private void addImageMessageNotDelay(final String url, final User user){
+        messagesAdapter.addToStart(Message.getImageMessage(user, url), true);
+    }
+
     private void handleChatStep(){
         switch (step) {
             case 0:
@@ -303,6 +378,10 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             case 1:
                 inputName.setVisibility(View.GONE);
                 inputBirth.setVisibility(View.GONE);
+                inputIdCard.setVisibility(View.GONE);
+                inputImage.setVisibility(View.GONE);
+                inputPhoneNumber.setVisibility(View.GONE);
+                inputConfirm.setVisibility(View.GONE);
                 inputTutorial.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
@@ -360,6 +439,25 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputIdCard.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
+            case 6:
+                registerStep = REMOVE_STEP;
+                inputName.setVisibility(View.GONE);
+                inputBirth.setVisibility(View.GONE);
+                inputPhoneNumber.setVisibility(View.GONE);
+                inputIdCard.setVisibility(View.GONE);
+                inputImage.setVisibility(View.VISIBLE);
+                expandableLayout.expand();
+                break;
+            case 7:
+                registerStep = REMOVE_STEP;
+                inputName.setVisibility(View.GONE);
+                inputBirth.setVisibility(View.GONE);
+                inputPhoneNumber.setVisibility(View.GONE);
+                inputIdCard.setVisibility(View.GONE);
+                inputImage.setVisibility(View.GONE);
+                inputConfirm.setVisibility(View.VISIBLE);
+                expandableLayout.expand();
+                break;
         }
     }
 
@@ -414,6 +512,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             firstName = edtName.getText().toString().trim();
             lastName = edtLastName.getText().toString().trim();
             registerStep = 3;
+            addTextMessageNotDelay(String.format("%s%s %s", prefixName, firstName, lastName), User.getUser());
             addTextMessage(String.format("คุณ%s %s",firstName, getString(R.string.chat_enter_birthday)), User.getTermTemUser());
             expandableLayout.collapse();
         }
@@ -424,6 +523,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
            addTextMessage(getString(R.string.chat_please_enter_birth), User.getTermTemUser());
        }else {
            registerStep = 4;
+           addTextMessageNotDelay(edtBirth.getText().toString(), User.getUser());
            addTextMessage(String.format("คุณ%s %s",firstName, getString(R.string.chat_enter_phone_number)), User.getTermTemUser());
            expandableLayout.collapse();
        }
@@ -437,6 +537,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         }else {
             registerStep = 5;
             phoneNumber = edtPhoneNumber.getText().toString();
+            addTextMessageNotDelay(phoneNumber, User.getUser());
             addTextMessage(String.format("คุณ%s %s",firstName, getString(R.string.chat_enter_id_card_number)), User.getTermTemUser());
             expandableLayout.collapse();
         }
@@ -452,6 +553,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 }else {
                     registerStep = 6;
                     idCard = edtIdCard.getText().toString();
+                    addTextMessageNotDelay(idCard, User.getUser());
                     addTextMessage(String.format("คุณ%s %s",firstName, getString(R.string.chat_please_select_image)), User.getTermTemUser());
                     expandableLayout.collapse();
                 }
@@ -490,4 +592,44 @@ public class ChatBotActivity extends MyAppcompatActivity implements
 
     }
 
+    private void confirmImageClick(){
+        if (imgPath==null){
+            addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_select_image)), User.getTermTemUser());
+        }else {
+            registerStep = 7;
+            addImageMessageNotDelay(imgPath, User.getUser());
+            addTextMessage(String.format("คุณ%s %s",firstName, getString(R.string.chat_please_check)), User.getTermTemUser());
+            expandableLayout.collapse();
+        }
+    }
+
+    private void captureImageClick(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = Util.createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                photoURI = Uri.fromFile(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, MyApplication.REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case MyApplication.REQUEST_IMAGE_CAPTURE:
+                    imgPath = Util.getRealPathFromURI(photoURI);
+                    Glide.with(getContext()).load(imgPath).into(idCardImage);
+                    break;
+            }
+        }
+    }
 }
