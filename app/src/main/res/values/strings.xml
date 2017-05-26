@@ -270,7 +270,7 @@
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
     <string name="note">หมายเหตุ :</string>
-    <string name="note_detail">กรุณาเก็บหลักฐานการฝากหรือโอนเงินไว้แจ้งผ่านเมนู ‘แจ้งโอนผ่านธนาคาร’ ในแอพฯเติมเต็ม</string>
+    <string name="note_detail">"กรุณาเก็บหลักฐานการฝาก หรือ การโอนเงินไว้แจ้งผ่านเมนู \"แจ้งโอนผ่านธนาคาร\" ในแอพฯเติมเต็ม"</string>
     <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
 
     <string-array name="str_list_dashboard">

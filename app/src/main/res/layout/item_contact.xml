@@ -12,13 +12,13 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_phone"
+                android:layout_height="@dimen/icon_size"
+                android:src="@drawable/ic_termtem_phone"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
@@ -43,10 +43,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/icon_size"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_facebook"/>
+                android:src="@drawable/ic_termtem_facebook"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/text_termtem_fb"

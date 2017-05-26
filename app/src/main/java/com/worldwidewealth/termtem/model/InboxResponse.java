@@ -116,7 +116,9 @@ public class InboxResponse implements Parcelable {
         Url = in.readString();
         TimeLength = in.readString();
         _type = in.readInt();
-        in.readList(attachlist, getClass().getClassLoader());
+        if (attachlist != null) {
+            in.readList(attachlist, getClass().getClassLoader());
+        }
     }
 
     @Override

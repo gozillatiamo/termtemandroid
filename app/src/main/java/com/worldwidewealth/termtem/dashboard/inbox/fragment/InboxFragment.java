@@ -226,9 +226,15 @@ public class InboxFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        MyApplication.getBus().register(this);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        MyApplication.getBus().register(this);
 
     }
 

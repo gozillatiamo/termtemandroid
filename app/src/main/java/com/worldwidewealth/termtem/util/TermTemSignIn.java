@@ -217,6 +217,7 @@ public class TermTemSignIn {
         this.mUsername = username;
         this.mPassword = password;
         this.mTXID = TXID;
+        Global.getInstance().setTXID(mTXID);
         Log.e(TAG, "Username: "+username);
         Log.e(TAG, "Password: "+password);
         Log.e(TAG, "TXID: "+TXID);
@@ -262,6 +263,7 @@ public class TermTemSignIn {
     }
 
     private void serviceAcceptWIFI(){
+        Log.e(TAG, "TXID before acceptwifi: "+Global.getInstance().getTXID());
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
                 new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -269,7 +271,6 @@ public class TermTemSignIn {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
                 if (responseValues != null) Login();
-
             }
 
             @Override
@@ -282,10 +283,10 @@ public class TermTemSignIn {
 
     private void Login(){
 
-        final String usernameEncode = EncryptionData.EncryptData(mUsername.replaceAll("-", ""), Global.getInstance().getDEVICEID()+mTXID);
-        mPassword = EncryptionData.EncryptData(mPassword, Global.getInstance().getDEVICEID()+mTXID);
+        final String usernameEncode = EncryptionData.EncryptData(mUsername.replaceAll("-", ""), Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        mPassword = EncryptionData.EncryptData(mPassword, Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-        Global.getInstance().setTXID(mTXID);
+//        Global.getInstance().setTXID(mTXID);
 
         Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                 Global.getInstance().getDEVICEID(),
