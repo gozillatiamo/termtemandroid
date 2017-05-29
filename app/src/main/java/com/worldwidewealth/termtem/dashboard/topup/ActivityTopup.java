@@ -40,6 +40,10 @@ public class ActivityTopup extends MyAppcompatActivity {
                 mTitle.setText(getString(R.string.dashboard_pin));
                 mMenuIcon.setImageResource(R.drawable.ic_pin_code);
                 break;
+            case FragmentTopup.VAS:
+                mTitle.setText(getString(R.string.vas));
+                mMenuIcon.setImageResource(R.drawable.ic_topup);
+                break;
         }
 
         initContainer();

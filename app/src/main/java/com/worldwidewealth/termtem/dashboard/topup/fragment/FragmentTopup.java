@@ -48,6 +48,7 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
     public static final String keyTopup = "topup";
     public static final String MOBILE = "mobile";
     public static final String PIN = "pin";
+    public static final String VAS = "vas";
 
 
     public static Fragment newInstance(String topup){
@@ -114,7 +115,12 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
                 mHolder.mImageTrue.setImageResource(R.drawable.logo_truemoney);
                 mHolder.mBtnDtac.setVisibility(View.GONE);
                 break;
+            case VAS:
+                mHolder.mBtnAis.setVisibility(View.VISIBLE);
+                loading.hide();
+                break;
         }
+
         if (servicePro != null) {
             Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTION_SERVICE_PRO, servicePro));
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {

@@ -84,9 +84,11 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myReceiver);
+/*
         if (Global.getInstance().getTXID() != null) {
             Util.logoutAPI(this, true);
         }
+*/
     }
 
     @Override

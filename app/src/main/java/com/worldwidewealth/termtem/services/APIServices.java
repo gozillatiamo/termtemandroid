@@ -13,6 +13,7 @@ import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -151,13 +152,14 @@ public interface APIServices {
 
 
     OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(1, TimeUnit.SECONDS)
+            .readTimeout(1, TimeUnit.SECONDS)
+            .writeTimeout(1, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
+
                     Request originalRequest = chain.request();
 
                     Request.Builder builder = originalRequest.newBuilder();
