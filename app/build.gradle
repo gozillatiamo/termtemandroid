@@ -19,7 +19,7 @@ android {
         config {
             keyAlias 'www'
             keyPassword 'wwwholding'
-            storeFile file('/Users/gozillatiamo/Documents/Andriod/termtemandroid/keystore/termtem.jks')
+            storeFile file('C:/Users/Santipong/Desktop/termtemandroid/keystore/termtem.jks')
             storePassword 'termtemholding'
         }
     }

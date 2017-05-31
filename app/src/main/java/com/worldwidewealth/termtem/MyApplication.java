@@ -332,7 +332,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 //                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
                 activity instanceof ActivityRegister |
-                activity instanceof ActivityShowNotify);
+                activity instanceof ActivityShowNotify |
+                activity instanceof ChatBotActivity |
+                activity instanceof PhotoViewActivity);
     }
 
     public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon){
