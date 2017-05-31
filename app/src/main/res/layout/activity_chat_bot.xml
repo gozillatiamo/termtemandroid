@@ -24,6 +24,29 @@
             android:layout_height="1dp"
             android:background="@drawable/toolbar_shadow"/>
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:tint="@color/green"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_keyboard_backspace_white_24px"/>
+
+        <ImageButton
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:tint="@color/green"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_replay_white_24px"/>
+
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -128,6 +151,38 @@
                 <include
                     android:id="@+id/input_confirm_edit"
                     layout="@layout/view_input_confirm_edit"
+                    android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/input_edit"
+                    layout="@layout/view_input_edit"
+                    android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/input_accept"
+                    layout="@layout/view_input_accept"
+                    android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/input_try_again"
+                    layout="@layout/view_input_try_again"
+                    android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/input_register_success"
+                    layout="@layout/view_input_register_success"
+                    android:visibility="gone"/>
+
+
+                <include
+                    android:id="@+id/input_bank"
+                    layout="@layout/view_input_bank"
+                    android:visibility="gone"/>
+
+
+                <include
+                    android:id="@+id/input_mpay"
+                    layout="@layout/view_input_mpay"
                     android:visibility="gone"/>
 
             </LinearLayout>

@@ -282,7 +282,7 @@
     <string name="chat_ask">สอบถามข้อมูล</string>
     <string name="chat_news">ข่าวสาร Promotion</string>
     <string name="chat_manual">คู่มือการใช้งาน</string>
-    <string name="chat_bye">บ๊าย บาย</string>
+    <string name="chat_bye">บ๊ายบาย</string>
     <string name="chat_yes">เคย</string>
     <string name="chat_no">ไม่เคย</string>
     <string name="chat_is_have_account">คุณเคยลงทะเบียนกับเติมเต็มมาก่อนไหมครับ</string>
@@ -305,8 +305,9 @@
     <string name="chat_ms">นาง</string>
     <string name="chat_miss">นางสาว</string>
     <string name="surname">นามสกุล</string>
+    <string name="full_name">ชื่อ - นามสกุล</string>
     <string name="chat_please_select_prefix">ขอโทษด้วยครับ กรุณาเลือกคำนำหน้าชื่อ</string>
-    <string name="chat_please_enter_name">ขอโทษด้วยครับ กรุณาากรอกชื่อ</string>
+    <string name="chat_please_enter_name">ขอโทษด้วยครับ กรุณากรอกชื่อ</string>
     <string name="chat_please_enter_last_name">ขอโทษด้วยครับ กรุณากรอกนามสกุล</string>
     <string name="chat_enter_birthday">ช่วยกรอกวันเดือนปีเกิดให้เติมเต็มด้วยครับ</string>
     <string name="chat_enter_phone_number">เติมเต็มขอเบอร์โทรศัพท์มือถือด้วยครับ</string>
@@ -318,6 +319,15 @@
     <string name="chat_id_card_is_invalid">ใส่เลขบัตรประชาชนไม่ถูกต้องนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_enter_id">ใส่เลขบัตรประชาชนไม่ครบ 13 หลักนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_select_image">เติมเต็มขอรูปบัตรประจำตัวประชาชนด้วยครับ</string>
+    <string name="chat_id_card_image">ภาพบัตรประจำตัวประชาชน</string>
+    <string name="chat_accept_link">โปรดแตะข้อความด้านล่างเพื่อดูข้อตกลงและเงื่อนไขการเข้าใช้บริการเติมเต็ม</string>
+    <string name="chat_accept">ยอมรับ</string>
+    <string name="chat_un_accept">ไม่ยอมรับ</string>
+    <string name="phone_no_already_exists">Phone No already exists!!</string>
+    <string name="idcard_already_exists">IDCARD already exists!!</string>
+    <string name="cannot_register_duplicate_id_card">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(บัตรประชาชนซ้ำ)</string>
+    <string name="cannot_register_duplicate_phone_number">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(หมายเลขโทรศัพท์ซ้ำ)</string>
+    <string name="cannot_register_network_connection_problem">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(สัญญาณอินเตอร์เน็ตมีปัญหา) กรุณาตรวจสอบอินเตอร์เน็ต และลองใหม่</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

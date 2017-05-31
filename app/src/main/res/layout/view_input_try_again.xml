@@ -3,39 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin">
-
-        <EditText
-            android:id="@+id/birth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:focusable="false"
-            android:clickable="true"
-            android:editable="false"
-            android:hint="วัน/เดือน/ปี"/>
-
-    </android.support.design.widget.TextInputLayout>
-
     <Button
-        android:id="@+id/btn_confirm_birth"
+        android:id="@+id/btn_try_again"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/confirm"
+        android:text="ลองใหม่"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
     <Button
-        android:id="@+id/btn_cancel_birth"
+        android:id="@+id/btn_edit_try_again"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/edit"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+    <Button
+        android:id="@+id/btn_cancel_try_again"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/cancel"
-        android:visibility="gone"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
