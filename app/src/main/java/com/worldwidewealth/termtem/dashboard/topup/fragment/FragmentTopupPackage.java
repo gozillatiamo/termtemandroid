@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -44,6 +46,8 @@ import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.text.NumberFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 import okhttp3.ResponseBody;
@@ -73,6 +77,8 @@ public class FragmentTopupPackage extends  Fragment{
     private Callback<ResponseBody> callback;
     private byte[] imageByte = null;
     private String transid;
+    private Timer mTimerTimeout;
+    private AlertDialog mAlertTimeout;
 
     private String mActionLoadButton = APIServices.ACTIONLOADBUTTON;
     private String mActionPreview = APIServices.ACTIONPREVIEW;
@@ -448,34 +454,95 @@ public class FragmentTopupPackage extends  Fragment{
                                 model.getTranid(),
                                 mButtonID,
                                 null)));
+
+        mTimerTimeout = new Timer();
+        mTimerTimeout.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        mAlertTimeout = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.error_msg_timeout)
+                                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
+                                                model.getTranid(),
+                                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
+                                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
+                                                        +getString(R.string.currency),
+                                                getString(R.string.phone_number)+" "+mPhone+" "
+                                                        +getString(R.string.processing),
+                                                android.R.drawable.stat_notify_sync);
+                                        getActivity().finish();
+                                    }
+                                }).show();
+                        mAlertTimeout.setOnShowListener(new MyShowListener());
+                    }
+                });
+            }
+        }, 60000);
+
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (mAlertTimeout != null && mAlertTimeout.isShowing())
+                    mAlertTimeout.cancel();
+
+                String title;
+                if (mTopup.equals(FragmentTopup.MOBILE)){
+                    title = MyApplication.getContext().getString(R.string.title_topup);
+                } else {
+                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
+                }
+
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null) {
                     mBottomAction.setEnable(true);
+
+                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
+                            model.getTranid(),
+                            title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
+                                    +MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+" "
+                                    +MyApplication.getContext().getString(R.string.msg_upload_fail),
+                            android.R.drawable.stat_sys_warning, null, null);
+
                     return;
                 }
 
                 if (responseValues instanceof ResponseModel){
+
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, model.getTranid(),
+                            title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+
+                                    " "+MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number)+" "+
+                                    mPhone+" "+MyApplication.getContext().getString(R.string.success),
+                            R.drawable.ic_check_circle_white, mTopup);
                     serviceEslip(model.getTranid());
                 }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "Exception submit topup: "+t.getMessage());
+                String title;
+                if (mTopup.equals(FragmentTopup.MOBILE)){
+                    title = MyApplication.getContext().getString(R.string.title_topup);
+                } else {
+                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
+                }
+
+                MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
+                        title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+
+                                " "+getString(R.string.currency),
+                        MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+
+                                " "+MyApplication.getContext().getString(R.string.msg_upload_fail),
+                        android.R.drawable.stat_sys_warning, call, this);
 
                 if (t.getMessage().equals("timeout")){
-                    AlertDialog alertDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
-                            .setTitle(R.string.warning)
-                            .setMessage(R.string.error_msg_timeout)
-                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getActivity().finish();
-                                }
-                            }).show();
-                    alertDialog.setOnShowListener(new MyShowListener());
                 }else {
                     new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
                     mBottomAction.setEnable(true);
@@ -505,6 +572,7 @@ public class FragmentTopupPackage extends  Fragment{
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
 //                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     try {
+                        if (activity == null) return;
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
                     } catch (IllegalStateException e){e.printStackTrace();}

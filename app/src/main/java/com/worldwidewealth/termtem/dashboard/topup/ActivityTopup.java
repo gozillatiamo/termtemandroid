@@ -10,10 +10,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.annotations.Until;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.model.EslipRequestModel;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.util.Util;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityTopup extends MyAppcompatActivity {
@@ -23,12 +31,13 @@ public class ActivityTopup extends MyAppcompatActivity {
     private String mTopup;
     private ImageView mMenuIcon;
     private TextView mTitle;
+    private String mPreviousTransId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
-
+        mPreviousTransId = getIntent().getExtras().getString("transid");
         setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
@@ -46,8 +55,12 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
         }
 
-        initContainer();
+        if (mPreviousTransId != null){
+            Util.getPreviousEslip(this, mPreviousTransId, mTopup, R.id.container_topup);
+        } else
+            initContainer();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,6 +117,10 @@ public class ActivityTopup extends MyAppcompatActivity {
                 .beginTransaction()
                 .replace(R.id.container_topup, FragmentTopup.newInstance(mTopup));
         transaction.commit();
+    }
+
+    public String getTopupTitle(){
+        return mTitle.getText().toString();
     }
 
 }

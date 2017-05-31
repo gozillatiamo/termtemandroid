@@ -3,7 +3,10 @@ package com.worldwidewealth.termtem;
 import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -11,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.AppCompatTextView;
@@ -23,6 +27,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.squareup.otto.Bus;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -54,7 +60,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
     public static boolean clickable = true;
-    private static final int NOTIUPLOAD = 1;
+    public static final int NOTIUPLOAD = 1;
+    public static final int NOTITOPUP = 2;
     private static boolean isUpload = false;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
@@ -185,33 +192,34 @@ public class MyApplication extends Application implements Application.ActivityLi
         {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
+            try {
+                if (mThread != null || mThread.isAlive()) {
+//                    mHandler.removeCallbacks(mRunable);
+                    mThread.interrupt();
+                    mThread = null;
+
+                    if (T != null) {
+                        T.cancel();
+                        T = null;
+                    }
+                }
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                mThread = null;
+                T = null;
+            }
+
+            if (Global.getInstance().getUSERNAME() == null) {
+                Util.backToSignIn(activity);
+                return;
+            }
+
+
             if (strCurrentAtivity == null) {
                 currentActivity = activity;
                 return;
             }
             if (strCurrentAtivity.equals(activity.getLocalClassName())) {
-                try {
-                    if (mThread != null || mThread.isAlive()) {
-//                    mHandler.removeCallbacks(mRunable);
-                        mThread.interrupt();
-                        mThread = null;
-
-                        if (T != null) {
-                            T.cancel();
-                            T = null;
-                        }
-                    }
-                } catch (NullPointerException e){
-                    e.printStackTrace();
-                    mThread = null;
-                    T = null;
-                }
-
-                if (Global.getInstance().getUSERNAME() == null) {
-                    Util.backToSignIn(activity);
-                    return;
-                }
-
 
                 if (Global.getInstance().getAGENTID() == null){
                     new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN,
@@ -325,47 +333,73 @@ public class MyApplication extends Application implements Application.ActivityLi
                 activity instanceof ActivityShowNotify);
     }
 
-    public static void showNotifyUpload(){
+    public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon){
 
         mNotifyManager =
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
         mBuilder = new NotificationCompat.Builder(MyApplication.getContext().getApplicationContext());
-        mBuilder.setContentTitle(getContext().getString(R.string.title_upload))
-                .setContentText(getContext().getString(R.string.msg_upload))
+        mBuilder.setContentTitle(title)
+                .setContentText(message)
                 .setOngoing(true)
                 .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.termtem_logo))
-                .setSmallIcon(android.R.drawable.stat_sys_upload);
+                .setSmallIcon(smallicon);
 
         mBuilder.setProgress(0, 0, true);
-        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+        mNotifyManager.notify(tag, id, mBuilder.build());
         isUpload = true;
     }
 
-    public static void uploadSuccess(){
-        mBuilder.setContentTitle(getContext().getString(R.string.title_upload_success));
-        mBuilder.setContentText(getContext().getString(R.string.msg_upload_success));
-        mBuilder.setSmallIcon(android.R.drawable.stat_sys_upload_done);
+    public static void uploadSuccess(int id, String tag, String title, String message, int smallicon, String type){
+        if (mBuilder == null && (id != NOTIUPLOAD)) return;
+
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(message);
+        mBuilder.setSmallIcon(smallicon);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+
+        if (id != NOTIUPLOAD){
+            Intent intent = new Intent(mContext, ActivityTopup.class);
+            intent.putExtra(FragmentTopup.keyTopup, type);
+            intent.putExtra("transid", tag);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+
+            mBuilder.setContentIntent(pendingIntent);
+        }
+
+        mNotifyManager.notify(tag, id, mBuilder.build());
         isUpload = false;
+        mBuilder = null;
     }
 
-    public static void uploadFail(String msg){
-        mBuilder.setContentTitle(getContext().getString(R.string.title_upload_fail));
-        mBuilder.setContentText(msg + " " + getContext().getString(R.string.msg_upload_fail));
-        mBuilder.setSmallIcon(android.R.drawable.stat_notify_error);
+    public static void uploadFail(int id, String tag, String title, String message, int smallicon, Call call, Callback callback){
+        if (mBuilder == null && (id != NOTIUPLOAD)) return;
+
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(message);
+        mBuilder.setSmallIcon(smallicon);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-        mNotifyManager.notify(NOTIUPLOAD, mBuilder.build());
+        if (call != null){
+            Intent retryIntent = new Intent(mContext, retryButtonListener.class);
+            retryIntent.putExtra("CALL", (Parcelable) call);
+            retryIntent.putExtra("CALLBACK", (Parcelable) callback);
+            PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
+                    retryIntent, 0);
+            mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
+        }
+        mNotifyManager.notify(tag, id, mBuilder.build());
         isUpload = false;
+        mBuilder = null;
+
     }
 
-    public static boolean isUpload(Context context){
+    public static boolean isUpload(Context context, int message){
         if (isUpload) {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setMessage(R.string.has_upload)
@@ -374,5 +408,16 @@ public class MyApplication extends Application implements Application.ActivityLi
                     .show();
         }
         return isUpload;
+    }
+
+    public static class retryButtonListener extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Here", "I am here");
+            Call call = intent.getExtras().getParcelable("CALL");
+            Callback callback = intent.getExtras().getParcelable("CALLBACK");
+            APIHelper.enqueueWithRetry(call.clone(), callback);
+
+        }
     }
 }

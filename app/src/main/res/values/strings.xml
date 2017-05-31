@@ -24,6 +24,7 @@
     <string name="promptpay_title">พร้อมเพย์ :</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
     <string name="name">ชื่อ</string>
+    <string name="processing">รอดำเนินการ...</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
     <string name="hint_phone_number">กรอกหมายเลขโทรศัพท์</string>
     <string name="identity_number">หมายเลขบัตรประจำตัวประชาชน</string>
