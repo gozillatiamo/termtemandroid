@@ -88,29 +88,49 @@
                 </LinearLayout>
 
             </LinearLayout>
-
             <FrameLayout
-                android:id="@+id/container_topup_package"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/white">
-
-                <TextView
-                    android:id="@+id/text_hint"
-                    style="@style/TextAppearance.AppCompat.Display1"
+                android:layout_weight="1">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:gravity="center"
-                    android:text="@string/dashboard_pin"
-                    android:textColor="#80CCCCCC"
-                    android:visibility="visible" />
-            </FrameLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <FrameLayout
+                        android:id="@+id/container_topup_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/white">
 
-            <include
-                android:id="@+id/include_bottom_action"
-                layout="@layout/bottom_action" />
+                        <TextView
+                            android:id="@+id/text_hint"
+                            style="@style/TextAppearance.AppCompat.Display1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:gravity="center"
+                            android:text="@string/dashboard_pin"
+                            android:textColor="#80CCCCCC"
+                            android:visibility="visible" />
+                    </FrameLayout>
+
+                    <include
+                        android:id="@+id/include_bottom_action"
+                        layout="@layout/bottom_action" />
+
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_vas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBackground"
+                    android:visibility="gone"
+                    android:padding="@dimen/activity_small_space"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+            </FrameLayout>
 
         </LinearLayout>
 

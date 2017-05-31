@@ -163,7 +163,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
         }
 
         View parent = (View) contentView.getParent();
-        parent.setFitsSystemWindows(true);
+//        parent.setFitsSystemWindows(true);
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(parent);
         contentView.measure(0, 0);
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -175,7 +175,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             ((BottomSheetBehavior)params.getBehavior()).setBottomSheetCallback(mBottomSheetBehaviorCallbak);
         }
 
-        params.height = screenHeight;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         parent.setLayoutParams(params);
 
     }

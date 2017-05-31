@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -91,6 +92,8 @@ public class InboxFragment extends Fragment {
     private SparseBooleanArray mSelectedPositions;
     private boolean mIsSelectable = false;
     private int countSeclect = 0;
+    private TextView mTextNoMsg;
+
 
 
 
@@ -173,6 +176,7 @@ public class InboxFragment extends Fragment {
             mInboxRecycler = (RecyclerView) rootView.findViewById(R.id.inbox_recyclear);
             mRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
             mRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            mTextNoMsg =  (TextView) rootView.findViewById(R.id.msg_not_have);
         }
 
 
@@ -222,9 +226,15 @@ public class InboxFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        MyApplication.getBus().register(this);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        MyApplication.getBus().register(this);
 
     }
 
@@ -480,9 +490,9 @@ public class InboxFragment extends Fragment {
                 }
 
                 if (mInboxAdapter == null || mInboxAdapter.getItemCount() == 0) {
-                    getView().findViewById(R.id.msg_not_have).setVisibility(View.VISIBLE);
+                    mTextNoMsg.setVisibility(View.VISIBLE);
                 } else {
-                    getView().findViewById(R.id.msg_not_have).setVisibility(View.GONE);
+                    mTextNoMsg.setVisibility(View.GONE);
                 }
 
 

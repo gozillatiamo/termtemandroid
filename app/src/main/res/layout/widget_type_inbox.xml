@@ -8,7 +8,8 @@
     <com.worldwidewealth.termtem.widgets.VideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        app:layout_heightPercent="40%">
+        app:layout_heightPercent="40%"
+        android:visibility="gone">
 
     </com.worldwidewealth.termtem.widgets.VideoView>
     <RelativeLayout
@@ -39,12 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_small_space"
-        android:fillViewport="true"
         android:nestedScrollingEnabled="false"
-        android:visibility="gone"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/exoplayer_view"
-        android:layout_toEndOf="@+id/exoplayer_view">
+        android:visibility="visible">
 
     </android.support.v7.widget.RecyclerView>
 </android.support.percent.PercentRelativeLayout>

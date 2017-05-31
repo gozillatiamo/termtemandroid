@@ -27,6 +27,8 @@ import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.worldwidewealth.termtem.ActivityRegister;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.model.ResponseModel;
@@ -72,6 +74,8 @@ public class FragmentReportMT extends Fragment {
     private String imgPath = null;
     private int id = 1;
     private DialogCounterAlert mAlertConfirmUpload = null;
+    private String mAttachEncode;
+
 
     private String[] mListNameBank;
     private String[] mListCodeBank;
@@ -141,22 +145,45 @@ public class FragmentReportMT extends Fragment {
                     break;
             }
 
-         if (imgPath != null) {
+            if (imgPath != null) {
+                getView().findViewById(R.id.text_des_pic).setVisibility(View.GONE);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        System.gc();
+                        Glide.clear(mHolder.mImagePhoto);
+
+                        Glide.with(FragmentReportMT.this).load(imgPath)
+                                .override(300, 300)
+                                .crossFade()
+                                .placeholder(R.drawable.ic_picture)
+                                .into(mHolder.mImagePhoto);
+                    }
+                }, 300);
+            }
+
+
 /*
-                        Bitmap bitmapDecode = Util.getBitmap(imgPath);
-                        Bitmap bitmapFilp = Util.flip(bitmapDecode, imgPath);
-*/
+            if (imgPath != null) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
                         mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-//                        mBitmapEncode = Util.encodeBitmapToUpload(Bitmap.createScaledBitmap(bitmapFilp, 300, 300, true));
                         mHolder.mImagePhoto.setImageBitmap(mBitmapImage);
                         System.gc();
                     }
-                }, 500);
+                }, 300);
             }
-     }
+*/
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mDateDialog != null && mDateDialog.isShowing()) mDateDialog.cancel();
+        if (mTimeDialog != null && mTimeDialog.isShowing()) mTimeDialog.cancel();
     }
 
     private void bindListBank(){
@@ -226,7 +253,7 @@ public class FragmentReportMT extends Fragment {
                 }
 
 
-                if (mBitmapImage == null){
+                if (imgPath == null){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_add_image), Toast.LENGTH_LONG).show();
                     mHolder.mScrollView.smoothScrollTo(0, 0);
 
@@ -244,11 +271,20 @@ public class FragmentReportMT extends Fragment {
                             dialog.dismiss();
                             if (!MyApplication.isUpload(getContext())) {
 
+                                mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+
+                                mAttachEncode = Util.encodeBitmapToUpload(mBitmapImage);
+
+                                if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
+                                    mBitmapImage.recycle();
+                                    mBitmapImage = null;
+                                }
+
                                 final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
                                         APIServices.ACTIONNOTIPAY,
                                         new NotiPayRequestModel(mStrAmount,
                                                 mDateTime,
-                                                Util.encodeBitmapToUpload(mBitmapImage),
+                                                mAttachEncode,
                                                 mStrBankStart,
                                                 mStrBankEnd)));
                                 MyApplication.showNotifyUpload();
@@ -283,7 +319,7 @@ public class FragmentReportMT extends Fragment {
                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                                         .replace(R.id.container_report_mt, FragmentReportMtPreview.newInstance(
                                                 Double.parseDouble(mStrAmount),
-                                                Util.encodeBitmapToUpload(mBitmapImage),
+                                                mAttachEncode,
                                                 mHolder.mBtnDateTransfer.getText().toString(),
                                                 mHolder.mBtnTimeTransfer.getText().toString(),
                                                 mPopupBankStart.getValuesBankSelected(),
@@ -291,10 +327,6 @@ public class FragmentReportMT extends Fragment {
                                         .addToBackStack(null);
                                 fragmentTransaction.commit();
 
-                                if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
-                                    mBitmapImage.recycle();
-                                    mBitmapImage = null;
-                                }
                             }
                         }
                     });
@@ -391,7 +423,8 @@ public class FragmentReportMT extends Fragment {
             mTimeDialog.setCancelable(false);
         }
 
-        mTimeDialog.show();
+            mTimeDialog.show();
+
     }
 
 

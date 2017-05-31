@@ -126,6 +126,8 @@ public class InboxActivity extends MyAppcompatActivity implements InboxFragment.
             mInboxTabLayout.setVisibility(View.GONE);
 
         }
+
+        if(mActionMode == null) return;
         mActionMode.setTitle(count+" รายการที่เลือก");
 
 

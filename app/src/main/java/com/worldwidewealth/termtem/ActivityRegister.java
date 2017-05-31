@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -98,6 +100,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     private static Uri photoURI;
     private String imgPath;
     private Bitmap mBitmapImage;
+    private String mAttachEncode;
 
 
     public static final String TAG = ActivityRegister.class.getSimpleName();
@@ -160,15 +163,25 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
             }
 
                 if (imgPath != null) {
-                    mHolder.mImageAttach.setVisibility(View.VISIBLE);
-                    Glide.with(this).load(imgPath)
-                            .override(300, 300)
-                            .crossFade()
-                            .placeholder(R.drawable.ic_picture)
-                            .into(mHolder.mImageAttach);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.gc();
+                            Glide.clear(mHolder.mImageAttach);
 
-                    mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-                    mDataCheck[ATTACH] = true;
+                            mHolder.mImageAttach.setVisibility(View.VISIBLE);
+
+                            Glide.with(ActivityRegister.this).load(imgPath)
+                                    .override(300, 300)
+                                    .crossFade()
+                                    .placeholder(R.drawable.ic_picture)
+                                    .into(mHolder.mImageAttach);
+
+
+                            mDataCheck[ATTACH] = true;
+
+                        }
+                    }, 300);
                 }
 
         }
@@ -270,9 +283,19 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
+
                                 mLoading.show();
                                 mDialogCondition.cancel();
 
+                                mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+
+                                mAttachEncode = Util.encodeBitmapToUpload(mBitmapImage);
+
+                                if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
+                                    mBitmapImage.recycle();
+                                    mBitmapImage = null;
+                                }
 
                                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                                         mHolder.mEditTitleName.getText().toString(),
@@ -283,8 +306,10 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                         mTel,
                                         mIden,
                                         mPerson,
-                                        Util.encodeBitmapToUpload(mBitmapImage)
+                                        mAttachEncode
                                 )));
+
+
 
                                 APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
                                     @Override
@@ -333,7 +358,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                 });
 
                             }
-                        }, 500);
+                        }, 300);
 
                     }
                 }

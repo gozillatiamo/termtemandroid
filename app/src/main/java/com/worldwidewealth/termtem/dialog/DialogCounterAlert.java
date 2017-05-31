@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.R;
@@ -137,11 +138,16 @@ public class DialogCounterAlert {
             boolean isShow = isShow();
 
             if (!isShow){
-                progressDialog = ProgressDialog.show(mContext,
-                        null,
-                        mContext.getString(R.string.msg_progress),
-                        true,
-                        false);
+                try {
+                    progressDialog = ProgressDialog.show(mContext,
+                            null,
+                            mContext.getString(R.string.msg_progress),
+                            true,
+                            false);
+                } catch (WindowManager.BadTokenException e){
+                    e.printStackTrace();
+                    progressDialog = null;
+                }
             }
 
             return isShow;

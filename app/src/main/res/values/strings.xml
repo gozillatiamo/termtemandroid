@@ -38,7 +38,7 @@
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
     <string name="register_done">&#9679;\t บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
-        \n\n &#9679;\t รอรับ “รหัสผู้ใช้งาน” และ “รหัสผ่าน” เมื่อได้รับการอนุมัติจากบริษัท (ภายใน 3 วันทำการ)
+        \n\n &#9679;\t รอรับ “รหัสผู้ใช้งาน” และ “รหัสผ่าน” เมื่อได้รับการอนุมัติจากบริษัท
         \n\n &#9679;\t สอบถามเพิ่มเติม ติดต่อ 02-331-4788</string>
     <string name="thank_register_done">ขอบคุณท่านที่ให้ความสนใจบริการเติมเต็ม</string>
     <string name="register_device_done">ลงทะเบียนเสร็จสิ้น ทางบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
@@ -61,6 +61,7 @@
     <string name="title_dashboard">Credit Limit</string>
     <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
     <string name="topup">เติมเงินมือถือ</string>
+    <string name="vas">ขายแพคเกจเสริม</string>
     <string name="confirm_order">ยืนยันทำรายการ</string>
     <string name="bank_account">บัญชีธนาคาร</string>
     <string name="credit_debit_card">บัตรเครดิต/เดบิต</string>
@@ -202,7 +203,6 @@
     <string name="please_select_bank_start">กรุณาเลือก ธนาคารต้นทาง</string>
     <string name="please_select_bank_end">กรุณาเลือก ธนาคารปลายทาง</string>
     <string name="airtime">ยอดเติมเงิน</string>
-    <string name="vas">VAS</string>
     <string name="bank_mt_start">ธนาคารต้นทาง :</string>
     <string name="bank_mt_end">ธนาคารปลายทาง :</string>
     <string name="date_transfer_preview">วันที่-เวลา ในการโอน</string>
@@ -227,6 +227,7 @@
     <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
     <string name="msg_upload">กรุณารอสักครู่.....</string>
     <string name="warning">เพื่อทราบ</string>
+    <string name="error_msg_timeout">รายการของท่านอยู่ระหว่างดำเนินการ\nโปรดรอจนกว่าจะมี SMS ส่งไปที่หมายเลขปลายทาง</string>
     <string name="msg_waiting_upload">ระบบกำลังอัพโหลดและตรวจสอบรายการโอนเงิน\nท่านสามารถใช้งานเมนูอื่นได้ตามปกติ</string>
     <string name="dialog_alert_title">แจ้งเตือน!!</string>
     <string name="title_upload_success">อัพโหลดเสร็จสิ้น</string>
@@ -271,7 +272,7 @@
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
     <string name="note">หมายเหตุ :</string>
-    <string name="note_detail">กรุณาเก็บหลักฐานการฝากหรือโอนเงินไว้แจ้งผ่านเมนู ‘แจ้งโอนผ่านธนาคาร’ ในแอพฯเติมเต็ม</string>
+    <string name="note_detail">"กรุณาเก็บหลักฐานการฝาก หรือ การโอนเงินไว้แจ้งผ่านเมนู \"แจ้งโอนผ่านธนาคาร\" ในแอพฯเติมเต็ม"</string>
     <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
 
     //Chat bot

@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -36,16 +37,18 @@ import retrofit2.Response;
  * Created by MyNet on 11/10/2559.
  */
 
-public class FragmentTopup extends Fragment {
+public class FragmentTopup extends Fragment implements View.OnClickListener{
     private View rootView;
     private ViewHolder mHolder;
     private String mTopup;
     private APIServices services = APIServices.retrofit.create(APIServices.class);
     private TermTemLoading loading;
+    private boolean isClickable = true;
 
     public static final String keyTopup = "topup";
     public static final String MOBILE = "mobile";
     public static final String PIN = "pin";
+    public static final String VAS = "vas";
 
 
     public static Fragment newInstance(String topup){
@@ -55,6 +58,7 @@ public class FragmentTopup extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
+
 
     public class ViewHolder{
         private CardView mBtnAis, mBtnTruemove, mBtnDtac;
@@ -90,6 +94,8 @@ public class FragmentTopup extends Fragment {
     public void onResume() {
         super.onResume();
         initData();
+        isClickable = true;
+
     }
 
     private void initBtnServices(){
@@ -109,7 +115,12 @@ public class FragmentTopup extends Fragment {
                 mHolder.mImageTrue.setImageResource(R.drawable.logo_truemoney);
                 mHolder.mBtnDtac.setVisibility(View.GONE);
                 break;
+            case VAS:
+                mHolder.mBtnAis.setVisibility(View.VISIBLE);
+                loading.hide();
+                break;
         }
+
         if (servicePro != null) {
             Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTION_SERVICE_PRO, servicePro));
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -154,27 +165,42 @@ public class FragmentTopup extends Fragment {
         }
 
 
-        mHolder.mBtnAis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFragmentService(APIServices.AIS);
-            }
-        });
+        mHolder.mBtnAis.setOnClickListener(this);
 
-        mHolder.mBtnTruemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFragmentService(APIServices.TRUEMOVE);
-            }
-        });
+        mHolder.mBtnTruemove.setOnClickListener(this);
 
-        mHolder.mBtnDtac.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFragmentService(APIServices.DTAC);
-            }
-        });
+        mHolder.mBtnDtac.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+
+        if (!isClickable) return;
+
+        isClickable = false;
+        String service = null;
+
+        switch (v.getId()) {
+
+            case R.id.btn_ais:
+                service = APIServices.AIS;
+                break;
+            case R.id.btn_truemove:
+                service = APIServices.TRUEMOVE;
+
+                break;
+            case R.id.btn_dtac:
+                service = APIServices.DTAC;
+                break;
+        }
+
+        if (service != null) {
+            startFragmentService(service);
+        }
+
+
+    }
+
 
     private void initData(){
 //        Util.setBalanceWallet(mHolder.mIncludeMyWallet);

@@ -1,0 +1,25 @@
+<resources>
+    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="text_menu_size_dashboard">16sp</dimen>
+    <dimen name="small_text_size">12sp</dimen>
+    <dimen name="my_text_size">14sp</dimen>
+    <dimen name="icon_big_size">64dp</dimen>
+    <dimen name="my_text_large">20sp</dimen>
+    <dimen name="contact_text_size">12sp</dimen>
+    <dimen name="max_width_thumbnail">150dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_space">8dp</dimen>
+    <dimen name="activity_small_space">4dp</dimen>
+    <dimen name="padding_icon_dashboard">20dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="icon_large_size">32dp</dimen>
+    <dimen name="padding_column_list">8dp</dimen>
+    <dimen name="elevation_cardview">4dp</dimen>
+    <dimen name="menu_size">80dp</dimen>
+    <dimen name="height_item_inbox">96dp</dimen>
+
+
+</resources>

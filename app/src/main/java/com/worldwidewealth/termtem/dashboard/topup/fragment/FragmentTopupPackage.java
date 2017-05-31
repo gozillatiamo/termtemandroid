@@ -1,6 +1,8 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -40,6 +44,7 @@ import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.text.NumberFormat;
+import java.util.concurrent.TimeoutException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -458,8 +463,23 @@ public class FragmentTopupPackage extends  Fragment{
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "Exception submit topup: "+t.getMessage());
+
+                if (t.getMessage().equals("timeout")){
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.error_msg_timeout)
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            }).show();
+                    alertDialog.setOnShowListener(new MyShowListener());
+                }else {
                     new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                mBottomAction.setEnable(true);
+                    mBottomAction.setEnable(true);
+                }
             }
         });
     }

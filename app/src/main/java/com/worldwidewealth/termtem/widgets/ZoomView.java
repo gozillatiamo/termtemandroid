@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -24,9 +25,14 @@ import com.worldwidewealth.termtem.services.APIServices;
 public class ZoomView {
     public static Animator mCurrentAnimator;
     public static int mShortAnimationDuration;
-    public static void zoomImageFromThumb(Context context, View rootView, final View thumbView, String urlImage) {
+    public static boolean duringAnima = false;
+    public static void zoomImageFromThumb(final Context context, View rootView, final View thumbView, String urlImage) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
+        if (duringAnima) return;
+
+        duringAnima = true;
+
         mShortAnimationDuration = context.getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
@@ -113,6 +119,8 @@ public class ZoomView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mCurrentAnimator = null;
+                expandedImageView.setBackgroundColor(ContextCompat.getColor(context,android.R.color.black));
+                duringAnima = false;
             }
 
             @Override
@@ -151,6 +159,12 @@ public class ZoomView {
                 set.setDuration(mShortAnimationDuration);
                 set.setInterpolator(new DecelerateInterpolator());
                 set.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        expandedImageView.setBackgroundColor(ContextCompat.getColor(context,android.R.color.transparent));
+
+                    }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         thumbView.setAlpha(1f);

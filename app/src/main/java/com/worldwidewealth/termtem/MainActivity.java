@@ -134,7 +134,7 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
 
         new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN,
                 new DialogCounterAlert.DialogProgress(this).show())
-                .checkWifi(mPhone, mPassword, Global.getInstance().getTXID());
+                .checkWifi(mPhone, mPassword);
 
 /*
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

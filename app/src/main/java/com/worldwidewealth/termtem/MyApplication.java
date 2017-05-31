@@ -297,14 +297,14 @@ public class MyApplication extends Application implements Application.ActivityLi
                         {
                             Log.e(TAG, ""+count);
                             count--;
-                            if (count == 0){
+                            if (count == 0 && T != null){
                                 Global.getInstance().clearUserName();
                                 Util.logoutAPI(null, true);
                                 T.cancel();
                                 T = null;
                             }
 
-                            if (count < 0){
+                            if (count < 0 && T != null){
                                 T.cancel();
                                 T = null;
                                 mThread.interrupt();

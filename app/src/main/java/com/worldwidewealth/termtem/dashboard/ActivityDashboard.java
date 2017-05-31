@@ -84,9 +84,11 @@ public class ActivityDashboard extends MyAppcompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myReceiver);
+/*
         if (Global.getInstance().getTXID() != null) {
             Util.logoutAPI(this, true);
         }
+*/
     }
 
     @Override
@@ -170,6 +172,12 @@ public class ActivityDashboard extends MyAppcompatActivity{
         String userDecoded = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
                 Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
         String username = null;
+
+        if (userDecoded == null){
+            Util.backToSignIn(ActivityDashboard.this);
+            return;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             username = PhoneNumberUtils.formatNumber(userDecoded, Locale.JAPAN.getCountry());
         } else {

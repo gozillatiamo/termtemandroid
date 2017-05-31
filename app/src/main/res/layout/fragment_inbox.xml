@@ -21,15 +21,14 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:clipToPadding="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         android:id="@+id/nestedScrollView">
 
-    </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/msg_not_have"

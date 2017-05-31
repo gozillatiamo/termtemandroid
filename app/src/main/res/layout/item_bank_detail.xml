@@ -46,8 +46,11 @@
 
             <ImageView
                 android:id="@+id/bank_logo_kbank"
-                android:layout_width="@dimen/activity_vertical_margin"
-                android:layout_height="@dimen/activity_vertical_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
                 android:src="@drawable/kbank"/>
 
         </RelativeLayout>
@@ -94,8 +97,11 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/bank_logo_bbl"
-                android:layout_width="@dimen/activity_vertical_margin"
-                android:layout_height="@dimen/activity_vertical_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
                 android:src="@drawable/bbl"/>
         </RelativeLayout>
 
@@ -144,11 +150,11 @@
             <ImageView
                 android:id="@+id/bank_logo_promptpay"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/activity_vertical_margin"
+                android:layout_height="@dimen/icon_size"
                 android:layout_alignParentLeft="true"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
-                android:src="@drawable/ic_promptpay"/>
+                android:src="@drawable/ic_termtem_promptpay"/>
 
         </RelativeLayout>
 
@@ -200,15 +206,16 @@
 
             android:text="@string/note"
             android:textStyle="bold"/>
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/saving_account_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             style="@style/TextAppearance.AppCompat.Caption"
             android:autoLink="all"
+            android:breakStrategy="balanced"
+            android:hyphenationFrequency="none"
             android:textSize="@dimen/contact_text_size"
-
             android:text="@string/note_detail"/>
     </LinearLayout>
 

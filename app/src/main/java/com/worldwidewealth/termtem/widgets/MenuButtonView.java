@@ -77,7 +77,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         HISTORY(7),
         EPIN(8),
         OTHER(9),
-        AR(10);
+        AR(10),
+        VAS(11);
 
         private int type;
         TYPE(int i) {
@@ -471,6 +472,10 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     break;
                 case AR:
 //                    intent = new Intent(getContext(), UnityPlayerNativeActivity.class);
+                    break;
+                case VAS:
+                    intent = new Intent(getContext(), ActivityTopup.class);
+                    intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.VAS);
                     break;
             }
 

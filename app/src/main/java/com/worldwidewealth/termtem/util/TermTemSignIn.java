@@ -117,6 +117,7 @@ public class TermTemSignIn {
                         if (responseModel.getShow() == APIServices.SUCCESS) {
                             Log.e(TAG, "TXID from PRE: "+responseModel.getTXID());
                             mTXID = responseModel.getTXID();
+
                             switch (mType){
                                 case NEWLOGIN:
                                     if (checkVersionApp(responseModel.getVersion())) {
@@ -124,12 +125,16 @@ public class TermTemSignIn {
                                     }
                                     break;
                                 case RELOGIN:
+                                    Log.e(TAG, "Username before encode: "+Global.getInstance().getUSERNAME());
+                                    Log.e(TAG, "Password before encode: "+Global.getInstance().getPASSWORD());
+                                    Log.e(TAG, "TXID before encode: "+Global.getInstance().getTXID());
+                                    Log.e(TAG, "DeviceId before encode: "+Global.getInstance().getDEVICEID());
                                     String username = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
                                             Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
                                     String password = EncryptionData.DecryptData(Global.getInstance().getPASSWORD(),
                                             Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
-
-                                    checkWifi(username, password, mTXID);
+                                    Global.getInstance().setTXID(mTXID);
+                                    checkWifi(username, password);
                                     break;
                             }
                         } else {
@@ -211,15 +216,18 @@ public class TermTemSignIn {
 
     }
 
-    public void checkWifi(String username, String password, String TXID){
+    public void checkWifi(String username, String password){
 //        new DialogCounterAlert.DialogProgress(mContext);
 
         this.mUsername = username;
         this.mPassword = password;
-        this.mTXID = TXID;
-        Log.e(TAG, "Username: "+username);
-        Log.e(TAG, "Password: "+password);
-        Log.e(TAG, "TXID: "+TXID);
+        Log.e(TAG, "Username: "+mUsername);
+        Log.e(TAG, "Password: "+mPassword);
+
+        if (mUsername.isEmpty() || mPassword.isEmpty()){
+            DialogCounterAlert.DialogProgress.dismiss();
+            Util.backToSignIn((Activity) mContext);
+        }
 
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -262,6 +270,7 @@ public class TermTemSignIn {
     }
 
     private void serviceAcceptWIFI(){
+        Log.e(TAG, "TXID before acceptwifi: "+Global.getInstance().getTXID());
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
                 new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -269,7 +278,6 @@ public class TermTemSignIn {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
                 if (responseValues != null) Login();
-
             }
 
             @Override
@@ -282,10 +290,10 @@ public class TermTemSignIn {
 
     private void Login(){
 
-        final String usernameEncode = EncryptionData.EncryptData(mUsername.replaceAll("-", ""), Global.getInstance().getDEVICEID()+mTXID);
-        mPassword = EncryptionData.EncryptData(mPassword, Global.getInstance().getDEVICEID()+mTXID);
+        final String usernameEncode = EncryptionData.EncryptData(mUsername.replaceAll("-", ""), Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+        mPassword = EncryptionData.EncryptData(mPassword, Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-        Global.getInstance().setTXID(mTXID);
+//        Global.getInstance().setTXID(mTXID);
 
         Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
                 Global.getInstance().getDEVICEID(),

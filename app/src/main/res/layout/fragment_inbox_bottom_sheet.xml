@@ -42,11 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_inbox_title"
-        android:scrollbars="vertical"
-        android:fillViewport = "true">
+        android:scrollbars="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <com.worldwidewealth.termtem.widgets.WidgetTypeInbox
                 android:id="@+id/widget_type"
@@ -89,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@android:color/black"
+        android:background="@android:color/transparent"
         android:adjustViewBounds="true"
         android:elevation="@dimen/elevation_cardview"
         android:src="@drawable/logo_ais"

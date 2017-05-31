@@ -111,7 +111,6 @@ public class WidgetTypeInbox extends FrameLayout{
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        super.onRestoreInstanceState(state);
         if(!(state instanceof SaveState)){
             super.onRestoreInstanceState(state);
             return;
