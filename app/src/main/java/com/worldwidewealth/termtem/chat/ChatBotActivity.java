@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem.chat;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,8 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -65,7 +68,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
 
     private static final long MESSAGE_DELAY_TIME = 1000;
     private static final int REMOVE_STEP = 99;
-    private static final String LINK = "htttps://wwwealth.co/wealthservice/tc.html";
+    private static final String LINK = "https://wwwealth.co/wealthservice/tc.html";
     private static final String IMG_BANK_ACCOUNT = "bank_account";
     private static final String IMG_MPAY = "mpay";
     private static final String IMG_ATM = "atm";
@@ -83,6 +86,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private ImageView termTem;
     private ImageButton btnBack;
     private ImageButton btnRefresh;
+    private Dialog dialogWebView;
+    private WebView webView;
 
     //view first menu
     private View inputTutorial;
@@ -172,6 +177,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         bindView();
         setUpView();
         initAdapter();
+        createDialog();
         expandableLayout.collapse();
 
     }
@@ -514,6 +520,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             }
         }else if (message.getUrl()!=null){
             //show link
+            webView.loadUrl(message.getUrl());
+            dialogWebView.show();
         }
     }
 
@@ -1109,4 +1117,11 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         idCardImage.setImageResource(0);
     }
 
+    private void createDialog(){
+        dialogWebView = new Dialog(this, R.style.DialogFullScreen);
+        dialogWebView.setContentView(R.layout.dialog_policy);
+        dialogWebView.getWindow().setBackgroundDrawableResource(R.color.grayDarkTransparent);
+
+        webView = (WebView) dialogWebView.findViewById(R.id.webView_policy);
+    }
 }
