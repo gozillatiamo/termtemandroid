@@ -152,9 +152,9 @@ public interface APIServices {
 
 
     OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.SECONDS)
-            .readTimeout(1, TimeUnit.SECONDS)
-            .writeTimeout(1, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.MINUTES)
+            .writeTimeout(30, TimeUnit.MINUTES)
             .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override

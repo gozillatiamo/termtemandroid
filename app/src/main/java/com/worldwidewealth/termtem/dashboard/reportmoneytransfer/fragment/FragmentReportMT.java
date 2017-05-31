@@ -269,7 +269,7 @@ public class FragmentReportMT extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            if (!MyApplication.isUpload(getContext())) {
+                            if (!MyApplication.isUpload(getContext(), R.string.has_upload)) {
 
                                 mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
 
@@ -287,7 +287,11 @@ public class FragmentReportMT extends Fragment {
                                                 mAttachEncode,
                                                 mStrBankStart,
                                                 mStrBankEnd)));
-                                MyApplication.showNotifyUpload();
+                                MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD,
+                                        String.valueOf(MyApplication.NOTIUPLOAD),
+                                        getString(R.string.title_upload),
+                                        getString(R.string.msg_upload),
+                                        android.R.drawable.stat_sys_upload);
                                 APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -297,11 +301,15 @@ public class FragmentReportMT extends Fragment {
                                         if (responseValues instanceof ResponseModel) {
                                             ResponseModel responseModel = (ResponseModel) responseValues;
                                             if (responseModel.getStatus() == APIServices.SUCCESS)
-                                                MyApplication.uploadSuccess();
+                                                MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD,
+                                                        String.valueOf(MyApplication.NOTIUPLOAD),
+                                                        getString(R.string.title_upload_success),
+                                                        getString(R.string.msg_upload_success),
+                                                        android.R.drawable.stat_sys_upload_done, null);
                                             else
-                                                MyApplication.uploadFail(responseModel.getMsg());
+                                                setUploadFail(responseModel.getMsg(), call, this);
                                         } else {
-                                            MyApplication.uploadFail(null);
+                                            setUploadFail(null, call, this);
                                         }
                                     }
 
@@ -309,7 +317,7 @@ public class FragmentReportMT extends Fragment {
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         t.printStackTrace();
                                         //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                        MyApplication.uploadFail(null);
+                                        setUploadFail(null, call, this);
                                     }
                                 });
 
@@ -394,6 +402,14 @@ public class FragmentReportMT extends Fragment {
         }
 
         mDateDialog.show();
+    }
+
+    private void setUploadFail(String msg, Call call, Callback callback){
+        MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
+                String.valueOf(MyApplication.NOTIUPLOAD),
+                getString(R.string.title_upload_fail),
+                (msg + " " + getString(R.string.msg_upload_fail)),
+                android.R.drawable.stat_notify_error, call, callback);
     }
 
     private void showTimeDialog(){

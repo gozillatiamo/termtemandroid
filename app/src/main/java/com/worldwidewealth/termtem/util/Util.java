@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,8 +41,12 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.Global;
@@ -510,4 +515,52 @@ public class Util {
         } else {
             return false;
         }
-    }}
+    }
+
+    public static void getPreviousEslip(final Context context, final String transid, String topupType, final int rootview){
+        String mActionEslip = APIServices.ACTIONESLIP;
+
+        if (topupType.equals(FragmentTopup.PIN)){
+            mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+        }
+
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
+
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(MyApplication.getContext(), call, response.body(), this);
+
+/*
+                if (responseValues == null) {
+                    mBottomAction.setEnable(true);
+                    return;
+                }
+*/
+
+                if (responseValues instanceof ResponseModel) {
+                    byte[] imageByte = Base64.decode(((ResponseModel) responseValues).getFf()
+                            , Base64.NO_WRAP);
+                    AppCompatActivity activity = (AppCompatActivity) context;
+//                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    try {
+                        if (activity == null) return;
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(context, null, call, this, false);
+            }
+
+        });
+    }
+
+}
