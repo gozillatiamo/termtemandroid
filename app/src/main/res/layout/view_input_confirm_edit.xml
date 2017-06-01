@@ -28,7 +28,7 @@
         android:id="@+id/btn_cancel_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/cancel"
+        android:text="ยกเลิกการสมัคร"
         android:background="@drawable/btn_chat_bot"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"

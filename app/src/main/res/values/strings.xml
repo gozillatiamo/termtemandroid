@@ -292,12 +292,12 @@
     <string name="chat_how_to_register">ต้องการทราบวิธีลงทะเบียนกับเติมเต็ม</string>
     <string name="chat_register_now">ลงทะเบียนกับเติมเต็มตอนนี้</string>
     <string name="chat_hello_i_am_term_tem">สวัสดีครับ ผมคือน้องเติมเต็ม</string>
-    <string name="chat_need_help">อยากให้น้องเติมช่วยอะไรครับ</string>
+    <string name="chat_need_help">อยากให้น้องเติมเต็มช่วยอะไรครับ</string>
     <string name="chat_how_to_transfer_money_to_bank">วิธีแจ้งโอนเงินผ่านธนาคาร</string>
     <string name="chat_how_to_transfer_money_to_account">สอบถามวิธีโอนเงินเข้าบัญชีเติมเต็ม</string>
     <string name="chat_register_account">สมัครตัวแทน</string>
-    <string name="chat_use_bank">โอนเข้าบัญชีธนาคาร</string>
-    <string name="chat_use_mpay">โอนผ่านเอ็มเปย์สเตชั่น</string>
+    <string name="chat_use_bank">โอนเงินเข้าบัญชีธนาคาร</string>
+    <string name="chat_use_mpay">โอนเงินผ่านเอ็มเปย์สเตชั่น</string>
     <string name="chat_use_mpay_station">ผ่านจุดบริการเอ็มเปย์สเตชั่น</string>
     <string name="chat_use_mpay_atm">ผ่านตู้ ATM</string>
     <string name="chat_dont_forgot">เมื่อโอนเงินแล้วต้องแจ้งโอนเงินในโปรแกรมด้วยนะครับ</string>
