@@ -2,8 +2,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_chat_bot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:id="@+id/appBar"
@@ -106,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:el_duration="1000"
+            app:el_duration="500"
             app:el_expanded="false"
             app:el_parallax="0.5">
 
@@ -184,6 +188,12 @@
                     android:id="@+id/input_mpay"
                     layout="@layout/view_input_mpay"
                     android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/input_btn_back"
+                    layout="@layout/view_input_back"
+                    android:visibility="gone"/>
+
 
             </LinearLayout>
 

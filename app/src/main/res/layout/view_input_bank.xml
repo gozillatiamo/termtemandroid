@@ -7,7 +7,9 @@
         android:id="@+id/btn_bank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="โอนเข้าบัญชีธนาคาร"
+        android:text="โอนเงินเข้าบัญชีธนาคาร"
+        android:background="@drawable/btn_chat_bot"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
@@ -15,7 +17,9 @@
         android:id="@+id/btn_mpay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="โอนผ่านเอ็มเปย์สเตชั่น"
+        android:text="โอนเงินผ่านเอ็มเปย์สเตชั่น"
+        android:background="@drawable/btn_chat_bot"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>

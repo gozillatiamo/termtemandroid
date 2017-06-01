@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 
@@ -53,7 +54,7 @@ public class PhotoViewActivity extends MyAppcompatActivity{
 
         int resId = getIntent().getIntExtra(EXTRA_RES_ID, 0);
         if (resId == 0){
-            Glide.with(this).load(getIntent().getStringExtra(EXTRA_IMG_URL)).into(mImage);
+            Glide.with(this).load(getIntent().getStringExtra(EXTRA_IMG_URL)).asBitmap().diskCacheStrategy(DiskCacheStrategy.ALL).into(mImage);
         }else {
             Glide.with(this).load(resId).into(mImage);
         }

@@ -4,24 +4,14 @@
     android:layout_height="wrap_content">
 
     <Button
-        android:id="@+id/btn_stay"
+        android:id="@+id/btn_img_back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="คุยต่อ"
+        android:text="ย้อนกลับ"
         android:background="@drawable/btn_chat_bot"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-    <Button
-        android:id="@+id/btn_exit"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/btn_chat_bot"
-        android:layout_marginTop="10dp"
-        android:text="@string/chat_bye"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </LinearLayout>
