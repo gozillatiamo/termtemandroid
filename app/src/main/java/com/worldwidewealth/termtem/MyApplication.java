@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.squareup.otto.Bus;
+import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
@@ -61,6 +62,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Bus mBus;
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
+    private NetworkStateMonitor mNetworkStateMonitor;
     public static boolean clickable = true;
     public static final int NOTIUPLOAD = 1;
     public static final int NOTITOPUP = 2;
@@ -92,6 +94,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mContext = getApplicationContext();
         userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
         mBus = new Bus();
+        mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Mitr-Regular.ttf")
@@ -118,6 +121,8 @@ public class MyApplication extends Application implements Application.ActivityLi
             e.printStackTrace();
         }
     }
+
+
 
     public static Context getContext(){
         return mContext;
@@ -362,6 +367,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setSmallIcon(smallicon);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setOngoing(false);
+        mBuilder.setAutoCancel(true);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
@@ -396,6 +402,8 @@ public class MyApplication extends Application implements Application.ActivityLi
             PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
                     retryIntent, 0);
             mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
+        } else {
+            mBuilder.setAutoCancel(true);
         }
         mNotifyManager.notify(tag, id, mBuilder.build());
         isUpload = false;

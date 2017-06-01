@@ -114,6 +114,7 @@
     <string name="setting_gps_message">ตำแหน่งถูกปิดอยู่ คุณจำเป็นต้องเปิดใช้งานตำแหน่งก่อนใช้งาน แอพพลิเคชั่น</string>
     <string name="network_error_title">การเชื่อมต่อล้มเหลว</string>
     <string name="network_error_message">การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง</string>
+    <string name="network_disconnect">อินเตอร์เน็ตขาดการเชื่อมต่อ</string>
     <string name="try_again">ลองใหม่</string>
     <string name="dashboard_my_card">My Cards</string>
     <string name="dashboard_card_to_card">Card to Card</string>
@@ -330,6 +331,9 @@
     <string name="cannot_register_duplicate_id_card">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(บัตรประชาชนซ้ำ)</string>
     <string name="cannot_register_duplicate_phone_number">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(หมายเลขโทรศัพท์ซ้ำ)</string>
     <string name="cannot_register_network_connection_problem">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(สัญญาณอินเตอร์เน็ตมีปัญหา) กรุณาตรวจสอบอินเตอร์เน็ต และลองใหม่</string>
+    <string name="day">วัน</string>
+    <string name="title_phone_short">เบอร์</string>
+    <string name="edit_phone">แก้ไขเบอร์</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
@@ -498,6 +502,23 @@
         <item>EPIN</item>
         <item>CASHIN</item>
     </string-array>
+    
+    <string-array name="list_vas_speed">
+        <item>เน็ตความเร็วสูงสุด</item>
+        <item>เน็ตความเร็ว 512K</item>
+        <item>เน็ตความเร็วสูงสุด</item>
+        <item>เน็ตความเร็ว 512K</item>
+        <item>เน็ตความเร็วสูงสุด</item>
+    </string-array>
+
+    <string-array name="list_vas_volume">
+        <item>ปริมาณ 100MB</item>
+        <item>ปริมาณ 300MB</item>
+        <item>ปริมาณ 500MB</item>
+        <item>ปริมาณไม่จำกัด</item>
+        <item>ปริมาณ 1GB</item>
+    </string-array>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

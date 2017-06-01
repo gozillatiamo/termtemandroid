@@ -132,9 +132,8 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
                         List<ServiceProResponseModel> models = new Gson()
                                 .fromJson((String)responseValues,
                                         new TypeToken<List<ServiceProResponseModel>>(){}.getType());
-
-                        for (ServiceProResponseModel model : models){
-                            switch (model.getCARRIERCODE()){
+                        for (ServiceProResponseModel model : models) {
+                            switch (model.getCARRIERCODE()) {
                                 case APIServices.AIS:
                                     mHolder.mBtnAis.setVisibility(View.VISIBLE);
                                     break;
@@ -146,12 +145,15 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
                                     break;
                             }
                         }
-                    } else if (responseValues == null && (getString(R.string.server).contains("test") ||
+                    }
+/*
+                    else if (responseValues == null && (getString(R.string.server).contains("test") ||
                             getString(R.string.server).contains("203.154.162.119"))){
                         mHolder.mBtnAis.setVisibility(View.VISIBLE);
                         mHolder.mBtnTruemove.setVisibility(View.VISIBLE);
                         mHolder.mBtnDtac.setVisibility(View.VISIBLE);
                     }
+*/
 
                     loading.hide();
                 }
