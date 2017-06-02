@@ -1,11 +1,14 @@
 package com.worldwidewealth.termtem.dashboard.topup;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -91,6 +94,22 @@ public class ActivityTopup extends MyAppcompatActivity {
                 .getChildFragmentManager()
                 .popBackStackImmediate()){
             super.onBackPressed();
+        } else if (mTopup.equals(FragmentTopup.VAS)){
+            final View view = getSupportFragmentManager()
+                .findFragmentById(R.id.container_topup)
+                .getView().findViewById(R.id.recycler_vas);
+
+            view.animate()
+                .alpha(1.0f)
+                .setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        view.setAlpha(0.0f);
+                        view.setVisibility(View.VISIBLE);
+                    }
+                });
         }
     }
 

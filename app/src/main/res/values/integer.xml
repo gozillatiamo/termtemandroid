@@ -34,4 +34,19 @@
         <item>@drawable/ic_report_cashin</item>
     </integer-array>
 
+    <integer-array name="list_vas_price">
+        <item>10</item>
+        <item>16</item>
+        <item>21</item>
+        <item>49</item>
+        <item>69</item>
+    </integer-array>
+
+    <integer-array name="list_vas_limitday">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>3</item>
+        <item>3</item>
+    </integer-array>
 </resources>

@@ -126,6 +126,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorBackground"
                     android:visibility="gone"
+                    android:fillViewport="true"
                     android:padding="@dimen/activity_small_space"
                     >
 

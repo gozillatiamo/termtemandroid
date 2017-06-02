@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -22,6 +23,7 @@ import com.worldwidewealth.termtem.R;
 
 public class TermTemLoading extends RelativeLayout {
     private ViewGroup mRootView;
+    public static final String TAG = TermTemLoading.class.getSimpleName();
     public TermTemLoading(Context context, ViewGroup rootview) {
         super(context);
         this.mRootView = rootview;
@@ -73,6 +75,9 @@ public class TermTemLoading extends RelativeLayout {
 
     public void show(){
         if (this.isShown()) return;
+        TermTemLoading.this.setAlpha(0.0f);
+        TermTemLoading.this.setVisibility(VISIBLE);
+
         this.animate()
                 .alpha(1.0f)
                 .setDuration(300)
@@ -80,14 +85,15 @@ public class TermTemLoading extends RelativeLayout {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
-                        TermTemLoading.this.setAlpha(0.0f);
-                        TermTemLoading.this.setVisibility(VISIBLE);
                     }
                 });
     }
 
     public void hide(){
-        if (!this.isShown()) return;
+        Log.e(TAG, ""+this.getVisibility());
+        if (!(this.getVisibility() == VISIBLE)){
+            return;
+        }
         this.animate()
                 .alpha(0.0f)
                 .setDuration(300)

@@ -131,7 +131,7 @@
                                         android:layout_weight="1"
                                         app:mbv_icon="@drawable/ic_topup"
                                         app:mbv_title="@string/vas"
-                                        app:mbv_type="topup"
+                                        app:mbv_type="vas"
                                         app:mbv_visibility="show">
 
                                     </com.worldwidewealth.termtem.widgets.MenuButtonView>

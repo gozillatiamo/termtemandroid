@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.nfc.Tag;
@@ -9,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.InputType;
@@ -25,6 +29,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -43,6 +48,7 @@ import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.TopupResponseModel;
 import com.worldwidewealth.termtem.util.BottomAction;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.RecyclerItemClickListener;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.text.NumberFormat;
@@ -50,6 +56,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,6 +86,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String transid;
     private Timer mTimerTimeout;
     private AlertDialog mAlertTimeout;
+    private VasAdapter mVasAdapter;
 
     private String mActionLoadButton = APIServices.ACTIONLOADBUTTON;
     private String mActionPreview = APIServices.ACTIONPREVIEW;
@@ -123,7 +131,11 @@ public class FragmentTopupPackage extends  Fragment{
         Util.setupUI(rootView);
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
 //        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
-        initPageTopup();
+        if (!mTopup.equals(FragmentTopup.VAS))
+            initPageTopup();
+        else
+            setupVAS();
+
         initBtn();
         initData();
         mHolder.mEditPhone.requestFocus();
@@ -259,36 +271,7 @@ public class FragmentTopupPackage extends  Fragment{
     private void servicePreview(){
         mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
-        if (mPhone.length() != 10){
-            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                    .setMessage(R.string.please_phone_topup_error)
-                    .setPositiveButton(R.string.confirm, null)
-                    .show();
-            mBottomAction.setEnable(true);
-
-            return;
-        }
-
-        if (mAmt == 0){
-            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                    .setMessage(R.string.please_choice_topup)
-                    .setPositiveButton(R.string.confirm, null)
-                    .show();
-            mBottomAction.setEnable(true);
-
-            return;
-        }
-
-        if (Global.getInstance().getBALANCE() < mAmt){
-            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                    .setMessage(R.string.balance_not_enough)
-                    .setPositiveButton(R.string.confirm, null)
-                    .show();
-            mBottomAction.setEnable(true);
-
-            return;
-        }
-
+        if (!checkData()) return;
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
 
@@ -368,6 +351,43 @@ public class FragmentTopupPackage extends  Fragment{
                 mBottomAction.setEnable(true);
             }
         });
+
+    }
+
+    private boolean checkData(){
+        mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
+
+        if (mPhone.length() != 10){
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.please_phone_topup_error)
+                    .setPositiveButton(R.string.confirm, null)
+                    .show();
+            mBottomAction.setEnable(true);
+
+            return false;
+        }
+
+        if (mAmt == 0){
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.please_choice_topup)
+                    .setPositiveButton(R.string.confirm, null)
+                    .show();
+            mBottomAction.setEnable(true);
+
+            return false;
+        }
+
+        if (Global.getInstance().getBALANCE() < mAmt){
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.balance_not_enough)
+                    .setPositiveButton(R.string.confirm, null)
+                    .show();
+            mBottomAction.setEnable(true);
+
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -620,12 +640,58 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
+    private void setupVAS(){
+        mHolder.mRecyclerVAS.setVisibility(View.VISIBLE);
+        mVasAdapter = new VasAdapter(getContext());
+        mHolder.mRecyclerVAS.setLayoutManager(new LinearLayoutManager(getContext()));
+        mHolder.mRecyclerVAS.setAdapter(new ScaleInAnimationAdapter(mVasAdapter));
+        mHolder.mRecyclerVAS.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                setAmt(mVasAdapter.getItem(position).getPRICE(), null);
+                if (!checkData()) return;
+
+                AlertDialog confirmDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                        .setTitle(getString(R.string.title_phone_short)+" "+mHolder.mEditPhone.getText().toString())
+                        .setMessage(mVasAdapter.getItem(position).getSPEED()+"\n"+
+                                mVasAdapter.getItem(position).getVOLUME()+"/"+
+                                mVasAdapter.getItem(position).getLIMITDAY()+" "+getString(R.string.day))
+                        .setNegativeButton(R.string.edit_phone, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mBottomAction.setEnable(false);
+                                mHolder.mRecyclerVAS.animate()
+                                        .alpha(0.0f)
+                                        .setDuration(500)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                mHolder.mRecyclerVAS.setVisibility(View.GONE);
+                                            }
+                                        });
+                                servicePreview();
+                            }
+                        }).show();
+
+                confirmDialog.setOnShowListener(new MyShowListener());
+            }
+        }));
+    }
+
     public class ViewHolder{
 //        private Button mBtnNext, mBtnTopup, mBtnCancel;
         private TextView mTextPrice, mTextHint;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
+        private RecyclerView mRecyclerVAS;
 //        private View mLayoutBtnTopup;
         private View mIncludeBottomAction;
         public ViewHolder(View itemview){
@@ -640,6 +706,7 @@ public class FragmentTopupPackage extends  Fragment{
             mTextHint = (TextView) itemview.findViewById(R.id.text_hint);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
+            mRecyclerVAS = (RecyclerView) itemview.findViewById(R.id.recycler_vas);
 //            mEditPhone.setOnFocusChangeListener(Util.onFocusEditText());
             mEditPhone.addTextChangedListener(new TextWatcher() {
                 @Override
