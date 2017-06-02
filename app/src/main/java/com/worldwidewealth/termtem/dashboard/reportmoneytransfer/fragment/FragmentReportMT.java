@@ -280,13 +280,15 @@ public class FragmentReportMT extends Fragment {
                                     mBitmapImage = null;
                                 }
 
-                                final Call<okhttp3.ResponseBody> req = services.notipay(new RequestModel(
+                                final RequestModel requestModel = new RequestModel(
                                         APIServices.ACTIONNOTIPAY,
                                         new NotiPayRequestModel(mStrAmount,
                                                 mDateTime,
                                                 mAttachEncode,
                                                 mStrBankStart,
-                                                mStrBankEnd)));
+                                                mStrBankEnd));
+
+                                final Call<okhttp3.ResponseBody> req = services.notipay(requestModel);
                                 MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD,
                                         String.valueOf(MyApplication.NOTIUPLOAD),
                                         getString(R.string.title_upload),
@@ -303,13 +305,13 @@ public class FragmentReportMT extends Fragment {
                                             if (responseModel.getStatus() == APIServices.SUCCESS)
                                                 MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD,
                                                         String.valueOf(MyApplication.NOTIUPLOAD),
-                                                        getString(R.string.title_upload_success),
-                                                        getString(R.string.msg_upload_success),
+                                                        MyApplication.getContext().getString(R.string.title_upload_success),
+                                                        MyApplication.getContext().getString(R.string.msg_upload_success),
                                                         android.R.drawable.stat_sys_upload_done, null);
                                             else
-                                                setUploadFail(responseModel.getMsg(), call, this);
+                                                setUploadFail(responseModel.getMsg(), requestModel);
                                         } else {
-                                            setUploadFail(null, call, this);
+                                            setUploadFail(null, requestModel);
                                         }
                                     }
 
@@ -317,7 +319,7 @@ public class FragmentReportMT extends Fragment {
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         t.printStackTrace();
                                         //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                        setUploadFail(null, call, this);
+                                        setUploadFail(null, requestModel);
                                     }
                                 });
 
@@ -404,12 +406,12 @@ public class FragmentReportMT extends Fragment {
         mDateDialog.show();
     }
 
-    private void setUploadFail(String msg, Call call, Callback callback){
+    private void setUploadFail(String msg, RequestModel requestModel){
         MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
                 String.valueOf(MyApplication.NOTIUPLOAD),
-                getString(R.string.title_upload_fail),
-                (msg + " " + getString(R.string.msg_upload_fail)),
-                android.R.drawable.stat_notify_error, call, callback);
+                MyApplication.getContext().getString(R.string.title_upload_fail),
+                (msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail)),
+                android.R.drawable.stat_notify_error, requestModel);
     }
 
     private void showTimeDialog(){

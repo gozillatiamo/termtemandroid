@@ -287,7 +287,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
 
                                 mLoading.show();
                                 mDialogCondition.cancel();
-
+                                checkboxSubmit.toggle();
                                 mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
 
                                 mAttachEncode = Util.encodeBitmapToUpload(mBitmapImage);

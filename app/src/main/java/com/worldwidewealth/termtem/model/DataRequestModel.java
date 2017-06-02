@@ -1,5 +1,8 @@
 package com.worldwidewealth.termtem.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
@@ -9,7 +12,7 @@ import com.worldwidewealth.termtem.R;
  * Created by MyNet on 15/11/2559.
  */
 
-public class DataRequestModel {
+public class DataRequestModel implements Parcelable{
 
     private String DEVICEID = Global.getInstance().getDEVICEID();
     private String PLATFORM = MyApplication.getContext().getString(R.string.platform);
@@ -48,6 +51,26 @@ public class DataRequestModel {
     }
 
 
+    protected DataRequestModel(Parcel in) {
+        DEVICEID = in.readString();
+        PLATFORM = in.readString();
+        TXID = in.readString();
+        AGENTID = in.readString();
+        USERID = in.readString();
+    }
+
+    public static final Creator<DataRequestModel> CREATOR = new Creator<DataRequestModel>() {
+        @Override
+        public DataRequestModel createFromParcel(Parcel in) {
+            return new DataRequestModel(in);
+        }
+
+        @Override
+        public DataRequestModel[] newArray(int size) {
+            return new DataRequestModel[size];
+        }
+    };
+
     public String getDEVICEID() {
         return DEVICEID;
     }
@@ -69,4 +92,17 @@ public class DataRequestModel {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(DEVICEID);
+        dest.writeString(PLATFORM);
+        dest.writeString(TXID);
+        dest.writeString(AGENTID);
+        dest.writeString(USERID);
+    }
 }

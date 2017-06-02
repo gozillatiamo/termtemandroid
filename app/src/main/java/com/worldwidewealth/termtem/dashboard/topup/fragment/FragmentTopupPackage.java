@@ -472,14 +472,14 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        call = services.submitTopup(
-                new RequestModel(mActionSumitTopup,
-                        new SubmitTopupRequestModel(String.valueOf(getmAmt()),
-                                mCarrier,
-                                mPhone,
-                                model.getTranid(),
-                                mButtonID,
-                                null)));
+        final RequestModel requestModel = new RequestModel(mActionSumitTopup,
+                new SubmitTopupRequestModel(String.valueOf(getmAmt()),
+                        mCarrier,
+                        mPhone,
+                        model.getTranid(),
+                        mButtonID,
+                        null));
+        call = services.submitTopup(requestModel);
 
         startTimeoutSubmit(model.getTranid());
 
@@ -515,7 +515,7 @@ public class FragmentTopupPackage extends  Fragment{
                                     +MyApplication.getContext().getString(R.string.currency),
                             MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+" "
                                     +MyApplication.getContext().getString(R.string.msg_upload_fail),
-                            android.R.drawable.stat_sys_warning, null, null);
+                            android.R.drawable.stat_sys_warning, null);
 
                     return;
                 }
@@ -546,10 +546,10 @@ public class FragmentTopupPackage extends  Fragment{
 
                 MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
                         title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+
-                                " "+getString(R.string.currency),
+                                " "+MyApplication.getContext().getString(R.string.currency),
                         MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+
                                 " "+MyApplication.getContext().getString(R.string.msg_upload_fail),
-                        android.R.drawable.stat_sys_warning, call, this);
+                        android.R.drawable.stat_sys_warning, requestModel);
 
                 if (t.getMessage().equals("timeout")){
                 }else {
@@ -594,7 +594,7 @@ public class FragmentTopupPackage extends  Fragment{
                     }
                 });
             }
-        }, 60000);
+        }, 1000);
 
     }
 

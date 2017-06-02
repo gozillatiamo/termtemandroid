@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.model.ChartResponseModel;
 import com.worldwidewealth.termtem.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -289,6 +290,14 @@ public class ActivityReport extends MyAppcompatActivity {
             loading = new TermTemLoading(this, (ViewGroup) findViewById(R.id.activity_report));
 
         loading.show();
+
+/*
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.parseLong(timeFrom));
+        int month = calendar.get(Calendar.MONTH);
+        calendar.set(Calendar.MONTH, month-1);
+*/
+
 //        new DialogCounterAlert.DialogProgress(this).show();
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
@@ -302,6 +311,19 @@ public class ActivityReport extends MyAppcompatActivity {
                 if (!(responseValues instanceof ResponseModel)){
                     loading.hide();
 //                    DialogCounterAlert.DialogProgress.dismiss();
+
+/*
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+                    List<ChartResponseModel> modelList = gson
+                            .fromJson((String)responseValues,
+                                    new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
+
+                    for (ChartResponseModel model : modelList){
+                        Log.e(TAG, "AMOUNT: "+model.getAMOUNT()+
+                        "\nPAYMENT_DATE: "+model.getPAYMENT_DATE().toString());
+                    }
+*/
+
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     List<SalerptResponseModel> modelList = gson
                             .fromJson((String)responseValues,

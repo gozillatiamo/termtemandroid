@@ -26,22 +26,28 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.chat.PhotoViewActivity;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
+import com.worldwidewealth.termtem.model.TopupResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -385,7 +391,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder = null;
     }
 
-    public static void uploadFail(int id, String tag, String title, String message, int smallicon, Call call, Callback callback){
+    public static void uploadFail(int id, String tag, String title, String message, int smallicon, RequestModel requestModel){
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
 
         mBuilder.setContentTitle(title);
@@ -395,16 +401,19 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setOngoing(false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-        if (call != null){
+        if (requestModel != null){
             Intent retryIntent = new Intent(mContext, retryButtonListener.class);
-            retryIntent.putExtra("CALL", (Parcelable) call);
-            retryIntent.putExtra("CALLBACK", (Parcelable) callback);
+            retryIntent.putExtra("REQUEST", requestModel);
+//            retryIntent.putExtra("CALLBACK", (Parcelable) callback);
             PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
                     retryIntent, 0);
             mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
         } else {
             mBuilder.setAutoCancel(true);
         }
+
+        Log.e(TAG, "TAG: "+tag);
+        Log.e(TAG, "ID: "+id);
         mNotifyManager.notify(tag, id, mBuilder.build());
         isUpload = false;
         mBuilder = null;
@@ -423,13 +432,172 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static class retryButtonListener extends BroadcastReceiver {
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("Here", "I am here");
-            Call call = intent.getExtras().getParcelable("CALL");
+/*
+            Call call =  intent.getExtras().getParcelable("CALL");
             Callback callback = intent.getExtras().getParcelable("CALLBACK");
             APIHelper.enqueueWithRetry(call.clone(), callback);
+*/
+
+
+            RequestModel requestModel = intent.getExtras().getParcelable("REQUEST");
+            if (requestModel.getAction().contains("SUBMIT"))
+                topupService(requestModel);
+            else
+                service(requestModel);
+
 
         }
+
+        private void service(final RequestModel requestModel){
+
+            MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD,
+                    String.valueOf(MyApplication.NOTIUPLOAD),
+                    getContext().getString(R.string.title_upload),
+                    getContext().getString(R.string.msg_upload),
+                    android.R.drawable.stat_sys_upload);
+
+            Call<ResponseBody> call = services.service(requestModel);
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                    Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+
+                    if (responseValues instanceof ResponseModel) {
+                        ResponseModel responseModel = (ResponseModel) responseValues;
+                        if (responseModel.getStatus() == APIServices.SUCCESS)
+                            MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD,
+                                    String.valueOf(MyApplication.NOTIUPLOAD),
+                                    getContext().getString(R.string.title_upload_success),
+                                    getContext().getString(R.string.msg_upload_success),
+                                    android.R.drawable.stat_sys_upload_done, null);
+                        else
+                            setUploadFail(responseModel.getMsg(), requestModel);
+                    } else {
+                        setUploadFail(null, requestModel);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Exception submit topup: "+t.getMessage());
+
+                    setUploadFail(null, requestModel);
+
+                }
+            });
+
+        }
+
+        private void setUploadFail(String msg, RequestModel requestModel){
+            MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
+                    String.valueOf(MyApplication.NOTIUPLOAD),
+                    getContext().getString(R.string.title_upload_fail),
+                    (msg + " " + getContext().getString(R.string.msg_upload_fail)),
+                    android.R.drawable.stat_notify_error, requestModel);
+        }
+
+
+        private void topupService(final RequestModel requestModel){
+            Call<ResponseBody> call = services.topupService(requestModel);
+
+            String title = null;
+            String mTopup = null;
+            SubmitTopupRequestModel submitModel = null;
+
+            switch (requestModel.getAction()){
+                case APIServices.ACTIONSUBMITTOPUP:
+                    title = MyApplication.getContext().getString(R.string.title_topup);
+                    mTopup = FragmentTopup.MOBILE;
+                    break;
+                case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
+                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
+                    mTopup = FragmentTopup.PIN;
+                    break;
+            }
+
+            if (requestModel.getData() instanceof SubmitTopupRequestModel) {
+
+                submitModel = (SubmitTopupRequestModel) requestModel.getData();
+
+                MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
+                        submitModel.getTRANID(),
+                        title+" " +submitModel.getCARRIER()+" "+submitModel.getPHONENO()+" "
+                                +getContext().getString(R.string.currency),
+                        getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
+                                +getContext().getString(R.string.processing),
+                        android.R.drawable.stat_notify_sync);
+
+            }
+
+
+
+            final String finalMTopup = mTopup;
+            final String finalTitle = title;
+
+
+            final SubmitTopupRequestModel finalSubmitModel = submitModel;
+            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                    Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                    if (finalSubmitModel != null) {
+
+                        if (responseValues == null) {
+
+                            MyApplication.uploadFail(MyApplication.NOTITOPUP,
+                                    finalSubmitModel.getTRANID(),
+                                    finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() + " "
+                                            + MyApplication.getContext().getString(R.string.currency),
+                                    MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() + " "
+                                            + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                                    android.R.drawable.stat_sys_warning, null);
+
+                            return;
+                        }
+
+                        if (responseValues instanceof ResponseModel) {
+
+                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP, finalSubmitModel.getTRANID(),
+                                    finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() +
+                                            " " + MyApplication.getContext().getString(R.string.currency),
+                                    MyApplication.getContext().getString(R.string.phone_number) + " " +
+                                            finalSubmitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
+                                    R.drawable.ic_check_circle_white, finalMTopup);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Exception submit topup: "+t.getMessage());
+
+                    if (finalSubmitModel != null) {
+
+                        MyApplication.uploadFail(MyApplication.NOTITOPUP, finalSubmitModel.getTRANID(),
+                                finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() +
+                                        " " + MyApplication.getContext().getString(R.string.currency),
+                                MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() +
+                                        " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                                android.R.drawable.stat_sys_warning, requestModel);
+                    }
+
+                }
+            });
+
+        }
+
     }
 }

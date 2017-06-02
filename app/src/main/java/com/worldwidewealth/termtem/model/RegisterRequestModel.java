@@ -3,13 +3,14 @@ package com.worldwidewealth.termtem.model;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.services.APIServices;
 
 /**
  * Created by MyNet on 10/11/2559.
  */
 
 public class RegisterRequestModel {
-    private String action = "REGISTER";
+    private String action = APIServices.ACTION_REGISTER;
     private Data data;
 
     public RegisterRequestModel(Data data){
