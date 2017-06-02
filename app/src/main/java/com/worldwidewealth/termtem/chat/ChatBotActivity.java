@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -91,34 +92,35 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private ImageButton btnRefresh;
     private Dialog dialogWebView;
     private WebView webView;
+    private APIServices service;
 
     //view first menu
-    private View inputTutorial;
+    private ViewGroup inputTutorial;
     private Button btnRegister;
     private Button btnBank;
     private Button btnAccount;
     private Button btnFinish;
 
     //View transfer
-    private View inputTransfer;
-    private View inputMpay;
+    private ViewGroup inputTransfer;
+    private ViewGroup inputMpay;
     private Button btnMpay;
     private Button btnMpayStation;
     private Button btnBankAccount;
     private Button btnATM;
 
     //view register
-    private View inputName;
-    private View inputBirth;
-    private View inputPhoneNumber;
-    private View inputIdCard;
-    private View inputImage;
-    private View inputConfirm;
-    private View inputEdit;
-    private View inputAccept;
-    private View inputSuccess;
-    private View inputTryAgain;
-    private View inputBack;
+    private ViewGroup inputName;
+    private ViewGroup inputBirth;
+    private ViewGroup inputPhoneNumber;
+    private ViewGroup inputIdCard;
+    private ViewGroup inputImage;
+    private ViewGroup inputConfirm;
+    private ViewGroup inputEdit;
+    private ViewGroup inputAccept;
+    private ViewGroup inputSuccess;
+    private ViewGroup inputTryAgain;
+    private ViewGroup inputBack;
     private EditText edtName;
     private EditText edtLastName;
     private RadioGroup groupPrefixName;
@@ -159,6 +161,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private int registerStep = 0;
     private int transferStep = 0;
     private boolean isEdit = false;
+    private boolean isClick = false;
 
     //variable for register
     private String prefixName;
@@ -178,6 +181,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_bot);
 
+        service = APIServices.retrofit.create(APIServices.class);
         handler = new Handler();
         bindView();
         setUpView();
@@ -196,23 +200,23 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnRefresh = (ImageButton) findViewById(R.id.btnRefresh);
 
-        inputTutorial = (View) findViewById(R.id.input_tutorial);
+        inputTutorial = (ViewGroup) findViewById(R.id.input_tutorial);
         btnRegister = (Button) findViewById(R.id.btn_register);
         btnFinish = (Button) findViewById(R.id.btn_bye);
         btnAccount = (Button) findViewById(R.id.btn_transfer_account);
         btnBank = (Button) findViewById(R.id.btn_transfer_bank);
 
-        inputName = (View) findViewById(R.id.input_register_name);
-        inputBirth = (View) findViewById(R.id.input_birth);
-        inputPhoneNumber = (View) findViewById(R.id.input_phone);
-        inputIdCard = (View) findViewById(R.id.input_id_card);
-        inputImage = (View) findViewById(R.id.input_image);
-        inputConfirm = (View) findViewById(R.id.input_confirm_edit);
-        inputEdit = (View) findViewById(R.id.input_edit);
-        inputAccept = (View) findViewById(R.id.input_accept);
-        inputTryAgain = (View) findViewById(R.id.input_try_again);
-        inputSuccess = (View) findViewById(R.id.input_register_success);
-        inputBack = (View) findViewById(R.id.input_btn_back);
+        inputName = (ViewGroup) findViewById(R.id.input_register_name);
+        inputBirth = (ViewGroup) findViewById(R.id.input_birth);
+        inputPhoneNumber = (ViewGroup) findViewById(R.id.input_phone);
+        inputIdCard = (ViewGroup) findViewById(R.id.input_id_card);
+        inputImage = (ViewGroup) findViewById(R.id.input_image);
+        inputConfirm = (ViewGroup) findViewById(R.id.input_confirm_edit);
+        inputEdit = (ViewGroup) findViewById(R.id.input_edit);
+        inputAccept = (ViewGroup) findViewById(R.id.input_accept);
+        inputTryAgain = (ViewGroup) findViewById(R.id.input_try_again);
+        inputSuccess = (ViewGroup) findViewById(R.id.input_register_success);
+        inputBack = (ViewGroup) findViewById(R.id.input_btn_back);
 
         edtName = (EditText) findViewById(R.id.name);
         edtLastName = (EditText) findViewById(R.id.surname);
@@ -249,8 +253,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         btnBye = (Button) findViewById(R.id.btn_exit);
         btnStay = (Button) findViewById(R.id.btn_stay);
 
-        inputTransfer = (View) findViewById(R.id.input_bank);
-        inputMpay = (View) findViewById(R.id.input_mpay);
+        inputTransfer = (ViewGroup) findViewById(R.id.input_bank);
+        inputMpay = (ViewGroup) findViewById(R.id.input_mpay);
 
         btnMpay = (Button) findViewById(R.id.btn_mpay);
         btnMpayStation = (Button) findViewById(R.id.btn_mpay_station);
@@ -355,143 +359,156 @@ public class ChatBotActivity extends MyAppcompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_register :
-                if (isNetworkAvailable()) {
-                    registerClick();
-                }else {
-                    addTextMessageNotDelay(String.format("ต้องขอโทษด้วยนะครับ ตอนนี้น้องเติมเต็มไม่สามารถเชื่อมต่อสัญญาณอินเตอเน็ตได้ โปรดตรวจสอบการเชื่อมต่อในโทรศัพท์ของท่านด้วยครับ"),
-                            User.getTermTemUser());
-                    expandableLayout.collapse();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            inputTutorial.setVisibility(View.GONE);
-                            inputSuccess.setVisibility(View.VISIBLE);
-                            expandableLayout.expand();
-                        }
-                    },1000);
+        if (!isClick) {
+            isClick = true;
+            switch (v.getId()) {
+                case R.id.btn_register:
+                    if (isNetworkAvailable()) {
+                        registerClick();
+                    } else {
+                        addTextMessageNotDelay(String.format("ต้องขอโทษด้วยนะครับ ตอนนี้น้องเติมเต็มไม่สามารถเชื่อมต่อสัญญาณอินเตอเน็ตได้ โปรดตรวจสอบการเชื่อมต่อในโทรศัพท์ของท่านด้วยครับ"),
+                                User.getTermTemUser());
+                        expandableLayout.collapse();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                inputTutorial.setVisibility(View.GONE);
+                                inputEdit.setVisibility(View.GONE);
+                                inputTryAgain.setVisibility(View.GONE);
+                                enable(inputSuccess);
+                                inputSuccess.setVisibility(View.VISIBLE);
+                                expandableLayout.expand();
+                            }
+                        }, 1000);
+                    }
+                    break;
+                case R.id.btn_transfer_bank:
+                    transferBankClick();
+                    break;
+                case R.id.btn_transfer_account:
+                    transferAccountClick();
+                    break;
+                case R.id.btn_bye:
+                    byeClick();
+                    break;
+                case R.id.btn_cancel:
+                    cancelClick();
+                    break;
+                case R.id.btn_confirm:
+                    confirmNameClick();
+                    break;
+                case R.id.btn_confirm_birth:
+                    confirmBirthClick();
+                    break;
+                case R.id.btn_cancel_birth:
+                    cancelClick();
+                    break;
+                case R.id.edit_birthdate:
+                    pickerDialog.show();
+                    break;
+                case R.id.btn_cancel_phone:
+                    cancelClick();
+                    break;
+                case R.id.btn_confirm_phone:
+                    confirmPhoneClick();
+                    break;
+                case R.id.btn_cancel_id:
+                    cancelClick();
+                    break;
+                case R.id.btn_confirm_id:
+                    confirmIdClick();
+                    break;
+                case R.id.btn_confirm_image:
+                    confirmImageClick();
+                    break;
+                case R.id.btn_cancel_image:
+                    cancelClick();
+                    break;
+                case R.id.id_card_image:
+                    captureImageClick();
+                    break;
+                case R.id.btn_cancel_edit:
+                    cancelRegisterClick();
+                    break;
+                case R.id.btn_confirm_edit:
+                    confirmEditClick();
+                    break;
+                case R.id.btn_edit:
+                    onEditClick();
+                    break;
+                case R.id.btn_edit_name:
+                    onEditNameClick();
+                    break;
+                case R.id.btn_edit_birth:
+                    onEditBirthClick();
+                    break;
+                case R.id.btn_edit_phone_number:
+                    onEditPhoneNumberClick();
+                    break;
+                case R.id.btn_edit_id_card:
+                    onEditIdCardClick();
+                    break;
+                case R.id.btn_edit_id_card_image:
+                    onEditIdCardImageClick();
+                    break;
+                case R.id.btn_edit_cancel:
+                    cancelRegisterClick();
+                    break;
+                case R.id.btn_accept:
+                    acceptRegister();
+                    break;
+                case R.id.btn_un_accept:
+                    clearData();
+                    cancelClick();
+                    break;
+                case R.id.btn_try_again:
+                    acceptRegister();
+                    break;
+                case R.id.btn_edit_try_again:
+                    onEditClick();
+                    break;
+                case R.id.btn_cancel_try_again:
+                    cancelRegisterClick();
+                    break;
+                case R.id.btn_stay:
+                    stayClick();
+                    break;
+                case R.id.btn_exit:
+                    byeBye();
+                    break;
+                case R.id.btn_bank:
+                    bankAccountClick();
+                    break;
+                case R.id.btn_mpay:
+                    mPayClick();
+                    break;
+                case R.id.btn_mpay_station:
+                    mPayStationClick();
+                    break;
+                case R.id.btn_atm:
+                    atmClick();
+                    break;
+                case R.id.btnBack:
+                    onBackPressed();
+                    break;
+                case R.id.btnRefresh:
+                    startActivity(create(this));
+                    finish();
+                    break;
+                case R.id.btn_img_back:
+                    backClick();
+                    break;
+                case R.id.text_capture:
+                    captureImageClick();
+                    break;
+            }
+        }else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isClick = false;
                 }
-                break;
-            case R.id.btn_transfer_bank :
-                transferBankClick();
-                break;
-            case R.id.btn_transfer_account :
-                transferAccountClick();
-                break;
-            case R.id.btn_bye :
-                byeClick();
-                break;
-            case R.id.btn_cancel :
-                cancelClick();
-                break;
-            case R.id.btn_confirm :
-                confirmNameClick();
-                break;
-            case R.id.btn_confirm_birth :
-                confirmBirthClick();
-                break;
-            case R.id.btn_cancel_birth :
-                cancelClick();
-                break;
-            case R.id.edit_birthdate:
-                pickerDialog.show();
-                break;
-            case R.id.btn_cancel_phone:
-                cancelClick();
-                break;
-            case R.id.btn_confirm_phone:
-                confirmPhoneClick();
-                break;
-            case R.id.btn_cancel_id:
-                cancelClick();
-                break;
-            case R.id.btn_confirm_id:
-                confirmIdClick();
-                break;
-            case R.id.btn_confirm_image:
-                confirmImageClick();
-                break;
-            case R.id.btn_cancel_image:
-                cancelClick();
-                break;
-            case R.id.id_card_image:
-                captureImageClick();
-                break;
-            case R.id.btn_cancel_edit:
-                cancelRegisterClick();
-                break;
-            case R.id.btn_confirm_edit:
-                confirmEditClick();
-                break;
-            case R.id.btn_edit:
-                onEditClick();
-                break;
-            case R.id.btn_edit_name:
-                onEditNameClick();
-                break;
-            case R.id.btn_edit_birth:
-                onEditBirthClick();
-                break;
-            case R.id.btn_edit_phone_number:
-                onEditPhoneNumberClick();
-                break;
-            case R.id.btn_edit_id_card:
-                onEditIdCardClick();
-                break;
-            case R.id.btn_edit_id_card_image:
-                onEditIdCardImageClick();
-                break;
-            case R.id.btn_edit_cancel:
-                cancelRegisterClick();
-                break;
-            case R.id.btn_accept:
-                acceptRegister();
-                break;
-            case R.id.btn_un_accept:
-                clearData();
-                cancelClick();
-                break;
-            case R.id.btn_try_again:
-                acceptRegister();
-                break;
-            case R.id.btn_edit_try_again:
-                onEditClick();
-                break;
-            case R.id.btn_cancel_try_again:
-                cancelRegisterClick();
-                break;
-            case R.id.btn_stay:
-                stayClick();
-                break;
-            case R.id.btn_exit:
-                byeBye();
-                break;
-            case R.id.btn_bank:
-                bankAccountClick();
-                break;
-            case R.id.btn_mpay:
-                mPayClick();
-                break;
-            case R.id.btn_mpay_station:
-                mPayStationClick();
-                break;
-            case R.id.btn_atm:
-                atmClick();
-                break;
-            case R.id.btnBack:
-                onBackPressed();
-                break;
-            case R.id.btnRefresh:
-                startActivity(create(this));
-                finish();
-                break;
-            case R.id.btn_img_back:
-                backClick();
-                break;
-            case R.id.text_capture:
-                captureImageClick();
-                break;
+            }, 500);
         }
     }
 
@@ -622,6 +639,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputEdit.setVisibility(View.GONE);
                 inputBack.setVisibility(View.GONE);
                 inputTutorial.setVisibility(View.VISIBLE);
+                enable(inputTutorial);
                 expandableLayout.expand();
                 break;
             case 2:
@@ -655,6 +673,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 break;
             case 2:
                 registerStep = REMOVE_STEP;
+                enable(inputName);
                 inputName.setVisibility(View.VISIBLE);
                 inputEdit.setVisibility(View.GONE);
                 inputTutorial.setVisibility(View.GONE);
@@ -665,6 +684,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputName.setVisibility(View.GONE);
                 inputEdit.setVisibility(View.GONE);
                 inputBirth.setVisibility(View.VISIBLE);
+                enable(inputBirth);
                 expandableLayout.expand();
                 break;
             case 4:
@@ -672,6 +692,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputName.setVisibility(View.GONE);
                 inputBirth.setVisibility(View.GONE);
                 inputEdit.setVisibility(View.GONE);
+                enable(inputPhoneNumber);
                 inputPhoneNumber.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
@@ -681,6 +702,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputBirth.setVisibility(View.GONE);
                 inputPhoneNumber.setVisibility(View.GONE);
                 inputEdit.setVisibility(View.GONE);
+                enable(inputIdCard);
                 inputIdCard.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
@@ -691,6 +713,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputPhoneNumber.setVisibility(View.GONE);
                 inputIdCard.setVisibility(View.GONE);
                 inputEdit.setVisibility(View.GONE);
+                enable(inputImage);
                 inputImage.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
@@ -709,6 +732,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputIdCard.setVisibility(View.GONE);
                 inputImage.setVisibility(View.GONE);
 
+                enable(inputConfirm);
 //                addImageMessageNotDelay(imgPath, User.getTermTemUser());
                 inputConfirm.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
@@ -724,6 +748,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputTryAgain.setVisibility(View.GONE);
                 addTextMessage(String.format("คุณ%s ต้องการแก้ไขข้อมูลส่วนไหนครับ?", firstName), User.getTermTemUser());
                 inputEdit.setVisibility(View.VISIBLE);
+                enable(inputEdit);
                 expandableLayout.expand();
                 break;
             case 10:
@@ -736,6 +761,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputConfirm.setVisibility(View.GONE);
                 inputEdit.setVisibility(View.GONE);
                 inputSuccess.setVisibility(View.GONE);
+                enable(inputAccept);
                 inputAccept.setVisibility(View.VISIBLE);
                 expandableLayout.expand();
                 break;
@@ -755,6 +781,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 addTextMessageNotDelay("คุณต้องการทราบวิธีโอนเงินเข้าบัญชีเติมเต็มวิธีไหนครับ?", User.getTermTemUser());
                 inputTutorial.setVisibility(View.GONE);
                 inputTransfer.setVisibility(View.VISIBLE);
+                enable(inputTransfer);
                 expandableLayout.expand();
                 break;
             case 1:
@@ -768,6 +795,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputTutorial.setVisibility(View.GONE);
                 inputTransfer.setVisibility(View.GONE);
                 inputMpay.setVisibility(View.VISIBLE);
+                enable(inputMpay);
                 expandableLayout.expand();
                 break;
             case 3:
@@ -787,12 +815,14 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputTransfer.setVisibility(View.GONE);
                 inputMpay.setVisibility(View.GONE);
                 inputBack.setVisibility(View.VISIBLE);
+                enable(inputBack);
                 expandableLayout.expand();
                 break;
         }
     }
 
    private void registerClick(){
+       disable(inputTutorial);
        step = 5;
        registerStep = 0;
        addTextMessage(getString(R.string.chat_register_account), User.getUser());
@@ -800,18 +830,21 @@ public class ChatBotActivity extends MyAppcompatActivity implements
    }
 
    private void transferBankClick(){
+       disable(inputTutorial);
        step = 3;
        addTextMessage(getString(R.string.chat_how_to_transfer_money_to_bank), User.getUser());
        expandableLayout.collapse();
    }
 
    private void transferAccountClick(){
+       disable(inputTutorial);
        step = 4;
        addTextMessage(getString(R.string.chat_how_to_transfer_money_to_account), User.getUser());
        expandableLayout.collapse();
    }
 
    private void byeClick(){
+       disable(inputTutorial);
        step = 2;
        addTextMessage(getString(R.string.chat_bye), User.getTermTemUser());
        expandableLayout.collapse();
@@ -841,6 +874,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void cancelRegisterClick(){
+        disable(inputTryAgain);
+        disable(inputConfirm);
         step = 0;
         addTextMessageNotDelay("ยกเลิกการสมัคร", User.getUser());
         addTextMessageNotDelay("ขอบคุณครับ", User.getTermTemUser());
@@ -851,12 +886,14 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputConfirm.setVisibility(View.GONE);
                 inputTryAgain.setVisibility(View.GONE);
                 inputSuccess.setVisibility(View.VISIBLE);
+                enable(inputSuccess);
                 expandableLayout.expand();
             }
         },1000);
     }
 
     private void stayClick(){
+        disable(inputSuccess);
         step = 0;
         registerStep = 0;
         clearData();
@@ -865,11 +902,15 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
    private void confirmNameClick(){
+       disable(inputName);
         if (prefixName == null || prefixName.equalsIgnoreCase("")){
+            enable(inputName);
             addTextMessage(getString(R.string.chat_please_select_prefix), User.getTermTemUser());
         }else if (edtName.getText().toString().trim().equals("")){
+            enable(inputName);
             addTextMessage(getString(R.string.chat_please_enter_name), User.getTermTemUser());
         }else if (edtLastName.getText().toString().trim().equals("")){
+            enable(inputName);
            addTextMessage(getString(R.string.chat_please_enter_last_name), User.getTermTemUser());
        }else {
             firstName = edtName.getText().toString().trim();
@@ -886,7 +927,9 @@ public class ChatBotActivity extends MyAppcompatActivity implements
    }
 
    private void confirmBirthClick(){
+       disable(inputBirth);
        if (edtBirth.getText().toString().trim().equals("")){
+           enable(inputBirth);
            addTextMessage(getString(R.string.chat_please_enter_birth), User.getTermTemUser());
        }else {
            if (!isEdit) {
@@ -901,9 +944,12 @@ public class ChatBotActivity extends MyAppcompatActivity implements
    }
 
     private void confirmPhoneClick(){
+        disable(inputPhoneNumber);
         if (edtPhoneNumber.getText().toString().trim().equals("")){
+            enable(inputPhoneNumber);
             addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_enter_phone)), User.getTermTemUser());
         }else if (!CheckSyntaxData.isPhoneValid(edtPhoneNumber.getText().toString())){
+            enable(inputPhoneNumber);
             addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_enter_phone_number_is_invalid)), User.getTermTemUser());
         }else {
             if (!isEdit) {
@@ -920,7 +966,9 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void confirmIdClick(){
+        disable(inputIdCard);
         if (edtIdCard.getText().toString().trim().equals("")){
+            enable(inputIdCard);
             addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_enter_id)), User.getTermTemUser());
         }else {
             if (edtIdCard.getText().toString().length()==13){
@@ -939,6 +987,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                     }
                 }
             }else {
+                enable(inputIdCard);
                 addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_enter_id)), User.getTermTemUser());
             }
         }
@@ -974,7 +1023,9 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void confirmImageClick(){
+        disable(inputImage);
         if (imgPath==null || imgPath.equalsIgnoreCase("")){
+            enable(inputImage);
             addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_select_image)), User.getTermTemUser());
         }else {
             if (!isEdit) {
@@ -1013,6 +1064,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void onEditClick(){
+        disable(inputConfirm);
         isEdit = true;
         registerStep = 9;
         addTextMessage(getString(R.string.edit), User.getUser());
@@ -1020,36 +1072,42 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void onEditNameClick(){
+        disable(inputEdit);
         registerStep = 2;
         addTextMessage(getString(R.string.full_name), User.getUser());
         expandableLayout.collapse();
     }
 
     private void onEditPhoneNumberClick(){
+        disable(inputEdit);
         registerStep = 4;
         addTextMessage(getString(R.string.phone_number), User.getUser());
         expandableLayout.collapse();
     }
 
     private void onEditBirthClick(){
+        disable(inputEdit);
         registerStep = 3;
         addTextMessage(getString(R.string.hint_birthday), User.getUser());
         expandableLayout.collapse();
     }
 
     private void onEditIdCardClick(){
+        disable(inputEdit);
         registerStep = 5;
         addTextMessage(getString(R.string.identity_number), User.getUser());
         expandableLayout.collapse();
     }
 
     private void onEditIdCardImageClick(){
+        disable(inputEdit);
         registerStep = 6;
         addTextMessage(getString(R.string.chat_id_card_image), User.getUser());
         expandableLayout.collapse();
     }
 
     private void confirmEditClick(){
+        disable(inputConfirm);
         registerStep = 10;
         addTextMessageNotDelay("ยืนยัน", User.getUser());
         addTextMessageWithLink(String.format("คุณ%s %s\n%s",firstName, getString(R.string.chat_accept_link), LINK), User.getTermTemUser());
@@ -1057,6 +1115,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void acceptRegister(){
+        disable(inputAccept);
         expandableLayout.collapse();
         addTextMessageNotDelay("ขอเวลาเติมเต็มดำเนินการสักครู่นะครับ", User.getTermTemUser());
         getApiService().enqueue(new Callback<ResponseModel>() {
@@ -1099,24 +1158,28 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     }
 
     private void bankAccountClick(){
+        disable(inputTransfer);
         transferStep = 1;
         addTextMessage("โอนเข้าบัญชีธนาคาร", User.getUser());
         expandableLayout.collapse();
     }
 
     private void mPayClick(){
+        disable(inputEdit);
         transferStep = 2;
         addTextMessage("โอนผ่านเอ็มเปย์สเตชั่น", User.getUser());
         expandableLayout.collapse();
     }
 
     private void mPayStationClick(){
+        disable(inputMpay);
         transferStep = 3;
         addTextMessage("ผ่านจุดบริการเอ็มเปย์สเตชั่น", User.getUser());
         expandableLayout.collapse();
     }
 
     private void atmClick(){
+        disable(inputMpay);
         transferStep = 4;
         addTextMessage("ผ่านตู้ ATM", User.getUser());
         expandableLayout.collapse();
@@ -1143,7 +1206,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         if (bitmapImage != null) {
             bitmapImage.recycle();
         }
-        return APIServices.retrofit.create(APIServices.class).SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
+        Call<ResponseModel> call = service.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
                prefixName,
                 firstName,
                 lastName,
@@ -1154,6 +1217,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 0,
                 image
         )));
+        return call;
     }
 
     private boolean isNetworkAvailable() {
@@ -1204,5 +1268,29 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private static void disable(ViewGroup layout) {
+        layout.setEnabled(false);
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                disable((ViewGroup) child);
+            } else {
+                child.setEnabled(false);
+            }
+        }
+    }
+
+    private static void enable(ViewGroup layout) {
+        layout.setEnabled(true);
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                enable((ViewGroup) child);
+            } else {
+                child.setEnabled(true);
+            }
+        }
     }
 }
