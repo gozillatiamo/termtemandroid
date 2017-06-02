@@ -15,16 +15,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.MyApplication;
@@ -475,40 +481,20 @@ public class FragmentTopupPackage extends  Fragment{
                                 mButtonID,
                                 null)));
 
-        mTimerTimeout = new Timer();
-        mTimerTimeout.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        mAlertTimeout = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
-                                .setTitle(R.string.warning)
-                                .setMessage(R.string.error_msg_timeout)
-                                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
-                                                model.getTranid(),
-                                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
-                                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
-                                                        +getString(R.string.currency),
-                                                getString(R.string.phone_number)+" "+mPhone+" "
-                                                        +getString(R.string.processing),
-                                                android.R.drawable.stat_notify_sync);
-                                        getActivity().finish();
-                                    }
-                                }).show();
-                        mAlertTimeout.setOnShowListener(new MyShowListener());
-                    }
-                });
-            }
-        }, 60000);
+        startTimeoutSubmit(model.getTranid());
 
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
+            protected Object clone() throws CloneNotSupportedException {
+                startTimeoutSubmit(model.getTranid());
+                return super.clone();
+            }
+
+            @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (mTimerTimeout != null)
+                    mTimerTimeout.cancel();
+
                 if (mAlertTimeout != null && mAlertTimeout.isShowing())
                     mAlertTimeout.cancel();
 
@@ -548,6 +534,9 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "Exception submit topup: "+t.getMessage());
+                if (mTimerTimeout != null)
+                    mTimerTimeout.cancel();
+
                 String title;
                 if (mTopup.equals(FragmentTopup.MOBILE)){
                     title = MyApplication.getContext().getString(R.string.title_topup);
@@ -569,6 +558,44 @@ public class FragmentTopupPackage extends  Fragment{
                 }
             }
         });
+    }
+
+    private void startTimeoutSubmit(final String tranid){
+        if (mTimerTimeout != null){
+            mTimerTimeout.cancel();
+            mTimerTimeout = null;
+        }
+        mTimerTimeout = new Timer();
+        mTimerTimeout.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogCounterAlert.DialogProgress.dismiss();
+                        mAlertTimeout = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.error_msg_timeout)
+                                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
+                                                tranid,
+                                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
+                                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
+                                                        +getString(R.string.currency),
+                                                getString(R.string.phone_number)+" "+mPhone+" "
+                                                        +getString(R.string.processing),
+                                                android.R.drawable.stat_notify_sync);
+                                        getActivity().finish();
+                                    }
+                                }).show();
+                        mAlertTimeout.setOnShowListener(new MyShowListener());
+                    }
+                });
+            }
+        }, 60000);
+
     }
 
     private void serviceEslip(final String transid){
@@ -650,39 +677,117 @@ public class FragmentTopupPackage extends  Fragment{
             public void onItemClick(View view, int position) {
                 setAmt(mVasAdapter.getItem(position).getPRICE(), null);
                 if (!checkData()) return;
-
-                AlertDialog confirmDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
-                        .setTitle(getString(R.string.title_phone_short)+" "+mHolder.mEditPhone.getText().toString())
-                        .setMessage(mVasAdapter.getItem(position).getSPEED()+"\n"+
-                                mVasAdapter.getItem(position).getVOLUME()+"/"+
-                                mVasAdapter.getItem(position).getLIMITDAY()+" "+getString(R.string.day))
-                        .setNegativeButton(R.string.edit_phone, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mBottomAction.setEnable(false);
-                                mHolder.mRecyclerVAS.animate()
-                                        .alpha(0.0f)
-                                        .setDuration(500)
-                                        .setListener(new AnimatorListenerAdapter() {
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-                                                super.onAnimationEnd(animation);
-                                                mHolder.mRecyclerVAS.setVisibility(View.GONE);
-                                            }
-                                        });
-                                servicePreview();
-                            }
-                        }).show();
-
-                confirmDialog.setOnShowListener(new MyShowListener());
+                showDialogConfirmVAS(position);
             }
         }));
+    }
+
+    private void showDialogConfirmVAS(final int position){
+        final AlertDialog confirmDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                .setTitle(getString(R.string.title_phone_short)+" "+mHolder.mEditPhone.getText().toString())
+                .setMessage(mVasAdapter.getItem(position).getSPEED()+"\n"+
+                        mVasAdapter.getItem(position).getVOLUME()+"/"+
+                        mVasAdapter.getItem(position).getLIMITDAY()+" "+getString(R.string.day))
+                .setNegativeButton(R.string.edit_phone, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showDialogEditPhone(position);
+                    }
+                })
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mBottomAction.setEnable(false);
+                        mHolder.mRecyclerVAS.animate()
+                                .alpha(0.0f)
+                                .setDuration(500)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        mHolder.mRecyclerVAS.setVisibility(View.GONE);
+                                    }
+                                });
+                        servicePreview();
+                    }
+                }).show();
+
+        confirmDialog.setOnShowListener(new MyShowListener());
+
+    }
+
+    private boolean mFormatting;
+
+
+    private void showDialogEditPhone(final int position){
+
+        final EditText editPhone = new EditText(getContext());
+        editPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+        editPhone.setPadding(20, 20, 20, 20);
+        editPhone.setGravity(Gravity.CENTER);
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(12);
+        editPhone.setFilters(FilterArray);
+
+        editPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting){
+                    mFormatting = true;
+                    PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                    mFormatting = false;
+                }
+            }
+        });
+
+        AlertDialog.Builder builderEditPhone = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                .setTitle(R.string.phone_number)
+                .setView(editPhone)
+                .setPositiveButton(R.string.confirm, null)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showDialogConfirmVAS(position);
+                    }
+                });
+
+        final AlertDialog dialogEditPhone = builderEditPhone.create();
+
+
+        dialogEditPhone.setOnShowListener(new MyShowListener(){
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                super.onShow(dialogInterface);
+                Button btnConfirm = dialogEditPhone.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPhone = editPhone.getText().toString().replaceAll("-", "");
+
+                        if (mPhone.length() != 10){
+                            Toast.makeText(getContext(), R.string.please_phone_topup_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        mHolder.mEditPhone.setText(editPhone.getText());
+                        dialogEditPhone.cancel();
+                        showDialogConfirmVAS(position);
+                    }
+                });
+
+            }
+        });
+
+        dialogEditPhone.show();
+
     }
 
     public class ViewHolder{

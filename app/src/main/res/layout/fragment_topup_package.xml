@@ -88,14 +88,17 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <FrameLayout
                         android:id="@+id/container_topup_package"
                         android:layout_width="match_parent"
@@ -120,15 +123,15 @@
                         layout="@layout/bottom_action" />
 
                 </LinearLayout>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_vas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorBackground"
-                    android:visibility="gone"
                     android:fillViewport="true"
                     android:padding="@dimen/activity_small_space"
-                    >
+                    android:visibility="gone">
 
                 </android.support.v7.widget.RecyclerView>
             </FrameLayout>
