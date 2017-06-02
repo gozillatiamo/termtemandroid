@@ -167,30 +167,34 @@ public class EncryptionData {
             if (responseModel == null) return null;
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
+                try {
+                    switch (requestModel.getAction()) {
 
-                switch (requestModel.getAction()){
+                        case APIServices.ACTIONGETOTP:
+                        case APIServices.ACTIONSUBMITTOPUP:
+                        case APIServices.ACTION_GET_OTP_EPIN:
+                        case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
 
-                    case APIServices.ACTIONGETOTP:
-                    case APIServices.ACTIONSUBMITTOPUP:
-                    case APIServices.ACTION_GET_OTP_EPIN:
-                    case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
+                            msg = context.getString(R.string.alert_topup_fail);
+                            new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
 
-                        msg = context.getString(R.string.alert_topup_fail);
-                        new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+                            return null;
 
-                        return null;
+                        case APIServices.ACTIONLOGIN:
+                        case APIServices.ACTIONNOTIPAY:
+                            return responseModel;
 
-                    case APIServices.ACTIONLOGIN:
-                    case APIServices.ACTIONNOTIPAY:
-                        return responseModel;
+                        case APIServices.ACTIONLOGOUT:
+                        case APIServices.ACTIONGETBALANCE:
+                            return null;
 
-                    case APIServices.ACTIONLOGOUT:
-                    case APIServices.ACTIONGETBALANCE:
-                        return null;
-
-                    default:
-                        new ErrorNetworkThrowable(null).networkError(context,
-                                responseModel.getMsg(), call, callback, true);
+                        default:
+                            new ErrorNetworkThrowable(null).networkError(context,
+                                    responseModel.getMsg(), call, callback, true);
+                    }
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                    return null;
                 }
             } else{
                 return responseModel;
