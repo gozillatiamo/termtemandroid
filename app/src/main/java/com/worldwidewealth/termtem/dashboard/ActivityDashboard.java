@@ -25,6 +25,8 @@ import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
@@ -73,6 +75,8 @@ public class ActivityDashboard extends MyAppcompatActivity{
         initBtnMenu();
 
         MenuButtonView.setsClickable(true);
+
+
     }
 
     @Override
@@ -229,6 +233,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
             }
         }
     }
+
     public class ViewHolder{
 
         private Toolbar mToolbar;

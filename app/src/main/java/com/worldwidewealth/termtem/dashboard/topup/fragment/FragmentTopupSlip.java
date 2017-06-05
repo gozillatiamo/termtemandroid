@@ -140,7 +140,7 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        Global.getInstance().setProcessSubmit(null);
         onBackPress();
     }
 

@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,7 @@ import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.ChangePasswordRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
@@ -479,11 +481,52 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     break;
             }
 
+            switch (TYPE.values()[this.mType]){
+                case TOPUP:
+                case EPIN:
+                case AGENTCASHIN:
+                case SCAN:
+                case VAS:
+                    if (Global.getInstance().getProcessSubmit() != null) {
+                        showDialogHasProcess();
+                        return;
+                    }
+
+                    break;
+            }
+
             if (intent != null) {
                 ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_right, 0);
                 getContext().startActivity(intent);
             }
         }
+    }
+
+    private void showDialogHasProcess(){
+         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.msg_has_process_service)
+                .setPositiveButton(R.string.confirm, null)
+                .setCancelable(false);
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new MyShowListener(){
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                super.onShow(dialogInterface);
+                ((TextView)alertDialog.findViewById(android.R.id.message)).setGravity(Gravity.CENTER);
+            }
+        });
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setsClickable(true);
+            }
+        });
+
+        alertDialog.show();
+
     }
 
     public interface MenuClickListener{

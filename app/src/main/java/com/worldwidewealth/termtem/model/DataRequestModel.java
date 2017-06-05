@@ -52,11 +52,11 @@ public class DataRequestModel implements Parcelable{
 
 
     protected DataRequestModel(Parcel in) {
-        DEVICEID = in.readString();
-        PLATFORM = in.readString();
-        TXID = in.readString();
-        AGENTID = in.readString();
-        USERID = in.readString();
+        this.DEVICEID = in.readString();
+        this.PLATFORM = in.readString();
+        this.TXID = in.readString();
+        this.AGENTID = in.readString();
+        this.USERID = in.readString();
     }
 
     public static final Creator<DataRequestModel> CREATOR = new Creator<DataRequestModel>() {
@@ -99,10 +99,10 @@ public class DataRequestModel implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(DEVICEID);
-        dest.writeString(PLATFORM);
-        dest.writeString(TXID);
-        dest.writeString(AGENTID);
-        dest.writeString(USERID);
+        dest.writeString(this.DEVICEID);
+        dest.writeString(this.PLATFORM);
+        dest.writeString(this.TXID);
+        dest.writeString(this.AGENTID);
+        dest.writeString(this.USERID);
     }
 }

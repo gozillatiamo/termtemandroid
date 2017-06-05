@@ -39,12 +39,12 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     protected SubmitTopupRequestModel(Parcel in) {
-        CARRIER = in.readString();
-        AMT = in.readString();
-        PHONENO = in.readString();
-        TRANID = in.readString();
-        AGENTIDCASHIN = in.readString();
-        BUTTONID = in.readString();
+        this.CARRIER = in.readString();
+        this.AMT = in.readString();
+        this.PHONENO = in.readString();
+        this.TRANID = in.readString();
+        this.AGENTIDCASHIN = in.readString();
+        this.BUTTONID = in.readString();
     }
 
     public String getCARRIER() {
@@ -99,11 +99,11 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(CARRIER);
-        dest.writeString(AMT);
-        dest.writeString(PHONENO);
-        dest.writeString(TRANID);
-        dest.writeString(AGENTIDCASHIN);
-        dest.writeString(BUTTONID);
+        dest.writeString(this.CARRIER);
+        dest.writeString(this.AMT);
+        dest.writeString(this.PHONENO);
+        dest.writeString(this.TRANID);
+        dest.writeString(this.AGENTIDCASHIN);
+        dest.writeString(this.BUTTONID);
     }
 }

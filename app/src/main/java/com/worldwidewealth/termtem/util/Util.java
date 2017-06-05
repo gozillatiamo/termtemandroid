@@ -13,6 +13,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +43,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -517,6 +520,7 @@ public class Util {
         }
     }
 
+
     public static void getPreviousEslip(final Context context, final String transid, String topupType, final int rootview){
         String mActionEslip = APIServices.ACTIONESLIP;
 
@@ -553,6 +557,9 @@ public class Util {
                     }
 
                 }
+
+                DialogCounterAlert.DialogProgress.dismiss();
+
             }
 
             @Override
@@ -561,6 +568,34 @@ public class Util {
             }
 
         });
+    }
+
+    public static class ParcelableUtil {
+        public static byte[] toByteArray(Parcelable parcelable) {
+            Parcel parcel=Parcel.obtain();
+
+            parcelable.writeToParcel(parcel, 0);
+
+            byte[] result=parcel.marshall();
+
+            parcel.recycle();
+
+            return(result);
+        }
+
+        public static <T> T toParcelable(byte[] bytes,
+                                         Parcelable.Creator<T> creator) {
+            Parcel parcel=Parcel.obtain();
+
+            parcel.unmarshall(bytes, 0, bytes.length);
+            parcel.setDataPosition(0);
+
+            T result=creator.createFromParcel(parcel);
+
+            parcel.recycle();
+
+            return(result);
+        }
     }
 
 }

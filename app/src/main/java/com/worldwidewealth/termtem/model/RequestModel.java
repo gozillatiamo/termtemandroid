@@ -18,8 +18,8 @@ public class RequestModel implements Parcelable{
     }
 
     protected RequestModel(Parcel in) {
-        action = in.readString();
-        data = in.readParcelable(DataRequestModel.class.getClassLoader());
+        this.action = in.readString();
+        this.data = in.readParcelable(DataRequestModel.class.getClassLoader());
         Log.e("readTranId", ((SubmitTopupRequestModel)data).getTRANID());
 
     }
@@ -51,8 +51,8 @@ public class RequestModel implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(action);
+        dest.writeString(this.action);
         Log.e("writeTranId", ((SubmitTopupRequestModel)data).getTRANID());
-        dest.writeParcelable(data, flags);
+        dest.writeParcelable(this.data, flags);
     }
 }

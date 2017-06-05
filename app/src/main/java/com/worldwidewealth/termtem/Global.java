@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -41,6 +42,7 @@ public class Global {
     private static final String PASSWORD = "password";
     private static final String USERDATA = "userdata";
     private static final String CACHEUSER = "cacheuser";
+    private static final String SERVICE_TRAN_ID = "servicetranid";
 
     public static final String TAG = Global.class.getSimpleName();
 
@@ -201,15 +203,19 @@ public class Global {
     public void clearUserName(){
         mEditor.putString(USERNAME, null);
         mEditor.putString(PASSWORD, null);
+        mEditor.putString(SERVICE_TRAN_ID, null);
         mEditor.commit();
     }
 
     public void clearUserData(boolean clearall){
 
         if (clearall) {
-            mEditor.putString(USERNAME, null);
-            mEditor.putString(PASSWORD, null);
+            clearUserName();
             mEditor.putString(TXID, null);
+
+            /*mEditor.putString(USERNAME, null);
+            mEditor.putString(PASSWORD, null);
+            mEditor.putString(TXID, null);*/
         }
         mEditor.putString(USERID, null);
         mEditor.putString(AGENTID, null);
@@ -250,4 +256,16 @@ public class Global {
         mEditor.clear();
         mEditor.commit();
     }
+
+    public void setProcessSubmit(String tranId){
+
+        mEditor.putString(SERVICE_TRAN_ID, tranId);
+        mEditor.commit();
+    }
+
+    public String getProcessSubmit(){
+        return mPreferences.getString(SERVICE_TRAN_ID, null);
+    }
+
+
 }

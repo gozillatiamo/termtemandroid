@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.annotations.Until;
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -59,6 +61,8 @@ public class ActivityTopup extends MyAppcompatActivity {
         }
 
         if (mPreviousTransId != null){
+            new DialogCounterAlert.DialogProgress(this).show();
+
             Util.getPreviousEslip(this, mPreviousTransId, mTopup, R.id.container_topup);
         } else
             initContainer();

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.LineSpinFadeLoaderIndicator;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 
 /**
  * Created by user on 17-Apr-17.
@@ -91,6 +93,7 @@ public class TermTemLoading extends RelativeLayout {
 
     public void hide(){
         Log.e(TAG, ""+this.getVisibility());
+        DialogCounterAlert.DialogProgress.dismiss();
         if (!(this.getVisibility() == VISIBLE)){
             return;
         }

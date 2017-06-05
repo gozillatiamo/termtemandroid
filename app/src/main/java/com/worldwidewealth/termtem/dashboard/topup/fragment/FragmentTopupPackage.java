@@ -576,6 +576,7 @@ public class FragmentTopupPackage extends  Fragment{
                         mAlertTimeout = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
                                 .setTitle(R.string.warning)
                                 .setMessage(R.string.error_msg_timeout)
+                                .setCancelable(false)
                                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -599,7 +600,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void serviceEslip(final String transid){
-
+        DialogCounterAlert.DialogProgress.show();
         call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
 
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {

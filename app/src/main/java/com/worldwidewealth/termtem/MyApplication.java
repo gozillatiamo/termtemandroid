@@ -59,6 +59,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
 /**
  * Created by MyNet on 17/11/2559.
  */
@@ -72,7 +74,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean clickable = true;
     public static final int NOTIUPLOAD = 1;
     public static final int NOTITOPUP = 2;
-    private static boolean isUpload = false;
+    public static boolean isUpload = false;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
 
@@ -362,11 +364,15 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         mBuilder.setProgress(0, 0, true);
         mNotifyManager.notify(tag, id, mBuilder.build());
+        if (id != NOTIUPLOAD){
+            Global.getInstance().setProcessSubmit(tag);
+        }
         isUpload = true;
     }
 
     public static void uploadSuccess(int id, String tag, String title, String message, int smallicon, String type){
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
+
 
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(message);
@@ -377,18 +383,36 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
+        isUpload = false;
+
         if (id != NOTIUPLOAD){
+            /*try {
+//                Global.getInstance().setProcessSubmit(null);
+                mNotifyManager.cancel(Global.getInstance().getProcessSubmit(), id);
+                Intent intent = new Intent(mContext, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, type);
+                intent.putExtra("transid", tag);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+                mBuilder = null;
+                return;
+            } catch (Exception e){
+                e.printStackTrace();
+            }*/
+
             Intent intent = new Intent(mContext, ActivityTopup.class);
             intent.putExtra(FragmentTopup.keyTopup, type);
-            intent.putExtra("transid", tag);
-            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-
+            intent.putExtra("transid", Global.getInstance().getProcessSubmit());
+            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.setContentIntent(pendingIntent);
+
         }
 
         mNotifyManager.notify(tag, id, mBuilder.build());
-        isUpload = false;
         mBuilder = null;
+
+
     }
 
     public static void uploadFail(int id, String tag, String title, String message, int smallicon, RequestModel requestModel){
@@ -398,24 +422,33 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setContentText(message);
         mBuilder.setSmallIcon(smallicon);
         mBuilder.setProgress(0, 0, false);
-        mBuilder.setOngoing(false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         if (requestModel != null){
+            mBuilder.setOngoing(true);
             Intent retryIntent = new Intent(mContext, retryButtonListener.class);
-            retryIntent.putExtra("REQUEST", requestModel);
-//            retryIntent.putExtra("CALLBACK", (Parcelable) callback);
+            byte[] requestByte = Util.ParcelableUtil.toByteArray(requestModel);
+
+            retryIntent.putExtra("REQUEST", requestByte);
             PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
-                    retryIntent, 0);
+                    retryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
         } else {
+            isUpload = false;
+
+            if (id == NOTITOPUP) {
+                Global.getInstance().setProcessSubmit(null);
+                mNotifyManager.cancel(tag, id);
+                mBuilder = null;
+                return;
+            }
             mBuilder.setAutoCancel(true);
         }
 
         Log.e(TAG, "TAG: "+tag);
         Log.e(TAG, "ID: "+id);
         mNotifyManager.notify(tag, id, mBuilder.build());
-        isUpload = false;
+
         mBuilder = null;
 
     }
@@ -423,7 +456,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean isUpload(Context context, int message){
         if (isUpload) {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
-                    .setMessage(R.string.has_upload)
+                    .setMessage(message)
                     .setPositiveButton(R.string.confirm, null)
                     .setCancelable(false)
                     .show();
@@ -444,7 +477,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 */
 
 
-            RequestModel requestModel = intent.getExtras().getParcelable("REQUEST");
+//            RequestModel requestModel = intent.getExtras().getby("REQUEST");
+            RequestModel requestModel = Util.ParcelableUtil.toParcelable(intent.getExtras().getByteArray("REQUEST"), RequestModel.CREATOR);
             if (requestModel.getAction().contains("SUBMIT"))
                 topupService(requestModel);
             else

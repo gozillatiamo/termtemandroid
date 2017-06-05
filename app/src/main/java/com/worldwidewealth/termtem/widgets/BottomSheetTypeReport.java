@@ -156,6 +156,10 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                             case SCAN:
                                 sparseBooleanArray.put(MenuButtonView.TYPE.AGENTCASHIN.getType(), true);
                                 break;
+                            case VAS:
+                                sparseBooleanArray.put(MenuButtonView.TYPE.valueOf(model.getBUTTON()).getType(), true);
+                                break;
+
                         }
                     }
 
@@ -212,6 +216,14 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 values.put(TITLE, getContext().getString(R.string.report_cashin_agent));
                 values.put(TYPE, "CASHIN");
                 values.put(ICON, R.drawable.ic_report_cashin);
+                mListData.add(values);
+            }
+
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.VAS.getType())){
+                ContentValues values = new ContentValues();
+                values.put(TITLE, getContext().getString(R.string.vas));
+                values.put(TYPE, "VAS");
+                values.put(ICON, R.drawable.ic_report_topup);
                 mListData.add(values);
             }
 

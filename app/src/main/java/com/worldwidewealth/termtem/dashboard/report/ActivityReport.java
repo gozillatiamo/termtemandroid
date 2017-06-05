@@ -3,6 +3,9 @@ package com.worldwidewealth.termtem.dashboard.report;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -25,6 +29,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.dashboard.report.adapter.PagerTypeReportAdapter;
+import com.worldwidewealth.termtem.dashboard.report.fragment.GraphReportFragment;
+import com.worldwidewealth.termtem.dashboard.report.fragment.TextReportFragment;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
 import com.worldwidewealth.termtem.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -90,7 +97,8 @@ public class ActivityReport extends MyAppcompatActivity {
         mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
         mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
         initToolbar();
-        initListReport();
+//        initListReport();
+        setupViewPager();
         initBottomAction();
 
     }
@@ -186,12 +194,19 @@ public class ActivityReport extends MyAppcompatActivity {
         this.getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
+/*
     private void initListReport(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mAdapter = new ReportAdapter(this, null);
         mHolder.mListReport.setLayoutManager(layoutManager);
         mHolder.mListReport.setAdapter(new AlphaInAnimationAdapter(mAdapter));
 //        mHolder.mListReport.addItemDecoration(new SimpleDividerItemDecoration(this));
+    }
+*/
+
+    private void setupViewPager(){
+        mHolder.mPagerTypeReport.setAdapter(new PagerTypeReportAdapter(getSupportFragmentManager(), this));
+        mHolder.mTabTypeReport.setupWithViewPager(mHolder.mPagerTypeReport);
     }
 
     private void initSearchDialog(){
@@ -291,6 +306,10 @@ public class ActivityReport extends MyAppcompatActivity {
 
         loading.show();
 
+        serviceReportText(timeFrom, timeTo);
+        serviceReportLineChart(timeFrom, timeTo);
+        serviceReportPieChart(timeFrom, timeTo);
+
 /*
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(timeFrom));
@@ -299,6 +318,9 @@ public class ActivityReport extends MyAppcompatActivity {
 */
 
 //        new DialogCounterAlert.DialogProgress(this).show();
+    }
+
+    private void serviceReportText(String timeFrom, String timeTo){
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
@@ -310,19 +332,6 @@ public class ActivityReport extends MyAppcompatActivity {
 
                 if (!(responseValues instanceof ResponseModel)){
                     loading.hide();
-//                    DialogCounterAlert.DialogProgress.dismiss();
-
-/*
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
-                    List<ChartResponseModel> modelList = gson
-                            .fromJson((String)responseValues,
-                                    new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
-
-                    for (ChartResponseModel model : modelList){
-                        Log.e(TAG, "AMOUNT: "+model.getAMOUNT()+
-                        "\nPAYMENT_DATE: "+model.getPAYMENT_DATE().toString());
-                    }
-*/
 
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     List<SalerptResponseModel> modelList = gson
@@ -349,29 +358,12 @@ public class ActivityReport extends MyAppcompatActivity {
 
                     mHolder.mTextReportTotal.setText(format.format(total));
                     mHolder.mTextDebitTotal.setText(format.format(debit));
-                    mAdapter.updateAll(modelList);
+                    updateListData(PagerTypeReportAdapter.TEXT, modelList);
 
 
                 } else {
-//                    DialogCounterAlert.DialogProgress.dismiss();
                     loading.hide();
                 }
-
-                /*
-                if (responseValues.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    ResponseModel responseModel = new Gson().fromJson(responseValues.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-                    DialogCounterAlert.DialogProgress.dismiss();
-
-//                    new DialogCounterAlert(ActivityReport.this, null, responseModel.getMsg(), null);
-
-                    if (responseModel.getStatus() != APIServices.SUCCESS)
-                        new ErrorNetworkThrowable(null).networkError(ActivityReport.this,
-                                responseModel.getMsg(), call, this);
-
-                } else {
-*/
-
-//                }
             }
 
             @Override
@@ -380,6 +372,66 @@ public class ActivityReport extends MyAppcompatActivity {
                 new ErrorNetworkThrowable(t).networkError(ActivityReport.this, call, this);
             }
         });
+
+    }
+
+    private void serviceReportLineChart(String timeFrom, String timeTo){
+        Call<ResponseBody> call = services.salerpt(
+                new RequestModel(APIServices.ACTION_LINE_CHART,
+                        new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(ActivityReport.this, call, response.body(), this);
+                if (responseValues == null) return;
+
+                if (!(responseValues instanceof ResponseModel)){
+                    loading.hide();
+
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+                    List<ChartResponseModel> modelList = gson
+                            .fromJson((String)responseValues,
+                                    new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
+
+                    for (ChartResponseModel model : modelList){
+                        Log.e(TAG, "AMOUNT: "+model.getAMOUNT()+
+                        "\nPAYMENT_DATE: "+model.getPAYMENT_DATE().toString());
+                    }
+                    updateListData(PagerTypeReportAdapter.TEXT, modelList);
+
+
+                } else {
+                    loading.hide();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                loading.hide();
+                new ErrorNetworkThrowable(t).networkError(ActivityReport.this, call, this);
+            }
+        });
+
+
+    }
+
+    private void serviceReportPieChart(String timeFrom, String timeTo){
+
+    }
+
+    private void updateListData(int position, List listdata){
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + position);
+        switch (position){
+            case 0:
+                ((TextReportFragment)page).updateDataReport(listdata);
+                break;
+            case 1:
+                ((GraphReportFragment)page).updateListDataLineChart(listdata);
+                break;
+        }
+
+        mHolder.mPagerTypeReport.setCurrentItem(0);
     }
 
     private void initDatePickerDialog(long longdate, final Button btn, final int type){
@@ -426,20 +478,24 @@ public class ActivityReport extends MyAppcompatActivity {
 
 
     private class ViewHolder{
-        private RecyclerView mListReport;
+//        private RecyclerView mListReport;
         private Toolbar mToolbar;
         private TextView mTextReportTotal, mTextDebitTotal, mTextType;
         private ImageView mIconType;
         private ImageView mLogoIcon;
+        private TabLayout mTabTypeReport;
+        private ViewPager mPagerTypeReport;
 
         public ViewHolder(Activity itemView){
-            mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
+//            mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
             mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
             mTextReportTotal = (TextView) itemView.findViewById(R.id.txt_report_total);
             mTextDebitTotal = (TextView) itemView.findViewById(R.id.txt_debit_total);
             mTextType = (TextView) itemView.findViewById(R.id.text_type_report);
             mIconType = (ImageView) itemView.findViewById(R.id.icon_type_report);
             mLogoIcon = (ImageView) itemView.findViewById(R.id.logo_menu);
+            mTabTypeReport = (TabLayout) itemView.findViewById(R.id.tab_type_history_report);
+            mPagerTypeReport = (ViewPager) itemView.findViewById(R.id.pager_type_history_report);
         }
     }
 }

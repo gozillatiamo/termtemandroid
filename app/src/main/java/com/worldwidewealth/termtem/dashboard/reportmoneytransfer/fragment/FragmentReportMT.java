@@ -309,9 +309,9 @@ public class FragmentReportMT extends Fragment {
                                                         MyApplication.getContext().getString(R.string.msg_upload_success),
                                                         android.R.drawable.stat_sys_upload_done, null);
                                             else
-                                                setUploadFail(responseModel.getMsg(), requestModel);
+                                                setUploadFail(responseModel.getMsg());
                                         } else {
-                                            setUploadFail(null, requestModel);
+                                            setUploadFail(null);
                                         }
                                     }
 
@@ -319,7 +319,7 @@ public class FragmentReportMT extends Fragment {
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         t.printStackTrace();
                                         //new ErrorNetworkThrowable(t).networkError(FragmentReportMT.this.getContext(), call, this);
-                                        setUploadFail(null, requestModel);
+                                        setUploadFail(null);
                                     }
                                 });
 
@@ -406,12 +406,12 @@ public class FragmentReportMT extends Fragment {
         mDateDialog.show();
     }
 
-    private void setUploadFail(String msg, RequestModel requestModel){
+    private void setUploadFail(String msg){
         MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
                 String.valueOf(MyApplication.NOTIUPLOAD),
                 MyApplication.getContext().getString(R.string.title_upload_fail),
                 (msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail)),
-                android.R.drawable.stat_notify_error, requestModel);
+                android.R.drawable.stat_notify_error, null);
     }
 
     private void showTimeDialog(){

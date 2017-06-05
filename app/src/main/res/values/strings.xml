@@ -334,6 +334,7 @@
     <string name="day">วัน</string>
     <string name="title_phone_short">เบอร์</string>
     <string name="edit_phone">แก้ไขเบอร์</string>
+    <string name="msg_has_process_service">ท่านมีรายการที่กำลังดำเนินการอยู่\nโปรดรอจนกว่ารายการดังกล่าวจะเสร็จสิ้น</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>
@@ -502,7 +503,7 @@
         <item>EPIN</item>
         <item>CASHIN</item>
     </string-array>
-    
+
     <string-array name="list_vas_speed">
         <item>เน็ตความเร็วสูงสุด</item>
         <item>เน็ตความเร็ว 512K</item>
@@ -519,6 +520,10 @@
         <item>ปริมาณ 1GB</item>
     </string-array>
 
+    <string-array name="list_tab_history_report">
+        <item>รายงานสรุปผล</item>
+        <item>กราฟสรุปผล</item>
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->
