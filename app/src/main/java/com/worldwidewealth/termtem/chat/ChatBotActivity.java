@@ -502,14 +502,13 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                     captureImageClick();
                     break;
             }
-        }else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isClick = false;
-                }
-            }, 500);
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isClick = false;
+            }
+        }, 500);
     }
 
     private Context getContext(){
@@ -973,6 +972,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         }else {
             if (edtIdCard.getText().toString().length()==13){
                 if (!CheckSyntaxData.isIdentificationValid(edtIdCard.getText().toString())){
+                    enable(inputIdCard);
                     addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_id_card_is_invalid)), User.getTermTemUser());
                 }else {
                     if (!isEdit) {
