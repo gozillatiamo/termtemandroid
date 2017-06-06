@@ -99,6 +99,7 @@ public class DialogNetworkError {
 
         alertDialog = builder.create();
         alertDialog.setOnShowListener(new MyShowListener());
+        alertDialog.setOnDismissListener(dismissListener);
         try {
             alertDialog.show();
             TextView msgTxt = (TextView) alertDialog.findViewById(android.R.id.message);

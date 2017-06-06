@@ -208,9 +208,11 @@ public class MyApplication extends Application implements Application.ActivityLi
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
             try {
-                if (mThread != null || mThread.isAlive()) {
+                if (mThread != null) {
 //                    mHandler.removeCallbacks(mRunable);
-                    mThread.interrupt();
+                    if(mThread.isAlive()) {
+                        mThread.interrupt();
+                    }
                     mThread = null;
 
                     if (T != null) {
