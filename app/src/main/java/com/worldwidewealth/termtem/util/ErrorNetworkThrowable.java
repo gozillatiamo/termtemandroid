@@ -1,6 +1,7 @@
 package com.worldwidewealth.termtem.util;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Environment;
 
 import com.worldwidewealth.termtem.MyApplication;
@@ -35,11 +36,15 @@ public class ErrorNetworkThrowable extends Throwable {
     }
 
     public void networkError(Context context, String msg, Call call, Callback callback, boolean canCancel){
+        networkError(context, msg, call, callback, canCancel, null);
+    }
+
+    public void networkError(Context context, String msg, Call call, Callback callback, boolean canCancel, DialogInterface.OnDismissListener dismissListener){
         //printStackTrace();
         if (DialogCounterAlert.DialogProgress.isShow()) {
             DialogCounterAlert.DialogProgress.dismiss();
         }
-        new DialogNetworkError(context, msg, call, callback, canCancel);
+        new DialogNetworkError(context, msg, call, callback, canCancel, dismissListener);
 
     }
 

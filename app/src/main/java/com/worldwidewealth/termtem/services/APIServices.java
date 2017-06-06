@@ -169,11 +169,12 @@ public interface APIServices {
 
 
                         builder = originalRequest.newBuilder()
+                                .addHeader("connection", "close")
                                 .method(originalRequest.method(), Util.encode(originalRequest.body()));
                     }
                     Response response = chain.proceed(builder.build());
 //                    Response response = client.newCall(builder.build()).execute();
-                    return  response;
+                     return  response;
                 }
             })
             .build();

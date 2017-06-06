@@ -104,35 +104,6 @@ public class FragmentTopupSlip extends Fragment {
 //        tabLayout.setVisibility(View.GONE);
 //        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
 
-        initBtn();
-
-        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Object values = EncryptionData.getModel(getContext(), call, response.body(), this);
-
-                        if (values instanceof String) {
-                            LoginResponseModel loginResponseModel = new Gson().fromJson((String) values, LoginResponseModel.class);
-                            Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
-                            Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
-                            Util.setBalanceWallet(mHolder.mIncludeMyWallet);
-
-                        }
-
-                        if (mImageBitmap != null || mTransID != null) {
-                            initEslip();
-                        }
-
-
-//                DialogCounterAlert.DialogProgress.dismiss();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    }
-                });
 
         return rootView;
     }
@@ -140,6 +111,38 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        new DialogCounterAlert.DialogProgress(getContext()).show();
+
+        initBtn();
+
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object values = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                if (values instanceof String) {
+                    LoginResponseModel loginResponseModel = new Gson().fromJson((String) values, LoginResponseModel.class);
+                    Global.getInstance().setBALANCE(loginResponseModel.getBALANCE());
+                    Global.getInstance().setMSGREAD(loginResponseModel.getMSGREAD());
+                    Util.setBalanceWallet(mHolder.mIncludeMyWallet);
+
+                }
+
+                if (mImageBitmap != null || mTransID != null) {
+                    initEslip();
+                }
+
+
+//                DialogCounterAlert.DialogProgress.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });
+
         Global.getInstance().setProcessSubmit(null);
         onBackPress();
     }

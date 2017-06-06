@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dialog;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.ResponseModel;
 
 /**
@@ -69,6 +71,14 @@ public class DialogCounterAlert {
             builder.setNegativeButton(R.string.cancel, cancelListener);
 
         } else {
+
+                doneListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((Activity)context).finish();
+                    }
+                };
+
             builder.setPositiveButton(R.string.done, doneListener);
 
         }

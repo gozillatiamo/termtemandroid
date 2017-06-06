@@ -229,7 +229,7 @@
     <string name="title_upload">กำลังอัพโหลดรายการของท่าน</string>
     <string name="msg_upload">กรุณารอสักครู่.....</string>
     <string name="warning">เพื่อทราบ</string>
-    <string name="error_msg_timeout">รายการของท่านอยู่ระหว่างดำเนินการ\nโปรดรอจนกว่าจะมี SMS ส่งไปที่หมายเลขปลายทาง</string>
+    <string name="error_msg_timeout">รายการของท่านอยู่ระหว่างดำเนินการ\nโปรดรอจนกว่าจะมี SMS ส่งไปที่หมายเลขปลายทาง\nกด "ยืนยัน" เพื่อกลับสู่หน้าหลัก</string>
     <string name="msg_waiting_upload">ระบบกำลังอัพโหลดและตรวจสอบรายการโอนเงิน\nท่านสามารถใช้งานเมนูอื่นได้ตามปกติ</string>
     <string name="dialog_alert_title">แจ้งเตือน!!</string>
     <string name="title_upload_success">อัพโหลดเสร็จสิ้น</string>

@@ -489,11 +489,6 @@ public class FragmentTopupPackage extends  Fragment{
         startTimeoutSubmit(model.getTranid());
 
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-                    @Override
-                    protected Object clone() throws CloneNotSupportedException {
-                        startTimeoutSubmit(model.getTranid());
-                        return super.clone();
-                    }
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -553,7 +548,8 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
                             mAlertTimeout.cancel();
-                        } else {
+
+                        }
                             MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
                                     title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
                                             " " + MyApplication.getContext().getString(R.string.currency),
@@ -561,13 +557,16 @@ public class FragmentTopupPackage extends  Fragment{
                                             " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
                                     android.R.drawable.stat_sys_warning, requestModel);
 
-                        }
 
-                        if (t.getMessage().equals("timeout")) {
-                        } else {
-                            new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                            mBottomAction.setEnable(true);
-                        }
+                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
+                                null, call, this, false, new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                startTimeoutSubmit(model.getTranid());
+                            }
+                        });
+                        mBottomAction.setEnable(true);
+
                     }
                 });
     }

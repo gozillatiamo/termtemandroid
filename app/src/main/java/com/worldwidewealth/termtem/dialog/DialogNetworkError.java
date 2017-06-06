@@ -36,6 +36,10 @@ public class DialogNetworkError {
     private String title;
 
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback , boolean canCancel){
+        new DialogNetworkError(context, msg, call, callback, canCancel, null);
+    }
+
+    public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback , boolean canCancel, DialogInterface.OnDismissListener dismissListener){
         this.mContext = context;
         if (mContext == null) return;
         strRequest = Util.convertToStringRequest(call.request().body());
