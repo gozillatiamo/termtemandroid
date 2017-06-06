@@ -86,8 +86,7 @@ public class FragmentTopupPackage extends  Fragment{
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
     private BottomAction mBottomAction;
-    private Call<ResponseBody> call;
-    private Callback<ResponseBody> callback;
+
     private byte[] imageByte = null;
     private String transid;
     private Timer mTimerTimeout;
@@ -180,6 +179,11 @@ public class FragmentTopupPackage extends  Fragment{
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
         this.mButtonID = buttonid;
@@ -199,10 +203,10 @@ public class FragmentTopupPackage extends  Fragment{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                call = services.loadButton(new RequestModel(mActionLoadButton,
+                Call<ResponseBody> call = services.loadButton(new RequestModel(mActionLoadButton,
                         new LoadButtonRequestModel(mCarrier)
                 ));
-                APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
@@ -281,9 +285,9 @@ public class FragmentTopupPackage extends  Fragment{
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
 
-        call = services.preview(new RequestModel(mActionPreview,
+        Call<ResponseBody> call = services.preview(new RequestModel(mActionPreview,
                 new TopupPreviewRequestModel(mAmt, mCarrier)));
-        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -444,12 +448,12 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
-        call = services.getOTP(new RequestModel(mActionGetOTP,
+        Call<ResponseBody> call = services.getOTP(new RequestModel(mActionGetOTP,
                 new GetOTPRequestModel()));
-        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                final Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null){
                     mBottomAction.setEnable(true);
                     return;
@@ -457,6 +461,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                 if (responseValues instanceof String){
                     serviceSubmitToup((String)responseValues);
+
                 }
             }
 
@@ -479,85 +484,92 @@ public class FragmentTopupPackage extends  Fragment{
                         model.getTranid(),
                         mButtonID,
                         null));
-        call = services.submitTopup(requestModel);
+        Call<ResponseBody> call = services.submitTopup(requestModel);
 
         startTimeoutSubmit(model.getTranid());
 
-        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
-            @Override
-            protected Object clone() throws CloneNotSupportedException {
-                startTimeoutSubmit(model.getTranid());
-                return super.clone();
-            }
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                    @Override
+                    protected Object clone() throws CloneNotSupportedException {
+                        startTimeoutSubmit(model.getTranid());
+                        return super.clone();
+                    }
 
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (mTimerTimeout != null)
-                    mTimerTimeout.cancel();
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (mTimerTimeout != null)
+                            mTimerTimeout.cancel();
 
-                if (mAlertTimeout != null && mAlertTimeout.isShowing())
-                    mAlertTimeout.cancel();
+                        if (mAlertTimeout != null && mAlertTimeout.isShowing())
+                            mAlertTimeout.cancel();
 
-                String title;
-                if (mTopup.equals(FragmentTopup.MOBILE)){
-                    title = MyApplication.getContext().getString(R.string.title_topup);
-                } else {
-                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
-                }
+                        String title;
+                        if (mTopup.equals(FragmentTopup.MOBILE)) {
+                            title = MyApplication.getContext().getString(R.string.title_topup);
+                        } else {
+                            title = MyApplication.getContext().getString(R.string.dashboard_pin);
+                        }
 
-                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-                if (responseValues == null) {
-                    mBottomAction.setEnable(true);
+                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                        if (responseValues == null) {
+                            mBottomAction.setEnable(true);
 
-                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                            model.getTranid(),
-                            title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
-                                    +MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+" "
-                                    +MyApplication.getContext().getString(R.string.msg_upload_fail),
-                            android.R.drawable.stat_sys_warning, null);
+                            MyApplication.uploadFail(MyApplication.NOTITOPUP,
+                                    model.getTranid(),
+                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() + " "
+                                            + MyApplication.getContext().getString(R.string.currency),
+                                    MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone + " "
+                                            + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                                    android.R.drawable.stat_sys_warning, null);
 
-                    return;
-                }
+                            return;
+                        }
 
-                if (responseValues instanceof ResponseModel){
+                        if (responseValues instanceof ResponseModel) {
 
-                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, model.getTranid(),
-                            title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+
-                                    " "+MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number)+" "+
-                                    mPhone+" "+MyApplication.getContext().getString(R.string.success),
-                            R.drawable.ic_check_circle_white, mTopup);
-                    serviceEslip(model.getTranid());
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "Exception submit topup: "+t.getMessage());
-                if (mTimerTimeout != null)
-                    mTimerTimeout.cancel();
+                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP, model.getTranid(),
+                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
+                                            " " + MyApplication.getContext().getString(R.string.currency),
+                                    MyApplication.getContext().getString(R.string.phone_number) + " " +
+                                            mPhone + " " + MyApplication.getContext().getString(R.string.success),
+                                    R.drawable.ic_check_circle_white, mTopup);
+                            serviceEslip(model.getTranid());
+                        }
+                    }
 
-                String title;
-                if (mTopup.equals(FragmentTopup.MOBILE)){
-                    title = MyApplication.getContext().getString(R.string.title_topup);
-                } else {
-                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
-                }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e(TAG, "Exception submit topup: " + t.getMessage());
+                        if (mTimerTimeout != null)
+                            mTimerTimeout.cancel();
 
-                MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
-                        title+" "+mCarrier+" "+mHolder.mTextPrice.getText().toString()+
-                                " "+MyApplication.getContext().getString(R.string.currency),
-                        MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+
-                                " "+MyApplication.getContext().getString(R.string.msg_upload_fail),
-                        android.R.drawable.stat_sys_warning, requestModel);
+                        String title;
+                        if (mTopup.equals(FragmentTopup.MOBILE)) {
+                            title = MyApplication.getContext().getString(R.string.title_topup);
+                        } else {
+                            title = MyApplication.getContext().getString(R.string.dashboard_pin);
+                        }
 
-                if (t.getMessage().equals("timeout")){
-                }else {
-                    new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                    mBottomAction.setEnable(true);
-                }
-            }
-        });
+
+                        if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
+                            mAlertTimeout.cancel();
+                        } else {
+                            MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
+                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
+                                            " " + MyApplication.getContext().getString(R.string.currency),
+                                    MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone +
+                                            " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                                    android.R.drawable.stat_sys_warning, requestModel);
+
+                        }
+
+                        if (t.getMessage().equals("timeout")) {
+                        } else {
+                            new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
+                            mBottomAction.setEnable(true);
+                        }
+                    }
+                });
     }
 
     private void startTimeoutSubmit(final String tranid){
@@ -595,15 +607,15 @@ public class FragmentTopupPackage extends  Fragment{
                     }
                 });
             }
-        }, 1000);
+        }, 15000);
 
     }
 
     private void serviceEslip(final String transid){
         DialogCounterAlert.DialogProgress.show();
-        call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
+        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
 
-        APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);

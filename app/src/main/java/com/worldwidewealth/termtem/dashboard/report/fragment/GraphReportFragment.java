@@ -1,15 +1,25 @@
 package com.worldwidewealth.termtem.dashboard.report.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,6 +35,8 @@ public class GraphReportFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+
+    private LineChart mLineChart = null;
 
     private List<ChartResponseModel> mListLineModel;
     public GraphReportFragment() {
@@ -53,17 +65,65 @@ public class GraphReportFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_graph_report, container, false);
     }
 
-    private void setup(){
+    @Override
+    public void onStart() {
+        super.onStart();
+        setup();
+    }
 
+    private void setup(){
+        bindView();
     }
 
     private void bindView(){
-
+        mLineChart = (LineChart) getView().findViewById(R.id.line_chart);
     }
 
     private void setupLineChart(){
 
+
+        mLineChart.getDescription().setEnabled(false);
+        mLineChart.setDrawGridBackground(false);
+
+        XAxis xAxis = mLineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+
+        YAxis leftAxis = mLineChart.getAxisLeft();
+        leftAxis.setLabelCount(5, false);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+
+        // set data
+        mLineChart.setData(generateDataLine());
+
+        // do not forget to refresh the chart
+        // holder.chart.invalidate();
+        mLineChart.animateX(750);
+
     }
+
+    private LineData generateDataLine() {
+
+        ArrayList<Entry> e1 = new ArrayList<Entry>();
+
+        for (ChartResponseModel model : mListLineModel) {
+            e1.add(new Entry(e1.size(), (float) model.getAMOUNT()));
+        }
+
+        LineDataSet d1 = new LineDataSet(e1, "New DataSet ");
+        d1.setLineWidth(2.5f);
+        d1.setCircleRadius(4.5f);
+        d1.setHighLightColor(Color.rgb(244, 117, 117));
+        d1.setDrawValues(false);
+
+        ArrayList<ILineDataSet> sets = new ArrayList<ILineDataSet>();
+        sets.add(d1);
+        LineData cd = new LineData(sets);
+        return cd;
+    }
+
 
     private void setupPieChart(){
 
@@ -71,6 +131,10 @@ public class GraphReportFragment extends Fragment {
 
     public void updateListDataLineChart(List<ChartResponseModel> listLineModel){
         mListLineModel = listLineModel;
+        setupLineChart();
     }
 
+    public LineChart getmLineChart() {
+        return mLineChart;
+    }
 }

@@ -399,10 +399,10 @@ public class MyApplication extends Application implements Application.ActivityLi
             } catch (Exception e){
                 e.printStackTrace();
             }*/
-
             Intent intent = new Intent(mContext, ActivityTopup.class);
             intent.putExtra(FragmentTopup.keyTopup, type);
             intent.putExtra("transid", Global.getInstance().getProcessSubmit());
+            Global.getInstance().setProcessSubmit(null);
             intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.setContentIntent(pendingIntent);
@@ -434,6 +434,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                     retryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
         } else {
+            mBuilder.setOngoing(false);
             isUpload = false;
 
             if (id == NOTITOPUP) {

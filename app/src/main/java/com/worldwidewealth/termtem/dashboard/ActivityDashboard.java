@@ -70,7 +70,9 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        updateBalance();
+        if (Global.getInstance().getProcessSubmit() == null) {
+            updateBalance();
+        }
         mUserMenuList = Global.getInstance().getUserMenuList();
         initBtnMenu();
 

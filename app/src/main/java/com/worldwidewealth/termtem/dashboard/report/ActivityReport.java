@@ -376,6 +376,16 @@ public class ActivityReport extends MyAppcompatActivity {
     }
 
     private void serviceReportLineChart(String timeFrom, String timeTo){
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
+
+        if (((GraphReportFragment)page).getmLineChart() == null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.parseLong(timeFrom));
+            int month = calendar.get(Calendar.MONTH);
+            calendar.set(Calendar.MONTH, month-1);
+            timeFrom = String.valueOf(calendar.getTimeInMillis());
+        }
+
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTION_LINE_CHART,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
@@ -397,7 +407,7 @@ public class ActivityReport extends MyAppcompatActivity {
                         Log.e(TAG, "AMOUNT: "+model.getAMOUNT()+
                         "\nPAYMENT_DATE: "+model.getPAYMENT_DATE().toString());
                     }
-                    updateListData(PagerTypeReportAdapter.TEXT, modelList);
+                    updateListData(PagerTypeReportAdapter.GRAPH, modelList);
 
 
                 } else {

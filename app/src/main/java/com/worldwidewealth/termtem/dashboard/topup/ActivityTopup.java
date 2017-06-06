@@ -60,14 +60,19 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (mPreviousTransId != null){
             new DialogCounterAlert.DialogProgress(this).show();
 
             Util.getPreviousEslip(this, mPreviousTransId, mTopup, R.id.container_topup);
         } else
             initContainer();
-    }
 
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,39 +86,32 @@ public class ActivityTopup extends MyAppcompatActivity {
 
     @Override
     public void onBackPressed() {
-//        Fragment fragment = getSupportFragmentManager()
-//                .findFragmentById(R.id.container_topup)
-//                .getChildFragmentManager()
-//                .findFragmentById(R.id.container_topup_package);
-//        if (fragment instanceof FragmentTopupPreview){
-//            FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview)fragment;
-//            fragmentTopupPreview.fragmentPopBack(fragmentTopupPreview.getParentFragment());
-//
-//        } else {
-//            super.onBackPressed();
-//        }
+        try {
+            if (!getSupportFragmentManager()
+                    .findFragmentById(R.id.container_topup)
+                    .getChildFragmentManager()
+                    .popBackStackImmediate()) {
+                super.onBackPressed();
+            } else if (mTopup.equals(FragmentTopup.VAS)) {
+                final View view = getSupportFragmentManager()
+                        .findFragmentById(R.id.container_topup)
+                        .getView().findViewById(R.id.recycler_vas);
 
-        if (!getSupportFragmentManager()
-                .findFragmentById(R.id.container_topup)
-                .getChildFragmentManager()
-                .popBackStackImmediate()){
-            super.onBackPressed();
-        } else if (mTopup.equals(FragmentTopup.VAS)){
-            final View view = getSupportFragmentManager()
-                .findFragmentById(R.id.container_topup)
-                .getView().findViewById(R.id.recycler_vas);
-
-            view.animate()
-                .alpha(1.0f)
-                .setDuration(500)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        view.setAlpha(0.0f);
-                        view.setVisibility(View.VISIBLE);
-                    }
-                });
+                view.animate()
+                        .alpha(1.0f)
+                        .setDuration(500)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                super.onAnimationStart(animation);
+                                view.setAlpha(0.0f);
+                                view.setVisibility(View.VISIBLE);
+                            }
+                        });
+            }
+        } catch (NullPointerException e){
+            e.printStackTrace();
+            finish();
         }
     }
 

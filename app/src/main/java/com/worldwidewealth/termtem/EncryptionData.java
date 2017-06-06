@@ -174,6 +174,9 @@ public class EncryptionData {
                         case APIServices.ACTIONSUBMITTOPUP:
                         case APIServices.ACTION_GET_OTP_EPIN:
                         case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
+                        case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+
+                            Global.getInstance().setProcessSubmit(null);
 
                             msg = context.getString(R.string.alert_topup_fail);
                             new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
