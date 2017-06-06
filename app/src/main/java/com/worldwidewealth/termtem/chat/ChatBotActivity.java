@@ -1127,6 +1127,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                     inputTryAgain.setVisibility(View.GONE);
                     inputSuccess.setVisibility(View.VISIBLE);
                     enable(inputTryAgain);
+                    enable(inputSuccess);
                     expandableLayout.expand();
                     clearData();
                 }else {
