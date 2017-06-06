@@ -1126,6 +1126,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                     inputAccept.setVisibility(View.GONE);
                     inputTryAgain.setVisibility(View.GONE);
                     inputSuccess.setVisibility(View.VISIBLE);
+                    enable(inputTryAgain);
                     expandableLayout.expand();
                     clearData();
                 }else {
@@ -1142,6 +1143,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                     inputAccept.setVisibility(View.GONE);
                     inputSuccess.setVisibility(View.GONE);
                     inputTryAgain.setVisibility(View.VISIBLE);
+                    enable(inputTryAgain);
                     expandableLayout.expand();
                 }
             }
@@ -1152,6 +1154,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 inputAccept.setVisibility(View.GONE);
                 inputSuccess.setVisibility(View.GONE);
                 inputTryAgain.setVisibility(View.VISIBLE);
+                enable(inputTryAgain);
                 expandableLayout.expand();
             }
         });
