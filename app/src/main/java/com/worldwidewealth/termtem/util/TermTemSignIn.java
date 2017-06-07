@@ -208,7 +208,7 @@ public class TermTemSignIn {
             alertDialog.setOnShowListener(new MyShowListener());
             try {
                 alertDialog.show();
-            } catch (WindowManager.BadTokenException e){}
+            } catch (Exception e){}
 
             return false;
         }

@@ -3,7 +3,11 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +38,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -86,6 +91,7 @@ public class FragmentTopupPackage extends  Fragment{
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
     private BottomAction mBottomAction;
+    public static Call<ResponseBody> callSubmit;
 
     private byte[] imageByte = null;
     private String transid;
@@ -102,6 +108,26 @@ public class FragmentTopupPackage extends  Fragment{
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
 
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getExtras() == null) return;
+
+            if (callSubmit != null && callSubmit.isExecuted()){
+                callSubmit.cancel();
+            }
+
+            if (intent.getExtras().getBoolean("topup")){
+                if (Global.getInstance().getProcessSubmit() != null){
+                    serviceEslip(Global.getInstance().getProcessSubmit());
+                }
+            } else {
+                getActivity().finish();
+            }
+        }
+    };
+
+
     public static Fragment newInstance(String carrier, String topup){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
@@ -109,6 +135,20 @@ public class FragmentTopupPackage extends  Fragment{
         bundle.putString(FragmentTopup.keyTopup, topup);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getActivity().unregisterReceiver(myReceiver);
+
     }
 
     @Nullable
@@ -484,14 +524,17 @@ public class FragmentTopupPackage extends  Fragment{
                         model.getTranid(),
                         mButtonID,
                         null));
-        Call<ResponseBody> call = services.submitTopup(requestModel);
+        callSubmit = services.submitTopup(requestModel);
 
-        startTimeoutSubmit(model.getTranid());
+        startTimeoutSubmit(model.getTranid(), requestModel);
 
-                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        Global.getInstance().setProcessSubmit(model.getTranid(), mTopup);
+
+                APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
 
@@ -529,12 +572,17 @@ public class FragmentTopupPackage extends  Fragment{
                                             mPhone + " " + MyApplication.getContext().getString(R.string.success),
                                     R.drawable.ic_check_circle_white, mTopup);
                             serviceEslip(model.getTranid());
+
+                            Global.getInstance().setProcessSubmit(null, null);
+
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e(TAG, "Exception submit topup: " + t.getMessage());
+                        if (t.getMessage().equals("Socket closed")) return;
+
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
 
@@ -548,6 +596,8 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
                             mAlertTimeout.cancel();
+                            Global.getInstance().setProcessSubmit(null, null);
+
 
                         }
                             MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
@@ -562,7 +612,7 @@ public class FragmentTopupPackage extends  Fragment{
                                 null, call, this, false, new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                startTimeoutSubmit(model.getTranid());
+                                startTimeoutSubmit(model.getTranid(), requestModel);
                             }
                         });
                         mBottomAction.setEnable(true);
@@ -571,7 +621,7 @@ public class FragmentTopupPackage extends  Fragment{
                 });
     }
 
-    private void startTimeoutSubmit(final String tranid){
+    private void startTimeoutSubmit(final String tranid, final RequestModel requestModel){
         if (mTimerTimeout != null){
             mTimerTimeout.cancel();
             mTimerTimeout = null;
@@ -598,7 +648,7 @@ public class FragmentTopupPackage extends  Fragment{
                                                         +getString(R.string.currency),
                                                 getString(R.string.phone_number)+" "+mPhone+" "
                                                         +getString(R.string.processing),
-                                                android.R.drawable.stat_notify_sync);
+                                                android.R.drawable.stat_notify_sync, requestModel);
                                         getActivity().finish();
                                     }
                                 }).show();

@@ -43,6 +43,7 @@ public class Global {
     private static final String USERDATA = "userdata";
     private static final String CACHEUSER = "cacheuser";
     private static final String SERVICE_TRAN_ID = "servicetranid";
+    private static final String SERVICE_TOPUP_TYPE = "servicetopup";
 
     public static final String TAG = Global.class.getSimpleName();
 
@@ -257,14 +258,19 @@ public class Global {
         mEditor.commit();
     }
 
-    public void setProcessSubmit(String tranId){
+    public void setProcessSubmit(String tranId, String type){
 
         mEditor.putString(SERVICE_TRAN_ID, tranId);
+        mEditor.putString(SERVICE_TOPUP_TYPE, type);
         mEditor.commit();
     }
 
     public String getProcessSubmit(){
         return mPreferences.getString(SERVICE_TRAN_ID, null);
+    }
+
+    public String getProcessType(){
+        return mPreferences.getString(SERVICE_TOPUP_TYPE, null);
     }
 
 

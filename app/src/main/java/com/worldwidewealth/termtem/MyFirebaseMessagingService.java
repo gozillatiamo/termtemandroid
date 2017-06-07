@@ -52,13 +52,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 */
 //        String click_action = remoteMessage.getNotification().getClickAction();
 
-        Intent intent = new Intent(INTENT_FILTER);
-        sendBroadcast(intent);
         if (remoteMessage.getData() != null) {
             Bundle bundle = new Bundle();
             bundle.putString(TEXT, remoteMessage.getData().get(TEXT));
             bundle.putString(BOX, remoteMessage.getData().get(BOX));
             bundle.putString(MSGID, remoteMessage.getData().get(MSGID));
+
+            Intent intent = new Intent(INTENT_FILTER);
+            intent.putExtra("topup", !(remoteMessage.getData().get(BOX).contains("incomplete")));
+            sendBroadcast(intent);
+
             if (remoteMessage.getData().containsKey(TYPE)){
                 mType = Integer.parseInt(remoteMessage.getData().get(TYPE));
                 bundle.putInt(TYPE, mType);

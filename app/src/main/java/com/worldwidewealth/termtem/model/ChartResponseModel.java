@@ -13,10 +13,12 @@ public class ChartResponseModel implements Parcelable {
 
     private double AMOUNT;
     private Date PAYMENT_DATE;
+    private String CARRIER;
 
     protected ChartResponseModel(Parcel in) {
         AMOUNT = in.readDouble();
         PAYMENT_DATE.setTime(in.readLong());
+        CARRIER = in.readString();
     }
 
     public double getAMOUNT() {
@@ -25,6 +27,10 @@ public class ChartResponseModel implements Parcelable {
 
     public Date getPAYMENT_DATE() {
         return PAYMENT_DATE;
+    }
+
+    public String getCARRIER() {
+        return CARRIER;
     }
 
     public static final Creator<ChartResponseModel> CREATOR = new Creator<ChartResponseModel>() {
@@ -48,5 +54,6 @@ public class ChartResponseModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(AMOUNT);
         dest.writeLong(PAYMENT_DATE.getTime());
+        dest.writeString(CARRIER);
     }
 }

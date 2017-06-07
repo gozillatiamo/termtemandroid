@@ -143,7 +143,7 @@ public class FragmentTopupSlip extends Fragment {
             }
         });
 
-        Global.getInstance().setProcessSubmit(null);
+        Global.getInstance().setProcessSubmit(null, null);
         onBackPress();
     }
 

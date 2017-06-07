@@ -71,6 +71,7 @@ public interface APIServices {
     public static final String ACTION_SERVICE_PRO = "SERVICEPRO";
     public static final String ACTION_REGISTER = "REGISTER";
     public static final String ACTION_LINE_CHART = "SALERPTLINECHART";
+    public static final String ACTION_PIE_CHART = "SALERPTPIECHART";
 
 
 

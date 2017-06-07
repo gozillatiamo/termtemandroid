@@ -293,7 +293,7 @@ public class FragmentReportMT extends Fragment {
                                         String.valueOf(MyApplication.NOTIUPLOAD),
                                         getString(R.string.title_upload),
                                         getString(R.string.msg_upload),
-                                        android.R.drawable.stat_sys_upload);
+                                        android.R.drawable.stat_sys_upload, null);
                                 APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

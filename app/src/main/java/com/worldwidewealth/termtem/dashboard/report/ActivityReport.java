@@ -80,7 +80,9 @@ public class ActivityReport extends MyAppcompatActivity {
 
     private static final int FORM = 0;
     private static final int TO = 1;
+
     public static final String TOPUP_REPORT = "TOPUP";
+    public static final String EPIN_REPORT = "EPIN";
     public static final String CASHIN_REPORT = "CASHIN";
 
     public static final String TAG = ActivityReport.class.getSimpleName();
@@ -276,20 +278,20 @@ public class ActivityReport extends MyAppcompatActivity {
     private void salerptService(String timeFrom, String timeTo){
         if (mCurrentType == null) return;
         switch (mCurrentType){
-            case "TOPUP":
+            case TOPUP_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_topup);
                 mHolder.mTextType.setText(R.string.topup);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_topup);
                 mHolder.mLogoIcon.setVisibility(View.VISIBLE);
                 break;
-            case "EPIN":
+            case EPIN_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_epin);
                 mHolder.mTextType.setText(R.string.dashboard_pin);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_epin);
                 mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
                 break;
-            case "CASHIN":
+            case CASHIN_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
                 mHolder.mTextType.setText(R.string.add_credit_agent);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
@@ -307,8 +309,7 @@ public class ActivityReport extends MyAppcompatActivity {
         loading.show();
 
         serviceReportText(timeFrom, timeTo);
-        serviceReportLineChart(timeFrom, timeTo);
-        serviceReportPieChart(timeFrom, timeTo);
+        serviceReportChart(timeFrom, timeTo);
 
 /*
         Calendar calendar = Calendar.getInstance();
@@ -358,7 +359,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
                     mHolder.mTextReportTotal.setText(format.format(total));
                     mHolder.mTextDebitTotal.setText(format.format(debit));
-                    updateListData(PagerTypeReportAdapter.TEXT, modelList);
+                    updateListData(PagerTypeReportAdapter.TEXT, modelList, null);
 
 
                 } else {
@@ -375,10 +376,10 @@ public class ActivityReport extends MyAppcompatActivity {
 
     }
 
-    private void serviceReportLineChart(String timeFrom, String timeTo){
+    private void serviceReportChart(String timeFrom, String timeTo){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
 
-        if (((GraphReportFragment)page).getmLineChart() == null){
+        if (((GraphReportFragment)page).getmListLineModel() == null){
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(Long.parseLong(timeFrom));
             int month = calendar.get(Calendar.MONTH);
@@ -386,10 +387,35 @@ public class ActivityReport extends MyAppcompatActivity {
             timeFrom = String.valueOf(calendar.getTimeInMillis());
         }
 
-        Call<ResponseBody> call = services.salerpt(
+        Call<ResponseBody> callLine = services.salerpt(
                 new RequestModel(APIServices.ACTION_LINE_CHART,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(callLine, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(ActivityReport.this, call, response.body(), this);
+                if (responseValues == null) return;
+
+                if (!(responseValues instanceof ResponseModel)){
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+                    List<ChartResponseModel> modelList = gson
+                            .fromJson((String)responseValues,
+                                    new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
+
+                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.LINE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                loading.hide();
+            }
+        });
+
+        Call<ResponseBody> callPie = services.salerpt(
+                new RequestModel(APIServices.ACTION_PIE_CHART,
+                        new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
+        APIHelper.enqueueWithRetry(callPie, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(ActivityReport.this, call, response.body(), this);
@@ -403,11 +429,7 @@ public class ActivityReport extends MyAppcompatActivity {
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
 
-                    for (ChartResponseModel model : modelList){
-                        Log.e(TAG, "AMOUNT: "+model.getAMOUNT()+
-                        "\nPAYMENT_DATE: "+model.getPAYMENT_DATE().toString());
-                    }
-                    updateListData(PagerTypeReportAdapter.GRAPH, modelList);
+                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.PIE);
 
 
                 } else {
@@ -419,25 +441,28 @@ public class ActivityReport extends MyAppcompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 loading.hide();
-                new ErrorNetworkThrowable(t).networkError(ActivityReport.this, call, this);
             }
         });
 
 
-    }
-
-    private void serviceReportPieChart(String timeFrom, String timeTo){
 
     }
 
-    private void updateListData(int position, List listdata){
+    private void updateListData(int position, List listdata, String chartType){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + position);
         switch (position){
             case 0:
                 ((TextReportFragment)page).updateDataReport(listdata);
                 break;
             case 1:
-                ((GraphReportFragment)page).updateListDataLineChart(listdata);
+                switch (chartType){
+                    case GraphReportFragment.LINE:
+                        ((GraphReportFragment)page).updateListDataLineChart(listdata);
+                        break;
+                    case GraphReportFragment.PIE:
+                        ((GraphReportFragment)page).updatePieDataLineChart(listdata);
+                        break;
+                }
                 break;
         }
 
@@ -485,7 +510,9 @@ public class ActivityReport extends MyAppcompatActivity {
         mDatePickerDialog.show();
     }
 
-
+    public String getmCurrentType() {
+        return mCurrentType;
+    }
 
     private class ViewHolder{
 //        private RecyclerView mListReport;
