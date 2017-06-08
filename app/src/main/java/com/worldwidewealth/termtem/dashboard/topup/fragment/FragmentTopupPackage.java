@@ -110,20 +110,26 @@ public class FragmentTopupPackage extends  Fragment{
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, final Intent intent) {
             if (intent.getExtras() == null) return;
 
-            if (callSubmit != null && callSubmit.isExecuted()){
-                callSubmit.cancel();
-            }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (callSubmit != null && callSubmit.isExecuted()){
+                        callSubmit.cancel();
+                    }
 
-            if (intent.getExtras().getBoolean("topup")){
-                if (Global.getInstance().getProcessSubmit() != null){
-                    serviceEslip(Global.getInstance().getProcessSubmit());
+                    if (intent.getExtras().getBoolean("topup")){
+                        if (Global.getInstance().getProcessSubmit() != null){
+                            serviceEslip(Global.getInstance().getProcessSubmit());
+                        }
+                    } else {
+                        getActivity().finish();
+                    }
+
                 }
-            } else {
-                getActivity().finish();
-            }
+            }, 3000);
         }
     };
 
@@ -147,7 +153,6 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().unregisterReceiver(myReceiver);
 
     }
 
@@ -222,6 +227,10 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (myReceiver != null) {
+            getActivity().unregisterReceiver(myReceiver);
+            myReceiver = null;
+        }
     }
 
     public void setAmt(double price, String buttonid){
@@ -534,6 +543,11 @@ public class FragmentTopupPackage extends  Fragment{
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        if (myReceiver != null) {
+                            getActivity().unregisterReceiver(myReceiver);
+                            myReceiver = null;
+                        }
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();

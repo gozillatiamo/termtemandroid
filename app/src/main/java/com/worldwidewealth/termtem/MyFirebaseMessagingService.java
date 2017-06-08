@@ -55,11 +55,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData() != null) {
             Bundle bundle = new Bundle();
             bundle.putString(TEXT, remoteMessage.getData().get(TEXT));
+
             bundle.putString(BOX, remoteMessage.getData().get(BOX));
             bundle.putString(MSGID, remoteMessage.getData().get(MSGID));
 
             Intent intent = new Intent(INTENT_FILTER);
-            intent.putExtra("topup", !(remoteMessage.getData().get(BOX).contains("incomplete")));
+            if (remoteMessage.getData().get(TEXT).equals("Transaction notification")){
+                intent.putExtra("topup", checkMsgTopup(remoteMessage.getData().get(BOX)));
+            }
             sendBroadcast(intent);
 
             if (remoteMessage.getData().containsKey(TYPE)){
@@ -75,7 +78,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                         new TypeToken<ArrayList<FileListNotifyResponseModel>>() {
                                         }.getType());
 
-                        bundle.putParcelableArrayList(FILELIST, list) ;
+                        bundle.putParcelableArrayList(FILELIST, list);
                         urlImagePreview  = list.get(0).getUrl();
                     }
                     break;
@@ -94,15 +97,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    private boolean checkMsgTopup(String msg){
+
+        if (msg.contains("incomplete")) return false;
+        if (msg.contains("complete")) return true;
+
+        return false;
+    }
+
 
     private void sendNotification(Bundle bundle) {
 
         Intent intent = new Intent(this, ActivityShowNotify.class);
         intent.putExtras(bundle);
 
+
         int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), iUniqueId, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), iUniqueId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_2);
 

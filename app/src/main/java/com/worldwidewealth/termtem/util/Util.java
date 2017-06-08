@@ -536,6 +536,8 @@ public class Util {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object responseValues = EncryptionData.getModel(MyApplication.getContext(), call, response.body(), this);
 
+                if (responseValues == null) ((Activity)context).finish();
+
 /*
                 if (responseValues == null) {
                     mBottomAction.setEnable(true);

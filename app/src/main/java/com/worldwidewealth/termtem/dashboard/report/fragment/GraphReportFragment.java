@@ -39,6 +39,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,8 +82,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTf = Typeface.createFromAsset(getContext().getAssets(), "Mitr-Regular.ttf");
-
+        mTf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Mitr-Regular.ttf");
         if (getArguments() != null) {
         }
     }

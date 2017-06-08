@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -218,7 +220,14 @@ public class FragmentTopupSlip extends Fragment {
         });
     }
 
-    private boolean saveImage(){
+    private void saveImage(){
+/*
+        NotificationManager nMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+*/
+        if (mFileName == null) return;
+
+
         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         File myDirOld = new File(root + "/WealthCounterSlip");
         File myDir = new File(root + "/TermTemSlip");
@@ -233,7 +242,7 @@ public class FragmentTopupSlip extends Fragment {
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
             MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
@@ -246,6 +255,7 @@ public class FragmentTopupSlip extends Fragment {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     DialogCounterAlert.DialogProgress.dismiss();
+                    mFileName = null;
                 }
 
                 @Override
@@ -254,11 +264,11 @@ public class FragmentTopupSlip extends Fragment {
                 }
             });
 
-            return true;
+            return;
         } catch (Exception e) {
             e.printStackTrace();
             new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.save_eslip_fail), null);
-            return false;
+            return;
         }
 
     }

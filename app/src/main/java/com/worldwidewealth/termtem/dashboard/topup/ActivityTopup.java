@@ -60,6 +60,9 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
         }
 
+        if (mPreviousTransId == null) initContainer();
+
+
     }
 
     @Override
@@ -69,8 +72,7 @@ public class ActivityTopup extends MyAppcompatActivity {
             new DialogCounterAlert.DialogProgress(this).show();
 
             Util.getPreviousEslip(this, mPreviousTransId, mTopup, R.id.container_topup);
-        } else
-            initContainer();
+        }
 
     }
 

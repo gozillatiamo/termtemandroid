@@ -65,12 +65,31 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.e(TAG, "onNewIntent");
+
         Bundle bundle = intent.getExtras();
         initData(bundle);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication.startService();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     private void initData(Bundle bundle){
-        MyApplication.LeavingOrEntering.currentActivity = null;
+//        MyApplication.LeavingOrEntering.currentActivity = null;
 
         if (bundle != null) {
             mStrTitle = bundle.getString(MyFirebaseMessagingService.TEXT);
@@ -92,7 +111,7 @@ public class ActivityShowNotify extends MyAppcompatActivity {
 
             }
 
-            if (mMsgid != null && !mMsgid.equals("")) {
+            if (mMsgid != null && !mMsgid.equals("") && Global.getInstance().getAGENTID() != null) {
                 Call<ResponseBody> call = services.service(
                         new RequestModel(APIServices.ACTIONREADMSG,
                                 new ReadMsgRequest(mMsgid)));

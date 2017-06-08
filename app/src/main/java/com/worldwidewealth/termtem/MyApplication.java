@@ -79,6 +79,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean isUpload = false;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
+    private static Intent intentLocalService = null;
+
 
     private static RequestModel mLastRequest;
 
@@ -94,7 +96,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         }
     };
 */
-    private static Thread mThread;
+//    private static Thread mThread;
 
     public static final String TAG = MyApplication.class.getSimpleName();
 
@@ -147,8 +149,10 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 
+/*
         Intent intent = new Intent(MyFirebaseMessagingService.INTENT_FILTER);
         sendBroadcast(intent);
+*/
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -201,7 +205,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
+
         if (canUseLeaving(activity)){
+            stopService(activity);
             LeavingOrEntering.activityResumed(activity);
         } else {
             LeavingOrEntering.currentActivity = null;
@@ -244,17 +250,55 @@ public class MyApplication extends Application implements Application.ActivityLi
         return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
     }
 
+    public static void stopService(Activity activity){
+        if (MyApplication.intentLocalService != null){
+            MyApplication.getContext().stopService(MyApplication.intentLocalService);
+            intentLocalService = null;
+/*
+
+            Context context = LeavingOrEntering.currentActivity;
+
+            if (context == null) context = getContext();
+
+
+            if (MyApplication
+
+*/
+
+            if (Global.getInstance().getUSERNAME() == null && !(activity instanceof ActivityShowNotify)) {
+                Util.backToSignIn(activity);
+                return;
+            }
+
+
+
+            if (Global.getInstance().getAGENTID() == null){
+                new TermTemSignIn(MyApplication.getContext(), TermTemSignIn.TYPE.RELOGIN,
+                        new DialogCounterAlert.DialogProgress(activity).show()).getTXIDfromServer();
+            } else {
+                Util.logoutAPI(activity, false);
+            }
+
+        }
+
+    }
+
+    public static void startService(){
+        if (Global.getInstance().getAGENTID() == null) return;
+        MyApplication.intentLocalService = new Intent(getContext(), LocalService.class);
+        MyApplication.getContext().startService(MyApplication.intentLocalService);
+    }
 
 
     public static class LeavingOrEntering {
         public static Activity currentActivity = null;
-        public static int count;
-        public static Timer T;
+//        public static int count;
+//        public static Timer T;
 
-        public static void activityResumed( Activity activity )
-        {
+        public static void activityResumed( Activity activity ) {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
+/*
             try {
                 if (mThread != null) {
 //                    mHandler.removeCallbacks(mRunable);
@@ -273,25 +317,18 @@ public class MyApplication extends Application implements Application.ActivityLi
                 mThread = null;
                 T = null;
             }
+*/
 
-            if (Global.getInstance().getUSERNAME() == null) {
-                Util.backToSignIn(activity);
-                return;
-            }
+
 
 
             if (strCurrentAtivity == null) {
                 currentActivity = activity;
                 return;
             }
+
             if (strCurrentAtivity.equals(activity.getLocalClassName())) {
 
-                if (Global.getInstance().getAGENTID() == null){
-                    new TermTemSignIn(activity, TermTemSignIn.TYPE.RELOGIN,
-                            new DialogCounterAlert.DialogProgress(activity).show()).getTXIDfromServer();
-                } else {
-                    Util.logoutAPI(activity, false);
-                }
             }
             currentActivity = activity;
 
@@ -307,6 +344,7 @@ public class MyApplication extends Application implements Application.ActivityLi
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
                 // We were stopped and no-one else has been started.
 //                Util.logoutAPI(false);
+/*
                 if(mThread != null && mThread.isAlive()){
                     mThread.interrupt();
                 }
@@ -353,11 +391,19 @@ public class MyApplication extends Application implements Application.ActivityLi
                 });
 
                 mThread.start();
+*/
+                stopService(activity);
+                startService();
+
 
             }
         }
 
+/*
         private static void countDownLogout(final Activity activity){
+            Intent intent = new Intent(getContext(), LocalService.class);
+            getContext().startService(intent);
+
             T = new Timer();
             T.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -388,15 +434,16 @@ public class MyApplication extends Application implements Application.ActivityLi
             }, 1000, 1000);
 
         }
+*/
 
     }
 
-    private boolean canUseLeaving(Activity activity){
+    public static boolean canUseLeaving(Activity activity){
         return !(activity instanceof SplashScreenWWW |
 //                activity instanceof ActivityShowNotify |
                 activity instanceof MainActivity |
-                activity instanceof ActivityRegister |
                 activity instanceof ActivityShowNotify |
+                activity instanceof ActivityRegister |
                 activity instanceof ChatBotActivity |
                 activity instanceof PhotoViewActivity);
     }
@@ -451,6 +498,9 @@ public class MyApplication extends Application implements Application.ActivityLi
             } catch (Exception e){
                 e.printStackTrace();
             }*/
+
+            if (Global.getInstance().getProcessSubmit() == null) return;
+
             Intent intent = new Intent(mContext, ActivityTopup.class);
             intent.putExtra(FragmentTopup.keyTopup, type);
             intent.putExtra("transid", Global.getInstance().getProcessSubmit());
@@ -491,7 +541,9 @@ public class MyApplication extends Application implements Application.ActivityLi
             isUpload = false;
 
             if (id == NOTITOPUP) {
+                if (Global.getInstance().getProcessSubmit() == null) return;
                 Global.getInstance().setProcessSubmit(null, null);
+                mLastRequest = null;
                 mNotifyManager.cancel(tag, id);
                 mBuilder = null;
                 return;

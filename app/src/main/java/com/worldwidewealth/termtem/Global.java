@@ -204,7 +204,7 @@ public class Global {
     public void clearUserName(){
         mEditor.putString(USERNAME, null);
         mEditor.putString(PASSWORD, null);
-        mEditor.putString(SERVICE_TRAN_ID, null);
+//        mEditor.putString(SERVICE_TRAN_ID, null);
         mEditor.commit();
     }
 
