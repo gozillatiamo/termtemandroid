@@ -165,6 +165,17 @@ public class EncryptionData {
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
             Log.e(TAG, "Response: "+ strRespone);
             if (responseModel == null) return null;
+
+            switch (requestModel.getAction()){
+                case APIServices.ACTIONGETOTP:
+                case APIServices.ACTIONSUBMITTOPUP:
+                case APIServices.ACTION_GET_OTP_EPIN:
+                case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
+                case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                    Global.getInstance().setSubmitStatus(responseModel.getMsg());
+                    break;
+            }
+
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 DialogCounterAlert.DialogProgress.dismiss();
                 try {
@@ -176,7 +187,9 @@ public class EncryptionData {
                         case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                         case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
 
-                            Global.getInstance().setProcessSubmit(null, null);
+                            if (responseModel.getMsg().equals("Fail")) {
+                                Global.getInstance().setLastSubmit(null);
+                            }
 
                             msg = context.getString(R.string.alert_topup_fail);
                             new DialogCounterAlert(context, context.getString(R.string.error), msg, null);

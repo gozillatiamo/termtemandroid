@@ -487,7 +487,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                 case AGENTCASHIN:
                 case SCAN:
                 case VAS:
-                    if (Global.getInstance().getProcessSubmit() != null) {
+                    if (Global.getInstance().getLastTranId() != null) {
                         showDialogHasProcess();
                         return;
                     }

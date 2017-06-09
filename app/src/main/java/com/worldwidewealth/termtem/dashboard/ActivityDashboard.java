@@ -39,6 +39,8 @@ import com.worldwidewealth.termtem.widgets.MenuButtonView;
 import java.util.List;
 import java.util.Locale;
 
+import static com.worldwidewealth.termtem.MyApplication.getTypeToup;
+
 /**
  * Created by gozillatiamo on 10/3/16.
  */
@@ -70,13 +72,15 @@ public class ActivityDashboard extends MyAppcompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        if (Global.getInstance().getProcessSubmit() == null) {
-            updateBalance();
-        }
+
+
+        updateBalance();
+
         mUserMenuList = Global.getInstance().getUserMenuList();
         initBtnMenu();
 
         MenuButtonView.setsClickable(true);
+
 
 
     }
@@ -113,7 +117,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MyApplication.LeavingOrEntering.currentActivity = null;
+//                        MyApplication.LeavingOrEntering.currentActivity = null;
                         Util.logoutAPI(ActivityDashboard.this, true);
                         finish();
                     }

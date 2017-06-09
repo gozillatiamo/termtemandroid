@@ -91,6 +91,25 @@ public class DataRequestModel implements Parcelable{
         return USERID;
     }
 
+    public void setDEVICEID(String DEVICEID) {
+        this.DEVICEID = DEVICEID;
+    }
+
+    public void setPLATFORM(String PLATFORM) {
+        this.PLATFORM = PLATFORM;
+    }
+
+    public void setTXID(String TXID) {
+        this.TXID = TXID;
+    }
+
+    public void setAGENTID(String AGENTID) {
+        this.AGENTID = AGENTID;
+    }
+
+    public void setUSERID(String USERID) {
+        this.USERID = USERID;
+    }
 
     @Override
     public int describeContents() {

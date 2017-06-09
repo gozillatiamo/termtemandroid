@@ -16,10 +16,13 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.PreRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
@@ -32,6 +35,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.worldwidewealth.termtem.MyApplication.getContext;
+import static com.worldwidewealth.termtem.MyApplication.getTitleTypeToup;
 
 /**
  * Created by gozillatiamo on 10/3/16.
@@ -58,6 +64,17 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
 
+        if (Global.getInstance().getLastTranId() != null){
+
+            if (FragmentTopupPackage.callSubmit != null){
+                FragmentTopupPackage.callSubmit.cancel();
+                FragmentTopupPackage.callSubmit = null;
+            }
+
+            if (FragmentTopupPackage.callSubmit == null && !Global.getInstance().getSubmitStatus()){
+                showLastSubmit();
+            }
+        }
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -120,6 +137,69 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onStop() {
         super.onStop();
         handler.removeCallbacks(runnable);
+
+    }
+
+    private void showLastSubmit(){
+
+        final SubmitTopupRequestModel submitModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
+
+        final String tranId = Global.getInstance().getLastTranId();
+        final String action = Global.getInstance().getLastSubmitAction();
+        final String title = getTitleTypeToup(action);
+
+        Call<ResponseBody> callSubmit = services.topupService(new RequestModel(action, submitModel));
+
+        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
+                tranId,
+                title+" " +submitModel.getCARRIER()+" "+submitModel.getAMT()+" "
+                        +getContext().getString(R.string.currency),
+                getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
+                        +getContext().getString(R.string.processing),
+                android.R.drawable.stat_notify_sync);
+
+        APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                if (responseValues == null) {
+
+                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
+                            tranId,
+                            title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
+                                    + MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
+                                    + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                            android.R.drawable.stat_sys_warning);
+
+                    return;
+                }
+
+                if (responseValues instanceof ResponseModel) {
+
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, tranId,
+                            title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
+                                    " " + MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number) + " " +
+                                    submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
+                            R.drawable.ic_check_circle_white);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                MyApplication.uploadFail(MyApplication.NOTITOPUP, tranId,
+                        title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
+                                " " + MyApplication.getContext().getString(R.string.currency),
+                        MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() +
+                                " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                        android.R.drawable.stat_sys_warning);
+
+            }
+        });
 
     }
 

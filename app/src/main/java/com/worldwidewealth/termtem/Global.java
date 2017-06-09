@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -42,8 +43,23 @@ public class Global {
     private static final String PASSWORD = "password";
     private static final String USERDATA = "userdata";
     private static final String CACHEUSER = "cacheuser";
-    private static final String SERVICE_TRAN_ID = "servicetranid";
-    private static final String SERVICE_TOPUP_TYPE = "servicetopup";
+
+    private static final String CARRIER = "carrier";
+    private static final String AMT = "amt";
+    private static final String SUBMIT_PHONENO = "submitphoneno";
+    private static final String TRANID = "tranid";
+    private static final String AGENTIDCASHIN = "agentidcashid";
+    private static final String BUTTONID = "buttonid";
+    private static final String SUBMIT_DEVICEID = "submitdeviceid";
+    private static final String SUBMIT_TXID = "submittxid";
+    private static final String SUBMIT_AGENTID = "submitagentid";
+    private static final String SUBMIT_USERID = "submituserid";
+    private static final String SUBMIT_ACTION = "submitaction";
+
+    private static final String SUBMIT_STATUS = "submitstatus";
+
+
+
 
     public static final String TAG = Global.class.getSimpleName();
 
@@ -258,13 +274,84 @@ public class Global {
         mEditor.commit();
     }
 
-    public void setProcessSubmit(String tranId, String type){
+    public void setLastSubmit(RequestModel model){
+        if (model == null){
+            mEditor.putString(SUBMIT_ACTION, null);
+            mEditor.putString(SUBMIT_AGENTID, null);
+            mEditor.putString(SUBMIT_DEVICEID, null);
+            mEditor.putString(SUBMIT_TXID, null);
+            mEditor.putString(SUBMIT_USERID, null);
+            mEditor.putString(BUTTONID, null);
+            mEditor.putString(AGENTIDCASHIN, null);
+            mEditor.putString(TRANID, null);
+            mEditor.putString(SUBMIT_PHONENO, null);
+            mEditor.putString(AMT, null);
+            mEditor.putString(CARRIER, null);
+            mEditor.commit();
+            setSubmitStatus(null);
+            return;
+        }
 
-        mEditor.putString(SERVICE_TRAN_ID, tranId);
-        mEditor.putString(SERVICE_TOPUP_TYPE, type);
+
+        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel)model.getData();
+
+        mEditor.putString(SUBMIT_ACTION, model.getAction());
+        mEditor.putString(SUBMIT_AGENTID, submitTopupRequestModel.getAGENTID());
+        mEditor.putString(SUBMIT_DEVICEID, submitTopupRequestModel.getDEVICEID());
+        mEditor.putString(SUBMIT_TXID, submitTopupRequestModel.getTXID());
+        mEditor.putString(SUBMIT_USERID, submitTopupRequestModel.getUSERID());
+        mEditor.putString(BUTTONID, submitTopupRequestModel.getBUTTONID());
+        mEditor.putString(AGENTIDCASHIN, submitTopupRequestModel.getAGENTIDCASHIN());
+        mEditor.putString(TRANID, submitTopupRequestModel.getTRANID());
+        mEditor.putString(SUBMIT_PHONENO, submitTopupRequestModel.getPHONENO());
+        mEditor.putString(AMT, submitTopupRequestModel.getAMT());
+        mEditor.putString(CARRIER, submitTopupRequestModel.getCARRIER());
         mEditor.commit();
     }
 
+    public void setSubmitStatus(String status){
+        mEditor.putString(SUBMIT_STATUS, status);
+        mEditor.commit();
+
+    }
+
+    public boolean getSubmitStatus(){
+        String status = mPreferences.getString(SUBMIT_STATUS, null);
+        if (status == null || !status.equals("Success")) return false;
+
+        return true;
+    }
+
+    public RequestModel getLastSubmit(){
+
+        if (mPreferences.getString(TRANID, null) == null) return null;
+
+        SubmitTopupRequestModel submitTopupRequestModel = new SubmitTopupRequestModel(
+                mPreferences.getString(AMT, null),
+                mPreferences.getString(CARRIER, null),
+                mPreferences.getString(SUBMIT_PHONENO, null),
+                mPreferences.getString(TRANID, null),
+                mPreferences.getString(BUTTONID, null),
+                mPreferences.getString(AGENTIDCASHIN, null)
+        );
+        submitTopupRequestModel.setAGENTID(mPreferences.getString(SUBMIT_AGENTID, null));
+        submitTopupRequestModel.setDEVICEID(mPreferences.getString(SUBMIT_DEVICEID, null));
+        submitTopupRequestModel.setTXID(mPreferences.getString(SUBMIT_TXID, null));
+        submitTopupRequestModel.setUSERID(mPreferences.getString(SUBMIT_USERID, null));
+
+        return new RequestModel(mPreferences.getString(SUBMIT_ACTION, null), submitTopupRequestModel);
+    }
+
+    public String getLastTranId(){
+        return mPreferences.getString(TRANID, null);
+    }
+
+    public String getLastSubmitAction(){
+        return mPreferences.getString(SUBMIT_ACTION, null);
+    }
+
+
+/*
     public String getProcessSubmit(){
         return mPreferences.getString(SERVICE_TRAN_ID, null);
     }
@@ -272,6 +359,7 @@ public class Global {
     public String getProcessType(){
         return mPreferences.getString(SERVICE_TOPUP_TYPE, null);
     }
+*/
 
 
 }

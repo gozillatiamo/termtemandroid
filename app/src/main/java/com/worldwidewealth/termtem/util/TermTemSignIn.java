@@ -387,10 +387,21 @@ public class TermTemSignIn {
                                     @Override
                                     public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                         DialogCounterAlert.DialogProgress.dismiss();
+/*
                                         new DialogCounterAlert(mContext,
                                                 mContext.getString(R.string.register),
                                                 mContext.getString(R.string.register_device_done),
                                                 null);
+*/
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning)
+                                                .setTitle(mContext.getString(R.string.register))
+                                                .setMessage(mContext.getString(R.string.register_device_done))
+                                                .setPositiveButton(R.string.confirm, null);
+
+                                        AlertDialog alertDialogDone = builder.create();
+                                        alertDialogDone.setOnShowListener(new MyShowListener());
+                                        alertDialogDone.show();
                                     }
 
                                     @Override

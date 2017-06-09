@@ -66,11 +66,13 @@ public class LocalService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
+
         serviceLeave(getApplicationContext(), startId);
         return START_NOT_STICKY;
     }
 
     private void serviceLeave(final Context context, final int startId){
+        if (Global.getInstance().getUSERNAME() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -97,6 +99,8 @@ public class LocalService extends Service {
     }
 
     private void countDownLogout(final Context context, final int startId){
+        if (Global.getInstance().getUSERNAME() == null) return;
+
         T = new Timer();
         T.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -140,6 +144,11 @@ public class LocalService extends Service {
                     APIHelper.enqueueWithRetry(call, this);
                 } else {
                     Global.getInstance().clearUserData(true);
+                    if (MyApplication.LeavingOrEntering.currentActivity != null){
+                        MyApplication.LeavingOrEntering.currentActivity.finish();
+                    }
+
+                    MyApplication.LeavingOrEntering.currentActivity = null;
                     stopSelf(statId);
                 }
             }
@@ -179,8 +188,8 @@ public class LocalService extends Service {
     public void onTaskRemoved(final Intent rootIntent) {
 
         Log.e("LocalService", "onTaskRemoved");
+        MyApplication.LeavingOrEntering.currentActivity = null;
         mNM.cancelAll();
-        Global.getInstance().setProcessSubmit(null, null);
 
 /*
         if (Global.getInstance().getProcessSubmit() != null) {

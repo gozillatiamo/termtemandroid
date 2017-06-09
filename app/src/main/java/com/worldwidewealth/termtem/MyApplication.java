@@ -82,7 +82,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Intent intentLocalService = null;
 
 
-    private static RequestModel mLastRequest;
+//    private static RequestModel mLastRequest;
 
 
     protected String userAgent;
@@ -104,8 +104,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         @Override
         public void onReceive(Context context, Intent intent) {
             SubmitTopupRequestModel submitModel = null;
-            if (mLastRequest != null){
-                submitModel = (SubmitTopupRequestModel)mLastRequest.getData();
+            if (Global.getInstance().getLastTranId() != null){
+                submitModel = (SubmitTopupRequestModel)Global.getInstance().getLastSubmit().getData();
             }
 
             if (submitModel == null) return;
@@ -114,23 +114,27 @@ public class MyApplication extends Application implements Application.ActivityLi
                 FragmentTopupPackage.callSubmit.cancel();
             }
 
+            if (!(intent.getExtras().containsKey("topup"))) return;
 
+            String action = Global.getInstance().getLastSubmitAction();
             if (intent.getExtras().getBoolean("topup")){
                 MyApplication.uploadSuccess(MyApplication.NOTITOPUP, submitModel.getTRANID(),
-                        getTitleTypeToup(mLastRequest.getAction()) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
+                        getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
                                 " " + MyApplication.getContext().getString(R.string.currency),
                         MyApplication.getContext().getString(R.string.phone_number) + " " +
                                 submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                        R.drawable.ic_check_circle_white, Global.getInstance().getProcessType());
+                        R.drawable.ic_check_circle_white);
 
             } else {
+
+                Global.getInstance().setLastSubmit(null);
                 MyApplication.uploadFail(MyApplication.NOTITOPUP,
                         submitModel.getTRANID(),
-                        getTitleTypeToup(mLastRequest.getAction()) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
+                        getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
                                 + MyApplication.getContext().getString(R.string.currency),
                         MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
                                 + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                        android.R.drawable.stat_sys_warning, null);
+                        android.R.drawable.stat_sys_warning);
 
             }
         }
@@ -205,13 +209,32 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityResumed(Activity activity) {
-
-        if (canUseLeaving(activity)){
+        if (!(activity instanceof ActivityShowNotify))
             stopService(activity);
-            LeavingOrEntering.activityResumed(activity);
-        } else {
-            LeavingOrEntering.currentActivity = null;
+
+
+        LeavingOrEntering.activityResumed(activity);
+
+        startSlip();
+
+
+
+    }
+
+    public static void startSlip(){
+        if (!canUseLeaving(LeavingOrEntering.currentActivity)) return;
+
+        if (Global.getInstance().getLastTranId() != null &&
+                !(LeavingOrEntering.currentActivity instanceof ActivityTopup)){
+
+            if (Global.getInstance().getSubmitStatus()) {
+                Intent intent = new Intent(LeavingOrEntering.currentActivity, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmitAction()));
+                LeavingOrEntering.currentActivity.startActivity(intent);
+            }
+
         }
+
     }
 
     @Override
@@ -222,9 +245,11 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStopped(Activity activity) {
-        if (canUseLeaving(activity)){
+//        stopService(activity);
+
+
             LeavingOrEntering.activityStopped(activity);
-        }
+
     }
 
     @Override
@@ -265,7 +290,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 */
 
-            if (Global.getInstance().getUSERNAME() == null && !(activity instanceof ActivityShowNotify)) {
+            if (!(canUseLeaving(activity))) return;
+
+            if (Global.getInstance().getUSERNAME() == null) {
                 Util.backToSignIn(activity);
                 return;
             }
@@ -284,7 +311,12 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static void startService(){
-        if (Global.getInstance().getAGENTID() == null) return;
+//        if (Global.getInstance().getAGENTID() == null) return;
+        if (MyApplication.intentLocalService != null) {
+            MyApplication.getContext().stopService(MyApplication.intentLocalService);
+            intentLocalService = null;
+        }
+
         MyApplication.intentLocalService = new Intent(getContext(), LocalService.class);
         MyApplication.getContext().startService(MyApplication.intentLocalService);
     }
@@ -322,14 +354,14 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 
 
-            if (strCurrentAtivity == null) {
-                currentActivity = activity;
-                return;
-            }
-
-            if (strCurrentAtivity.equals(activity.getLocalClassName())) {
-
-            }
+//            if (strCurrentAtivity == null) {
+//                currentActivity = activity;
+//                return;
+//            }
+//
+//            if (strCurrentAtivity.equals(activity.getLocalClassName())) {
+//
+//            }
             currentActivity = activity;
 
 
@@ -392,7 +424,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                 mThread.start();
 */
-                stopService(activity);
+
+//                stopService(activity);
                 startService();
 
 
@@ -440,15 +473,19 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     public static boolean canUseLeaving(Activity activity){
         return !(activity instanceof SplashScreenWWW |
-//                activity instanceof ActivityShowNotify |
-                activity instanceof MainActivity |
                 activity instanceof ActivityShowNotify |
+                activity instanceof MainActivity |
                 activity instanceof ActivityRegister |
                 activity instanceof ChatBotActivity |
                 activity instanceof PhotoViewActivity);
     }
 
-    public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon, RequestModel requestModel){
+    public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon){
+
+        if (id != NOTIUPLOAD){
+            if (Global.getInstance().getLastSubmit() == null) return;
+//            mLastRequest = Global.getInstance().getLastSubmit();
+        }
 
         mNotifyManager =
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -462,14 +499,10 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         mBuilder.setProgress(0, 0, true);
         mNotifyManager.notify(tag, id, mBuilder.build());
-        if (id != NOTIUPLOAD){
-            Global.getInstance().setProcessSubmit(tag, getTypeToup(requestModel.getAction()));
-            mLastRequest = requestModel;
-        }
         isUpload = true;
     }
 
-    public static void uploadSuccess(int id, String tag, String title, String message, int smallicon, String type){
+    public static void uploadSuccess(int id, String tag, String title, String message, int smallicon){
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
 
 
@@ -499,16 +532,17 @@ public class MyApplication extends Application implements Application.ActivityLi
                 e.printStackTrace();
             }*/
 
-            if (Global.getInstance().getProcessSubmit() == null) return;
+            if (Global.getInstance().getLastSubmit() == null) return;
 
             Intent intent = new Intent(mContext, ActivityTopup.class);
-            intent.putExtra(FragmentTopup.keyTopup, type);
-            intent.putExtra("transid", Global.getInstance().getProcessSubmit());
-            Global.getInstance().setProcessSubmit(null, null);
+            intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmitAction()));
+//            Global.getInstance().setProcessSubmit(null, null);
             intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.setContentIntent(pendingIntent);
-            mLastRequest = null;
+            startSlip();
+
+//            mLastRequest = null;
 
         }
 
@@ -518,7 +552,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
-    public static void uploadFail(int id, String tag, String title, String message, int smallicon, RequestModel requestModel){
+    public static void uploadFail(int id, String tag, String title, String message, int smallicon){
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
 
         mBuilder.setContentTitle(title);
@@ -527,10 +561,12 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setProgress(0, 0, false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+        RequestModel requestModel = Global.getInstance().getLastSubmit();
         if (requestModel != null){
             mBuilder.setOngoing(true);
             Intent retryIntent = new Intent(mContext, retryButtonListener.class);
             byte[] requestByte = Util.ParcelableUtil.toByteArray(requestModel);
+//            Global.getInstance().setProcessSubmit(null, null);
 
             retryIntent.putExtra("REQUEST", requestByte);
             PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
@@ -541,12 +577,14 @@ public class MyApplication extends Application implements Application.ActivityLi
             isUpload = false;
 
             if (id == NOTITOPUP) {
-                if (Global.getInstance().getProcessSubmit() == null) return;
-                Global.getInstance().setProcessSubmit(null, null);
-                mLastRequest = null;
-                mNotifyManager.cancel(tag, id);
+                if (Global.getInstance().getLastSubmit() == null) return;
+                Global.getInstance().setLastSubmit(null);
+//                mLastRequest = null;
+//                mNotifyManager.cancel(tag, id);
+/*
                 mBuilder = null;
                 return;
+*/
             }
             mBuilder.setAutoCancel(true);
         }
@@ -613,63 +651,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                     if (requestModel.getAction().contains("SUBMIT"))
                         topupService(requestModel);
-                    else
-                        service(requestModel);
 
 
-
-        }
-
-        private void service(final RequestModel requestModel){
-
-            MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD,
-                    String.valueOf(MyApplication.NOTIUPLOAD),
-                    getContext().getString(R.string.title_upload),
-                    getContext().getString(R.string.msg_upload),
-                    android.R.drawable.stat_sys_upload, requestModel);
-
-            Call<ResponseBody> call = services.service(requestModel);
-            APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-
-                    Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-
-
-                    if (responseValues instanceof ResponseModel) {
-                        ResponseModel responseModel = (ResponseModel) responseValues;
-                        if (responseModel.getStatus() == APIServices.SUCCESS)
-                            MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD,
-                                    String.valueOf(MyApplication.NOTIUPLOAD),
-                                    getContext().getString(R.string.title_upload_success),
-                                    getContext().getString(R.string.msg_upload_success),
-                                    android.R.drawable.stat_sys_upload_done, null);
-                        else
-                            setUploadFail(responseModel.getMsg(), requestModel);
-                    } else {
-                        setUploadFail(null, requestModel);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e(TAG, "Exception submit topup: "+t.getMessage());
-
-                    setUploadFail(null, requestModel);
-
-                }
-            });
-
-        }
-
-        private void setUploadFail(String msg, RequestModel requestModel){
-            MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
-                    String.valueOf(MyApplication.NOTIUPLOAD),
-                    getContext().getString(R.string.title_upload_fail),
-                    (msg + " " + getContext().getString(R.string.msg_upload_fail)),
-                    android.R.drawable.stat_notify_error, requestModel);
         }
 
         private void topupService(final RequestModel requestModel){
@@ -703,7 +686,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                 +getContext().getString(R.string.currency),
                         getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
                                 +getContext().getString(R.string.processing),
-                        android.R.drawable.stat_notify_sync, requestModel);
+                        android.R.drawable.stat_notify_sync);
 
             }
 
@@ -734,7 +717,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                     + MyApplication.getContext().getString(R.string.currency),
                                             MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() + " "
                                                     + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                            android.R.drawable.stat_sys_warning, null);
+                                            android.R.drawable.stat_sys_warning);
 
                                     return;
                                 }
@@ -746,7 +729,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                     " " + MyApplication.getContext().getString(R.string.currency),
                                             MyApplication.getContext().getString(R.string.phone_number) + " " +
                                                     finalSubmitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                                            R.drawable.ic_check_circle_white, finalMTopup);
+                                            R.drawable.ic_check_circle_white);
                                 }
                             }
                         }
@@ -762,7 +745,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                                                 " " + MyApplication.getContext().getString(R.string.currency),
                                         MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() +
                                                 " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                        android.R.drawable.stat_sys_warning, requestModel);
+                                        android.R.drawable.stat_sys_warning);
                             }
 
                         }

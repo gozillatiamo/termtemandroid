@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -144,8 +145,10 @@ public class FragmentTopupSlip extends Fragment {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
+        NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
 
-        Global.getInstance().setProcessSubmit(null, null);
+        Global.getInstance().setLastSubmit(null);
         onBackPress();
     }
 

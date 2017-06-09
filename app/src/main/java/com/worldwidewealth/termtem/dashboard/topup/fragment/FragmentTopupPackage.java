@@ -91,11 +91,11 @@ public class FragmentTopupPackage extends  Fragment{
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
     private BottomAction mBottomAction;
-    public static Call<ResponseBody> callSubmit;
+    public static Call<ResponseBody> callSubmit = null;
 
     private byte[] imageByte = null;
     private String transid;
-    private Timer mTimerTimeout;
+    private Timer mTimerTimeout = null;
     private AlertDialog mAlertTimeout;
     private VasAdapter mVasAdapter;
 
@@ -120,12 +120,19 @@ public class FragmentTopupPackage extends  Fragment{
                         callSubmit.cancel();
                     }
 
+                    if (!(intent.getExtras().containsKey("topup"))) return;
+
                     if (intent.getExtras().getBoolean("topup")){
-                        if (Global.getInstance().getProcessSubmit() != null){
-                            serviceEslip(Global.getInstance().getProcessSubmit());
+                        if (Global.getInstance().getLastSubmit() != null){
+                            serviceEslip(Global.getInstance().getLastTranId());
                         }
                     } else {
-                        getActivity().finish();
+                        Global.getInstance().setLastSubmit(null);
+
+                        String msg = getContext().getString(R.string.alert_topup_fail);
+                        new DialogCounterAlert(getContext(), getContext().getString(R.string.error), msg, null);
+
+//                        getActivity().finish();
                     }
 
                 }
@@ -537,7 +544,7 @@ public class FragmentTopupPackage extends  Fragment{
 
         startTimeoutSubmit(model.getTranid(), requestModel);
 
-        Global.getInstance().setProcessSubmit(model.getTranid(), mTopup);
+        Global.getInstance().setLastSubmit(requestModel);
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -572,7 +579,7 @@ public class FragmentTopupPackage extends  Fragment{
                                             + MyApplication.getContext().getString(R.string.currency),
                                     MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone + " "
                                             + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                    android.R.drawable.stat_sys_warning, null);
+                                    android.R.drawable.stat_sys_warning);
 
                             return;
                         }
@@ -584,10 +591,10 @@ public class FragmentTopupPackage extends  Fragment{
                                             " " + MyApplication.getContext().getString(R.string.currency),
                                     MyApplication.getContext().getString(R.string.phone_number) + " " +
                                             mPhone + " " + MyApplication.getContext().getString(R.string.success),
-                                    R.drawable.ic_check_circle_white, mTopup);
+                                    R.drawable.ic_check_circle_white);
                             serviceEslip(model.getTranid());
 
-                            Global.getInstance().setProcessSubmit(null, null);
+//                            Global.getInstance().setProcessSubmit(null, null);
 
                         }
                     }
@@ -610,7 +617,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
                             mAlertTimeout.cancel();
-                            Global.getInstance().setProcessSubmit(null, null);
+//                            Global.getInstance().setProcessSubmit(null, null);
 
 
                         }
@@ -619,7 +626,7 @@ public class FragmentTopupPackage extends  Fragment{
                                             " " + MyApplication.getContext().getString(R.string.currency),
                                     MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone +
                                             " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                    android.R.drawable.stat_sys_warning, requestModel);
+                                    android.R.drawable.stat_sys_warning);
 
 
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
@@ -636,45 +643,64 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void startTimeoutSubmit(final String tranid, final RequestModel requestModel){
+
         if (mTimerTimeout != null){
             mTimerTimeout.cancel();
             mTimerTimeout = null;
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.error_msg_timeout)
+                .setCancelable(false)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
+                                tranid,
+                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
+                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
+                                        +getString(R.string.currency),
+                                getString(R.string.phone_number)+" "+mPhone+" "
+                                        +getString(R.string.processing),
+                                android.R.drawable.stat_notify_sync);
+                        getActivity().finish();
+                    }
+                });
+
+        mAlertTimeout = builder.create();
+
+        mAlertTimeout.setOnShowListener(new MyShowListener());
+
         mTimerTimeout = new Timer();
         mTimerTimeout.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        mAlertTimeout = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
-                                .setTitle(R.string.warning)
-                                .setMessage(R.string.error_msg_timeout)
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
-                                                tranid,
-                                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
-                                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
-                                                        +getString(R.string.currency),
-                                                getString(R.string.phone_number)+" "+mPhone+" "
-                                                        +getString(R.string.processing),
-                                                android.R.drawable.stat_notify_sync, requestModel);
-                                        getActivity().finish();
-                                    }
-                                }).show();
-                        mAlertTimeout.setOnShowListener(new MyShowListener());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogCounterAlert.DialogProgress.dismiss();
+
+                            mAlertTimeout.show();
+
+                        }
+                    });
+
                     }
-                });
-            }
         }, 15000);
 
     }
 
     private void serviceEslip(final String transid){
+        if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
+            mAlertTimeout.cancel();
+        }
+
+        if (mTimerTimeout != null){
+            mTimerTimeout.cancel();
+            mTimerTimeout = null;
+        }
+
         DialogCounterAlert.DialogProgress.show();
         Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
 

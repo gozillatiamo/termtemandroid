@@ -293,7 +293,7 @@ public class FragmentReportMT extends Fragment {
                                         String.valueOf(MyApplication.NOTIUPLOAD),
                                         getString(R.string.title_upload),
                                         getString(R.string.msg_upload),
-                                        android.R.drawable.stat_sys_upload, null);
+                                        android.R.drawable.stat_sys_upload);
                                 APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -307,7 +307,7 @@ public class FragmentReportMT extends Fragment {
                                                         String.valueOf(MyApplication.NOTIUPLOAD),
                                                         MyApplication.getContext().getString(R.string.title_upload_success),
                                                         MyApplication.getContext().getString(R.string.msg_upload_success),
-                                                        android.R.drawable.stat_sys_upload_done, null);
+                                                        android.R.drawable.stat_sys_upload_done);
                                             else
                                                 setUploadFail(responseModel.getMsg());
                                         } else {
@@ -411,7 +411,7 @@ public class FragmentReportMT extends Fragment {
                 String.valueOf(MyApplication.NOTIUPLOAD),
                 MyApplication.getContext().getString(R.string.title_upload_fail),
                 (msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail)),
-                android.R.drawable.stat_notify_error, null);
+                android.R.drawable.stat_notify_error);
     }
 
     private void showTimeDialog(){

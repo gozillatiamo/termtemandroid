@@ -261,7 +261,7 @@ public class Util {
 
 
     public static void backToSignIn(Activity activity){
-        MyApplication.LeavingOrEntering.currentActivity = null;
+//        MyApplication.LeavingOrEntering.currentActivity = null;
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
                 Intent.FLAG_ACTIVITY_CLEAR_TASK|
@@ -521,7 +521,7 @@ public class Util {
     }
 
 
-    public static void getPreviousEslip(final Context context, final String transid, String topupType, final int rootview){
+    public static void getPreviousEslip(final Context context, String topupType, final int rootview){
         String mActionEslip = APIServices.ACTIONESLIP;
 
         if (topupType.equals(FragmentTopup.PIN)){
@@ -529,7 +529,14 @@ public class Util {
         }
 
         APIServices services = APIServices.retrofit.create(APIServices.class);
-        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
+        DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
+        EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), null);
+        eslipRequestModel.setUSERID(dataRequestModel.getUSERID());
+        eslipRequestModel.setTXID(dataRequestModel.getTXID());
+        eslipRequestModel.setDEVICEID(dataRequestModel.getDEVICEID());
+        eslipRequestModel.setAGENTID(dataRequestModel.getAGENTID());
+
+        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, eslipRequestModel));
 
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -553,7 +560,7 @@ public class Util {
                     try {
                         if (activity == null) return;
                         activity.getSupportFragmentManager().beginTransaction()
-                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte, Global.getInstance().getLastTranId())).commit();
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }

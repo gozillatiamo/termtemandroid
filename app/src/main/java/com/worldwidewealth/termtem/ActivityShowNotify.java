@@ -79,9 +79,11 @@ public class ActivityShowNotify extends MyAppcompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        MyApplication.startService();
+//        MyApplication.startService();
         finish();
     }
+
+
 
     @Override
     protected void onDestroy() {

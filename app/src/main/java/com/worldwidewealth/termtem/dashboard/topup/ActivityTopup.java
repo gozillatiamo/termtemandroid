@@ -42,7 +42,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
-        mPreviousTransId = getIntent().getExtras().getString("transid");
+        mPreviousTransId = Global.getInstance().getLastTranId();
         setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
@@ -71,7 +71,7 @@ public class ActivityTopup extends MyAppcompatActivity {
         if (mPreviousTransId != null){
             new DialogCounterAlert.DialogProgress(this).show();
 
-            Util.getPreviousEslip(this, mPreviousTransId, mTopup, R.id.container_topup);
+            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
         }
 
     }
