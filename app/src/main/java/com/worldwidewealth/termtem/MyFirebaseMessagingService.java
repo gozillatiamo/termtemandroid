@@ -59,11 +59,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             bundle.putString(BOX, remoteMessage.getData().get(BOX));
             bundle.putString(MSGID, remoteMessage.getData().get(MSGID));
 
+/*
             Intent intent = new Intent(INTENT_FILTER);
             if (remoteMessage.getData().get(TEXT).equals("Transaction notification")){
                 intent.putExtra("topup", checkMsgTopup(remoteMessage.getData().get(BOX)));
             }
             sendBroadcast(intent);
+*/
 
             if (remoteMessage.getData().containsKey(TYPE)){
                 mType = Integer.parseInt(remoteMessage.getData().get(TYPE));
@@ -97,20 +99,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private boolean checkMsgTopup(String msg){
-
-        if (msg.contains("incomplete")){
-            Global.getInstance().setSubmitStatus("Fail");
-            return false;
-        }
-
-        if (msg.contains("complete")){
-            Global.getInstance().setSubmitStatus("Success");
-            return true;
-        }
-
-        return false;
-    }
 
 
     private void sendNotification(Bundle bundle) {

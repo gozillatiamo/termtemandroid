@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -66,13 +67,14 @@ public class LocalService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
-
-        serviceLeave(getApplicationContext(), startId);
+        if (Global.getInstance().getUSERNAME() != null
+                && !(MyApplication.LeavingOrEntering.currentActivity instanceof SplashScreenWWW)) {
+            serviceLeave(getApplicationContext(), startId);
+        }
         return START_NOT_STICKY;
     }
 
     private void serviceLeave(final Context context, final int startId){
-        if (Global.getInstance().getUSERNAME() == null) return;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {

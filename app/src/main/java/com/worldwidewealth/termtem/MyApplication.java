@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
 import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
+import com.worldwidewealth.termtem.broadcast.NotificationBroadCastReceiver;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
@@ -81,26 +82,9 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static final int REQUEST_IMAGE_CHOOSE = 2;
     private static Intent intentLocalService = null;
 
-
-//    private static RequestModel mLastRequest;
-
-
     protected String userAgent;
 
-    /*
-    private static Handler  mHandler = new Handler();
-    private static Runnable mRunable = new Runnable() {
-        @Override
-        public void run() {
-            Util.logoutAPI(null, true);
-        }
-    };
-*/
-//    private static Thread mThread;
-
-    public static final String TAG = MyApplication.class.getSimpleName();
-
-    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+    private static BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             SubmitTopupRequestModel submitModel = null;
@@ -140,6 +124,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         }
     };
 
+    public static final String TAG = MyApplication.class.getSimpleName();
 
     @Override
     public void onCreate() {
@@ -151,7 +136,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBus = new Bus();
         mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
-        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
+//        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 
 /*
         Intent intent = new Intent(MyFirebaseMessagingService.INTENT_FILTER);
@@ -184,10 +169,6 @@ public class MyApplication extends Application implements Application.ActivityLi
             e.printStackTrace();
         }
     }
-
-
-
-
 
     public static Context getContext(){
         return mContext;
@@ -324,47 +305,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     public static class LeavingOrEntering {
         public static Activity currentActivity = null;
-//        public static int count;
-//        public static Timer T;
 
         public static void activityResumed( Activity activity ) {
-            String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
-
-/*
-            try {
-                if (mThread != null) {
-//                    mHandler.removeCallbacks(mRunable);
-                    if(mThread.isAlive()) {
-                        mThread.interrupt();
-                    }
-                    mThread = null;
-
-                    if (T != null) {
-                        T.cancel();
-                        T = null;
-                    }
-                }
-            } catch (NullPointerException e){
-                e.printStackTrace();
-                mThread = null;
-                T = null;
-            }
-*/
-
-
-
-
-//            if (strCurrentAtivity == null) {
-//                currentActivity = activity;
-//                return;
-//            }
-//
-//            if (strCurrentAtivity.equals(activity.getLocalClassName())) {
-//
-//            }
             currentActivity = activity;
-
-
         }
 
 
@@ -374,100 +317,10 @@ public class MyApplication extends Application implements Application.ActivityLi
             if (currentActivity == null) return;
 
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
-                // We were stopped and no-one else has been started.
-//                Util.logoutAPI(false);
-/*
-                if(mThread != null && mThread.isAlive()){
-                    mThread.interrupt();
-                }
-
-                mThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int times = 0;
-                        while (Global.getInstance().getAGENTID() == null && times < 3){
-                            try {
-                                Thread.sleep(1000);
-                                times++;
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-
-                        if (Global.getInstance().getAGENTID() == null) return;
-
-                        APIServices services = APIServices.retrofit.create(APIServices.class);
-                        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
-                        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                Object values = EncryptionData.getModel(activity, call, response.body(), this);
-                                if (values instanceof ResponseModel){
-                                    ResponseModel model = (ResponseModel) values;
-                                    count = model.getIdlelimit();
-                                    countDownLogout(activity);
-//                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                                mHandler.postDelayed(mRunable, 60000);
-                                count = 60;
-                                countDownLogout(activity);
-
-                            }
-                        });
-                    }
-                });
-
-                mThread.start();
-*/
-
-//                stopService(activity);
                 startService();
-
-
             }
         }
 
-/*
-        private static void countDownLogout(final Activity activity){
-            Intent intent = new Intent(getContext(), LocalService.class);
-            getContext().startService(intent);
-
-            T = new Timer();
-            T.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            Log.e(TAG, ""+count);
-                            count--;
-                            if (count == 0 && T != null){
-                                Global.getInstance().clearUserName();
-                                Util.logoutAPI(null, true);
-                                T.cancel();
-                                T = null;
-                            }
-
-                            if (count < 0 && T != null){
-                                T.cancel();
-                                T = null;
-                                mThread.interrupt();
-                                mThread = null;
-                            }
-                        }
-                    });
-                }
-            }, 1000, 1000);
-
-        }
-*/
 
     }
 
@@ -484,6 +337,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         if (id != NOTIUPLOAD){
             if (Global.getInstance().getLastSubmit() == null) return;
+            getContext().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 //            mLastRequest = Global.getInstance().getLastSubmit();
         }
 

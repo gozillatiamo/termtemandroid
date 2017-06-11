@@ -66,12 +66,8 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
         if (Global.getInstance().getLastTranId() != null){
 
-            if (FragmentTopupPackage.callSubmit != null){
-                FragmentTopupPackage.callSubmit.cancel();
-                FragmentTopupPackage.callSubmit = null;
-            }
-
-            if (FragmentTopupPackage.callSubmit == null && !Global.getInstance().getSubmitStatus()){
+            if ((FragmentTopupPackage.callSubmit == null || FragmentTopupPackage.callSubmit.isCanceled())
+                    && !Global.getInstance().getSubmitStatus()){
                 showLastSubmit();
             }
         }

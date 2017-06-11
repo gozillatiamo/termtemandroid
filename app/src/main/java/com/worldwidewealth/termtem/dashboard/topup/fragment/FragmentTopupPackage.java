@@ -116,11 +116,13 @@ public class FragmentTopupPackage extends  Fragment{
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+
+                    if (!(intent.getExtras().containsKey("topup"))) return;
+
                     if (callSubmit != null && callSubmit.isExecuted()){
                         callSubmit.cancel();
                     }
 
-                    if (!(intent.getExtras().containsKey("topup"))) return;
 
                     if (intent.getExtras().getBoolean("topup")){
                         if (Global.getInstance().getLastSubmit() != null){
@@ -154,7 +156,6 @@ public class FragmentTopupPackage extends  Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
-
     }
 
     @Override
@@ -234,9 +235,10 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (myReceiver != null) {
+        try{
             getActivity().unregisterReceiver(myReceiver);
-            myReceiver = null;
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
         }
     }
 
@@ -550,11 +552,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        if (myReceiver != null) {
-                            getActivity().unregisterReceiver(myReceiver);
-                            myReceiver = null;
-                        }
+                        getActivity().unregisterReceiver(myReceiver);
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
@@ -602,7 +600,7 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e(TAG, "Exception submit topup: " + t.getMessage());
-                        if (t.getMessage().equals("Socket closed")) return;
+                        if (call.isCanceled()) return;
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
