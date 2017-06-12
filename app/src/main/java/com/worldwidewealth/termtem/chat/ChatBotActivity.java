@@ -1138,7 +1138,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                         addTextMessageNotDelay(String.format("เติมเต็มต้องขอโทษคุณ%s%s",
                                 firstName, getString(R.string.cannot_register_duplicate_phone_number)), User.getTermTemUser());
                     }else {
-                        addTextMessageNotDelay(response.body().getMsg(), User.getTermTemUser());
+                        addTextMessageNotDelay("ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", User.getTermTemUser());
                     }
                     addTextMessageNotDelay(String.format("คุณ%s ต้องการแก้ไขข้อมูลเพื่อลงทะเบียนใหม่หรือเปล่าครับ", firstName), User.getTermTemUser());
                     inputAccept.setVisibility(View.GONE);
