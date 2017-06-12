@@ -58,6 +58,7 @@ public class FragmentAddCreditChoice extends Fragment {
     private Callback<ResponseBody> callback;
     private byte[] imageByte = null;
     private String transid;
+    public static final String AGENT_CASHIN = "agentcashin";
 
     public FragmentAddCreditChoice() {
         // Required empty public constructor
@@ -94,8 +95,11 @@ public class FragmentAddCreditChoice extends Fragment {
                 @Override
                 public void run() {
                     if (imageByte != null) {
+                        getActivity().finish();
+/*
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+*/
                     }
                 }
             }, 2000);
@@ -244,14 +248,18 @@ public class FragmentAddCreditChoice extends Fragment {
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        call = services.submitTopup(
-                new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
-                        new SubmitTopupRequestModel(mBottomAction.getPrice(),
-                                null,
-                                mAgent.getPhoneno(),
-                                model.getTranid(),
-                                null,
-                                mAgent.getAgentId())));
+        RequestModel requestModel = new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
+                new SubmitTopupRequestModel(mBottomAction.getPrice(),
+                        null,
+                        mAgent.getPhoneno(),
+                        model.getTranid(),
+                        null,
+                        mAgent.getAgentId()));
+
+        Global.getInstance().setLastSubmit(requestModel);
+
+        call = services.submitTopup(requestModel);
+
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

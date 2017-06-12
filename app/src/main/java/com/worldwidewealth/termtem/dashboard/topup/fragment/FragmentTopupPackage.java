@@ -207,18 +207,6 @@ public class FragmentTopupPackage extends  Fragment{
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
 
-        if (Global.getInstance().getAGENTID() != null) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (imageByte != null) {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
-                    }
-                }
-            }, 2000);
-        }
-
     }
 
     @Override
@@ -552,7 +540,12 @@ public class FragmentTopupPackage extends  Fragment{
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        getActivity().unregisterReceiver(myReceiver);
+
+                        try{
+                            getActivity().unregisterReceiver(myReceiver);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
@@ -685,7 +678,7 @@ public class FragmentTopupPackage extends  Fragment{
                     });
 
                     }
-        }, 15000);
+        }, 90000);
 
     }
 

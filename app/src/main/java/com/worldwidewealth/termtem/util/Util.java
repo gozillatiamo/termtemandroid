@@ -43,6 +43,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
@@ -50,6 +51,7 @@ import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.Global;
@@ -125,7 +127,7 @@ public class Util {
 
     public static void setBalanceWallet(View myWallet){
 
-        if (Global.getInstance().getTXID() == null) return;
+//        if (Global.getInstance().getTXID() == null) return;
 
         TextView balanceDecimal = (TextView) myWallet.findViewById(R.id.txt_balance_decimal);
         TextView balanceInteger = (TextView) myWallet.findViewById(R.id.txt_balance_integer);
@@ -522,7 +524,19 @@ public class Util {
 
 
     public static void getPreviousEslip(final Context context, String topupType, final int rootview){
-        String mActionEslip = APIServices.ACTIONESLIP;
+        String mActionEslip = null;
+
+        switch (topupType){
+            case FragmentTopup.MOBILE:
+                mActionEslip = APIServices.ACTIONESLIP;
+                break;
+            case FragmentTopup.PIN:
+                mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+                break;
+            case FragmentAddCreditChoice.AGENT_CASHIN:
+                mActionEslip = APIServices.ACTION_ESLIP_AGENT_CASHIN;
+                break;
+        }
 
         if (topupType.equals(FragmentTopup.PIN)){
             mActionEslip = APIServices.ACTION_ESLIP_EPIN;
@@ -530,7 +544,8 @@ public class Util {
 
         APIServices services = APIServices.retrofit.create(APIServices.class);
         DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
-        EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), null);
+        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) dataRequestModel;
+        EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), submitTopupRequestModel.getPHONENO());
         eslipRequestModel.setUSERID(dataRequestModel.getUSERID());
         eslipRequestModel.setTXID(dataRequestModel.getTXID());
         eslipRequestModel.setDEVICEID(dataRequestModel.getDEVICEID());
@@ -558,7 +573,11 @@ public class Util {
                     AppCompatActivity activity = (AppCompatActivity) context;
 //                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     try {
-                        if (activity == null) return;
+                        if (activity == null) {
+                            DialogCounterAlert.DialogProgress.dismiss();
+                            return;
+                        }
+
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(rootview, FragmentTopupSlip.newInstance(imageByte, Global.getInstance().getLastTranId())).commit();
                     } catch (IllegalStateException e) {
@@ -566,9 +585,6 @@ public class Util {
                     }
 
                 }
-
-                DialogCounterAlert.DialogProgress.dismiss();
-
             }
 
             @Override

@@ -32,6 +32,7 @@ import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
 import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
 import com.worldwidewealth.termtem.broadcast.NotificationBroadCastReceiver;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
@@ -63,6 +64,7 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static com.worldwidewealth.termtem.MyApplication.LeavingOrEntering.currentActivity;
 
 /**
  * Created by MyNet on 17/11/2559.
@@ -203,15 +205,15 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static void startSlip(){
-        if (!canUseLeaving(LeavingOrEntering.currentActivity)) return;
+        if (!canUseLeaving(currentActivity)) return;
 
         if (Global.getInstance().getLastTranId() != null &&
-                !(LeavingOrEntering.currentActivity instanceof ActivityTopup)){
+                !(currentActivity instanceof ActivityTopup)){
 
             if (Global.getInstance().getSubmitStatus()) {
-                Intent intent = new Intent(LeavingOrEntering.currentActivity, ActivityTopup.class);
+                Intent intent = new Intent(currentActivity, ActivityTopup.class);
                 intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmitAction()));
-                LeavingOrEntering.currentActivity.startActivity(intent);
+                currentActivity.startActivity(intent);
             }
 
         }
@@ -240,7 +242,15 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        DialogCounterAlert.DialogProgress.dismiss();
+        String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
+
+        if (currentActivity == null) return;
+
+        if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
+            DialogCounterAlert.DialogProgress.dismiss();
+
+        }
+
     }
 
     public boolean useExtensionRenderers() {
@@ -468,6 +478,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return FragmentTopup.MOBILE;
             case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 return FragmentTopup.PIN;
+            case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                return FragmentAddCreditChoice.AGENT_CASHIN;
         }
 
         return null;
@@ -480,6 +492,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return MyApplication.getContext().getString(R.string.title_topup);
             case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 return MyApplication.getContext().getString(R.string.dashboard_pin);
+            case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                return MyApplication.getContext().getString(R.string.add_credit_agent);
         }
 
         return null;

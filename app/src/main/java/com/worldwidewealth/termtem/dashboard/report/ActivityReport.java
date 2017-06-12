@@ -309,7 +309,7 @@ public class ActivityReport extends MyAppcompatActivity {
         loading.show();
 
         serviceReportText(timeFrom, timeTo);
-        serviceReportChart(timeFrom, timeTo);
+//        serviceReportChart(timeFrom, timeTo);
 
 /*
         Calendar calendar = Calendar.getInstance();
@@ -321,7 +321,7 @@ public class ActivityReport extends MyAppcompatActivity {
 //        new DialogCounterAlert.DialogProgress(this).show();
     }
 
-    private void serviceReportText(String timeFrom, String timeTo){
+    private void serviceReportText(final String timeFrom, final String timeTo){
         Call<ResponseBody> call = services.salerpt(
                 new RequestModel(APIServices.ACTIONSALERPT,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
@@ -359,7 +359,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
                     mHolder.mTextReportTotal.setText(format.format(total));
                     mHolder.mTextDebitTotal.setText(format.format(debit));
-                    updateListData(PagerTypeReportAdapter.TEXT, modelList, null);
+                    updateListData(PagerTypeReportAdapter.TEXT, modelList, null, Long.parseLong(timeFrom), Long.parseLong(timeTo));
 
 
                 } else {
@@ -376,7 +376,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
     }
 
-    private void serviceReportChart(String timeFrom, String timeTo){
+    private void serviceReportChart(String timeFrom, final String timeTo){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
 
         if (((GraphReportFragment)page).getmListLineModel() == null){
@@ -390,6 +390,7 @@ public class ActivityReport extends MyAppcompatActivity {
         Call<ResponseBody> callLine = services.salerpt(
                 new RequestModel(APIServices.ACTION_LINE_CHART,
                         new SalerptRequestModel(timeFrom, timeTo, mCurrentType)));
+        final String finalTimeFrom = timeFrom;
         APIHelper.enqueueWithRetry(callLine, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -402,7 +403,7 @@ public class ActivityReport extends MyAppcompatActivity {
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
 
-                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.LINE);
+                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.LINE, Long.parseLong(finalTimeFrom), Long.parseLong(timeTo));
                 }
             }
 
@@ -429,7 +430,7 @@ public class ActivityReport extends MyAppcompatActivity {
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<ChartResponseModel>>(){}.getType());
 
-                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.PIE);
+                    updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.PIE, Long.parseLong(finalTimeFrom), Long.parseLong(timeTo));
 
 
                 } else {
@@ -448,20 +449,24 @@ public class ActivityReport extends MyAppcompatActivity {
 
     }
 
-    private void updateListData(int position, List listdata, String chartType){
+    private void updateListData(int position, List listdata, String chartType, long timefrom, long timeto){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + position);
         switch (position){
             case 0:
                 ((TextReportFragment)page).updateDataReport(listdata);
                 break;
             case 1:
-                switch (chartType){
-                    case GraphReportFragment.LINE:
-                        ((GraphReportFragment)page).updateListDataLineChart(listdata);
-                        break;
-                    case GraphReportFragment.PIE:
-                        ((GraphReportFragment)page).updatePieDataLineChart(listdata);
-                        break;
+                if (listdata.size() > 0) {
+
+                    ((GraphReportFragment) page).setRangeTime(timefrom, timeto);
+                    switch (chartType) {
+                        case GraphReportFragment.LINE:
+                            ((GraphReportFragment) page).updateListDataLineChart(listdata);
+                            break;
+                        case GraphReportFragment.PIE:
+                            ((GraphReportFragment) page).updatePieDataLineChart(listdata);
+                            break;
+                    }
                 }
                 break;
         }

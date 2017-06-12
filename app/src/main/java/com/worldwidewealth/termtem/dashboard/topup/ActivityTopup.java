@@ -68,7 +68,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mPreviousTransId != null){
+        if (Global.getInstance().getLastTranId() != null){
             new DialogCounterAlert.DialogProgress(this).show();
 
             Util.getPreviousEslip(this, mTopup, R.id.container_topup);
@@ -132,6 +132,13 @@ public class ActivityTopup extends MyAppcompatActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        if (mPreviousTransId != null){
+            new DialogCounterAlert.DialogProgress(this).show();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        }
+
 
     }
 

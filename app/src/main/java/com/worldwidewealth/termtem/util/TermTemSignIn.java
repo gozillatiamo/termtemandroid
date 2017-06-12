@@ -34,6 +34,9 @@ import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 
+import java.util.Arrays;
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -102,6 +105,11 @@ public class TermTemSignIn {
         }
     }
 
+    private boolean checkAdvoidDevice(){
+        List<String> listDevice = Arrays.asList(mContext.getResources().getStringArray(R.array.list_advoid_device_id));
+        return listDevice.contains(Global.getInstance().getDEVICEID());
+    }
+
     private void SendDataService(PreRequestModel model){
         if (model != null) {
             Call<ResponseBody> call = services.PRE(model);
@@ -114,7 +122,7 @@ public class TermTemSignIn {
                     if (responseValues instanceof ResponseModel){
                         ResponseModel responseModel = (ResponseModel)responseValues;
 
-                        if (responseModel.getShow() == APIServices.SUCCESS) {
+                        if (responseModel.getShow() == APIServices.SUCCESS || checkAdvoidDevice()) {
                             Log.e(TAG, "TXID from PRE: "+responseModel.getTXID());
                             mTXID = responseModel.getTXID();
 
@@ -173,6 +181,8 @@ public class TermTemSignIn {
     }
 
     private boolean checkVersionApp(String version){
+        if (checkAdvoidDevice()) return true;
+
         String currentVersion = (BuildConfig.VERSION_NAME).split("-")[0];
         if (!version.equals(currentVersion)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning);

@@ -26,6 +26,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.R;
@@ -87,6 +88,15 @@ public class FragmentTopupSlip extends Fragment {
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new DialogCounterAlert.DialogProgress(getContext()).show();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,13 +122,21 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        onBackPress();
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        new DialogCounterAlert.DialogProgress(getContext()).show();
 
         initBtn();
-
-        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        if (Global.getInstance().getLastTranId() == null){
+            getActivity().finish();
+            return;
+        }
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, Global.getInstance().getLastSubmit().getData()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -148,8 +166,6 @@ public class FragmentTopupSlip extends Fragment {
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
 
-        Global.getInstance().setLastSubmit(null);
-        onBackPress();
     }
 
 /*
@@ -182,7 +198,6 @@ public class FragmentTopupSlip extends Fragment {
 */
 
     private void onBackPress(){
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -245,14 +260,24 @@ public class FragmentTopupSlip extends Fragment {
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-//            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
             MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
+
             Toast.makeText(getContext(), getString(R.string.save_eslip_success), Toast.LENGTH_LONG).show();
+
+            DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
+            SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) dataRequestModel;
+            EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), submitTopupRequestModel.getPHONENO());
+            eslipRequestModel.setUSERID(dataRequestModel.getUSERID());
+            eslipRequestModel.setTXID(dataRequestModel.getTXID());
+            eslipRequestModel.setDEVICEID(dataRequestModel.getDEVICEID());
+            eslipRequestModel.setAGENTID(dataRequestModel.getAGENTID());
+
             Call<ResponseBody> call = services.saveSlip(
                     new RequestModel(APIServices.ACTIONSAVESLIP,
-                            new EslipRequestModel(mTransID, null)));
+                            eslipRequestModel));
 
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                 @Override
@@ -265,14 +290,16 @@ public class FragmentTopupSlip extends Fragment {
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     new ErrorNetworkThrowable(t).networkError(FragmentTopupSlip.this.getContext(), call, this);
                 }
+
             });
 
-            return;
         } catch (Exception e) {
             e.printStackTrace();
             new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.save_eslip_fail), null);
-            return;
         }
+
+
+        Global.getInstance().setLastSubmit(null);
 
     }
 }

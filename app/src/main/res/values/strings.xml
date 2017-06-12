@@ -524,6 +524,35 @@
         <item>รายงานสรุปผล</item>
         <item>กราฟสรุปผล</item>
     </string-array>
+    
+    <string-array name="list_advoid_device_id">
+        <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
+        <item>866234029722533</item>
+        <item>231a7ba6-205f-4c89-9923-87a68b025dbf</item>
+        <item>359525071446317</item>
+        <item>352901063654696</item>
+        <item>e21fd2e0-4df5-4be1-82ee-7e74ba0458d0</item>
+        <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
+        <item>866234029722533</item>
+        <item>352901063654696</item>
+        <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
+        <item>5435bbba-8b50-4ba7-87cf-0ad45301dcbc</item>
+        <item>357406060061213</item>
+        <item>351542068115209</item>
+        <item>359525071446317</item>
+        <item>231a7ba6-205f-4c89-9923-87a68b025dbf</item>
+        <item>359525072266995</item>
+        <item>86f17b8f-1d27-4de8-a60b-b9e3039b98f1</item>
+        <item>2bc04406-95e2-4a8e-a15d-b9ebd5158b7e</item>
+        <item>e21fd2e0-4df5-4be1-82ee-7e74ba0458d0</item>
+        <item>864069030247647</item>
+        <item>352901063654696</item>
+        <item>231a7ba6-205f-4c89-9923-87a68b025dbf</item>
+        <item>359525071446317</item>
+        <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
+        <item>911483400434250</item>
+        <item>357406060061213</item>
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->

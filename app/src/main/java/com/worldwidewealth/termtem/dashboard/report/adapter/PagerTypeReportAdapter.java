@@ -40,7 +40,8 @@ public class PagerTypeReportAdapter extends FragmentPagerAdapter{
 
     @Override
     public int getCount() {
-        return mTitle.length;
+        return 1;
+//        return mTitle.length;
     }
 
     @Override

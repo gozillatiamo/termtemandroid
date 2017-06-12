@@ -5,41 +5,86 @@
     tools:context="com.worldwidewealth.termtem.dashboard.report.fragment.GraphReportFragment">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/btn_line_chart"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/btn_line_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_line_chart"/>
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/btn_pie_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circular_chart"/>
+
+        </LinearLayout>
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_line_chart"/>
-        <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/btn_pie_chart"
-            android:layout_width="wrap_content"
+            android:src="@drawable/ic_date_range"
+            android:layout_gravity="center"
+            android:tint="#808080"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_circular_chart"/>
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_space"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/text_timefrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_space"
+                android:textStyle="bold"
+                android:textSize="@dimen/my_text_large"
+                android:text="1/3/2012"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_next"/>
+            <TextView
+                android:id="@+id/text_timeto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/my_text_large"
+
+                android:layout_margin="@dimen/activity_space"
+                android:text="1/3/2012"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center">
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/line_chart"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/white"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@android:color/white"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/line_chart"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/white"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"/>
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@android:color/white"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
 
 
 </FrameLayout>

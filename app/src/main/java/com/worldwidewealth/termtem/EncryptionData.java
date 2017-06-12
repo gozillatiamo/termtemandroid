@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Base64;
@@ -205,6 +206,11 @@ public class EncryptionData {
                             return null;
 
                         default:
+                            if (MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity) &&
+                                    Global.getInstance().getAGENTID() == null) {
+                                Util.backToSignIn((Activity) context);
+                                return null;
+                            }
                             new ErrorNetworkThrowable(null).networkError(context,
                                     responseModel.getMsg(), call, callback, true);
                     }
