@@ -335,6 +335,7 @@
     <string name="title_phone_short">เบอร์</string>
     <string name="edit_phone">แก้ไขเบอร์</string>
     <string name="msg_has_process_service">ท่านมีรายการที่กำลังดำเนินการอยู่\nโปรดรอจนกว่ารายการดังกล่าวจะเสร็จสิ้น</string>
+    <string name="no_data_graph">ไม่มีข้อมูลสำหรับช่วงเวลานี้</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

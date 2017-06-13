@@ -309,7 +309,7 @@ public class ActivityReport extends MyAppcompatActivity {
         loading.show();
 
         serviceReportText(timeFrom, timeTo);
-//        serviceReportChart(timeFrom, timeTo);
+        serviceReportChart(timeFrom, timeTo);
 
 /*
         Calendar calendar = Calendar.getInstance();
@@ -456,8 +456,6 @@ public class ActivityReport extends MyAppcompatActivity {
                 ((TextReportFragment)page).updateDataReport(listdata);
                 break;
             case 1:
-                if (listdata.size() > 0) {
-
                     ((GraphReportFragment) page).setRangeTime(timefrom, timeto);
                     switch (chartType) {
                         case GraphReportFragment.LINE:
@@ -467,7 +465,7 @@ public class ActivityReport extends MyAppcompatActivity {
                             ((GraphReportFragment) page).updatePieDataLineChart(listdata);
                             break;
                     }
-                }
+
                 break;
         }
 

@@ -132,7 +132,7 @@
                                         app:mbv_icon="@drawable/ic_topup"
                                         app:mbv_title="@string/vas"
                                         app:mbv_type="vas"
-                                        app:mbv_visibility="hide">
+                                        app:mbv_visibility="show">
 
                                     </com.worldwidewealth.termtem.widgets.MenuButtonView>
 

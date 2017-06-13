@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +59,12 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     public static final String LINE = "line";
     public static final String PIE = "pie";
 
+    private static final int SAME = 0;
+    private static final int BEFOR = -1;
+    private static final int AFTER = 1;
+
+    public static final String TAG = GraphReportFragment.class.getSimpleName();
+
     // TODO: Rename and change types of parameters
 
     private LineChart mLineChart;
@@ -70,6 +78,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     private long mTimeTo;
 
     private HashMap<Integer, String> xAxisValues;
+    private ArrayList<Entry> mLineData;
 
 
     private List<ChartResponseModel> mListLineModel = null;
@@ -125,11 +134,21 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         mBtnLineChart.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
         mPieChart.setVisibility(View.GONE);
 
-        mLineChart.setNoDataText("");
-        mPieChart.setNoDataText("");
     }
 
     private void setupLineChart(){
+        mLineChart.clear();
+
+        if (mListLineModel.size() == 0){
+            mLineChart.setNoDataText(getString(R.string.no_data_graph));
+            mLineChart.setNoDataTextTypeface(mTf);
+            mLineChart.setNoDataTextColor(R.color.colorAccent);
+            mLineChart.invalidate();
+            return;
+        } else {
+            mLineChart.setNoDataText("");
+        }
+
         LineData data = generateDataLine();
         mLineChart.getDescription().setEnabled(false);
         mLineChart.setDrawGridBackground(false);
@@ -166,18 +185,29 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
     private LineData generateDataLine() {
 
-        ArrayList<Entry> e1 = new ArrayList<Entry>();
+        mLineData = new ArrayList<Entry>();
         xAxisValues = new HashMap<>();
+        long dateStart = mTimeFrom;
+        Calendar calendar = Calendar.getInstance();
+
         for (ChartResponseModel model : mListLineModel) {
-            Calendar calendar = Calendar.getInstance();
             calendar.setTime(model.getPAYMENT_DATE());
-            xAxisValues.put(e1.size(), calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH")));
-            e1.add(new Entry(e1.size(), (float) model.getAMOUNT()));
+            addDateValues(dateStart, model.getPAYMENT_DATE().getTime());
+            xAxisValues.put(mLineData.size(), calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH")));
+            mLineData.add(new Entry(mLineData.size(), (float) model.getAMOUNT()));
+            Log.e(TAG, "LineData: "+calendar.get(Calendar.DAY_OF_MONTH)+"/"
+                    +calendar.get(Calendar.MONTH)+"/"
+                    +calendar.get(Calendar.YEAR)+"\nAmount: "+(float) model.getAMOUNT());
+            rollCalendar(calendar);
+            dateStart = calendar.getTimeInMillis();
         }
 
-        LineDataSet d1 = new LineDataSet(e1, "New DataSet ");
+        addDateValues(calendar.getTimeInMillis(), mTimeTo);
+
+        LineDataSet d1 = new LineDataSet(mLineData, getString(R.string.all_total));
         d1.setLineWidth(2.5f);
-        d1.setCircleRadius(4.5f);
+        d1.setDrawCircleHole(false);
+        d1.setDrawCircles(false);
         d1.setHighLightColor(R.color.colorPrimary);
         d1.setDrawValues(false);
 
@@ -187,7 +217,41 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         return cd;
     }
 
-    private void addDateValues(){
+    private void addDateValues(long dateStart, long dateEnd){
+        Calendar calendarStart = Calendar.getInstance();
+        calendarStart.setTimeInMillis(Util.getTimestamp(dateStart, 0, 0, 0));
+
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTimeInMillis(Util.getTimestamp(dateEnd, 0, 0, 0));
+
+
+        while (calendarStart.before(calendarEnd)){
+            xAxisValues.put(mLineData.size(), calendarStart.get(Calendar.DAY_OF_MONTH)+"/"+calendarStart.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH")));
+            mLineData.add(new Entry(mLineData.size(), (float) 0.00));
+            Log.e(TAG, "LineData: "+calendarStart.get(Calendar.DAY_OF_MONTH)+"/"
+                    +calendarStart.get(Calendar.MONTH)+"/"
+                    +calendarStart.get(Calendar.YEAR)+"\nAmount: "+0.00);
+
+            rollCalendar(calendarStart);
+
+        }
+    }
+
+    private void rollCalendar(Calendar calendar){
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        calendar.roll(Calendar.DAY_OF_MONTH, true);
+
+        if (currentDay == calendar.getActualMaximum(Calendar.DAY_OF_MONTH)){
+            calendar.roll(Calendar.MONTH, true);
+
+            if (currentMonth == calendar.getActualMaximum(Calendar.MONTH)){
+                calendar.roll(Calendar.YEAR, true);
+            }
+
+        }
+
 
     }
 
@@ -231,6 +295,20 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
 
     private void setupPieChart(){
+
+        mPieChart.clear();
+
+        if (mListPieModel.size() == 0){
+            mPieChart.setNoDataText(getString(R.string.no_data_graph));
+            mPieChart.setNoDataTextTypeface(mTf);
+            mPieChart.setNoDataTextColor(R.color.colorAccent);
+            mPieChart.invalidate();
+            return;
+        } else {
+            mPieChart.setNoDataText("");
+        }
+
+
         mPieChart.getDescription().setEnabled(false);
         mPieChart.setHoleRadius(52f);
         mPieChart.setCenterTextTypeface(mTf);
@@ -302,7 +380,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         mPieChart.setVisibility(View.GONE);
 
         mListLineModel = listLineModel;
-        if(mListLineModel == null) return;
+
         setupLineChart();
     }
 
@@ -321,9 +399,15 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_line_chart:
+                mLineChart.clear();
+                mLineChart.invalidate();
+
                 setChangeChart(LINE);
                 break;
             case R.id.btn_pie_chart:
+                mPieChart.clear();
+                mPieChart.invalidate();
+
                 setChangeChart(PIE);
                 break;
         }
@@ -333,16 +417,12 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         View showView = null, hideView = null;
         switch (type){
             case LINE:
-                mLineChart.clear();
-                mLineChart.invalidate();
                 showView = mLineChart;
                 hideView = mPieChart;
                 mBtnLineChart.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 mBtnPieChart.setColorFilter(null);
                 break;
             case PIE:
-                mPieChart.clear();
-                mPieChart.invalidate();
                 showView = mPieChart;
                 hideView = mLineChart;
                 mBtnPieChart.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
@@ -401,12 +481,12 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         mTextTimeFrom.setText(calendar.get(Calendar.DAY_OF_MONTH)+"/"
         +calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH"))+"/"
-        +calendar.getDisplayName(Calendar.YEAR, Calendar.LONG, new Locale("TH")));
+        +(calendar.get(Calendar.YEAR)+543));
 
         calendar.setTimeInMillis(timeto);
 
         mTextTimeTo.setText(calendar.get(Calendar.DAY_OF_MONTH)+"/"
                 +calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH"))+"/"
-                +calendar.get(Calendar.YEAR));
+                +(calendar.get(Calendar.YEAR)+543));
     }
 }
