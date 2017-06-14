@@ -176,7 +176,6 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
-
         mLineChart.animateX(750);
         mLineChart.invalidate();
 

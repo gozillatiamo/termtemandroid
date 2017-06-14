@@ -186,6 +186,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (t.getMessage().equals("Canceled")) return;
 
                 MyApplication.uploadFail(MyApplication.NOTITOPUP, tranId,
                         title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +

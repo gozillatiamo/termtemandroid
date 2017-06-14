@@ -18,6 +18,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -37,12 +38,23 @@ public class ActivityTopup extends MyAppcompatActivity {
     private ImageView mMenuIcon;
     private TextView mTitle;
     private String mPreviousTransId;
+    private String mPhoneNo;
+    private String mCarrier;
+
+    public static final String KEY_PHONENO = "phoneno";
+    public static final String KEY_CARRIER = "carrier";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTopup = this.getIntent().getExtras().getString(FragmentTopup.keyTopup);
+        Bundle bundle = getIntent().getExtras();
+        mTopup = bundle.getString(FragmentTopup.keyTopup);
         mPreviousTransId = Global.getInstance().getLastTranId();
+
+        if (bundle.containsKey(KEY_PHONENO)){
+            mPhoneNo = bundle.getString(KEY_PHONENO);
+            mCarrier = bundle.getString(KEY_CARRIER);
+        }
         setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
@@ -60,7 +72,10 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
         }
 
-        if (mPreviousTransId == null) initContainer();
+        if (mPreviousTransId == null){
+            initContainer();
+            if (mPhoneNo != null) startWithOldPhoneNO();
+        }
 
 
     }
@@ -147,6 +162,17 @@ public class ActivityTopup extends MyAppcompatActivity {
                 .beginTransaction()
                 .replace(R.id.container_topup, FragmentTopup.newInstance(mTopup));
         transaction.commit();
+    }
+
+    private void startWithOldPhoneNO(){
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo))
+                .addToBackStack(null)
+                .commit();
+
     }
 
     public String getTopupTitle(){

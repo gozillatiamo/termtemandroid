@@ -441,7 +441,7 @@ public class MyApplication extends Application implements Application.ActivityLi
             isUpload = false;
 
             if (id == NOTITOPUP) {
-                if (Global.getInstance().getLastSubmit() == null) return;
+//                if (Global.getInstance().getLastSubmit() == null) return;
                 Global.getInstance().setLastSubmit(null);
 //                mLastRequest = null;
 //                mNotifyManager.cancel(tag, id);
@@ -480,6 +480,9 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return FragmentTopup.PIN;
             case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                 return FragmentAddCreditChoice.AGENT_CASHIN;
+            case APIServices.ACTION_SUBMIT_VAS:
+                return FragmentTopup.VAS;
+
         }
 
         return null;
@@ -494,6 +497,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return MyApplication.getContext().getString(R.string.dashboard_pin);
             case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                 return MyApplication.getContext().getString(R.string.add_credit_agent);
+            case APIServices.ACTION_SUBMIT_VAS:
+                return MyApplication.getContext().getString(R.string.vas);
         }
 
         return null;

@@ -24,13 +24,22 @@ public class NotificationBroadCastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "I'm in!!!");
-
+        if (Global.getInstance().getLastTranId() == null) return;
         Bundle dataBundle = intent.getExtras();
+
+        boolean checkStatus = checkMsgTopup(dataBundle.getString(BOX));
 
         Intent intentBroadcast = new Intent(INTENT_FILTER);
         if (dataBundle.getString(TEXT).equals("Transaction notification")){
-            intentBroadcast.putExtra("topup", checkMsgTopup(dataBundle.getString(BOX)));
+            intentBroadcast.putExtra("topup", checkStatus);
+        } else return;
+
+        if (checkStatus) {
+            if (!(dataBundle.getString(BOX).contains(Global.getInstance().getLastSubmitPhoneNo()))
+                    || !(dataBundle.getString(BOX).contains(Global.getInstance().getLastSubmitAmt())))
+                return;
         }
+
 
         MyApplication.getContext().sendBroadcast(intentBroadcast);
 

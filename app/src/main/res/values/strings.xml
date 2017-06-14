@@ -336,6 +336,9 @@
     <string name="edit_phone">แก้ไขเบอร์</string>
     <string name="msg_has_process_service">ท่านมีรายการที่กำลังดำเนินการอยู่\nโปรดรอจนกว่ารายการดังกล่าวจะเสร็จสิ้น</string>
     <string name="no_data_graph">ไม่มีข้อมูลสำหรับช่วงเวลานี้</string>
+    <string name="interesting_vas">สนใจซื้อแพคเกจเสริมเล่นเน็ต หรือไม่ ?</string>
+    <string name="interested">สนใจ</string>
+    <string name="ignore">ไม่สนใจ</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

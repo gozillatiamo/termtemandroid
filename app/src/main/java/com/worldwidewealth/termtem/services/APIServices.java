@@ -39,6 +39,10 @@ import retrofit2.http.POST;
 public interface APIServices {
     public static final int SUCCESS = 0;
 
+    String MSG_SUCCESS = "Success";
+    String MSG_FAIL = "Fail";
+    String MSG_WAIT = "100";
+
     public static final String ACTIONLOGIN = "LOGIN";
     public static final String ACTIONCHANGEPASSWORD = "CHANGEPASSWORD";
     public static final String ACTIONLOADBUTTON = "LOADBUTTON";
@@ -72,6 +76,11 @@ public interface APIServices {
     public static final String ACTION_REGISTER = "REGISTER";
     public static final String ACTION_LINE_CHART = "SALERPTLINECHART";
     public static final String ACTION_PIE_CHART = "SALERPTPIECHART";
+    public static final String ACTION_GET_LISTPG = "GETLISTPG";
+    public static final String ACTION_PREVIEW_VAS = "PREVIEWVAS";
+    public static final String ACTION_GETOTP_VAS = "GETOTPVAS";
+    public static final String ACTION_SUBMIT_VAS = "SUBMITVAS";
+    public static final String ACTION_ESLIP_VAS = "ESLIPVAS";
 
 
 

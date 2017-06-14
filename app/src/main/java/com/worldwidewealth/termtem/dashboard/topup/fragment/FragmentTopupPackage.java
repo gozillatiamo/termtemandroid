@@ -2,13 +2,11 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -24,7 +22,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,16 +29,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
+import com.worldwidewealth.termtem.model.PGResponseModel;
+import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -62,10 +62,12 @@ import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.RecyclerItemClickListener;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
@@ -87,6 +89,7 @@ public class FragmentTopupPackage extends  Fragment{
     private APIServices services;
     private double mAmt = 0.00;
     private String mButtonID = null;
+    private String mPgName = null;
     public Handler mHandler;
     public Runnable mRunnableSubmit;
     public static final String TAG = FragmentTopupPackage.class.getSimpleName();
@@ -143,11 +146,12 @@ public class FragmentTopupPackage extends  Fragment{
     };
 
 
-    public static Fragment newInstance(String carrier, String topup){
+    public static Fragment newInstance(String carrier, String topup, String phone_no){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
         bundle.putString(CARRIER, carrier);
         bundle.putString(FragmentTopup.keyTopup, topup);
+        bundle.putString(ActivityTopup.KEY_PHONENO, phone_no);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -169,6 +173,7 @@ public class FragmentTopupPackage extends  Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCarrier = getArguments().getString(CARRIER);
         mTopup = getArguments().getString(FragmentTopup.keyTopup);
+        mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
@@ -177,23 +182,12 @@ public class FragmentTopupPackage extends  Fragment{
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        if(mTopup.equals(FragmentTopup.PIN)){
-            mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
-            mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
-            mActionGetOTP = APIServices.ACTION_GET_OTP_EPIN;
-            mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
-            mActionEslip = APIServices.ACTION_ESLIP_EPIN;
-            rootView.findViewById(R.id.text_hint).setVisibility(View.VISIBLE);
-        }
+        setupService(mTopup);
 
         Util.setupUI(rootView);
 //        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
 //        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
-        if (!mTopup.equals(FragmentTopup.VAS))
-            initPageTopup();
-        else
-            setupVAS();
-
+        initPageTopup();
         initBtn();
         initData();
         mHolder.mEditPhone.requestFocus();
@@ -230,6 +224,34 @@ public class FragmentTopupPackage extends  Fragment{
         }
     }
 
+    private void setupService(String type){
+
+        switch (type){
+            case FragmentTopup.MOBILE:
+                mActionLoadButton = APIServices.ACTIONLOADBUTTON;
+                mActionPreview = APIServices.ACTIONPREVIEW;
+                mActionGetOTP = APIServices.ACTIONGETOTP;
+                mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
+                mActionEslip = APIServices.ACTIONESLIP;
+                break;
+            case FragmentTopup.PIN:
+                mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
+                mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
+                mActionGetOTP = APIServices.ACTION_GET_OTP_EPIN;
+                mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
+                mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+                break;
+            case FragmentTopup.VAS:
+                mActionLoadButton = APIServices.ACTION_GET_LISTPG;
+                mActionPreview = APIServices.ACTION_PREVIEW_VAS;
+                mActionGetOTP = APIServices.ACTION_GETOTP_VAS;
+                mActionSumitTopup = APIServices.ACTION_SUBMIT_VAS;
+                mActionEslip = APIServices.ACTION_ESLIP_VAS;
+                break;
+        }
+
+    }
+
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
         this.mButtonID = buttonid;
@@ -262,9 +284,18 @@ public class FragmentTopupPackage extends  Fragment{
                         if (responseValues instanceof ResponseModel){
                             DialogCounterAlert.DialogProgress.dismiss();
                         } else {
-                            getChildFragmentManager().beginTransaction()
-                                    .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance((String)responseValues, mTopup))
-                                    .commit();
+                            if (mTopup.equals(FragmentTopup.VAS)) {
+                                Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+                                Type listType = new TypeToken<List<PGResponseModel>>() {}.getType();
+                                List<PGResponseModel> modelList = gson.fromJson((String) responseValues, listType);
+
+                                setupVAS(modelList);
+                                DialogCounterAlert.DialogProgress.dismiss();
+                            }else {
+                                getChildFragmentManager().beginTransaction()
+                                        .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance((String) responseValues, mTopup))
+                                        .commit();
+                            }
                         }
                     }
 
@@ -281,12 +312,16 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void initData(){
         setAmt(mAmt, null);
+        if (mPhone != null){
+            mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+            mHolder.mEditPhone.setText(mPhone);
+        }
         switch (mCarrier){
             case APIServices.AIS:
-                if (mTopup.equals(FragmentTopup.MOBILE))
-                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
-                else
+                if (mTopup.equals(FragmentTopup.PIN))
                     mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
+                else
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
 
                 break;
             case APIServices.TRUEMOVE:
@@ -308,6 +343,11 @@ public class FragmentTopupPackage extends  Fragment{
                 break;
             case FragmentTopup.PIN:
                 mHolder.mTextHint.setText(R.string.dashboard_pin);
+                mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+
+                break;
+            case FragmentTopup.VAS:
+                mHolder.mTextHint.setText(R.string.vas);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
 
                 break;
@@ -523,18 +563,39 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        final RequestModel requestModel = new RequestModel(mActionSumitTopup,
-                new SubmitTopupRequestModel(String.valueOf(getmAmt()),
+        SubmitTopupRequestModel submitTopupRequestModel = null;
+
+        switch (mTopup){
+            case FragmentTopup.MOBILE:
+            case FragmentTopup.PIN:
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitTopupRequestModel(
+                        String.valueOf(getmAmt()),
                         mCarrier,
                         mPhone,
                         model.getTranid(),
-                        mButtonID,
-                        null));
+                        mButtonID
+                );
+                break;
+            case FragmentTopup.VAS:
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitVasRequestModel(
+                        String.valueOf(getmAmt()),
+                        mCarrier,
+                        mPhone,
+                        model.getTranid(),
+                        mPgName,
+                        mButtonID
+                );
+
+                break;
+        }
+
+        final RequestModel requestModel = new RequestModel(mActionSumitTopup, submitTopupRequestModel);
         callSubmit = services.submitTopup(requestModel);
 
         startTimeoutSubmit(model.getTranid(), requestModel);
 
         Global.getInstance().setLastSubmit(requestModel);
+        Global.getInstance().setSubmitStatus(null);
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -563,6 +624,7 @@ public class FragmentTopupPackage extends  Fragment{
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
+                            Global.getInstance().setLastSubmit(null);
 
                             MyApplication.uploadFail(MyApplication.NOTITOPUP,
                                     model.getTranid(),
@@ -593,7 +655,7 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e(TAG, "Exception submit topup: " + t.getMessage());
-                        if (call.isCanceled()) return;
+                        if (t.getMessage().equals("Canceled")) return;
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
@@ -678,7 +740,9 @@ public class FragmentTopupPackage extends  Fragment{
                     });
 
                     }
-        }, 90000);
+        }, 10000);
+
+//        90000
 
     }
 
@@ -760,15 +824,16 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-    private void setupVAS(){
+    private void setupVAS(List<PGResponseModel> listPG){
         mHolder.mRecyclerVAS.setVisibility(View.VISIBLE);
-        mVasAdapter = new VasAdapter(getContext());
+        mVasAdapter = new VasAdapter(getContext(), listPG);
         mHolder.mRecyclerVAS.setLayoutManager(new LinearLayoutManager(getContext()));
         mHolder.mRecyclerVAS.setAdapter(new ScaleInAnimationAdapter(mVasAdapter));
         mHolder.mRecyclerVAS.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener(){
             @Override
             public void onItemClick(View view, int position) {
-                setAmt(mVasAdapter.getItem(position).getPRICE(), null);
+                setAmt(mVasAdapter.getItem(position).getAmount(), mVasAdapter.getItem(position).getPackageId());
+                mPgName = mVasAdapter.getItem(position).getServiceNameTh();
                 if (!checkData()) return;
                 showDialogConfirmVAS(position);
             }
@@ -778,9 +843,8 @@ public class FragmentTopupPackage extends  Fragment{
     private void showDialogConfirmVAS(final int position){
         final AlertDialog confirmDialog = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
                 .setTitle(getString(R.string.title_phone_short)+" "+mHolder.mEditPhone.getText().toString())
-                .setMessage(mVasAdapter.getItem(position).getSPEED()+"\n"+
-                        mVasAdapter.getItem(position).getVOLUME()+"/"+
-                        mVasAdapter.getItem(position).getLIMITDAY()+" "+getString(R.string.day))
+                .setMessage(mVasAdapter.getAmount(position)+" "+getString(R.string.currency)+"\n"+
+                        mVasAdapter.getItem(position).getServiceNameTh())
                 .setNegativeButton(R.string.edit_phone, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

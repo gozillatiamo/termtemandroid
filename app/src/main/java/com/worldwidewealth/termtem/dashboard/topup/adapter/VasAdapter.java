@@ -13,9 +13,11 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.model.PGResponseModel;
 import com.worldwidewealth.termtem.model.VasValuesModel;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +33,11 @@ public class VasAdapter extends RecyclerView.Adapter<VasAdapter.ViewHolder>{
     private String[] mListSpeed, mListVolume;
     private int[] mListPrice, mListLimitDay;
 
+    private List<PGResponseModel> mListPG;
     public static final String TAG = VasAdapter.class.getSimpleName();
-    public VasAdapter(Context context){
+    public VasAdapter(Context context, List<PGResponseModel> listPG){
         mContext = context;
+        this.mListPG = listPG;
         mListSpeed = context.getResources().getStringArray(R.array.list_vas_speed);
         mListVolume = context.getResources().getStringArray(R.array.list_vas_volume);
         mListPrice = context.getResources().getIntArray(R.array.list_vas_price);
@@ -61,20 +65,34 @@ public class VasAdapter extends RecyclerView.Adapter<VasAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextPrice.setText(((Double)mListValues.get(position).getPRICE()).intValue()+" "+mContext.getString(R.string.currency));
-        holder.mTextSpeed.setText(mListValues.get(position).getSPEED());
-        holder.mTextVolume.setText(mListValues.get(position).getVOLUME()+"/"+
-                mListValues.get(position).getLIMITDAY()+" "+mContext.getString(R.string.day));
+
+
+        holder.mTextPrice.setText(getAmount(position)+" "+mContext.getString(R.string.currency));
+
+        holder.mTextSpeed.setText(getStrDes(position)[0]+"4G");
+        holder.mTextVolume.setText(getStrDes(position)[1]);
 
     }
 
     @Override
     public int getItemCount() {
-        return mListValues.size();
+        return mListPG.size();
     }
 
-    public VasValuesModel getItem(int positon){
-        return mListValues.get(positon);
+    public String getAmount(int position){
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
+
+        return format.format(mListPG.get(position).getAmount());
+    }
+
+    public String[] getStrDes(int position){
+        return  mListPG.get(position).getServiceNameTh().split("4G ");
+    }
+
+    public PGResponseModel getItem(int positon){
+        return mListPG.get(positon);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

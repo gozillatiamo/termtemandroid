@@ -87,13 +87,13 @@ public class LocalService extends Service {
                     countDownLogout(context, startId);
 //                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                 } else {
-                    APIHelper.enqueueWithRetry(call, this);
+                    APIHelper.enqueueWithRetry(call.clone(), this);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                APIHelper.enqueueWithRetry(call, this);
+                APIHelper.enqueueWithRetry(call.clone(), this);
                 t.printStackTrace();
             }
         });
@@ -143,7 +143,7 @@ public class LocalService extends Service {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null){
-                    APIHelper.enqueueWithRetry(call, this);
+                    APIHelper.enqueueWithRetry(call.clone(), this);
                 } else {
                     Global.getInstance().clearUserData(true);
                     if (MyApplication.LeavingOrEntering.currentActivity != null){
@@ -158,7 +158,7 @@ public class LocalService extends Service {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-                APIHelper.enqueueWithRetry(call, this);
+                APIHelper.enqueueWithRetry(call.clone(), this);
             }
         });
 

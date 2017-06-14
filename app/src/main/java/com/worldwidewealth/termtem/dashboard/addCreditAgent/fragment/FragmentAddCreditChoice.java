@@ -249,14 +249,13 @@ public class FragmentAddCreditChoice extends Fragment {
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
         RequestModel requestModel = new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
-                new SubmitTopupRequestModel(mBottomAction.getPrice(),
-                        null,
+                SubmitTopupRequestModel.SubmitAgentRequestModel(mBottomAction.getPrice(),
                         mAgent.getPhoneno(),
                         model.getTranid(),
-                        null,
                         mAgent.getAgentId()));
 
         Global.getInstance().setLastSubmit(requestModel);
+        Global.getInstance().setSubmitStatus(null);
 
         call = services.submitTopup(requestModel);
 

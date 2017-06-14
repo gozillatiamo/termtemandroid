@@ -214,7 +214,7 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
         this.getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(service, mTopup))
+                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(service, mTopup, null))
                 .addToBackStack(null)
                 .commit();
     }

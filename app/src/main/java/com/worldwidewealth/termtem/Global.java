@@ -50,12 +50,14 @@ public class Global {
     private static final String TRANID = "tranid";
     private static final String AGENTIDCASHIN = "agentidcashid";
     private static final String BUTTONID = "buttonid";
+    private static final String SUBMIT_PG_ID = "submitpgid";
+    private static final String SUBMIT_PG_NAME = "submitpgname";
     private static final String SUBMIT_DEVICEID = "submitdeviceid";
     private static final String SUBMIT_TXID = "submittxid";
     private static final String SUBMIT_AGENTID = "submitagentid";
     private static final String SUBMIT_USERID = "submituserid";
-    private static final String SUBMIT_ACTION = "submitaction";
 
+    private static final String SUBMIT_ACTION = "submitaction";
     private static final String SUBMIT_STATUS = "submitstatus";
 
 
@@ -287,6 +289,8 @@ public class Global {
             mEditor.putString(SUBMIT_PHONENO, null);
             mEditor.putString(AMT, null);
             mEditor.putString(CARRIER, null);
+            mEditor.putString(SUBMIT_PG_ID, null);
+            mEditor.putString(SUBMIT_PG_NAME, null);
             mEditor.commit();
             setSubmitStatus(null);
             return;
@@ -306,6 +310,8 @@ public class Global {
         mEditor.putString(SUBMIT_PHONENO, submitTopupRequestModel.getPHONENO());
         mEditor.putString(AMT, submitTopupRequestModel.getAMT());
         mEditor.putString(CARRIER, submitTopupRequestModel.getCARRIER());
+        mEditor.putString(SUBMIT_PG_ID, submitTopupRequestModel.getPGID());
+        mEditor.putString(SUBMIT_PG_NAME, submitTopupRequestModel.getPGNAME());
         mEditor.commit();
     }
 
@@ -332,7 +338,9 @@ public class Global {
                 mPreferences.getString(SUBMIT_PHONENO, null),
                 mPreferences.getString(TRANID, null),
                 mPreferences.getString(BUTTONID, null),
-                mPreferences.getString(AGENTIDCASHIN, null)
+                mPreferences.getString(AGENTIDCASHIN, null),
+                mPreferences.getString(SUBMIT_PG_ID, null),
+                mPreferences.getString(SUBMIT_PG_NAME, null)
         );
         submitTopupRequestModel.setAGENTID(mPreferences.getString(SUBMIT_AGENTID, null));
         submitTopupRequestModel.setDEVICEID(mPreferences.getString(SUBMIT_DEVICEID, null));
@@ -348,6 +356,18 @@ public class Global {
 
     public String getLastSubmitAction(){
         return mPreferences.getString(SUBMIT_ACTION, null);
+    }
+
+    public String getLastSubmitPhoneNo(){
+        return mPreferences.getString(SUBMIT_PHONENO, null);
+    }
+
+    public String getLastSubmitCarrier(){
+        return mPreferences.getString(CARRIER, null);
+    }
+
+    public String getLastSubmitAmt(){
+        return mPreferences.getString(AMT, null);
     }
 
 

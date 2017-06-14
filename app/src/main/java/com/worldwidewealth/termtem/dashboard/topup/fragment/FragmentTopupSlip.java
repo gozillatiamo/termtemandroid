@@ -2,6 +2,8 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -10,6 +12,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,6 +27,8 @@ import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
@@ -61,6 +66,9 @@ public class FragmentTopupSlip extends Fragment {
     private APIServices services;
     private String mTransID;
     private String mFileName;
+    private String mPhoneNo;
+    private String mCarrier;
+    private String mTypeToup;
     public static final String TAG = FragmentTopupSlip.class.getSimpleName();
 
     private static final String IMAGE = "image";
@@ -103,6 +111,10 @@ public class FragmentTopupSlip extends Fragment {
 //        mPage = getArguments().getString("page");
         mImageByte = getArguments().getByteArray(IMAGE);
         mTransID = getArguments().getString(TRANSID);
+        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
+        mCarrier = Global.getInstance().getLastSubmitCarrier();
+        mTypeToup = MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction());
+
         services = APIServices.retrofit.create(APIServices.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         Date now = new Date();
@@ -164,7 +176,7 @@ public class FragmentTopupSlip extends Fragment {
             }
         });
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
+        mNM.cancel(MyApplication.NOTITOPUP);
 
     }
 
@@ -222,7 +234,33 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                if (mTypeToup.equals(FragmentTopup.MOBILE) && mCarrier.equals(APIServices.AIS)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            .setMessage(getString(R.string.interesting_vas))
+                            .setPositiveButton(getString(R.string.interested), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getContext(), ActivityTopup.class);
+                                    intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.VAS);
+                                    intent.putExtra(ActivityTopup.KEY_CARRIER, mCarrier);
+                                    intent.putExtra(ActivityTopup.KEY_PHONENO, mPhoneNo);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.ignore), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setOnShowListener(new MyShowListener());
+                    alertDialog.show();
+                } else {
+                    getActivity().finish();
+                }
 //                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
 //                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 //                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();

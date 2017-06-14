@@ -140,6 +140,8 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
         for (UserMenuModel model : Global.getInstance().getUserMenuList()){
 
+            if (model.getSTATUS() == null || model.getSTATUS().equals("")) return;
+
             MenuButtonView.VISIBILITY visibility = MenuButtonView.VISIBILITY.valueOf(model.getSTATUS());
             switch (visibility){
                 case SHOW:

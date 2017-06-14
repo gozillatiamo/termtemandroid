@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
@@ -168,11 +169,11 @@ public class EncryptionData {
             if (responseModel == null) return null;
 
             switch (requestModel.getAction()){
-                case APIServices.ACTIONGETOTP:
                 case APIServices.ACTIONSUBMITTOPUP:
                 case APIServices.ACTION_GET_OTP_EPIN:
                 case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                case APIServices.ACTION_SUBMIT_VAS:
                     Global.getInstance().setSubmitStatus(responseModel.getMsg());
                     break;
             }
@@ -187,12 +188,25 @@ public class EncryptionData {
                         case APIServices.ACTION_GET_OTP_EPIN:
                         case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                         case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
+                        case APIServices.ACTION_SUBMIT_VAS:
 
-                            if (responseModel.getMsg().equals("Fail")) {
+                            if (responseModel.getMsg().equals(APIServices.MSG_FAIL)) {
                                 Global.getInstance().setLastSubmit(null);
                             }
 
-                            msg = context.getString(R.string.alert_topup_fail);
+                            if (responseModel.getMsg().contains(APIServices.MSG_WAIT)) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        call.cancel();
+                                        APIHelper.enqueueWithRetry(call.clone(), callback);
+                                    }
+                                }, 3000);
+
+                                return APIServices.MSG_WAIT;
+                            }
+
+                            msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
                             new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
 
                             return null;
