@@ -67,7 +67,7 @@ public class LocalService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
-        if (Global.getInstance().getUSERNAME() != null
+        if (Global.getInstance().getAGENTID() != null
                 && !(MyApplication.LeavingOrEntering.currentActivity instanceof SplashScreenWWW)) {
             serviceLeave(getApplicationContext(), startId);
         }

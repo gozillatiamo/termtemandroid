@@ -6,8 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
     android:id="@+id/layout_parent"
     android:background="@color/colorBackground"
     tools:context="com.worldwidewealth.termtem.MainActivity">
@@ -121,7 +119,6 @@
                             android:textColorHint="@android:color/secondary_text_dark_nodisable"
                             android:imeOptions="actionNext"
                             >
-                            <requestFocus/>
                         </com.worldwidewealth.termtem.util.InstantAutoComplete>
 
                     </LinearLayout>

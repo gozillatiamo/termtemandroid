@@ -81,6 +81,9 @@ public interface APIServices {
     public static final String ACTION_GETOTP_VAS = "GETOTPVAS";
     public static final String ACTION_SUBMIT_VAS = "SUBMITVAS";
     public static final String ACTION_ESLIP_VAS = "ESLIPVAS";
+    public static final String ACTION_ADD_FAV = "ADDFAV";
+    public static final String ACTION_REMOVE_FAV = "REMOVEFAV";
+    public static final String ACTION_LOAD_FAV = "LOADFAV";
 
 
 

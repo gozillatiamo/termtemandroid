@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
+import com.worldwidewealth.termtem.dashboard.favorite.FavoritesActivity;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
@@ -44,7 +46,7 @@ import static com.worldwidewealth.termtem.MyApplication.getTypeToup;
 /**
  * Created by gozillatiamo on 10/3/16.
  */
-public class ActivityDashboard extends MyAppcompatActivity{
+public class ActivityDashboard extends MyAppcompatActivity implements View.OnClickListener{
 
     private ViewHolder mHolder;
     private static final String TAG = ActivityDashboard.class.getSimpleName();
@@ -240,6 +242,16 @@ public class ActivityDashboard extends MyAppcompatActivity{
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_favorites:
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
     public class ViewHolder{
 
         private Toolbar mToolbar;
@@ -247,6 +259,7 @@ public class ActivityDashboard extends MyAppcompatActivity{
                                 mMenuNotiPay, mMenuHistory, mMenuTopupPIN, mMenuOther;
         private TextView mTextUserName;
         private View mIncludeMyWallet;
+        private AppCompatButton mBtnFavorites;
         public ViewHolder(Activity view){
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mIncludeMyWallet = (View) view.findViewById(R.id.include_my_wallet);
@@ -261,6 +274,9 @@ public class ActivityDashboard extends MyAppcompatActivity{
             mMenuTopupPIN = (MenuButtonView) view.findViewById(R.id.mbv_topup_pin);
             mTextUserName = (TextView) view.findViewById(R.id.text_username);
             mMenuOther = (MenuButtonView) view.findViewById(R.id.mbv_other);
+            mBtnFavorites = (AppCompatButton) view.findViewById(R.id.btn_favorites);
+
+            mBtnFavorites.setOnClickListener(ActivityDashboard.this);
         }
     }
 }

@@ -43,6 +43,7 @@ public class Global {
     private static final String PASSWORD = "password";
     private static final String USERDATA = "userdata";
     private static final String CACHEUSER = "cacheuser";
+    private static final String LAST_USER_LOGIN = "lastuserlogin";
 
     private static final String CARRIER = "carrier";
     private static final String AMT = "amt";
@@ -262,13 +263,23 @@ public class Global {
     public void setCacheUser(String username){
         Set<String> setUser = mPreferences.getStringSet(CACHEUSER, new HashSet<String>());
 
-        if (!setUser.contains(username)){
+//        if (!setUser.contains(username)){
             setUser.add(username);
-
             mEditor.putStringSet(CACHEUSER, setUser);
             mEditor.commit();
-        }
 
+        setLastUserLogin(username);
+//        }
+
+    }
+
+    public void setLastUserLogin(String userLogin){
+        mEditor.putString(LAST_USER_LOGIN, userLogin);
+        mEditor.commit();
+    }
+
+    public String getLastUserLogin(){
+        return mPreferences.getString(LAST_USER_LOGIN, null);
     }
 
     public void clearAll(){

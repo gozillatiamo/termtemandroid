@@ -20,17 +20,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
+import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
+import com.worldwidewealth.termtem.model.AddFavRequestModel;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
+import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -83,16 +89,19 @@ public class FragmentTopupSlip extends Fragment {
         return fragment;
     }
 
+
     public class ViewHolder{
         private Button mBtnBack, mBtnGame, mBtnSavePic;
         private ImageView mImageSlip;
         private View mIncludeMyWallet;
+        private ShineButton mBtnAddFavorite;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
             mBtnGame = (Button) itemview.findViewById(R.id.btn_play_game);
             mImageSlip = (ImageView) itemview.findViewById(R.id.image_slip);
             mBtnSavePic = (Button) itemview.findViewById(R.id.btn_save_pic);
             mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
+            mBtnAddFavorite = (ShineButton) itemview.findViewById(R.id.btn_add_favorite);
         }
     }
 
@@ -136,6 +145,7 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onStart() {
         onBackPress();
+        setupBtnFavorite();
         super.onStart();
     }
 
@@ -175,6 +185,7 @@ public class FragmentTopupSlip extends Fragment {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
+
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.cancel(MyApplication.NOTITOPUP);
 
@@ -228,6 +239,88 @@ public class FragmentTopupSlip extends Fragment {
         mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
         mHolder.mImageSlip.setImageBitmap(mImageBitmap);
         saveImage();
+    }
+
+    private String getService(){
+        switch (mTypeToup){
+            case FragmentTopup.MOBILE:
+                return ActivityReport.TOPUP_REPORT;
+            case FragmentTopup.PIN:
+                return ActivityReport.EPIN_REPORT;
+            case FragmentTopup.VAS:
+                return ActivityReport.VAS_REPORT;
+            case FragmentAddCreditChoice.AGENT_CASHIN:
+                return ActivityReport.CASHIN_REPORT;
+        }
+
+        return null;
+    }
+
+    private void setupBtnFavorite(){
+        mHolder.mBtnAddFavorite.init(getActivity());
+        mHolder.mBtnAddFavorite.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(View view, boolean checked) {
+                if (checked){
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+                            .setTitle(R.string.set_title_favorite)
+                            .setView(R.layout.dialog_edit_text)
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mHolder.mBtnAddFavorite.setChecked(false);
+                                }
+                            })
+                            .setPositiveButton(R.string.confirm, null);
+                    final AlertDialog alertDialog = builder.create();
+
+
+                    alertDialog.setOnShowListener(new MyShowListener(){
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            super.onShow(dialogInterface);
+                            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EditText editFavoriteName = (EditText) alertDialog.findViewById(R.id.edit_text);
+
+                                    String favName = editFavoriteName.getText().toString();
+                                    if (favName == null || favName.isEmpty()){
+                                        Toast.makeText(getContext(), R.string.please_set_name, Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
+                                    mHolder.mBtnAddFavorite.setClickable(false);
+
+                                    Call<ResponseBody> call = services.service(new RequestModel(
+                                            APIServices.ACTION_ADD_FAV,
+                                            new AddFavRequestModel(mTransID, favName, getService())
+                                    ));
+
+                                    APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                    alertDialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+
+                    alertDialog.show();
+
+                }
+            }
+        });
     }
 
     private void initBtn(){

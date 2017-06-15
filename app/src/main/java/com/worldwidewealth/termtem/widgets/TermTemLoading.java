@@ -92,7 +92,6 @@ public class TermTemLoading extends RelativeLayout {
     }
 
     public void hide(){
-        Log.e(TAG, ""+this.getVisibility());
         DialogCounterAlert.DialogProgress.dismiss();
         if (!(this.getVisibility() == VISIBLE)){
             return;

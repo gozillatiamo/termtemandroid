@@ -438,6 +438,12 @@ public class Util {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static void showSoftKeyboard(Context context, EditText view) {
+        view.requestFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager)  context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
     public static void setupUI(final View view) {
         //If a layout container, iterate over children and seed recursion.
         if (view instanceof ViewGroup) {

@@ -7,6 +7,7 @@ import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -104,14 +105,21 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
         if (cacheUser.length > 0) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
                    cacheUser);
+            mHolder.mPhone.setText(Global.getInstance().getLastUserLogin());
+            Util.showSoftKeyboard(this, mHolder.mPassword);
             mHolder.mPhone.setAdapter(adapter);
-            mHolder.mPhone.setOnClickListener(new View.OnClickListener() {
+            mHolder.mPhone.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    if (!mHolder.mPhone.isPopupShowing())
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP){
+                        mHolder.mPhone.setText("");
                         mHolder.mPhone.showDropDown();
+                    }
+
+                    return false;
                 }
             });
+
             mHolder.mPhone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -136,220 +144,8 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                 new DialogCounterAlert.DialogProgress(this).show())
                 .checkWifi(mPhone, mPassword);
 
-/*
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (mWifi.isConnected()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                    .setMessage(R.string.alert_sure_connect_wifi)
-                    .setPositiveButton(R.string.use_wifi, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            new DialogCounterAlert.DialogProgress(MainActivity.this);
-                            serviceAcceptWIFI();
-                        }
-                    })
-                    .setNegativeButton(R.string.close_wifi, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                            DialogCounterAlert.DialogProgress.dismiss();
-                        }
-                    });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                }
-            });
-            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    mHolder.mBtnLogin.setEnabled(true);
-                }
-            });
-            alertDialog.show();
-        } else {
-            new DialogCounterAlert.DialogProgress(MainActivity.this);
-            serviceLogin();
-        }
-*/
-
     }
 
-/*
-    private void serviceAcceptWIFI(){
-        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
-                new DataRequestModel()));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Object responseValues = EncryptionData.getModel(MainActivity.this, call, response.body(), this);
-                if (responseValues != null) serviceLogin();
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
-            }
-        });
-    }
-*/
-
-/*
-    private void initBtn(){
-        mHolder.mBtnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        mHolder.mBtnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ActivityRegister.class);
-                startActivity(intent);
-            }
-        });
-
-        mHolder.mHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               new DialogHelp(MainActivity.this).show();
-            }
-        });
-
-    }
-*/
-
-/*
-    private void serviceLogin(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                final String username = EncryptionData.EncryptData(mPhone.replace(" ", ""),
-                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
-                final String password =  EncryptionData.EncryptData(mPassword,
-                        Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
-                Call<ResponseBody> call = services.LOGIN(new SignInRequestModel(new SignInRequestModel.Data(
-                        Global.getInstance().getDEVICEID(),
-                        getString(R.string.platform),
-                        username,
-                        password,
-                        Global.getInstance().getTXID())));
-
-                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Gson gson = new Gson();
-                        DialogCounterAlert.DialogProgress.dismiss();
-                        String strResponse = null;
-                        ResponseModel responseModel = null;
-                        try {
-                            strResponse = response.body().string();
-                            JsonParser jsonParser = new JsonParser();
-
-                            JsonObject jsonObject = jsonParser.parse(strResponse).getAsJsonObject();
-                            responseModel = gson.fromJson(jsonObject, ResponseModel.class);
-
-                        } catch (Exception e) {
-                        }
-
-                        if (responseModel != null){
-
-                            String[] strRegisDevice = responseModel.getMsg().toString().split(":");
-                            if (strRegisDevice != null) {
-                                if (strRegisDevice.length == 4) {
-                                    registerDevice(strRegisDevice[1], strRegisDevice[2], strRegisDevice[3]);
-                                } else {
-                                    Toast.makeText(MainActivity.this, responseModel.getMsg(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                        } else {
-
-                            ContentValues values = new ContentValues();
-                            values.put(Global.getKeyUSERNAME(), username);
-                            values.put(Global.getKeyPASSWORD(), password);
-                            values.put(Global.getKeyUSERDATA(), strResponse);
-                            Global.getInstance().setUserData(values);
-
-                            if (!mSetHistoryUser.contains(mHolder.mPhone.getText().toString())){
-
-                                mSetHistoryUser.add(mHolder.mPhone.getText().toString());
-                                SharedPreferences.Editor editor = mShared.edit();
-                                editor.putStringSet(USER, mSetHistoryUser);
-                                editor.commit();
-                            }
-
-                            Intent intent = new Intent(MainActivity.this, ActivityDashboard.class);
-//                            intent.putExtra(UserMenuModel.KEY_MODEL, (ArrayList<UserMenuModel>)loginResponseModel.getUsermenu());
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
-                            startActivity(intent);
-                            finish();
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
-                    }
-                });
-                mHolder.mBtnLogin.setEnabled(true);
-            }
-        }, 1000);
-
-
-
-    }
-    private void registerDevice(String msg, final String agantId, final String userId){
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setTitle(msg)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new DialogCounterAlert.DialogProgress(MainActivity.this);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Call<ResponseModel> call = services.registerDevice(
-                                        new RequestModel(APIServices.ACTIONREGISTERDEVICE,
-                                                new DataRequestModel(agantId, userId)));
-
-                                APIHelper.enqueueWithRetry(call, new Callback<ResponseModel>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                                        DialogCounterAlert.DialogProgress.dismiss();
-                                        new DialogCounterAlert(MainActivity.this,
-                                                getString(R.string.register),
-                                                getString(R.string.register_device_done),
-                                                null);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseModel> call, Throwable t) {
-                                        t.printStackTrace();
-                                        new ErrorNetworkThrowable(t).networkError(MainActivity.this, call, this);
-                                    }
-                                });
-
-                            }
-                        }, 1000);
-                    }
-                }).show();
-    }
-*/
 
     @Override
     public void onBackPressed() {

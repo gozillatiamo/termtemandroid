@@ -205,8 +205,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static void startSlip(){
-        if (!canUseLeaving(currentActivity)) return;
 
+        if (!canUseLeaving(currentActivity)) return;
         if (Global.getInstance().getLastTranId() != null &&
                 !(currentActivity instanceof ActivityTopup)){
 

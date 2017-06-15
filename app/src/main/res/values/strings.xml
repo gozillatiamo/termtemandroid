@@ -23,6 +23,7 @@
     <string name="promptpay_account">บัญชีพร้อมเพย์ :</string>
     <string name="promptpay_title">พร้อมเพย์ :</string>
     <string name="please_enter_data">กรุณากรอกข้อมูลให้ครบถ้วน</string>
+    <string name="please_set_name">กรุณากรอกชื่อที่ท่านต้องการตั้ง</string>
     <string name="name">ชื่อ</string>
     <string name="processing">รอดำเนินการ...</string>
     <string name="phone_number">หมายเลขโทรศัพท์</string>
@@ -196,6 +197,7 @@
     <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการโอน</string>
     <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
     <string name="take_photo">ถ่ายรูป</string>
+    <string name="set_title_favorite">ตั้งชื่อรายการโปรด</string>
     <string name="choose_pic">เลือกรูปภาพ</string>
     <string name="error">เกิดข้อผิดพลาด</string>
     <string name="topup_time_out">การทำรายการของท่านใช้เวลานานกินกำหนดกรุณาลองใหม่ภายหลัง</string>
@@ -274,6 +276,7 @@
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
     <string name="note">หมายเหตุ :</string>
+    <string name="favorite">รายการโปรด</string>
     <string name="note_detail">"กรุณาเก็บหลักฐานการฝาก หรือ การโอนเงินไว้แจ้งผ่านเมนู \"แจ้งโอนผ่านธนาคาร\" ในแอพฯเติมเต็ม"</string>
     <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
 
@@ -528,7 +531,7 @@
         <item>รายงานสรุปผล</item>
         <item>กราฟสรุปผล</item>
     </string-array>
-    
+
     <string-array name="list_advoid_device_id">
         <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
         <item>866234029722533</item>
@@ -561,4 +564,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_favorites">รายการโปรด</string>
 </resources>

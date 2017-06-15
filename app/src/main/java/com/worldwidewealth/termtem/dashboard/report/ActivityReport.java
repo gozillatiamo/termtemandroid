@@ -84,6 +84,8 @@ public class ActivityReport extends MyAppcompatActivity {
     public static final String TOPUP_REPORT = "TOPUP";
     public static final String EPIN_REPORT = "EPIN";
     public static final String CASHIN_REPORT = "CASHIN";
+    public static final String VAS_REPORT = "VAS";
+    public static final String BILL_REPORT = "BILL";
 
     public static final String TAG = ActivityReport.class.getSimpleName();
    // private Date mDate = new Date(mPreviousDateFrom);

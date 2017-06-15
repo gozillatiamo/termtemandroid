@@ -65,16 +65,31 @@
                                 android:gravity="center"
                                 android:text="@string/username" />
 
-                            <TextView
+                            <me.grantland.widget.AutofitTextView
                                 android:id="@+id/text_username"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="@dimen/activity_space"
+                                android:layout_weight="1"
+                                android:lines="1"
                                 android:text="00000000"
                                 style="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/colorPrimary"
                                 android:textStyle="bold" />
+                            <android.support.v7.widget.AppCompatButton
+                                android:id="@+id/btn_favorites"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:backgroundTint="@android:color/holo_orange_light"
+                                android:text="@string/favorite"
+                                android:textSize="@dimen/small_text_size"
+                                android:drawableLeft="@drawable/ic_star"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:drawablePadding="@dimen/activity_small_space"
+                                />
                         </LinearLayout>
 
                         <include
