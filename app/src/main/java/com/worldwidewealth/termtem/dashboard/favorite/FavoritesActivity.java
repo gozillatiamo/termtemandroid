@@ -1,9 +1,14 @@
 package com.worldwidewealth.termtem.dashboard.favorite;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +18,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
+import com.worldwidewealth.termtem.dashboard.favorite.adapter.FavoritesAdapter;
+import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.model.AgentResponse;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoadFavResponseModel;
 import com.worldwidewealth.termtem.model.PGResponseModel;
@@ -20,13 +32,16 @@ import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.RecyclerItemClickListener;
 import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +52,9 @@ public class FavoritesActivity extends AppCompatActivity {
     private APIServices services = APIServices.retrofit.create(APIServices.class);
     private TermTemLoading mLoading;
     private List<LoadFavResponseModel> mListFavModels;
+    private RecyclerView mRecyclerFav;
+    private FavoritesAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +71,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private void bindView(){
         mLoading = new TermTemLoading(this, (ViewGroup) findViewById(R.id.container));
+        mRecyclerFav = (RecyclerView) findViewById(R.id.recycler_favorites);
 
     }
 
@@ -74,7 +93,16 @@ public class FavoritesActivity extends AppCompatActivity {
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     Type listType = new TypeToken<List<LoadFavResponseModel>>() {}.getType();
                     mListFavModels = gson.fromJson((String) responseValues, listType);
-
+                    mRecyclerFav.setLayoutManager(new LinearLayoutManager(FavoritesActivity.this));
+                    mAdapter = new FavoritesAdapter(FavoritesActivity.this, mListFavModels);
+                    mRecyclerFav.setAdapter(new ScaleInAnimationAdapter(mAdapter));
+                    mRecyclerFav.addOnItemTouchListener(new RecyclerItemClickListener(FavoritesActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+//                            showDialogConfirm(position);
+                            startTopup(position);
+                        }
+                    }));
                 }
                 mLoading.hide();
             }
@@ -87,5 +115,93 @@ public class FavoritesActivity extends AppCompatActivity {
         });
 
     }
+
+    private void startTopup(int position){
+        LoadFavResponseModel model = mListFavModels.get(position);
+
+        Intent intent = null;
+
+        switch (model.getService()){
+            case ActivityReport.TOPUP_REPORT:
+                LoadFavResponseModel.TopupListModel topupListModel = model.getTopuplist().get(0);
+
+                intent = new Intent(FavoritesActivity.this, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.MOBILE);
+                intent.putExtra(ActivityTopup.KEY_PHONENO, topupListModel.getPhoneNo());
+                intent.putExtra(ActivityTopup.KEY_CARRIER, topupListModel.getCarrierCode());
+                intent.putExtra(ActivityTopup.KEY_AMT, topupListModel.getAmt());
+
+                break;
+            case ActivityReport.EPIN_REPORT:
+                LoadFavResponseModel.EpinListModel epinListModel = model.getEpinlist().get(0);
+
+                intent = new Intent(FavoritesActivity.this, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.MOBILE);
+                intent.putExtra(ActivityTopup.KEY_PHONENO, epinListModel.getPhoneNo());
+                intent.putExtra(ActivityTopup.KEY_CARRIER, epinListModel.getCarrierCode());
+                intent.putExtra(ActivityTopup.KEY_AMT, epinListModel.getAmt());
+
+                break;
+            case ActivityReport.VAS_REPORT:
+                break;
+            case ActivityReport.CASHIN_REPORT:
+                LoadFavResponseModel.CashInListModel cashInListModel = model.getCashinlist().get(0);
+
+                Bundle bundle = new Bundle();
+
+                AgentResponse agentResponse = new AgentResponse(cashInListModel.getAgentId(),
+                        cashInListModel.getAgentCode(),
+                        cashInListModel.getAgentFirstName(),
+                        cashInListModel.getAgentLastName(),
+                        "0000000000");
+
+                bundle.putParcelable(AgentAdapter.AGENTDATA, agentResponse);
+                bundle.writeToParcel(Parcel.obtain(), 0);
+                bundle.putDouble(ActivityTopup.KEY_AMT, cashInListModel.getAmt());
+
+                intent = new Intent(this, ActivityAddCreditAgent.class);
+                intent.putExtra("type", ActivityAddCreditAgent.SCAN);
+                intent.putExtra("data", bundle);
+
+                break;
+            case ActivityReport.BILL_REPORT:
+                break;
+        }
+
+        if (intent != null){
+            overridePendingTransition(R.anim.slide_in_right, 0);
+
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
+/*
+    private void showDialogConfirm(int position){
+        LoadFavResponseModel model = mListFavModels.get(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(FavoritesActivity.this, R.style.MyAlertDialogWarning);
+
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
+
+        switch (model.getService()){
+            case ActivityReport.TOPUP_REPORT:
+                LoadFavResponseModel.TopupListModel topupListModel = model.getTopuplist().get(0);
+                builder.setTitle(model.getName()+"\n"+format.format(topupListModel.getAmt())+" "+getString(R.string.currency));
+                break;
+            case ActivityReport.EPIN_REPORT:
+                break;
+            case ActivityReport.VAS_REPORT:
+                break;
+            case ActivityReport.CASHIN_REPORT:
+                break;
+            case ActivityReport.BILL_REPORT:
+                break;
+        }
+
+    }
+*/
 
 }

@@ -17,6 +17,9 @@
     <color name="colorTabVAS">#F1C40F</color>
     <color name="color_bg_card">#009688</color>
     <color name="disable_btn_color">#ccccccd0</color>
+    <color name="color_topup">#337628</color>
+    <color name="color_epin">#D59709</color>
+    <color name="color_agent_cashin">#3B6FAE</color>
 
     //Chat bot
     <color name="grayLight">#e2e2e2</color>

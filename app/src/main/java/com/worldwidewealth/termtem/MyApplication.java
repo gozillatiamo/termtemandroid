@@ -113,7 +113,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             } else {
 
-                Global.getInstance().setLastSubmit(null);
+                Global.getInstance().setLastSubmit(null, false);
                 MyApplication.uploadFail(MyApplication.NOTITOPUP,
                         submitModel.getTRANID(),
                         getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
@@ -442,7 +442,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
             if (id == NOTITOPUP) {
 //                if (Global.getInstance().getLastSubmit() == null) return;
-                Global.getInstance().setLastSubmit(null);
+                Global.getInstance().setLastSubmit(null, false);
 //                mLastRequest = null;
 //                mNotifyManager.cancel(tag, id);
 /*

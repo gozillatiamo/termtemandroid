@@ -4,7 +4,6 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.AdapterPageTopup;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.util.Util;
@@ -19,7 +19,7 @@ import com.worldwidewealth.termtem.util.Util;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAirtimeVAS extends Fragment {
+public class FragmentAirtime extends Fragment {
 
     private View rootView;
     private ViewHolder mHolder;
@@ -33,13 +33,16 @@ public class FragmentAirtimeVAS extends Fragment {
 
     private String mTopup;
 
-    public static Fragment newInstance(String data, String topup) {
+    public static Fragment newInstance(String data, String topup, double amt) {
         Bundle bundle = new Bundle();
-        FragmentAirtimeVAS fragmentAirtimeVAS = new FragmentAirtimeVAS();
+        FragmentAirtime fragmentAirtime = new FragmentAirtime();
         bundle.putString(DATA, data);
         bundle.putString(FragmentTopup.keyTopup, topup);
-        fragmentAirtimeVAS.setArguments(bundle);
-        return fragmentAirtimeVAS;
+        if (amt > 0) {
+            bundle.putDouble(ActivityTopup.KEY_AMT, amt);
+        }
+        fragmentAirtime.setArguments(bundle);
+        return fragmentAirtime;
         // Required empty public constructor
     }
 
@@ -59,7 +62,7 @@ public class FragmentAirtimeVAS extends Fragment {
         }
 
         if (rootView == null){
-            rootView = inflater.inflate(R.layout.fragment_airtime_vas, container, false);
+            rootView = inflater.inflate(R.layout.fragment_airtime, container, false);
             mHolder = new ViewHolder(rootView);
             Util.setupUI(rootView);
             rootView.setTag(mHolder);
@@ -177,7 +180,7 @@ public class FragmentAirtimeVAS extends Fragment {
     }
 
     public static void setsTabColor(int sTabColor) {
-        FragmentAirtimeVAS.sTabColor = sTabColor;
+        FragmentAirtime.sTabColor = sTabColor;
     }
 
     private class ViewHolder{

@@ -75,15 +75,18 @@ public class FragmentTopupSlip extends Fragment {
     private String mPhoneNo;
     private String mCarrier;
     private String mTypeToup;
+    private boolean mIsFav;
     public static final String TAG = FragmentTopupSlip.class.getSimpleName();
 
     private static final String IMAGE = "image";
     private static final String TRANSID = "transid";
+    private static final String FAVORITE = "favorite";
 
-    public static Fragment newInstance(byte[] imagebyte, String transid){
+    public static Fragment newInstance(byte[] imagebyte, String transid, boolean isFav){
         Bundle bundle = new Bundle();
         bundle.putByteArray(IMAGE, imagebyte);
         bundle.putString(TRANSID, transid);
+        bundle.putBoolean(FAVORITE, isFav);
         FragmentTopupSlip fragment = new FragmentTopupSlip();
         fragment.setArguments(bundle);
         return fragment;
@@ -102,6 +105,9 @@ public class FragmentTopupSlip extends Fragment {
             mBtnSavePic = (Button) itemview.findViewById(R.id.btn_save_pic);
             mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
             mBtnAddFavorite = (ShineButton) itemview.findViewById(R.id.btn_add_favorite);
+
+            mBtnAddFavorite.setChecked(mIsFav);
+            mBtnAddFavorite.setClickable(!mIsFav);
         }
     }
 
@@ -120,6 +126,8 @@ public class FragmentTopupSlip extends Fragment {
 //        mPage = getArguments().getString("page");
         mImageByte = getArguments().getByteArray(IMAGE);
         mTransID = getArguments().getString(TRANSID);
+        mIsFav = getArguments().getBoolean(FAVORITE);
+
         mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
         mCarrier = Global.getInstance().getLastSubmitCarrier();
         mTypeToup = MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction());
@@ -430,7 +438,7 @@ public class FragmentTopupSlip extends Fragment {
         }
 
 
-        Global.getInstance().setLastSubmit(null);
+        Global.getInstance().setLastSubmit(null, false);
 
     }
 }

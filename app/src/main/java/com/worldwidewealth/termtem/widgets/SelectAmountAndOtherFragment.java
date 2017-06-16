@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.util.BottomAction;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -42,6 +44,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
     private ViewHolder mHolder;
     private BottomAction mBottomAction;
     private View rootView;
+    private double mFavAmt = 0;
+    private int mDefaultPosition = -1;
+    private boolean mIsFav;
+
+    private AmountBtnAdapter mAdapter;
 
     @SuppressLint("ValidFragment")
     public SelectAmountAndOtherFragment(BottomAction bottomAction) {
@@ -59,10 +66,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
      * @return A new instance of fragment SelectAmountAndOtherFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SelectAmountAndOtherFragment newInstance(BottomAction bottomAction, String[] listamount) {
+    public static SelectAmountAndOtherFragment newInstance(BottomAction bottomAction, String[] listamount, double favamt) {
         SelectAmountAndOtherFragment fragment = new SelectAmountAndOtherFragment(bottomAction);
         Bundle args = new Bundle();
         args.putStringArray(LIST_AMOUNT, listamount);
+        args.putDouble(ActivityTopup.KEY_AMT, favamt);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,6 +80,7 @@ public class SelectAmountAndOtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mListAmount = getArguments().getStringArray(LIST_AMOUNT);
+            mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
         }
     }
 
@@ -107,8 +116,30 @@ public class SelectAmountAndOtherFragment extends Fragment {
     private void initListAmount(){
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         mHolder.mRecyclerAmount.setLayoutManager(gridLayoutManager);
-        mHolder.mRecyclerAmount.setAdapter(new AmountBtnAdapter());
+        mAdapter = new AmountBtnAdapter();
+        mHolder.mRecyclerAmount.setAdapter(mAdapter);
 
+        if (mFavAmt > 0){
+
+            for (int i = 0; i < mListAmount.length; i++){
+                if (Double.parseDouble(mListAmount[i]) == mFavAmt){
+                    mDefaultPosition = i;
+                    break;
+                }
+            }
+
+            if (mDefaultPosition != -1){
+                mAdapter.setClickChoiceTopup(null, mDefaultPosition);
+            }
+
+            mAdapter.setAmtOther(mFavAmt);
+        }
+
+
+    }
+
+    public boolean getIsFav(){
+        return mIsFav;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -139,6 +170,8 @@ public class SelectAmountAndOtherFragment extends Fragment {
                         amt = Double.parseDouble(s.toString());
                     }
                     mBottomAction.updatePrice(amt);
+                    mIsFav = (mFavAmt ==  amt);
+
                 }
             });
         }
@@ -226,7 +259,7 @@ public class SelectAmountAndOtherFragment extends Fragment {
 
         }
 
-        private void setClickChoiceTopup(ViewHolder holder, int position){
+        public void setClickChoiceTopup(ViewHolder holder, int position){
 
             String nowAmt = "0";
             if (position != -1) {
@@ -255,6 +288,32 @@ public class SelectAmountAndOtherFragment extends Fragment {
             }
             previousSelectedPosition = position;
             mBottomAction.updatePrice(Double.parseDouble(nowAmt));
+
+            mIsFav = (mFavAmt ==  Double.parseDouble(nowAmt));
+        }
+
+        public void setAmtOther(double amt){
+            mHolder.mEditAmountOther.setText(String.valueOf(amt));
+            mHolder.mLayoutEditAmountOther.setVisibility(View.VISIBLE);
+            mHolder.mLayoutEditAmountOther.setAlpha(0.0f);
+            mHolder.mLayoutEditAmountOther.animate()
+                    .alpha(1.0f)
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mHolder.mEditAmountOther.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(mHolder.mEditAmountOther, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    });
+
+
+            previousSelectedPosition = -1;
+            mBottomAction.updatePrice(amt);
+            mIsFav = (mFavAmt ==  amt);
 
 
         }

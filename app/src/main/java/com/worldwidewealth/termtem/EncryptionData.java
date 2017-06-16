@@ -191,7 +191,7 @@ public class EncryptionData {
                         case APIServices.ACTION_SUBMIT_VAS:
 
                             if (responseModel.getMsg().equals(APIServices.MSG_FAIL)) {
-                                Global.getInstance().setLastSubmit(null);
+                                Global.getInstance().setLastSubmit(null, false);
                             }
 
                             if (responseModel.getMsg().contains(APIServices.MSG_WAIT)) {

@@ -21,6 +21,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.FragmentTopupPreview;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -56,9 +57,12 @@ public class FragmentAddCreditChoice extends Fragment {
     private APIServices services;
     private Call<ResponseBody> call;
     private Callback<ResponseBody> callback;
+    private double mFavAmt = 0;
+    private boolean mIsFavAmt;
     private byte[] imageByte = null;
     private String transid;
     public static final String AGENT_CASHIN = "agentcashin";
+    private boolean mIsFav;
 
     public FragmentAddCreditChoice() {
         // Required empty public constructor
@@ -78,6 +82,9 @@ public class FragmentAddCreditChoice extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_add_credit_choice, container, false);
         mHolder = new ViewHolder(rootView);
         mAgent = getArguments().getParcelable(AgentAdapter.AGENTDATA);
+        if (getArguments().containsKey(ActivityTopup.KEY_AMT)){
+            mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
+        }
         services = APIServices.retrofit.create(APIServices.class);
         initData();
         initBtn();
@@ -174,6 +181,8 @@ public class FragmentAddCreditChoice extends Fragment {
                 Object objectResponse = EncryptionData.getModel(getContext(), call, response.body(), this);
 
                 if (objectResponse instanceof String) {
+                    SelectAmountAndOtherFragment fragmentAmount = (SelectAmountAndOtherFragment) getChildFragmentManager().findFragmentById(R.id.container_select_amount);
+                    mIsFav = fragmentAmount.getIsFav();
                     FragmentTransaction transaction = getChildFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right,
@@ -254,7 +263,7 @@ public class FragmentAddCreditChoice extends Fragment {
                         model.getTranid(),
                         mAgent.getAgentId()));
 
-        Global.getInstance().setLastSubmit(requestModel);
+        Global.getInstance().setLastSubmit(requestModel, mIsFav);
         Global.getInstance().setSubmitStatus(null);
 
         call = services.submitTopup(requestModel);
@@ -296,8 +305,9 @@ public class FragmentAddCreditChoice extends Fragment {
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) getActivity();
                     try {
+
                         activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid, mIsFav)).commit();
                     } catch (IllegalStateException e){e.printStackTrace();}
                 }
             }
@@ -314,7 +324,7 @@ public class FragmentAddCreditChoice extends Fragment {
     private void initGrid(){
         getChildFragmentManager()
                 .beginTransaction()
-                .add(R.id.container_select_amount, SelectAmountAndOtherFragment.newInstance(mBottomAction, mAmount))
+                .add(R.id.container_select_amount, SelectAmountAndOtherFragment.newInstance(mBottomAction, mAmount, mFavAmt))
                 .commit();
     }
 

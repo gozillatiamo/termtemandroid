@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentAirtimeVAS;
-import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentChoiceTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentAirtime;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.util.Util;
@@ -82,7 +81,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         holder.mBtnChoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setClickChoiceTopup(holder, position);
+                setClickChoiceTopup(position);
 
             }
         });
@@ -105,8 +104,8 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
     private void setBackgroundSelect(ViewHolder holder, int position){
         if (mFragment != null) {
 
-            if (mFragment.getParentFragment() instanceof FragmentAirtimeVAS) {
-                FragmentAirtimeVAS fragmentAirtimeVAS = (FragmentAirtimeVAS) mFragment.getParentFragment();
+//            if (mFragment.getParentFragment() instanceof FragmentAirtime) {
+//                FragmentAirtime fragmentAirtimeVAS = (FragmentAirtime) mFragment.getParentFragment();
                 holder.mTextProductItem.setTextColor(mContext.getResources().getColor(android.R.color.white));
                 holder.mTextCurency.setTextColor(mContext.getResources().getColor(android.R.color.white));
                 TypedValue typedValue = new TypedValue();
@@ -116,7 +115,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
 
                 a.recycle();
                 holder.mBtnChoice.setCardBackgroundColor(color);
-            }
+//            }
 
 
             if (previousSelectedPosition == position) return;
@@ -129,7 +128,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         }
     }
 
-    private void setClickChoiceTopup(ViewHolder holder, int position){
+    public void setClickChoiceTopup(int position){
 
         double nowAmt = 0;
         String buttonId = null;
@@ -142,7 +141,7 @@ public class BtnTopupAdapter extends RecyclerView.Adapter<BtnTopupAdapter.ViewHo
         }
 
         if (mFragment != null) {
-            Fragment fragment = mFragment.getParentFragment().getParentFragment();
+            Fragment fragment = mFragment.getParentFragment();
 
             if (fragment instanceof FragmentTopupPackage) {
 

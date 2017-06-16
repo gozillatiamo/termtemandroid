@@ -40,8 +40,8 @@ import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
-import com.worldwidewealth.termtem.model.PGResponseModel;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
+import com.worldwidewealth.termtem.model.PGResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -64,6 +64,7 @@ import com.worldwidewealth.termtem.util.Util;
 
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -86,6 +87,8 @@ public class FragmentTopupPackage extends  Fragment{
     private String mCarrier;
     private String mTopup;
     private String mPhone;
+    private double mFavAmt = 0;
+    private boolean mIsFAV;
     private APIServices services;
     private double mAmt = 0.00;
     private String mButtonID = null;
@@ -132,7 +135,7 @@ public class FragmentTopupPackage extends  Fragment{
                             serviceEslip(Global.getInstance().getLastTranId());
                         }
                     } else {
-                        Global.getInstance().setLastSubmit(null);
+                        Global.getInstance().setLastSubmit(null, false);
 
                         String msg = getContext().getString(R.string.alert_topup_fail);
                         new DialogCounterAlert(getContext(), getContext().getString(R.string.error), msg, null);
@@ -146,12 +149,13 @@ public class FragmentTopupPackage extends  Fragment{
     };
 
 
-    public static Fragment newInstance(String carrier, String topup, String phone_no){
+    public static Fragment newInstance(String carrier, String topup, String phone_no, double amt){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
         bundle.putString(CARRIER, carrier);
         bundle.putString(FragmentTopup.keyTopup, topup);
         bundle.putString(ActivityTopup.KEY_PHONENO, phone_no);
+        bundle.putDouble(ActivityTopup.KEY_AMT, amt);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -174,6 +178,8 @@ public class FragmentTopupPackage extends  Fragment{
         mCarrier = getArguments().getString(CARRIER);
         mTopup = getArguments().getString(FragmentTopup.keyTopup);
         mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+        mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
+
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
@@ -255,6 +261,8 @@ public class FragmentTopupPackage extends  Fragment{
     public void setAmt(double price, String buttonid){
         this.mAmt = price;
         this.mButtonID = buttonid;
+        mIsFAV = (mAmt == mFavAmt);
+
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
@@ -281,22 +289,15 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (responseValues == null) return;
 
-                        if (responseValues instanceof ResponseModel){
-                            DialogCounterAlert.DialogProgress.dismiss();
-                        } else {
-                            if (mTopup.equals(FragmentTopup.VAS)) {
-                                Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
-                                Type listType = new TypeToken<List<PGResponseModel>>() {}.getType();
-                                List<PGResponseModel> modelList = gson.fromJson((String) responseValues, listType);
-
-                                setupVAS(modelList);
-                                DialogCounterAlert.DialogProgress.dismiss();
-                            }else {
-                                getChildFragmentManager().beginTransaction()
-                                        .replace(R.id.container_topup_package, FragmentAirtimeVAS.newInstance((String) responseValues, mTopup))
-                                        .commit();
-                            }
+                        if (responseValues instanceof String){
+                            if (mTopup.equals(FragmentTopup.VAS))
+                                setupVAS((String) responseValues);
+                            else
+                                setupBtnToup((String) responseValues);
                         }
+
+                        DialogCounterAlert.DialogProgress.dismiss();
+
                     }
 
                     @Override
@@ -530,6 +531,12 @@ public class FragmentTopupPackage extends  Fragment{
             });
 
         }
+
+        if (mFavAmt > 0) {
+            mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
+            mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
+
+        }
     }
 
     private void serviceTopup(){
@@ -594,7 +601,7 @@ public class FragmentTopupPackage extends  Fragment{
 
         startTimeoutSubmit(model.getTranid(), requestModel);
 
-        Global.getInstance().setLastSubmit(requestModel);
+        Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
@@ -624,7 +631,7 @@ public class FragmentTopupPackage extends  Fragment{
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
-                            Global.getInstance().setLastSubmit(null);
+                            Global.getInstance().setLastSubmit(null, false);
 
                             MyApplication.uploadFail(MyApplication.NOTITOPUP,
                                     model.getTranid(),
@@ -778,7 +785,7 @@ public class FragmentTopupPackage extends  Fragment{
                     try {
                         if (activity == null) return;
                         activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid, mIsFAV)).commit();
                     } catch (IllegalStateException e){e.printStackTrace();}
 
                 }
@@ -824,9 +831,13 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-    private void setupVAS(List<PGResponseModel> listPG){
+    private void setupVAS(String response){
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+        Type listType = new TypeToken<List<PGResponseModel>>() {}.getType();
+        List<PGResponseModel> modelList = gson.fromJson(response, listType);
+
         mHolder.mRecyclerVAS.setVisibility(View.VISIBLE);
-        mVasAdapter = new VasAdapter(getContext(), listPG);
+        mVasAdapter = new VasAdapter(getContext(), modelList);
         mHolder.mRecyclerVAS.setLayoutManager(new LinearLayoutManager(getContext()));
         mHolder.mRecyclerVAS.setAdapter(new ScaleInAnimationAdapter(mVasAdapter));
         mHolder.mRecyclerVAS.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener(){
@@ -838,6 +849,28 @@ public class FragmentTopupPackage extends  Fragment{
                 showDialogConfirmVAS(position);
             }
         }));
+    }
+
+    private void setupBtnToup(String response){
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
+        Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
+        List<LoadButtonResponseModel> modelList = gson.fromJson(response, listType);
+
+        List<LoadButtonResponseModel> finalDataList = new ArrayList<>();
+        int defaultPosition = -1;
+        for (LoadButtonResponseModel model : modelList){
+            if (model.getPRODUCT_TYPE().equals("AIRTIME") || model.getPRODUCT_TYPE().equals("E-PIN")){
+                finalDataList.add(model.getSORT_NO()-1, model);
+
+                if (model.getPRODUCT_PRICE() == mFavAmt) defaultPosition = model.getSORT_NO()-1;
+            }
+        }
+
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.container_topup_package, FragmentChoiceTopup.newInstance(finalDataList, defaultPosition))
+                .commit();
+
+
     }
 
     private void showDialogConfirmVAS(final int position){

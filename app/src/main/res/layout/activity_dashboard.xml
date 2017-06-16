@@ -82,7 +82,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
-                                android:backgroundTint="@android:color/holo_orange_light"
+                                app:backgroundTint="@android:color/holo_orange_light"
                                 android:text="@string/favorite"
                                 android:textSize="@dimen/small_text_size"
                                 android:drawableLeft="@drawable/ic_star"

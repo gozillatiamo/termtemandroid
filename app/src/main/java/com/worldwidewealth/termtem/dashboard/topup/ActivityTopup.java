@@ -40,9 +40,11 @@ public class ActivityTopup extends MyAppcompatActivity {
     private String mPreviousTransId;
     private String mPhoneNo;
     private String mCarrier;
+    private double mLastAmt = 0;
 
     public static final String KEY_PHONENO = "phoneno";
     public static final String KEY_CARRIER = "carrier";
+    public static final String KEY_AMT = "amt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,9 @@ public class ActivityTopup extends MyAppcompatActivity {
             mPhoneNo = bundle.getString(KEY_PHONENO);
             mCarrier = bundle.getString(KEY_CARRIER);
         }
+
+        if (bundle.containsKey(KEY_AMT)) mLastAmt = bundle.getDouble(KEY_AMT);
+
         setContentView(R.layout.activity_topup);
         initWidgets();
         initToolbar();
@@ -169,7 +174,7 @@ public class ActivityTopup extends MyAppcompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo))
+                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo, mLastAmt))
                 .addToBackStack(null)
                 .commit();
 

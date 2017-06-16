@@ -86,7 +86,7 @@ public class MPayStationActivity extends MyAppcompatActivity {
     private void initGrid(){
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.container_select_amount, SelectAmountAndOtherFragment.newInstance(mBottomAction, mListAmount))
+                .add(R.id.container_select_amount, SelectAmountAndOtherFragment.newInstance(mBottomAction, mListAmount, 0))
                 .commit();
 
     }

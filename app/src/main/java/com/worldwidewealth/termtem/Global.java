@@ -60,6 +60,7 @@ public class Global {
 
     private static final String SUBMIT_ACTION = "submitaction";
     private static final String SUBMIT_STATUS = "submitstatus";
+    private static final String SUBMIT_IS_FAV = "submitisfav";
 
 
 
@@ -287,7 +288,7 @@ public class Global {
         mEditor.commit();
     }
 
-    public void setLastSubmit(RequestModel model){
+    public void setLastSubmit(RequestModel model, boolean isFav){
         if (model == null){
             mEditor.putString(SUBMIT_ACTION, null);
             mEditor.putString(SUBMIT_AGENTID, null);
@@ -302,6 +303,7 @@ public class Global {
             mEditor.putString(CARRIER, null);
             mEditor.putString(SUBMIT_PG_ID, null);
             mEditor.putString(SUBMIT_PG_NAME, null);
+            mEditor.putBoolean(SUBMIT_IS_FAV, false);
             mEditor.commit();
             setSubmitStatus(null);
             return;
@@ -323,6 +325,7 @@ public class Global {
         mEditor.putString(CARRIER, submitTopupRequestModel.getCARRIER());
         mEditor.putString(SUBMIT_PG_ID, submitTopupRequestModel.getPGID());
         mEditor.putString(SUBMIT_PG_NAME, submitTopupRequestModel.getPGNAME());
+        mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
         mEditor.commit();
     }
 
@@ -337,6 +340,10 @@ public class Global {
         if (status == null || !status.equals("Success")) return false;
 
         return true;
+    }
+
+    public boolean getSubmitIsFav(){
+        return mPreferences.getBoolean(SUBMIT_IS_FAV, false);
     }
 
     public RequestModel getLastSubmit(){

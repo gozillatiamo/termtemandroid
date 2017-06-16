@@ -585,7 +585,9 @@ public class Util {
                         }
 
                         activity.getSupportFragmentManager().beginTransaction()
-                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte, Global.getInstance().getLastTranId())).commit();
+                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte,
+                                        Global.getInstance().getLastTranId(),
+                                        Global.getInstance().getSubmitIsFav())).commit();
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }

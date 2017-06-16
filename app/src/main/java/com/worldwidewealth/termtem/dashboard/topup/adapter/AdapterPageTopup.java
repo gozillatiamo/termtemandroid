@@ -46,29 +46,30 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
         transferDataTopup();
     }
 
-    private void transferDataTopup(){
+    private void transferDataTopup() {
 
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
-        Type listType = new TypeToken<List<LoadButtonResponseModel>>() {}.getType();
+        Type listType = new TypeToken<List<LoadButtonResponseModel>>() {
+        }.getType();
         List<LoadButtonResponseModel> modelList = gson.fromJson(mData, listType);
-        for (LoadButtonResponseModel model : modelList){
+        for (LoadButtonResponseModel model : modelList) {
 
-            switch (model.getPRODUCT_TYPE()){
+            switch (model.getPRODUCT_TYPE()) {
                 case "AIRTIME":
-                    mListAirtime.add(model.getSORT_NO()-1, model);
+                    mListAirtime.add(model.getSORT_NO() - 1, model);
                     break;
                 case "VAS":
-                    mListVAS.add(model.getSORT_NO()-1, model);
+                    mListVAS.add(model.getSORT_NO() - 1, model);
                     break;
                 case "E-PIN":
-                    mListEpin.add(model.getSORT_NO()-1, model);
+                    mListEpin.add(model.getSORT_NO() - 1, model);
             }
         }
     }
 
     @Override
     public int getCount() {
-        return title.length-1;
+        return title.length - 1;
     }
 
     @Override
@@ -78,8 +79,10 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
     @Override
     public FragmentChoiceTopup getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
+
+/*
                 if (mTopup.equals(FragmentTopup.MOBILE)) {
                     return FragmentChoiceTopup.newInstance(mListAirtime);
                 } else {
@@ -88,6 +91,10 @@ public class AdapterPageTopup extends FragmentPagerAdapter {
 
             case 1:
                 return FragmentChoiceTopup.newInstance(mListVAS);
+        }
+
+*/
+                return null;
         }
 
         return null;

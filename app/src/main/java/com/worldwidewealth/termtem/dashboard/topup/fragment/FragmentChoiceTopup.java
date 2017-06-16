@@ -10,7 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.BtnTopupAdapter;
+import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -25,11 +28,15 @@ public class FragmentChoiceTopup extends Fragment{
     private static List<LoadButtonResponseModel> mDataList;
     private RecyclerView mRecyclerBtnTopup;
     private BtnTopupAdapter mAdapter;
+//    private int mDefaultPostionAmt = -1;
 
-    public static FragmentChoiceTopup newInstance(List datalis) {
+    public static final String KEY_DEFAULT_AMT = "defaultamt";
+
+    public static FragmentChoiceTopup newInstance(List datalis, int defaultPostionAmt) {
 
         Bundle args = new Bundle();
         FragmentChoiceTopup fragment = new FragmentChoiceTopup(datalis);
+        args.putDouble(KEY_DEFAULT_AMT, defaultPostionAmt);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +53,10 @@ public class FragmentChoiceTopup extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if (getParentFragment() instanceof FragmentTopupPackage){
+            ((FragmentTopupPackage)getParentFragment()).setEnableEditPhone(true);
+        }
+
         mRecyclerBtnTopup = new RecyclerView(getActivity());
         mRecyclerBtnTopup.setScrollbarFadingEnabled(true);
         initGrid();
@@ -59,7 +70,7 @@ public class FragmentChoiceTopup extends Fragment{
         mAdapter.previousSelectedPosition = -1;
         clearSelected();
 
-        Fragment fragment = getParentFragment().getParentFragment();
+        Fragment fragment = getParentFragment();
 
         if (fragment instanceof FragmentTopupPackage) {
 
@@ -75,6 +86,8 @@ public class FragmentChoiceTopup extends Fragment{
         mAdapter = new BtnTopupAdapter(FragmentChoiceTopup.this, mDataList);
         mRecyclerBtnTopup.setAdapter(mAdapter);
         mRecyclerBtnTopup.setItemViewCacheSize(mDataList.size());
+        if (getArguments().getInt(KEY_DEFAULT_AMT) > -1)
+            mAdapter.setClickChoiceTopup(getArguments().getInt(KEY_DEFAULT_AMT));
     }
 
 

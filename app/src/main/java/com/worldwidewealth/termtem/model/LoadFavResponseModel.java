@@ -12,6 +12,7 @@ import java.util.List;
 
 public class LoadFavResponseModel implements Parcelable{
 
+    private String favid;
     private String no;
     private String name;
     private String service;
@@ -23,6 +24,7 @@ public class LoadFavResponseModel implements Parcelable{
     private List<BillListModel> billlist;
 
     protected LoadFavResponseModel(Parcel in) {
+        favid = in.readString();
         no = in.readString();
         name = in.readString();
         service = in.readString();
@@ -89,6 +91,7 @@ public class LoadFavResponseModel implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(favid);
         dest.writeString(no);
         dest.writeString(name);
         dest.writeString(service);
