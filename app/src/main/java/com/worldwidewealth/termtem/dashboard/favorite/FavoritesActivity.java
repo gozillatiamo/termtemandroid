@@ -1,5 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.favorite;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
@@ -24,6 +28,8 @@ import com.worldwidewealth.termtem.dashboard.favorite.adapter.FavoritesAdapter;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
+import com.worldwidewealth.termtem.model.ActionItemRequest;
 import com.worldwidewealth.termtem.model.AgentResponse;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoadFavResponseModel;
@@ -34,6 +40,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.RecyclerItemClickListener;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.MenuButtonView;
 import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.lang.reflect.Type;
@@ -54,6 +61,8 @@ public class FavoritesActivity extends AppCompatActivity {
     private List<LoadFavResponseModel> mListFavModels;
     private RecyclerView mRecyclerFav;
     private FavoritesAdapter mAdapter;
+
+    public static final String TAG = FavoritesActivity.class.getSimpleName();
 
 
     @Override
@@ -100,9 +109,29 @@ public class FavoritesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
 //                            showDialogConfirm(position);
+                            if (Global.getInstance().getLastTranId() != null) {
+                                MenuButtonView.showDialogHasProcess(FavoritesActivity.this);
+                                return;
+                            }
+
                             startTopup(position);
                         }
                     }));
+
+                    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+                        @Override
+                        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                            removeFavorite(viewHolder.getAdapterPosition());
+                        }
+                    };
+
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                    itemTouchHelper.attachToRecyclerView(mRecyclerFav);
                 }
                 mLoading.hide();
             }
@@ -114,6 +143,46 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void removeFavorite(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogError)
+                .setTitle(R.string.confirm_delete_title_fav)
+                .setMessage(R.string.confirm_delete_msg_fav)
+                .setCancelable(false)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTION_REMOVE_FAV,
+                                ActionItemRequest.FAV(mAdapter.getItem(position).getFavid())));
+
+                        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                            }
+                        });
+
+                        mAdapter.removeItem(position);
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new MyShowListener());
+
+        alertDialog.show();
     }
 
     private void startTopup(int position){

@@ -48,6 +48,10 @@ public class LoadFavResponseModel implements Parcelable{
         }
     };
 
+    public String getFavid() {
+        return favid;
+    }
+
     public String getNo() {
         return no;
     }

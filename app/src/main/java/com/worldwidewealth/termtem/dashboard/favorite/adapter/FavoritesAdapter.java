@@ -39,7 +39,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_list_favorite, parent, false);
+        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.item_list_favorite, parent, false);
         return new ViewHolder(view);
     }
 
@@ -146,6 +147,15 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                 calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
 
         textDate.setText(strDate);
+    }
+
+    public LoadFavResponseModel getItem(int position){
+        return mListFav.get(position);
+    }
+
+    public void removeItem(int position){
+        mListFav.remove(position);
+        this.notifyItemRangeRemoved(position, mListFav.size());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

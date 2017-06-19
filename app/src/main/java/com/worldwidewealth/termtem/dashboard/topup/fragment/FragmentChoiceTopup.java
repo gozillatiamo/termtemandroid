@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +31,15 @@ public class FragmentChoiceTopup extends Fragment{
     private BtnTopupAdapter mAdapter;
 //    private int mDefaultPostionAmt = -1;
 
+    public static final String TAG = FragmentChoiceTopup.class.getSimpleName();
+
     public static final String KEY_DEFAULT_AMT = "defaultamt";
 
     public static FragmentChoiceTopup newInstance(List datalis, int defaultPostionAmt) {
 
         Bundle args = new Bundle();
         FragmentChoiceTopup fragment = new FragmentChoiceTopup(datalis);
-        args.putDouble(KEY_DEFAULT_AMT, defaultPostionAmt);
+        args.putInt(KEY_DEFAULT_AMT, defaultPostionAmt);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,15 +70,17 @@ public class FragmentChoiceTopup extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.previousSelectedPosition = -1;
-        clearSelected();
+        if (getArguments().getInt(KEY_DEFAULT_AMT) == -1) {
+            mAdapter.previousSelectedPosition = -1;
+            clearSelected();
 
-        Fragment fragment = getParentFragment();
+            Fragment fragment = getParentFragment();
 
-        if (fragment instanceof FragmentTopupPackage) {
+            if (fragment instanceof FragmentTopupPackage) {
 
-            ((FragmentTopupPackage) fragment).setAmt(0, null);
+                ((FragmentTopupPackage) fragment).setAmt(0, null);
 
+            }
         }
 
     }
@@ -86,8 +91,14 @@ public class FragmentChoiceTopup extends Fragment{
         mAdapter = new BtnTopupAdapter(FragmentChoiceTopup.this, mDataList);
         mRecyclerBtnTopup.setAdapter(mAdapter);
         mRecyclerBtnTopup.setItemViewCacheSize(mDataList.size());
-        if (getArguments().getInt(KEY_DEFAULT_AMT) > -1)
+        if (getArguments().getInt(KEY_DEFAULT_AMT) > -1) {
             mAdapter.setClickChoiceTopup(getArguments().getInt(KEY_DEFAULT_AMT));
+/*
+            mAdapter.notifyDataSetChanged();
+            Log.e(TAG, "postion: "+mAdapter.previousSelectedPosition);
+            Log.e(TAG, "Amt: "+ ((FragmentTopupPackage) getParentFragment()).getmAmt());
+*/
+        }
     }
 
 

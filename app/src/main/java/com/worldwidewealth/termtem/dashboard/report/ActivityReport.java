@@ -153,6 +153,15 @@ public class ActivityReport extends MyAppcompatActivity {
                 @Override
                 public void onResult(String typeReport) {
                     mCurrentType = typeReport;
+                    Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
+                    ((GraphReportFragment)page).updateListDataLineChart(null);
+
+                    if (mCurrentType.equals(ActivityReport.CASHIN_REPORT) || mCurrentType.equals(ActivityReport.BILL_REPORT)){
+                        ((GraphReportFragment)page).hidePieChart();
+                    }
+
+                    ((GraphReportFragment)page).showPieChart();
+
                     mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
                     mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
                 }

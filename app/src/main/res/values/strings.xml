@@ -261,6 +261,7 @@
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
     <string name="report_epin">ประวัติการขายบัตรเงินสด</string>
     <string name="report_cashin_agent">ประวัติการโอนเงินให้ Agent</string>
+    <string name="report_vas">ประวัติการขายแพ็กเกจเสริม</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>
@@ -268,6 +269,8 @@
     <string name="delete">ลบ</string>
     <string name="confirm_delete_title">ลบข้อความ</string>
     <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>
+    <string name="confirm_delete_title_fav">ลบรายการโปรด</string>
+    <string name="confirm_delete_msg_fav">คุณต้องการจะลบรายการโปรดนี้ ?</string>
     <string name="username">รหัสผู้ใช้งาน</string>
     <string name="resolution_video">คุณภาพ\t&#183;\t</string>
     <string name="error_image_identity">กรุณาแนบภาพบัตรประชาชน</string>
@@ -528,8 +531,14 @@
     </string-array>
 
     <string-array name="list_tab_history_report">
-        <item>รายงานสรุปผล</item>
-        <item>กราฟสรุปผล</item>
+        <item>รายละเอียด</item>
+        <item>กราฟ</item>
+    </string-array>
+
+    <string-array name="list_tab_inbox_report">
+        <item>ทั้งหมด</item>
+        <item>ข้อความ</item>
+        <item>ภาพ</item>
     </string-array>
 
     <string-array name="list_advoid_device_id">

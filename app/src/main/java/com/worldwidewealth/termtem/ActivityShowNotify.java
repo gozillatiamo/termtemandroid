@@ -1,15 +1,9 @@
 package com.worldwidewealth.termtem;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneNumberUtils;
-import android.text.Spannable;
-import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.Patterns;
@@ -17,7 +11,7 @@ import android.widget.TextView;
 
 import com.worldwidewealth.termtem.model.AttachResponseModel;
 import com.worldwidewealth.termtem.model.FileListNotifyResponseModel;
-import com.worldwidewealth.termtem.model.ReadMsgRequest;
+import com.worldwidewealth.termtem.model.ActionItemRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.widgets.InformationView;
@@ -25,7 +19,6 @@ import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +26,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by MyNet on 11/10/2559.
@@ -116,7 +108,7 @@ public class ActivityShowNotify extends MyAppcompatActivity {
             if (mMsgid != null && !mMsgid.equals("") && Global.getInstance().getAGENTID() != null) {
                 Call<ResponseBody> call = services.service(
                         new RequestModel(APIServices.ACTIONREADMSG,
-                                new ReadMsgRequest(mMsgid)));
+                                ActionItemRequest.MSG(mMsgid)));
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

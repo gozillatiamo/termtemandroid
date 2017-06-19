@@ -599,7 +599,7 @@ public class FragmentTopupPackage extends  Fragment{
         final RequestModel requestModel = new RequestModel(mActionSumitTopup, submitTopupRequestModel);
         callSubmit = services.submitTopup(requestModel);
 
-        startTimeoutSubmit(model.getTranid(), requestModel);
+        startTimeoutSubmit(model.getTranid());
 
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
@@ -608,12 +608,19 @@ public class FragmentTopupPackage extends  Fragment{
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
                         try{
                             getActivity().unregisterReceiver(myReceiver);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
+
+                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                        if (responseValues instanceof String){
+                            String msg = (String)responseValues;
+                            if (msg.equals(APIServices.MSG_WAIT)) return;
+                        }
+
 
                         if (mTimerTimeout != null)
                             mTimerTimeout.cancel();
@@ -628,7 +635,6 @@ public class FragmentTopupPackage extends  Fragment{
                             title = MyApplication.getContext().getString(R.string.dashboard_pin);
                         }
 
-                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
                             Global.getInstance().setLastSubmit(null, false);
@@ -693,7 +699,7 @@ public class FragmentTopupPackage extends  Fragment{
                                 null, call, this, false, new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                startTimeoutSubmit(model.getTranid(), requestModel);
+                                startTimeoutSubmit(model.getTranid());
                             }
                         });
                         mBottomAction.setEnable(true);
@@ -702,7 +708,7 @@ public class FragmentTopupPackage extends  Fragment{
                 });
     }
 
-    private void startTimeoutSubmit(final String tranid, final RequestModel requestModel){
+    private void startTimeoutSubmit(final String tranid){
 
         if (mTimerTimeout != null){
             mTimerTimeout.cancel();
@@ -754,6 +760,8 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void serviceEslip(final String transid){
+        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
+
         if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
             mAlertTimeout.cancel();
         }
@@ -781,7 +789,6 @@ public class FragmentTopupPackage extends  Fragment{
                     imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-//                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     try {
                         if (activity == null) return;
                         activity.getSupportFragmentManager().beginTransaction()
@@ -789,30 +796,6 @@ public class FragmentTopupPackage extends  Fragment{
                     } catch (IllegalStateException e){e.printStackTrace();}
 
                 }
-
-
-/*
-                if (values.getAsBoolean(EncryptionData.ASRESPONSEMODEL)){
-                    ResponseModel responseModel = new Gson().fromJson(values.getAsString(EncryptionData.STRMODEL), ResponseModel.class);
-
-                    if (responseModel.getStatus() != APIServices.SUCCESS)
-                        new ErrorNetworkThrowable(null).networkError(getContext(),
-                                responseModel.getMsg(), call, this);
-                    else {
-                        if (responseModel.getFf().equals("")) {
-
-                            new DialogCounterAlert(FragmentTopupPackage.this.getContext(),
-                                    null,
-                                    getString(R.string.slip_not_found),
-                                    null);
-
-                        } else {
-
-                        }
-                    }
-
-                }
-*/
 
             }
 
@@ -822,13 +805,6 @@ public class FragmentTopupPackage extends  Fragment{
                 mBottomAction.setEnable(true);
             }
         });
-
-//        DialogCounterAlert.DialogProgress.dismiss();
-//        AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-//        activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//        activity.getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.container_topup, FragmentTopupSlip.newInstance()).commit();
-
     }
 
     private void setupVAS(String response){

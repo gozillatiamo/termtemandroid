@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaCodec;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -17,58 +13,21 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Pair;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
-import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
-import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
-import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.Allocator;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DataSpec;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
-import com.google.vr.sdk.widgets.video.VrVideoEventListener;
-import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.inbox.adapter.InboxPagerAdapter;
 import com.worldwidewealth.termtem.model.InboxResponse;
-import com.worldwidewealth.termtem.model.ReadMsgRequest;
+import com.worldwidewealth.termtem.model.ActionItemRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.widgets.InformationView;
 import com.worldwidewealth.termtem.widgets.WidgetTypeInbox;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -247,7 +206,7 @@ public class InboxBottomSheetDialogFragment extends BottomSheetDialogFragment {
             MyApplication.getBus().post(mDataInbox.getMsgid());
             Call<ResponseBody> call = services.service(
                     new RequestModel(APIServices.ACTIONREADMSG,
-                            new ReadMsgRequest(mDataInbox.getMsgid())));
+                            ActionItemRequest.MSG(mDataInbox.getMsgid())));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

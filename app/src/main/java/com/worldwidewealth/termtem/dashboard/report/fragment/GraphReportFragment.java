@@ -139,7 +139,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     private void setupLineChart(){
         mLineChart.clear();
 
-        if (mListLineModel.size() == 0){
+        if (mListLineModel == null || mListLineModel.size() == 0){
             mLineChart.setNoDataText(getString(R.string.no_data_graph));
             mLineChart.setNoDataTextTypeface(mTf);
             mLineChart.setNoDataTextColor(R.color.colorAccent);
@@ -297,7 +297,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         mPieChart.clear();
 
-        if (mListPieModel.size() == 0){
+        if (mListLineModel == null || mListPieModel.size() == 0){
             mPieChart.setNoDataText(getString(R.string.no_data_graph));
             mPieChart.setNoDataTextTypeface(mTf);
             mPieChart.setNoDataTextColor(R.color.colorAccent);
@@ -392,6 +392,15 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
     public List<ChartResponseModel> getmListLineModel() {
         return mListLineModel;
+    }
+
+    public void showPieChart(){
+        mBtnPieChart.setVisibility(View.VISIBLE);
+    }
+
+    public void hidePieChart(){
+        mPieChart.setVisibility(View.GONE);
+        mBtnPieChart.setVisibility(View.GONE);
     }
 
     @Override

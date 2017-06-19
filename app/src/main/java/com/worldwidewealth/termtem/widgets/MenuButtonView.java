@@ -488,7 +488,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                 case SCAN:
                 case VAS:
                     if (Global.getInstance().getLastTranId() != null) {
-                        showDialogHasProcess();
+                        showDialogHasProcess(getContext());
                         return;
                     }
 
@@ -502,8 +502,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         }
     }
 
-    private void showDialogHasProcess(){
-         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
+    public static  void showDialogHasProcess(Context context){
+         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogWarning)
                 .setTitle(R.string.warning)
                 .setMessage(R.string.msg_has_process_service)
                 .setPositiveButton(R.string.confirm, null)

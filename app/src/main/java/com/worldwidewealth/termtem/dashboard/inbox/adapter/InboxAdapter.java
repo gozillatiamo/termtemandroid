@@ -1,38 +1,18 @@
 package com.worldwidewealth.termtem.dashboard.inbox.adapter;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.squareup.otto.Subscribe;
-import com.worldwidewealth.termtem.ActivityShowNotify;
 import com.worldwidewealth.termtem.MyApplication;
-import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxBottomSheetDialogFragment;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
-import com.worldwidewealth.termtem.model.InboxRequest;
-import com.worldwidewealth.termtem.model.ReadMsgRequest;
+import com.worldwidewealth.termtem.model.ActionItemRequest;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.widgets.InformationView;
@@ -40,12 +20,8 @@ import com.worldwidewealth.termtem.widgets.OnLoadMoreListener;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.InboxResponse;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -280,7 +256,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             Call<ResponseBody> call = services.service(
                     new RequestModel(APIServices.ACTIONREMOVEMSG,
-                            new ReadMsgRequest(getItem(position).getMsgid())));
+                            ActionItemRequest.MSG(getItem(position).getMsgid())));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

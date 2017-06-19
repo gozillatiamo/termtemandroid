@@ -175,6 +175,17 @@ public class EncryptionData {
                 case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                 case APIServices.ACTION_SUBMIT_VAS:
                     Global.getInstance().setSubmitStatus(responseModel.getMsg());
+                    if (responseModel.getMsg().contains(APIServices.MSG_WAIT)) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                APIHelper.enqueueWithRetry(call.clone(), callback);
+                            }
+                        }, 3000);
+
+                        return APIServices.MSG_WAIT;
+                    }
+
                     break;
             }
 
@@ -192,18 +203,6 @@ public class EncryptionData {
 
                             if (responseModel.getMsg().equals(APIServices.MSG_FAIL)) {
                                 Global.getInstance().setLastSubmit(null, false);
-                            }
-
-                            if (responseModel.getMsg().contains(APIServices.MSG_WAIT)) {
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        call.cancel();
-                                        APIHelper.enqueueWithRetry(call.clone(), callback);
-                                    }
-                                }, 3000);
-
-                                return APIServices.MSG_WAIT;
                             }
 
                             msg = MyApplication.getContext().getString(R.string.alert_topup_fail);

@@ -110,20 +110,22 @@ public class LocalService extends Service {
 
                         Log.e(TAG, ""+count);
                         count--;
-                        if (count == 0 && T != null){
+                        if (count == 0){
                             Global.getInstance().clearUserName();
                             serviceLogout(startId);
-                            T.cancel();
+                            if (T != null) {
+                                T.cancel();
+                            }
                             T = null;
+                            this.cancel();
                         }
 
                         if (count < 0 && T != null){
-                            T.cancel();
+                            if (T != null) {
+                                T.cancel();
+                            }
                             T = null;
-/*
-                            mThread.interrupt();
-                            mThread = null;
-*/
+                            this.cancel();
                         }
                     }
 

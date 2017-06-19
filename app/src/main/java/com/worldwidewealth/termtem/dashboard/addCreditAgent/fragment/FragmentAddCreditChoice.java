@@ -18,8 +18,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.FragmentTopupPreview;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
@@ -291,7 +293,7 @@ public class FragmentAddCreditChoice extends Fragment {
 
 
     private void serviceEslip(final String transid){
-
+        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityAddCreditAgent)) return;
         call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid, mAgent.getPhoneno())));
         APIHelper.enqueueWithRetry(call, callback = new Callback<ResponseBody>() {
             @Override

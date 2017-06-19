@@ -213,6 +213,15 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 mListData.add(values);
             }
 
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.VAS.getType())){
+                ContentValues values = new ContentValues();
+                values.put(TITLE, getContext().getString(R.string.report_vas));
+                values.put(TYPE, "VAS");
+                values.put(ICON, R.drawable.ic_report_topup);
+                mListData.add(values);
+            }
+
+
             if (sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType())){
                 ContentValues values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_cashin_agent));
@@ -221,13 +230,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 mListData.add(values);
             }
 
-            if (sparseBooleanArray.get(MenuButtonView.TYPE.VAS.getType())){
-                ContentValues values = new ContentValues();
-                values.put(TITLE, getContext().getString(R.string.vas));
-                values.put(TYPE, "VAS");
-                values.put(ICON, R.drawable.ic_report_topup);
-                mListData.add(values);
-            }
 
         }
 

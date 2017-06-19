@@ -106,8 +106,6 @@ public class FragmentTopupSlip extends Fragment {
             mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
             mBtnAddFavorite = (ShineButton) itemview.findViewById(R.id.btn_add_favorite);
 
-            mBtnAddFavorite.setChecked(mIsFav);
-            mBtnAddFavorite.setClickable(!mIsFav);
         }
     }
 
@@ -154,6 +152,9 @@ public class FragmentTopupSlip extends Fragment {
     public void onStart() {
         onBackPress();
         setupBtnFavorite();
+        mHolder.mBtnAddFavorite.setChecked(mIsFav);
+        mHolder.mBtnAddFavorite.setClickable(!mIsFav);
+
         super.onStart();
     }
 
@@ -194,8 +195,6 @@ public class FragmentTopupSlip extends Fragment {
             }
         });
 
-        NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNM.cancel(MyApplication.NOTITOPUP);
 
     }
 
@@ -437,6 +436,8 @@ public class FragmentTopupSlip extends Fragment {
             new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.save_eslip_fail), null);
         }
 
+        NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
 
         Global.getInstance().setLastSubmit(null, false);
 

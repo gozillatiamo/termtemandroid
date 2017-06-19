@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.inbox.fragment.InboxFragment;
 
 /**
@@ -19,12 +20,14 @@ public class InboxPagerAdapter extends FragmentPagerAdapter {
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
 
-    private String tabTitles[] = new String[] { "ALL", "TEXT", "IMAGE" };
+    private String tabTitles[];
     private Context mContext;
 
     public InboxPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
+        tabTitles = context.getResources().getStringArray(R.array.list_tab_inbox_report);
+
     }
 
     @Override
