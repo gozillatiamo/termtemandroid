@@ -190,7 +190,6 @@ public class EncryptionData {
             }
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
-                DialogCounterAlert.DialogProgress.dismiss();
                 try {
                     switch (requestModel.getAction()) {
 
@@ -207,18 +206,29 @@ public class EncryptionData {
 
                             msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
                             new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
+                            DialogCounterAlert.DialogProgress.dismiss();
 
                             return null;
 
                         case APIServices.ACTIONLOGIN:
                         case APIServices.ACTIONNOTIPAY:
+                            DialogCounterAlert.DialogProgress.dismiss();
+
                             return responseModel;
 
                         case APIServices.ACTIONLOGOUT:
                         case APIServices.ACTIONGETBALANCE:
+                            DialogCounterAlert.DialogProgress.dismiss();
+
+                            return null;
+
+                        case APIServices.ACTION_GET_LISTPG:
+                            APIHelper.enqueueWithRetry(call.clone(), callback);
                             return null;
 
                         default:
+                            DialogCounterAlert.DialogProgress.dismiss();
+
                             if (MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity) &&
                                     Global.getInstance().getAGENTID() == null) {
                                 Util.backToSignIn((Activity) context);
@@ -228,6 +238,8 @@ public class EncryptionData {
                                     responseModel.getMsg(), call, callback, true);
                     }
                 } catch (NullPointerException e){
+                    DialogCounterAlert.DialogProgress.dismiss();
+
                     e.printStackTrace();
                     return null;
                 }

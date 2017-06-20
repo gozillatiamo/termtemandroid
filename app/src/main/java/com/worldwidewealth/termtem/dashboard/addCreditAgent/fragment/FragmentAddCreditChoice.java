@@ -192,7 +192,7 @@ public class FragmentAddCreditChoice extends Fragment {
                                     R.anim.slide_in_left,
                                     R.anim.slide_out_right)
                             .addToBackStack(null)
-                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance(((String)objectResponse), mBottomAction.getPrice()));
+                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance(AGENT_CASHIN, ((String)objectResponse), mBottomAction.getPrice()));
                     transaction.commit();
 
 

@@ -217,7 +217,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 ContentValues values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_vas));
                 values.put(TYPE, "VAS");
-                values.put(ICON, R.drawable.ic_report_topup);
+                values.put(ICON, R.drawable.ic_vas_report);
                 mListData.add(values);
             }
 

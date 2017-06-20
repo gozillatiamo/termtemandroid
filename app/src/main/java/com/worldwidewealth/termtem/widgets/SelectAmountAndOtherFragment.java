@@ -121,7 +121,8 @@ public class SelectAmountAndOtherFragment extends Fragment {
 
         if (mFavAmt > 0){
 
-            for (int i = 0; i < mListAmount.length; i++){
+            for (int i = 0; i < (mListAmount.length-1); i++){
+
                 if (Double.parseDouble(mListAmount[i]) == mFavAmt){
                     mDefaultPosition = i;
                     break;
@@ -293,7 +294,7 @@ public class SelectAmountAndOtherFragment extends Fragment {
         }
 
         public void setAmtOther(double amt){
-            mHolder.mEditAmountOther.setText(String.valueOf(amt));
+            mHolder.mEditAmountOther.setText(String.valueOf((int)amt));
             mHolder.mLayoutEditAmountOther.setVisibility(View.VISIBLE);
             mHolder.mLayoutEditAmountOther.setAlpha(0.0f);
             mHolder.mLayoutEditAmountOther.animate()

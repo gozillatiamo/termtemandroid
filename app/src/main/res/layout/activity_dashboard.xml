@@ -144,7 +144,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        app:mbv_icon="@drawable/ic_topup"
+                                        app:mbv_icon="@drawable/ic_vas"
                                         app:mbv_title="@string/vas"
                                         app:mbv_type="vas"
                                         app:mbv_visibility="show">

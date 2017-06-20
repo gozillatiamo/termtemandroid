@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.ResponseModel;
 
@@ -71,13 +73,14 @@ public class DialogCounterAlert {
             builder.setNegativeButton(R.string.cancel, cancelListener);
 
         } else {
-
-                doneListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((Activity)context).finish();
-                    }
-                };
+                if (context instanceof ActivityTopup || context instanceof ActivityAddCreditAgent) {
+                    doneListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((Activity) context).finish();
+                        }
+                    };
+                }
 
             builder.setPositiveButton(R.string.done, doneListener);
 

@@ -63,7 +63,7 @@
     <string name="title_dashboard">Credit Limit</string>
     <string name="credit_balance">ยอดเครดิตคงเหลือ</string>
     <string name="topup">เติมเงินมือถือ</string>
-    <string name="vas">ขายแพคเกจเสริม</string>
+    <string name="vas">ขายแพ็กเกจเสริม</string>
     <string name="confirm_order">ยืนยันทำรายการ</string>
     <string name="bank_account">บัญชีธนาคาร</string>
     <string name="credit_debit_card">บัตรเครดิต/เดบิต</string>
@@ -278,10 +278,21 @@
     <string name="epin_title_amount">จำนวนเงิน (บาท)</string>
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
+    <string name="add_to_favorite">เพิ่มรายการโปรด</string>
     <string name="note">หมายเหตุ :</string>
     <string name="favorite">รายการโปรด</string>
     <string name="note_detail">"กรุณาเก็บหลักฐานการฝาก หรือ การโอนเงินไว้แจ้งผ่านเมนู \"แจ้งโอนผ่านธนาคาร\" ในแอพฯเติมเต็ม"</string>
     <string name="contact_phone"> เวลาทำการ จ.-ศ. 09:00-18:00 น. \n\tโทร 02-331-4788\nนอกเวลาทำการ \n\tโทร 095-162-8477 \n\tและ 095-162-0577</string>
+    <string name="day">วัน</string>
+    <string name="title_phone_short">เบอร์</string>
+    <string name="edit_phone">แก้ไขเบอร์</string>
+    <string name="msg_has_process_service">ท่านมีรายการที่กำลังดำเนินการอยู่\nโปรดรอจนกว่ารายการดังกล่าวจะเสร็จสิ้น</string>
+    <string name="no_data_graph">ไม่มีข้อมูลสำหรับช่วงเวลานี้</string>
+    <string name="interesting_vas">สนใจซื้อแพ็กเกจเสริมเล่นเน็ต หรือไม่ ?</string>
+    <string name="interested">สนใจ</string>
+    <string name="ignore">ไม่สนใจ</string>
+    <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
+
 
     //Chat bot
     <string name="hint_input">Enter your message</string>
@@ -337,14 +348,6 @@
     <string name="cannot_register_duplicate_id_card">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(บัตรประชาชนซ้ำ)</string>
     <string name="cannot_register_duplicate_phone_number">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(หมายเลขโทรศัพท์ซ้ำ)</string>
     <string name="cannot_register_network_connection_problem">ด้วยนะครับ ไม่สามารถลงทะเบียนได้เนื่องจาก(สัญญาณอินเตอร์เน็ตมีปัญหา) กรุณาตรวจสอบอินเตอร์เน็ต และลองใหม่</string>
-    <string name="day">วัน</string>
-    <string name="title_phone_short">เบอร์</string>
-    <string name="edit_phone">แก้ไขเบอร์</string>
-    <string name="msg_has_process_service">ท่านมีรายการที่กำลังดำเนินการอยู่\nโปรดรอจนกว่ารายการดังกล่าวจะเสร็จสิ้น</string>
-    <string name="no_data_graph">ไม่มีข้อมูลสำหรับช่วงเวลานี้</string>
-    <string name="interesting_vas">สนใจซื้อแพคเกจเสริมเล่นเน็ต หรือไม่ ?</string>
-    <string name="interested">สนใจ</string>
-    <string name="ignore">ไม่สนใจ</string>
 
     <string-array name="str_list_dashboard">
         <item>@string/dashboard_my_card</item>

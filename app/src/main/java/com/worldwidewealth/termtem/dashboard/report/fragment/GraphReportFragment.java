@@ -76,6 +76,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
     private long mTimeFrom;
     private long mTimeTo;
+    private double mAmountTopup;
 
     private HashMap<Integer, String> xAxisValues;
     private ArrayList<Entry> mLineData;
@@ -148,6 +149,11 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         } else {
             mLineChart.setNoDataText("");
         }
+        mAmountTopup = 0;
+
+        for (ChartResponseModel model : mListLineModel){
+            mAmountTopup += model.getAMOUNT();
+        }
 
         LineData data = generateDataLine();
         mLineChart.getDescription().setEnabled(false);
@@ -203,7 +209,8 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         addDateValues(calendar.getTimeInMillis(), mTimeTo);
 
-        LineDataSet d1 = new LineDataSet(mLineData, getString(R.string.all_total));
+        LineDataSet d1 = new LineDataSet(mLineData, null);
+
         d1.setLineWidth(2.5f);
         d1.setDrawCircleHole(false);
         d1.setDrawCircles(false);
@@ -387,6 +394,10 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         mListPieModel = listPieModel;
         if(mListPieModel == null) return;
         setupPieChart();
+    }
+
+    public double getAmountTopup(){
+        return mAmountTopup;
     }
 
 

@@ -88,6 +88,8 @@ public class FavoritesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_favorites_outline);
     }
 
     private void setupRecyclear(){
@@ -102,7 +104,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     Type listType = new TypeToken<List<LoadFavResponseModel>>() {}.getType();
                     mListFavModels = gson.fromJson((String) responseValues, listType);
-                    mRecyclerFav.setLayoutManager(new LinearLayoutManager(FavoritesActivity.this));
+                    mRecyclerFav.setLayoutManager(new LinearLayoutManager(FavoritesActivity.this, LinearLayoutManager.VERTICAL, false));
                     mAdapter = new FavoritesAdapter(FavoritesActivity.this, mListFavModels);
                     mRecyclerFav.setAdapter(new ScaleInAnimationAdapter(mAdapter));
                     mRecyclerFav.addOnItemTouchListener(new RecyclerItemClickListener(FavoritesActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
@@ -212,6 +214,14 @@ public class FavoritesActivity extends AppCompatActivity {
 
                 break;
             case ActivityReport.VAS_REPORT:
+                LoadFavResponseModel.VasListModel vasListModel = model.getVaslist().get(0);
+
+                intent = new Intent(FavoritesActivity.this, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.VAS);
+                intent.putExtra(ActivityTopup.KEY_PHONENO, vasListModel.getPhoneNo());
+                intent.putExtra(ActivityTopup.KEY_CARRIER, vasListModel.getCarrierCode());
+                intent.putExtra(ActivityTopup.KEY_AMT, vasListModel.getAmt());
+
                 break;
             case ActivityReport.CASHIN_REPORT:
                 LoadFavResponseModel.CashInListModel cashInListModel = model.getCashinlist().get(0);
@@ -222,7 +232,7 @@ public class FavoritesActivity extends AppCompatActivity {
                         cashInListModel.getAgentCode(),
                         cashInListModel.getAgentFirstName(),
                         cashInListModel.getAgentLastName(),
-                        "0000000000");
+                        cashInListModel.getAgentPhone(), null);
 
                 bundle.putParcelable(AgentAdapter.AGENTDATA, agentResponse);
                 bundle.writeToParcel(Parcel.obtain(), 0);

@@ -73,7 +73,7 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
             case FragmentTopup.VAS:
                 mTitle.setText(getString(R.string.vas));
-                mMenuIcon.setImageResource(R.drawable.ic_topup);
+                mMenuIcon.setImageResource(R.drawable.ic_vas);
                 break;
         }
 

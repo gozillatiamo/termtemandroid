@@ -21,9 +21,11 @@ public class AgentResponse implements Parcelable {
     private String TXID;
     private boolean IsTermTemScan = true;
 
+/*
     public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno) {
         new AgentResponse(agentid, agentcode, firstname, lastname, phoneno, null);
     }
+*/
 
     public AgentResponse(String agentid, String agentcode, String firstname, String lastname, String phoneno, String txid) {
         this.AgentId = agentid;

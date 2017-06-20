@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.TopupPreviewResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -29,14 +30,17 @@ public class FragmentTopupPreview extends Fragment {
     private NumberFormat format = NumberFormat.getInstance();
     private static final String DATA = "data";
     private static final String SELECT_AMOUNT = "selectamount";
+    private String mTopup;
 
-    public static Fragment newInstance(String data, String selectAmount){
+    public static Fragment newInstance(String type, String data, String selectAmount){
         FragmentTopupPreview fragment = new FragmentTopupPreview();
         Bundle bundle = new Bundle();
+        bundle.putString(FragmentTopup.keyTopup, type);
         bundle.putString(DATA, data);
         bundle.putString(SELECT_AMOUNT, selectAmount);
         fragment.setArguments(bundle);
         return fragment;
+
     }
 
 
@@ -44,10 +48,11 @@ public class FragmentTopupPreview extends Fragment {
     public class ViewHolder{
 
         private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
-        mTextMarkup, mTextTotal, mTextSelectAmout;
+        mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice;
         private View mLayoutCommission, mLayoutMarkup;
         public ViewHolder(View itemview){
             mTextAmount = (TextView) itemview.findViewById(R.id.txt_amount);
+            mTextTitlePrice = (TextView) itemview.findViewById(R.id.text_title_price);
             mTextCommissionRate = (TextView) itemview.findViewById(R.id.txt_commission_rate);
             mTextCommissionAmout = (TextView) itemview.findViewById(R.id.txt_commission_amount);
             mTextMarkup = (TextView) itemview.findViewById(R.id.txt_markup);
@@ -63,6 +68,7 @@ public class FragmentTopupPreview extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         service = APIServices.retrofit.create(APIServices.class);
+        mTopup = getArguments().getString(FragmentTopup.keyTopup);
         mData = getArguments().getString(DATA);
         mSelectAmout = getArguments().getString(SELECT_AMOUNT);
         if (rootView == null){
@@ -158,6 +164,11 @@ public class FragmentTopupPreview extends Fragment {
 */
 
     private void setData(){
+        switch (mTopup){
+            case FragmentTopup.VAS:
+                mHolder.mTextTitlePrice.setText(R.string.title_text_price_vas);
+                break;
+        }
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));

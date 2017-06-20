@@ -156,12 +156,14 @@ public class LoadFavResponseModel implements Parcelable{
         private String AgentCode;
         private String AgentFirstName;
         private String AgentLastName;
+        private String AgentPhone;
         private Double Amt;
 
         protected CashInListModel(Parcel in) {
             AgentId = in.readString();
             AgentCode = in.readString();
             AgentFirstName = in.readString();
+            AgentPhone = in.readString();
             AgentLastName = in.readString();
             Amt = in.readDouble();
         }
@@ -194,6 +196,10 @@ public class LoadFavResponseModel implements Parcelable{
             return AgentLastName;
         }
 
+        public String getAgentPhone() {
+            return AgentPhone;
+        }
+
         public Double getAmt() {
             return Amt;
         }
@@ -209,6 +215,7 @@ public class LoadFavResponseModel implements Parcelable{
             dest.writeString(AgentCode);
             dest.writeString(AgentFirstName);
             dest.writeString(AgentLastName);
+            dest.writeString(AgentPhone);
             dest.writeDouble(Amt);
         }
     }

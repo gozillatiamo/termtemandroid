@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.report;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -77,6 +79,7 @@ public class ActivityReport extends MyAppcompatActivity {
     private boolean mCanCashIn;
     private boolean canShowTutorial = true;
     private TermTemLoading loading;
+    private double mAmoutTopup, mAmountDebit;
 
     private static final int FORM = 0;
     private static final int TO = 1;
@@ -158,9 +161,9 @@ public class ActivityReport extends MyAppcompatActivity {
 
                     if (mCurrentType.equals(ActivityReport.CASHIN_REPORT) || mCurrentType.equals(ActivityReport.BILL_REPORT)){
                         ((GraphReportFragment)page).hidePieChart();
+                    } else {
+                        ((GraphReportFragment) page).showPieChart();
                     }
-
-                    ((GraphReportFragment)page).showPieChart();
 
                     mPreviousDateFrom = Util.getTimestamp(System.currentTimeMillis(), 0, 0, 0);
                     mPeviousDateTo = Util.getTimestamp(System.currentTimeMillis(), 23, 59, 59);
@@ -220,6 +223,31 @@ public class ActivityReport extends MyAppcompatActivity {
     private void setupViewPager(){
         mHolder.mPagerTypeReport.setAdapter(new PagerTypeReportAdapter(getSupportFragmentManager(), this));
         mHolder.mTabTypeReport.setupWithViewPager(mHolder.mPagerTypeReport);
+        mHolder.mPagerTypeReport.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case PagerTypeReportAdapter.TEXT:
+                        setAmountTotal(position, mAmoutTopup, mAmountDebit);
+                        break;
+                    case PagerTypeReportAdapter.GRAPH:
+                        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + position);
+                        setAmountTotal(position, ((GraphReportFragment)page).getAmountTopup(), 0);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initSearchDialog(){
@@ -302,12 +330,24 @@ public class ActivityReport extends MyAppcompatActivity {
                 mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
                 break;
+
+            case VAS_REPORT:
+                mHolder.mIconType.setImageResource(R.drawable.ic_vas_report);
+                mHolder.mTextType.setText(R.string.vas);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_vas);
+                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
+
+                break;
+
             case CASHIN_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
                 mHolder.mTextType.setText(R.string.add_credit_agent);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
                 mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
+                break;
+
+            case BILL_REPORT:
                 break;
 
         }
@@ -350,9 +390,6 @@ public class ActivityReport extends MyAppcompatActivity {
                             .fromJson((String)responseValues,
                                     new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
 
-                    DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-                    format.setMaximumFractionDigits(2);
-                    format.setMinimumFractionDigits(2);
                     double total = 0;
                     double debit = 0;
 
@@ -368,8 +405,9 @@ public class ActivityReport extends MyAppcompatActivity {
                         }
                     }
 
-                    mHolder.mTextReportTotal.setText(format.format(total));
-                    mHolder.mTextDebitTotal.setText(format.format(debit));
+                    mAmoutTopup = total;
+                    mAmountDebit = debit;
+                    setAmountTotal(PagerTypeReportAdapter.TEXT, mAmoutTopup, mAmountDebit);
                     updateListData(PagerTypeReportAdapter.TEXT, modelList, null, Long.parseLong(timeFrom), Long.parseLong(timeTo));
 
 
@@ -386,6 +424,48 @@ public class ActivityReport extends MyAppcompatActivity {
         });
 
     }
+
+    private void setAmountTotal(int typePage, double amountTopup, double amonutDebit){
+        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
+
+        final View layoutAmountDebit = findViewById(R.id.layout_amount_debit);
+        final View layoutTotal = findViewById(R.id.layout_totle);
+        int heightView = layoutAmountDebit.getMeasuredHeight();
+        switch (typePage){
+            case PagerTypeReportAdapter.TEXT:
+                layoutTotal.animate()
+                        .setDuration(300)
+                        .translationY(0f)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                super.onAnimationStart(animation);
+                                layoutAmountDebit.setVisibility(View.VISIBLE);
+                            }
+                        }).start();
+                break;
+            case PagerTypeReportAdapter.GRAPH:
+                layoutTotal.animate()
+                        .setDuration(300)
+                        .translationY(heightView)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                layoutAmountDebit.setVisibility(View.INVISIBLE);
+                            }
+                        }).start();
+
+                break;
+        }
+
+        mHolder.mTextReportTotal.setText(format.format(amountTopup));
+        mHolder.mTextDebitTotal.setText(format.format(amountTopup));
+
+    }
+
 
     private void serviceReportChart(String timeFrom, final String timeTo){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);

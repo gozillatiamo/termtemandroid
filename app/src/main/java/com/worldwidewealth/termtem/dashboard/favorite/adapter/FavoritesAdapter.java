@@ -1,16 +1,20 @@
 package com.worldwidewealth.termtem.dashboard.favorite.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.LoadFavResponseModel;
@@ -39,8 +43,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_list_favorite, parent, false);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_favorite, parent, false);
         return new ViewHolder(view);
     }
 
@@ -68,7 +72,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
                 break;
             case ActivityReport.VAS_REPORT:
-                icon.setImageResource(R.drawable.ic_topup);
+                icon.setImageResource(R.drawable.ic_vas);
 
                 break;
             case ActivityReport.CASHIN_REPORT:
@@ -85,8 +89,9 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     private void setTextDes(LoadFavResponseModel model, TextView textDes, TextView textAmt){
         String strDes = null;
+        String phoneNo = null;
         EditText editText = new EditText(mContext);
-        PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+//        PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
 
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
@@ -97,9 +102,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
             case ActivityReport.TOPUP_REPORT:
                 LoadFavResponseModel.TopupListModel topupModel = model.getTopuplist().get(0);
                 editText.setText(topupModel.getPhoneNo());
-                strDes = model.getService()+" "+topupModel.getCarrierCode()+" "+
-                        mContext.getString(R.string.title_phone_short)+" "+
-                        editText.getText().toString();
+                PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+                phoneNo = editText.getText().toString();
+                strDes = getTitleService(model.getService())+" "+topupModel.getCarrierCode()+" "+
+                        mContext.getString(R.string.title_phone_short)+" "+phoneNo;
 
                 textAmt.setText(format.format(topupModel.getAmt()));
                 textAmt.setTextColor(ContextCompat.getColor(mContext, R.color.color_topup));
@@ -107,20 +113,31 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
             case ActivityReport.EPIN_REPORT:
                 LoadFavResponseModel.EpinListModel epinModel = model.getEpinlist().get(0);
                 editText.setText(epinModel.getPhoneNo());
-                strDes = model.getService()+" "+epinModel.getCarrierCode()+" "+
-                        mContext.getString(R.string.title_phone_short)+" "+
-                        editText.getText().toString();
+                PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+                phoneNo = editText.getText().toString();
+                strDes = getTitleService(model.getService())+" "+epinModel.getCarrierCode()+" "+
+                        mContext.getString(R.string.title_phone_short)+" "+phoneNo;
 
                 textAmt.setText(format.format(epinModel.getAmt()));
                 textAmt.setTextColor(ContextCompat.getColor(mContext, R.color.color_epin));
 
                 break;
             case ActivityReport.VAS_REPORT:
+                LoadFavResponseModel.VasListModel vasModel = model.getVaslist().get(0);
+                editText.setText(vasModel.getPhoneNo());
+                PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+                phoneNo = editText.getText().toString();
+
+                strDes = vasModel.getDesc()+" "+vasModel.getCarrierCode()+" "+
+                        mContext.getString(R.string.title_phone_short)+" "+phoneNo;
+
+                textAmt.setText(format.format(vasModel.getAmt()));
+                textAmt.setTextColor(ContextCompat.getColor(mContext, R.color.color_vas));
 
                 break;
             case ActivityReport.CASHIN_REPORT:
                 LoadFavResponseModel.CashInListModel cashInModel = model.getCashinlist().get(0);
-                strDes = model.getService()+" Agent: "+cashInModel.getAgentFirstName()+" "+
+                strDes = getTitleService(model.getService())+" "+cashInModel.getAgentFirstName()+" "+
                         cashInModel.getAgentLastName();
 
                 textAmt.setText(format.format(cashInModel.getAmt()));
@@ -135,6 +152,24 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
         textDes.setText(strDes);
 
+    }
+
+    public static String getTitleService(String service){
+        switch (service){
+            case ActivityReport.TOPUP_REPORT:
+                return MyApplication.getContext().getString(R.string.topup);
+            case ActivityReport.EPIN_REPORT:
+                return MyApplication.getContext().getString(R.string.dashboard_pin);
+            case ActivityReport.VAS_REPORT:
+                return MyApplication.getContext().getString(R.string.vas);
+            case ActivityReport.CASHIN_REPORT:
+                return MyApplication.getContext().getString(R.string.add_credit_agent);
+            case ActivityReport.BILL_REPORT:
+                return MyApplication.getContext().getString(R.string.topup);
+
+        }
+
+        return  null;
     }
 
     private void setTextDate(Date date, TextView textDate){
