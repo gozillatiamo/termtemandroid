@@ -334,7 +334,7 @@ public class ActivityReport extends MyAppcompatActivity {
             case VAS_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_vas_report);
                 mHolder.mTextType.setText(R.string.vas);
-                mHolder.mLogoIcon.setImageResource(R.drawable.ic_vas);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_vas_report);
                 mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
                 break;

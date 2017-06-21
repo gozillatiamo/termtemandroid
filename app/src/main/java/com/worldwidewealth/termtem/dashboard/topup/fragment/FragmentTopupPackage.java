@@ -88,7 +88,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mTopup;
     private String mPhone;
     private double mFavAmt = 0;
-    private boolean mIsFAV;
+    private boolean mIsFAV = false;
     private APIServices services;
     private double mAmt = 0.00;
     private String mButtonID = null;
@@ -109,7 +109,6 @@ public class FragmentTopupPackage extends  Fragment{
     private String mActionPreview = APIServices.ACTIONPREVIEW;
     private String mActionGetOTP = APIServices.ACTIONGETOTP;
     private String mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
-    private String mActionEslip = APIServices.ACTIONESLIP;
 
     private static final String CARRIER = "carrier";
     private static final int postDelay = 1000;
@@ -125,21 +124,35 @@ public class FragmentTopupPackage extends  Fragment{
 
                 if (!(intent.getExtras().containsKey("topup"))) return;
 
-                mTimerTimeout.cancel();
-                if (callSubmit != null && callSubmit.isExecuted()){
+            if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
+                mAlertTimeout.cancel();
+            }
+
+
+            mTimerTimeout.cancel();
+            mTimerTimeout = null;
+
+
+            if (callSubmit != null && callSubmit.isExecuted()){
                     callSubmit.cancel();
                 }
 
 
                 if (intent.getExtras().getBoolean("topup")){
                     if (Global.getInstance().getLastSubmit() != null){
-                        serviceEslip(Global.getInstance().getLastTranId());
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+
                     }
                 } else {
                     Global.getInstance().setLastSubmit(null, false);
 
-                    String msg = getContext().getString(R.string.alert_topup_fail);
-                    new DialogCounterAlert(getContext(), getContext().getString(R.string.error), msg, null);
+                    try {
+                        String msg = getContext().getString(R.string.alert_topup_fail);
+                        new DialogCounterAlert(getContext(), getContext().getString(R.string.error), msg, null);
+                    } catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
 
 //                        getActivity().finish();
                 }
@@ -248,21 +261,18 @@ public class FragmentTopupPackage extends  Fragment{
                 mActionPreview = APIServices.ACTIONPREVIEW;
                 mActionGetOTP = APIServices.ACTIONGETOTP;
                 mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
-                mActionEslip = APIServices.ACTIONESLIP;
                 break;
             case FragmentTopup.PIN:
                 mActionLoadButton = APIServices.ACTION_LOAD_BUTTON_EPIN;
                 mActionPreview = APIServices.ACTION_PREVIEW_EPIN;
                 mActionGetOTP = APIServices.ACTION_GET_OTP_EPIN;
                 mActionSumitTopup = APIServices.ACTION_SUBMIT_TOPUP_EPIN;
-                mActionEslip = APIServices.ACTION_ESLIP_EPIN;
                 break;
             case FragmentTopup.VAS:
                 mActionLoadButton = APIServices.ACTION_GET_LISTPG;
                 mActionPreview = APIServices.ACTION_PREVIEW_VAS;
                 mActionGetOTP = APIServices.ACTION_GETOTP_VAS;
                 mActionSumitTopup = APIServices.ACTION_SUBMIT_VAS;
-                mActionEslip = APIServices.ACTION_ESLIP_VAS;
                 break;
         }
 
@@ -582,6 +592,7 @@ public class FragmentTopupPackage extends  Fragment{
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
         SubmitTopupRequestModel submitTopupRequestModel = null;
+        this.transid = model.getTranid();
 
         switch (mTopup){
             case FragmentTopup.MOBILE:
@@ -590,7 +601,7 @@ public class FragmentTopupPackage extends  Fragment{
                         String.valueOf(getmAmt()),
                         mCarrier,
                         mPhone,
-                        model.getTranid(),
+                        transid,
                         mButtonID
                 );
                 break;
@@ -599,7 +610,7 @@ public class FragmentTopupPackage extends  Fragment{
                         String.valueOf(getmAmt()),
                         mCarrier,
                         mPhone,
-                        model.getTranid(),
+                        transid,
                         mPgName,
                         mButtonID
                 );
@@ -610,7 +621,7 @@ public class FragmentTopupPackage extends  Fragment{
         final RequestModel requestModel = new RequestModel(mActionSumitTopup, submitTopupRequestModel);
         callSubmit = services.submitTopup(requestModel);
 
-        startTimeoutSubmit(model.getTranid());
+        startTimeoutSubmit(transid);
 
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
@@ -670,7 +681,10 @@ public class FragmentTopupPackage extends  Fragment{
                                     MyApplication.getContext().getString(R.string.phone_number) + " " +
                                             mPhone + " " + MyApplication.getContext().getString(R.string.success),
                                     R.drawable.ic_check_circle_white);
-                            serviceEslip(model.getTranid());
+
+
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
 
 //                            Global.getInstance().setProcessSubmit(null, null);
 
@@ -771,53 +785,6 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-    private void serviceEslip(final String transid){
-        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
-
-        if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
-            mAlertTimeout.cancel();
-        }
-
-        if (mTimerTimeout != null){
-            mTimerTimeout.cancel();
-            mTimerTimeout = null;
-        }
-
-        DialogCounterAlert.DialogProgress.show();
-        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(transid, null)));
-
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
-
-                if (responseValues == null) {
-                    mBottomAction.setEnable(true);
-                    return;
-                }
-
-                if (responseValues instanceof ResponseModel){
-                    FragmentTopupPackage.this.transid = transid;
-                    imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
-                            , Base64.NO_WRAP);
-                    AppCompatActivity activity = (AppCompatActivity) FragmentTopupPackage.this.getActivity();
-                    try {
-                        if (activity == null) return;
-                        activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(imageByte, transid, mIsFAV)).commit();
-                    } catch (IllegalStateException e){e.printStackTrace();}
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(), null, call, this, false);
-                mBottomAction.setEnable(true);
-            }
-        });
-    }
 
     private void setupVAS(String response){
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();

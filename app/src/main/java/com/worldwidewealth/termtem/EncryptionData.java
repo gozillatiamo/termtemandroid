@@ -222,9 +222,11 @@ public class EncryptionData {
 
                             return null;
 
+/*
                         case APIServices.ACTION_GET_LISTPG:
                             APIHelper.enqueueWithRetry(call.clone(), callback);
                             return null;
+*/
 
                         default:
                             DialogCounterAlert.DialogProgress.dismiss();
@@ -235,7 +237,7 @@ public class EncryptionData {
                                 return null;
                             }
                             new ErrorNetworkThrowable(null).networkError(context,
-                                    responseModel.getMsg(), call, callback, true);
+                                    MyApplication.getContext().getString(R.string.error_msg), call, callback, true);
                     }
                 } catch (NullPointerException e){
                     DialogCounterAlert.DialogProgress.dismiss();

@@ -292,6 +292,7 @@
     <string name="interested">สนใจ</string>
     <string name="ignore">ไม่สนใจ</string>
     <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
+    <string name="error_msg">เกิดข้อผิดพลาดในการรับข้อมูลกรุณาลองใหม่อีกครั้ง</string>
 
 
     //Chat bot

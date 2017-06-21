@@ -104,6 +104,8 @@ public class Util {
                 try {
                     Buffer buffer = new Buffer();
                     body.writeTo(buffer);
+                    System.gc();
+
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
                     String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
@@ -529,6 +531,7 @@ public class Util {
     }
 
 
+/*
     public static void getPreviousEslip(final Context context, String topupType, final int rootview){
         String mActionEslip = null;
 
@@ -539,14 +542,14 @@ public class Util {
             case FragmentTopup.PIN:
                 mActionEslip = APIServices.ACTION_ESLIP_EPIN;
                 break;
+            case FragmentTopup.VAS:
+                mActionEslip = APIServices.ACTION_ESLIP_VAS;
+                break;
             case FragmentAddCreditChoice.AGENT_CASHIN:
                 mActionEslip = APIServices.ACTION_ESLIP_AGENT_CASHIN;
                 break;
         }
 
-        if (topupType.equals(FragmentTopup.PIN)){
-            mActionEslip = APIServices.ACTION_ESLIP_EPIN;
-        }
 
         APIServices services = APIServices.retrofit.create(APIServices.class);
         DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
@@ -566,12 +569,14 @@ public class Util {
 
                 if (responseValues == null) ((Activity)context).finish();
 
+*/
 /*
                 if (responseValues == null) {
                     mBottomAction.setEnable(true);
                     return;
                 }
-*/
+*//*
+
 
                 if (responseValues instanceof ResponseModel) {
                     byte[] imageByte = Base64.decode(((ResponseModel) responseValues).getFf()
@@ -584,10 +589,6 @@ public class Util {
                             return;
                         }
 
-                        activity.getSupportFragmentManager().beginTransaction()
-                                .replace(rootview, FragmentTopupSlip.newInstance(imageByte,
-                                        Global.getInstance().getLastTranId(),
-                                        Global.getInstance().getSubmitIsFav())).commit();
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
@@ -602,6 +603,8 @@ public class Util {
 
         });
     }
+*/
+
 
     public static class ParcelableUtil {
         public static byte[] toByteArray(Parcelable parcelable) {

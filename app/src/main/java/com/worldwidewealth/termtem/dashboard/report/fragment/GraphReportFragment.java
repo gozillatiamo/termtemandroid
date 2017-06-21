@@ -36,6 +36,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
+import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
@@ -209,7 +210,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         addDateValues(calendar.getTimeInMillis(), mTimeTo);
 
-        LineDataSet d1 = new LineDataSet(mLineData, null);
+        LineDataSet d1 = new LineDataSet(mLineData, getString(R.string.all_total));
 
         d1.setLineWidth(2.5f);
         d1.setDrawCircleHole(false);
@@ -264,9 +265,26 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     private PieData generateDataPie() {
 
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+        List<Integer> colors = new ArrayList<>();
 
         for (ChartResponseModel model : mListPieModel) {
             entries.add(new PieEntry((float) model.getAMOUNT(), model.getCARRIER()));
+            int color = -1;
+            switch (model.getCARRIER()){
+                case APIServices.AIS:
+                    color = Color.parseColor("#b4cd32");
+                    break;
+                case APIServices.TRUEMOVE:
+                    color = Color.parseColor("#df1400");
+                    break;
+                case APIServices.DTAC:
+                    color = Color.parseColor("#009edf");
+                    break;
+            }
+
+            if (color != -1 && !colors.contains(color)){
+                colors.add(color);
+            }
         }
 
         PieDataSet d = new PieDataSet(entries, "");
@@ -282,10 +300,6 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         // space between slices
         d.setSliceSpace(2f);
 
-        List<Integer> colors = new ArrayList<>();
-        colors.add(Color.parseColor("#b4cd32"));
-        colors.add(Color.parseColor("#009edf"));
-        colors.add(Color.parseColor("#df1400"));
         d.setColors(colors);
 //        d.setColors(new ColorTemplate.);
 

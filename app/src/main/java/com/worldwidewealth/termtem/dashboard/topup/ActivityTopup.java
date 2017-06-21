@@ -16,9 +16,11 @@ import android.widget.TextView;
 import com.google.gson.annotations.Until;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
@@ -89,9 +91,15 @@ public class ActivityTopup extends MyAppcompatActivity {
     protected void onResume() {
         super.onResume();
         if (Global.getInstance().getLastTranId() != null){
-            new DialogCounterAlert.DialogProgress(this).show();
 
-            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
+            new DialogCounterAlert.DialogProgress(this).show();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
+                            MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
+                            Global.getInstance().getLastTranId(),
+                            Global.getInstance().getSubmitIsFav())).commit();
+
+//            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
         }
 
     }

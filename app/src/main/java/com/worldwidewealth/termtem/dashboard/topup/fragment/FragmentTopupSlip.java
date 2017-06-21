@@ -1,27 +1,38 @@
 package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -50,6 +61,7 @@ import com.worldwidewealth.termtem.util.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -74,14 +86,29 @@ public class FragmentTopupSlip extends Fragment {
     private String mFileName;
     private String mPhoneNo;
     private String mCarrier;
+    private int mColorType;
+    private Double mAmount;
     private String mTypeToup;
+    private Drawable mIconCarrier;
+    private Drawable mIconTypeTopup;
+    private int mTypePage;
     private boolean mIsFav;
+    private String mActionEslip = APIServices.ACTIONESLIP;
+
+
     public static final String TAG = FragmentTopupSlip.class.getSimpleName();
 
-    private static final String IMAGE = "image";
-    private static final String TRANSID = "transid";
-    private static final String FAVORITE = "favorite";
+    public static final int PREVIEW = 0x0;
+    public static final int ESLIP = 0x1;
 
+    private static final String FAVORITE = "favorite";
+    public static final String TRANID = "tranid";
+    public static final String TYPEPAGE = "typepage";
+    public static final String TYPETOPUP = "typetopup";
+
+
+
+/*
     public static Fragment newInstance(byte[] imagebyte, String transid, boolean isFav){
         Bundle bundle = new Bundle();
         bundle.putByteArray(IMAGE, imagebyte);
@@ -91,12 +118,27 @@ public class FragmentTopupSlip extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
+*/
+
+    public static Fragment newInstance(int type, String typetopup, String tranid, boolean isFav){
+        Bundle bundle = new Bundle();
+        bundle.putInt(TYPEPAGE, type);
+        bundle.putString(TYPETOPUP, typetopup);
+        bundle.putString(TRANID, tranid);
+        bundle.putBoolean(FAVORITE, isFav);
+        FragmentTopupSlip fragment = new FragmentTopupSlip();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
 
 
     public class ViewHolder{
         private Button mBtnBack, mBtnGame, mBtnSavePic;
-        private ImageView mImageSlip;
-        private View mIncludeMyWallet;
+        private TextView mTextPhone, mTextAmount, mTextSuccess;
+        private ImageView mImageSlip, mIconService, mIconCarrier, mIconSuccess;
+        private View mIncludeMyWallet, mLayoutInclude, mLayoutBorder;
         private ShineButton mBtnAddFavorite;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
@@ -105,6 +147,14 @@ public class FragmentTopupSlip extends Fragment {
             mBtnSavePic = (Button) itemview.findViewById(R.id.btn_save_pic);
             mIncludeMyWallet = (View) itemview.findViewById(R.id.include_my_wallet);
             mBtnAddFavorite = (ShineButton) itemview.findViewById(R.id.btn_add_favorite);
+            mLayoutInclude = itemview.findViewById(R.id.include_layout_success);
+            mTextPhone = (TextView) itemview.findViewById(R.id.text_phone_no);
+            mTextAmount = (TextView) itemview.findViewById(R.id.text_amount_price);
+            mIconService = (ImageView) itemview.findViewById(R.id.icon_service);
+            mIconCarrier = (ImageView) itemview.findViewById(R.id.icon_carrier);
+            mIconSuccess = (ImageView) itemview.findViewById(R.id.icon_success);
+            mTextSuccess = (TextView) itemview.findViewById(R.id.text_success);
+            mLayoutBorder = itemview.findViewById(R.id.layout_border);
 
         }
     }
@@ -122,34 +172,31 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        mPage = getArguments().getString("page");
+/*
         mImageByte = getArguments().getByteArray(IMAGE);
         mTransID = getArguments().getString(TRANSID);
+*/
+        mTypePage = getArguments().getInt(TYPEPAGE);
+        mTypeToup = getArguments().getString(TYPETOPUP);
+        mTransID = getArguments().getString(TRANID);
         mIsFav = getArguments().getBoolean(FAVORITE);
 
-        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
-        mCarrier = Global.getInstance().getLastSubmitCarrier();
-        mTypeToup = MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction());
 
-        services = APIServices.retrofit.create(APIServices.class);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-        Date now = new Date();
-        mFileName = formatter.format(now) + ".jpg";
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_slip, container, false);
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-//        tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_main);
-//        tabLayout.setVisibility(View.GONE);
-//        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
 
+        setupDataType();
 
         return rootView;
     }
 
     @Override
     public void onStart() {
+        initBtn();
         onBackPress();
         setupBtnFavorite();
         mHolder.mBtnAddFavorite.setChecked(mIsFav);
@@ -161,12 +208,195 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        initBtn();
-        if (Global.getInstance().getLastTranId() == null){
+        if (mTransID == null){
             getActivity().finish();
             return;
         }
+
+        DialogCounterAlert.DialogProgress.show();
+        NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
+
+        switch (mTypePage){
+            case PREVIEW:
+                setupPreviewSuccess();
+                break;
+            case ESLIP:
+                mHolder.mLayoutInclude.setVisibility(View.GONE);
+                serviceEslip();
+                break;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Global.getInstance().setLastSubmit(null, false);
+
+    }
+
+    private void setupDataType(){
+
+        switch (mTypeToup){
+            case FragmentTopup.MOBILE:
+                mActionEslip = APIServices.ACTIONESLIP;
+                mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_topup);
+                mColorType = ContextCompat.getColor(getContext(), R.color.color_topup);
+                break;
+            case FragmentTopup.PIN:
+                mActionEslip = APIServices.ACTION_ESLIP_EPIN;
+                mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_pin_code);
+                mColorType = ContextCompat.getColor(getContext(), R.color.color_epin);
+                break;
+            case FragmentTopup.VAS:
+                mActionEslip = APIServices.ACTION_ESLIP_VAS;
+                mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_vas);
+                mColorType = ContextCompat.getColor(getContext(), R.color.color_vas);
+
+                break;
+            case FragmentAddCreditChoice.AGENT_CASHIN:
+                mActionEslip = APIServices.ACTION_ESLIP_AGENT_CASHIN;
+                mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_agent_cashin);
+                mColorType = ContextCompat.getColor(getContext(), R.color.color_agent_cashin);
+
+                break;
+        }
+
+    }
+
+    private void setupSlip(){
+        mTransID = getArguments().getString(TRANID);
+        services = APIServices.retrofit.create(APIServices.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        Date now = new Date();
+        mFileName = formatter.format(now) + ".jpg";
+
+        getBalance();
+    }
+
+    private void setupPreviewSuccess(){
+        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
+        mAmount = Double.valueOf(((SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData()).getAMT());
+        mCarrier = Global.getInstance().getLastSubmitCarrier();
+
+        switch (mCarrier){
+            case APIServices.AIS:
+                if (mTypeToup.equals(FragmentTopup.MOBILE))
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
+                else
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
+
+                break;
+            case APIServices.TRUEMOVE:
+                if (mTypeToup.equals(FragmentTopup.MOBILE))
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemove);
+                else
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemoney);
+
+                break;
+            case APIServices.DTAC:
+                mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_dtac);
+                break;
+        }
+
+//        mTypeToup = MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction());
+
+        mHolder.mLayoutBorder.setBackgroundColor(mColorType);
+        mHolder.mIconService.setImageDrawable(mIconTypeTopup);
+        mHolder.mIconCarrier.setImageDrawable(mIconCarrier);
+        EditText editText = new EditText(getContext());
+        editText.setText(mPhoneNo);
+        PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);
+        mHolder.mTextPhone.setText(editText.getText().toString());
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMinimumFractionDigits(2);
+        format.setMaximumFractionDigits(2);
+        mHolder.mTextAmount.setText(format.format(mAmount));
+
+        DialogCounterAlert.DialogProgress.dismiss();
+
+
+
+
+/*
+        mHolder.mIconSuccess.animate()
+                .setStartDelay(1000)
+                .setDuration(700)
+                .alpha(1f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        mHolder.mIconSuccess.setAlpha(0f);
+                        mHolder.mIconSuccess.setVisibility(View.VISIBLE);
+                    }
+                }).start();
+*/
+
+        Animation loadanimation = AnimationUtils.loadAnimation(getContext(), R.anim.dialog_enter);
+        loadanimation.setDuration(2000);
+        loadanimation.setStartTime(2000);
+        loadanimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mHolder.mIconSuccess.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
+                animation.setDuration(1000);
+                animation.setStartTime(3000);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        mHolder.mTextSuccess.setVisibility(View.VISIBLE);
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                mHolder.mTextSuccess.startAnimation(animation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        mHolder.mIconSuccess.startAnimation(loadanimation);
+
+
+
+/*
+        mHolder.mTextSuccess.animate()
+                .setDuration(1000)
+                .setStartDelay(700)
+                .translationXBy(width)
+                .translationX(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        mHolder.mTextSuccess.setVisibility(View.VISIBLE);
+                    }
+                }).start();
+
+*/
+    }
+
+    private void getBalance(){
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, Global.getInstance().getLastSubmit().getData()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -195,8 +425,38 @@ public class FragmentTopupSlip extends Fragment {
             }
         });
 
-
     }
+
+    private void serviceEslip(){
+//        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
+
+        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(mTransID, null)));
+
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+
+                if (responseValues == null) {
+                    return;
+                }
+
+                if (responseValues instanceof ResponseModel){
+                    mImageByte = Base64.decode(((ResponseModel)responseValues).getFf()
+                            , Base64.NO_WRAP);
+
+                    setupSlip();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                new ErrorNetworkThrowable(t).networkError(getContext(), null, call, this, false);
+            }
+        });
+    }
+
 
 /*
     private void initHeader(){
@@ -249,6 +509,7 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private String getService(){
+
         switch (mTypeToup){
             case FragmentTopup.MOBILE:
                 return ActivityReport.TOPUP_REPORT;
@@ -293,7 +554,7 @@ public class FragmentTopupSlip extends Fragment {
                                     EditText editFavoriteName = (EditText) alertDialog.findViewById(R.id.edit_text);
 
                                     String favName = editFavoriteName.getText().toString();
-                                    if (favName == null || favName.isEmpty()){
+                                    if (favName == null || favName.concat(" ").isEmpty()){
                                         Toast.makeText(getContext(), R.string.please_set_name, Toast.LENGTH_SHORT).show();
                                         return;
                                     }
@@ -334,6 +595,9 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getActivity().finish();
+
+/*
                 if (mTypeToup.equals(FragmentTopup.MOBILE) && mCarrier.equals(APIServices.AIS)){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                             .setMessage(getString(R.string.interesting_vas))
@@ -361,10 +625,7 @@ public class FragmentTopupSlip extends Fragment {
                 } else {
                     getActivity().finish();
                 }
-//                FragmentManager fragmentManager = FragmentTopupSlip.this.getActivity().getSupportFragmentManager();
-//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                ((AppCompatActivity)FragmentTopupSlip.this.getActivity()).getSupportActionBar().show();
-//                FragmentTopupSlip.this.getFragmentManager().popBackStack();
+*/
             }
         });
 
@@ -436,10 +697,6 @@ public class FragmentTopupSlip extends Fragment {
             new DialogCounterAlert(getContext(), getString(R.string.error), getString(R.string.save_eslip_fail), null);
         }
 
-        NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
-
-        Global.getInstance().setLastSubmit(null, false);
 
     }
 }

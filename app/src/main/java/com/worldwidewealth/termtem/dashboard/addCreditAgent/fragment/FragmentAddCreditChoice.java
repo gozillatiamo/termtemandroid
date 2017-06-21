@@ -259,10 +259,12 @@ public class FragmentAddCreditChoice extends Fragment {
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
+        this.transid  = model.getTranid();
+
         RequestModel requestModel = new RequestModel(APIServices.ACTION_SUBMIT_AGENT_CASHIN,
                 SubmitTopupRequestModel.SubmitAgentRequestModel(mBottomAction.getPrice(),
                         mAgent.getPhoneno(),
-                        model.getTranid(),
+                        transid,
                         mAgent.getAgentId()));
 
         Global.getInstance().setLastSubmit(requestModel, mIsFav);
@@ -280,7 +282,10 @@ public class FragmentAddCreditChoice extends Fragment {
                 }
 
                 if (responseValues instanceof ResponseModel){
-                    serviceEslip(model.getTranid());
+//                    serviceEslip(model.getTranid());
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, AGENT_CASHIN, transid, mIsFav)).commit();
+
                 }
             }
             @Override
@@ -292,6 +297,7 @@ public class FragmentAddCreditChoice extends Fragment {
     }
 
 
+/*
     private void serviceEslip(final String transid){
         if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityAddCreditAgent)) return;
         call = services.eslip(new RequestModel(APIServices.ACTION_ESLIP_AGENT_CASHIN, new EslipRequestModel(transid, mAgent.getPhoneno())));
@@ -302,7 +308,6 @@ public class FragmentAddCreditChoice extends Fragment {
                 if (responseValues == null) return;
 
                 if (responseValues instanceof ResponseModel){
-                    FragmentAddCreditChoice.this.transid  = transid;
                     imageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
                     AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -321,6 +326,7 @@ public class FragmentAddCreditChoice extends Fragment {
             }
         });
     }
+*/
 
 
     private void initGrid(){

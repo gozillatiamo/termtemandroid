@@ -24,6 +24,7 @@ import com.worldwidewealth.termtem.util.Util;
 public class ActivityMyQrCode extends MyAppcompatActivity {
 
     private ViewHoler mHolder;
+    private Bitmap bitmapMyQR;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,6 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
         mHolder = new ViewHoler(this);
 
         initToolbar();
-        initQRCode();
     }
 
     @Override
@@ -43,6 +43,19 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initQRCode();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bitmapMyQR.recycle();
+        System.gc();
     }
 
     private void initToolbar(){
@@ -62,7 +75,8 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
                 Global.getInstance().getTXID()
         );
 
-        mHolder.mMyQRCode.setImageBitmap(Util.generateQR(new Gson().toJson(agentResponse, AgentResponse.class)));
+        bitmapMyQR = Util.generateQR(new Gson().toJson(agentResponse, AgentResponse.class));
+        mHolder.mMyQRCode.setImageBitmap(bitmapMyQR);
 /*
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {

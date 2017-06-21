@@ -226,7 +226,7 @@ public class FragmentReportMT extends Fragment {
                 mStrBankStart = mPopupBankStart.getBank();
                 mStrBankEnd = mPopupBankEnd.getBank();
 //                mStrBankEnd = "KBANK";
-                if (mStrAmount.equals("") || Double.parseDouble(mStrAmount) <= 0.25){
+                if (mStrAmount.equals("") || Double.parseDouble(mStrAmount) < 0.25){
                     Toast.makeText(FragmentReportMT.this.getContext(), getString(R.string.please_enter_amount), Toast.LENGTH_LONG).show();
                     mHolder.mScrollView.smoothScrollTo(0, 0);
                     return;
@@ -276,6 +276,7 @@ public class FragmentReportMT extends Fragment {
                                 mAttachEncode = Util.encodeBitmapToUpload(mBitmapImage);
 
                                 if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
+                                    System.gc();
                                     mBitmapImage.recycle();
                                     mBitmapImage = null;
                                 }
