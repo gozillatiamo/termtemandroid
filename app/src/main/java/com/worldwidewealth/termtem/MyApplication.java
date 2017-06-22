@@ -288,14 +288,17 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return;
             }
 
+            new DialogCounterAlert.DialogProgress(activity).show();
 
+            Util.logoutAPI(activity, false);
 
+/*
             if (Global.getInstance().getAGENTID() == null){
                 new TermTemSignIn(MyApplication.getContext(), TermTemSignIn.TYPE.RELOGIN,
                         new DialogCounterAlert.DialogProgress(activity).show()).getTXIDfromServer();
             } else {
-                Util.logoutAPI(activity, false);
             }
+*/
 
         }
 
@@ -335,12 +338,15 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static boolean canUseLeaving(Activity activity){
-        return !(activity instanceof SplashScreenWWW |
-                activity instanceof ActivityShowNotify |
-                activity instanceof MainActivity |
-                activity instanceof ActivityRegister |
-                activity instanceof ChatBotActivity |
-                activity instanceof PhotoViewActivity);
+
+       boolean can = !(activity instanceof SplashScreenWWW |
+               activity instanceof ActivityShowNotify |
+               activity instanceof MainActivity |
+               activity instanceof ActivityRegister |
+               activity instanceof ChatBotActivity |
+               activity instanceof PhotoViewActivity);
+
+        return can;
     }
 
     public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon){

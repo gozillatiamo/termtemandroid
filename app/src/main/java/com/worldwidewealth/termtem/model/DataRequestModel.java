@@ -17,17 +17,26 @@ public class DataRequestModel implements Parcelable{
     private String DEVICEID = Global.getInstance().getDEVICEID();
     private String PLATFORM = MyApplication.getContext().getString(R.string.platform);
     private String TXID = Global.getInstance().getTXID();
-    private String AGENTID = EncryptionData.EncryptData(
-            EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID()),
+    private String AGENTID = EncryptionData.EncryptData(Global.getInstance().getAGENTID(),
             Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
-    private String USERID = EncryptionData.EncryptData(
-            EncryptionData.DecryptData(Global.getInstance().getUSERID(), Global.getInstance().getTXID()),
+    private String USERID = EncryptionData.EncryptData(Global.getInstance().getUSERID(),
             Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-    public DataRequestModel() {
+    public DataRequestModel () {
+
     }
 
     public DataRequestModel(String agentid, String userid) {
+        DEVICEID = Global.getInstance().getDEVICEID();
+        PLATFORM = MyApplication.getContext().getString(R.string.platform);
+        TXID = Global.getInstance().getTXID();
+
+        if (agentid == null && userid == null){
+            AGENTID = "";
+            USERID = "";
+            return;
+        }
+
         AGENTID = EncryptionData.EncryptData(
                 EncryptionData.DecryptData(agentid, Global.getInstance().getTXID()),
                 Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
@@ -35,8 +44,10 @@ public class DataRequestModel implements Parcelable{
                 EncryptionData.DecryptData(userid, Global.getInstance().getTXID()),
                 Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
+
     }
 
+/*
     public DataRequestModel(String deviceid, String platform, String txid, String agentid, String userid) {
         DEVICEID = deviceid;
         PLATFORM = platform;
@@ -49,6 +60,7 @@ public class DataRequestModel implements Parcelable{
                 DEVICEID+TXID);
 
     }
+*/
 
 
     protected DataRequestModel(Parcel in) {

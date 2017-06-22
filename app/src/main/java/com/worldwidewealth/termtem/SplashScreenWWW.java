@@ -64,6 +64,20 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
 
+        String deviceId = Global.getInstance().getDEVICEID();
+
+        if (deviceId == null) {
+            TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (mngr.getDeviceId() != null) {
+                deviceId = mngr.getDeviceId();
+            } else {
+                deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+            }
+        }
+
+        Global.getInstance().setDEVICEID(deviceId);
+
+
         if (Global.getInstance().getLastTranId() != null){
 
             if ((FragmentTopupPackage.callSubmit == null || FragmentTopupPackage.callSubmit.isCanceled())
@@ -91,7 +105,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                             }
 
                             if (responseValues instanceof ResponseModel){
-                                Global.getInstance().clearUserData(true);
+                                Global.getInstance().clearUserData();
                                 getDataDevice();
 
                             }
@@ -242,19 +256,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                     }
                     return;
                 }
-
-                String deviceId = Global.getInstance().getDEVICEID();
-
-                if (deviceId == null) {
-                    TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                    if (mngr.getDeviceId() != null) {
-                        deviceId = mngr.getDeviceId();
-                    } else {
-                        deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
-                    }
-                }
-
-                Global.getInstance().setDEVICEID(deviceId);
 
                 new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN, true).getTXIDfromServer();
 

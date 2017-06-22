@@ -93,8 +93,8 @@ public class EncryptionData {
             return convertPlus;
 
         } catch (Exception e){
-            e.printStackTrace();
-            return  null;
+            Log.e(TAG, "EncryptFail");
+            return  "";
         }
 
     }
@@ -127,8 +127,8 @@ public class EncryptionData {
             String[] convertDecode = strDecode.split(";");
             return convertDecode[0];
         } catch (Exception e){
-            e.printStackTrace();
-            return  null;
+            Log.e(TAG, "DecryptFail");
+            return  "";
         }
     }
 
@@ -233,9 +233,14 @@ public class EncryptionData {
 
                             if (MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity) &&
                                     Global.getInstance().getAGENTID() == null) {
-                                Util.backToSignIn((Activity) context);
+                                try{
+                                    Util.backToSignIn((Activity) context);
+                                } catch (ClassCastException e){
+                                    e.printStackTrace();
+                                }
                                 return null;
                             }
+
                             new ErrorNetworkThrowable(null).networkError(context,
                                     MyApplication.getContext().getString(R.string.error_msg), call, callback, true);
                     }

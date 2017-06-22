@@ -234,7 +234,7 @@ public class TermTemSignIn {
         Log.e(TAG, "Username: "+mUsername);
         Log.e(TAG, "Password: "+mPassword);
 
-        if (mUsername.isEmpty() || mPassword.isEmpty()){
+        if (mUsername == null || mUsername.isEmpty() || mPassword.isEmpty()){
             DialogCounterAlert.DialogProgress.dismiss();
             Util.backToSignIn((Activity) mContext);
         }
@@ -282,7 +282,7 @@ public class TermTemSignIn {
     private void serviceAcceptWIFI(){
         Log.e(TAG, "TXID before acceptwifi: "+Global.getInstance().getTXID());
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONACCPWIFI,
-                new DataRequestModel()));
+                new DataRequestModel(null, null)));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -315,6 +315,7 @@ public class TermTemSignIn {
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                 Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
 
                 if (responseValues instanceof ResponseModel){
@@ -327,7 +328,7 @@ public class TermTemSignIn {
                             Toast.makeText(mContext, responseModel.getMsg(),
                                     Toast.LENGTH_SHORT).show();
                             if (mType.equals(TYPE.RELOGIN)){
-                                Global.getInstance().clearUserData(true);
+                                Global.getInstance().clearUserData();
                                 Util.backToSignIn(((Activity)mContext));
                             }
                         }

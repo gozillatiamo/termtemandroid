@@ -542,6 +542,9 @@ public class ActivityReport extends MyAppcompatActivity {
 
     private void updateListData(int position, List listdata, String chartType, long timefrom, long timeto){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + position);
+
+        if (page == null) return;
+
         switch (position){
             case 0:
                 ((TextReportFragment)page).updateDataReport(listdata);

@@ -67,7 +67,7 @@ public class ActivityMyQrCode extends MyAppcompatActivity {
 
     private void initQRCode(){
         AgentResponse agentResponse = new AgentResponse(
-                Global.getInstance().getAGENTID(),
+                EncryptionData.EncryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID()),
                 Global.getInstance().getAGENTCODE(),
                 Global.getInstance().getFIRSTNAME(),
                 Global.getInstance().getLASTNAME(),

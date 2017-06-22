@@ -58,7 +58,7 @@ public class ActivityScan extends MyAppcompatActivity {
                 }
 
                 if (agentResponse != null){
-                    String myAgentId = EncryptionData.DecryptData(Global.getInstance().getAGENTID(), Global.getInstance().getTXID());
+                    String myAgentId = Global.getInstance().getAGENTID();
                     String customerAgentId = EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID());
                     if (!myAgentId.equals(customerAgentId)) {
                         agentResponse.setAgentId(customerAgentId);

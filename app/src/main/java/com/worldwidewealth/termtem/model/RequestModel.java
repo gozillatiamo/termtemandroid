@@ -44,6 +44,10 @@ public class RequestModel implements Parcelable{
         return data;
     }
 
+    public void setData(DataRequestModel data) {
+        this.data = data;
+    }
+
     @Override
     public int describeContents() {
         return 0;

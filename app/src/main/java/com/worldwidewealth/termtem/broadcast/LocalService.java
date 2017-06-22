@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
@@ -27,6 +28,7 @@ import com.worldwidewealth.termtem.util.Util;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +43,9 @@ public class LocalService extends Service {
     private static Timer T;
     public static String TAG = LocalService.class.getSimpleName();
     private int count;
+    private int countRetry = 0;
+    private APIServices services = APIServices.retrofit.create(APIServices.class);
+
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -75,7 +80,7 @@ public class LocalService extends Service {
     }
 
     private void serviceLeave(final Context context, final int startId){
-        APIServices services = APIServices.retrofit.create(APIServices.class);
+        countRetry = 0;
         Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -86,17 +91,39 @@ public class LocalService extends Service {
                     count = model.getIdlelimit();
                     countDownLogout(context, startId);
 //                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
-                } else {
-                    APIHelper.enqueueWithRetry(call.clone(), this);
+                } else if (countRetry < 3){
+                    countRetry++;
+                    retryService(call, this);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                APIHelper.enqueueWithRetry(call.clone(), this);
+                if (countRetry < 3){
+                    countRetry++;
+                    retryService(call, this);
+                }
+
                 t.printStackTrace();
             }
         });
+
+    }
+
+    private void retryService(final Call call, final Callback callback){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String strRequest = Util.convertToStringRequest(call.request().body());
+                if (strRequest != null) {
+                    RequestModel requestModel = new Gson().fromJson(strRequest, RequestModel.class);
+                    requestModel.setData(new DataRequestModel());
+                    Call<ResponseBody> newCall = services.service(requestModel);
+                    APIHelper.enqueueWithRetry(newCall, callback);
+                }
+
+            }
+        }, 3000);
 
     }
 
@@ -115,18 +142,22 @@ public class LocalService extends Service {
                             serviceLogout(startId);
                             if (T != null) {
                                 T.cancel();
+                                T.purge();
                             }
                             T = null;
                             this.cancel();
                         }
 
-                        if (count < 0 && T != null){
+                        if ((count < 0 && T != null) ||
+                                (!MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity))){
                             if (T != null) {
                                 T.cancel();
+                                T.purge();
                             }
                             T = null;
                             this.cancel();
                         }
+
                     }
 
 
@@ -136,6 +167,8 @@ public class LocalService extends Service {
 
     private void serviceLogout(final int statId){
         if (Global.getInstance().getTXID() == null) return;
+        countRetry = 0;
+
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
@@ -145,9 +178,12 @@ public class LocalService extends Service {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null){
-                    APIHelper.enqueueWithRetry(call.clone(), this);
+                    if (countRetry < 3){
+                        countRetry++;
+                        retryService(call, this);
+                    }
                 } else {
-                    Global.getInstance().clearUserData(true);
+                    Global.getInstance().clearUserData();
                     if (MyApplication.LeavingOrEntering.currentActivity != null){
                         MyApplication.LeavingOrEntering.currentActivity.finish();
                     }
@@ -160,13 +196,14 @@ public class LocalService extends Service {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-                APIHelper.enqueueWithRetry(call.clone(), this);
-            }
+                if (countRetry < 3){
+                    countRetry++;
+                    retryService(call, this);
+                }                    }
         });
 
 
     }
-
 
     @Override
     public void onDestroy() {
@@ -175,6 +212,7 @@ public class LocalService extends Service {
 
         if (T != null) {
             T.cancel();
+            T.purge();
             T = null;
         }
 

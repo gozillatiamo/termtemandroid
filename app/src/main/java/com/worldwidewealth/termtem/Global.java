@@ -160,7 +160,7 @@ public class Global {
     }
 
     public void setDEVICEID(String deviceid) {
-        if ("".equals(getUSERID())) deviceid = null;
+//        if ("".equals(getUSERID())) deviceid = null;
         mEditor.putString(DEVICEID, deviceid);
         mEditor.commit();
     }
@@ -200,7 +200,7 @@ public class Global {
     }
 
 
-    public void setUserData(ContentValues values){
+    public void  setUserData(ContentValues values){
 
         String responseStr = values.getAsString(USERDATA);
 
@@ -208,8 +208,8 @@ public class Global {
         LoginResponseModel loginResponseModel = new Gson().fromJson(responseStr, LoginResponseModel.class);
         mEditor.putString(USERNAME, values.getAsString(USERNAME));
         mEditor.putString(PASSWORD, values.getAsString(PASSWORD));
-        mEditor.putString(USERID, loginResponseModel.getUSERID());
-        mEditor.putString(AGENTID, loginResponseModel.getAGENTID());
+        mEditor.putString(USERID, EncryptionData.DecryptData(loginResponseModel.getUSERID(), Global.getInstance().getTXID()));
+        mEditor.putString(AGENTID, EncryptionData.DecryptData(loginResponseModel.getAGENTID(), Global.getInstance().getTXID()));
         mEditor.putString(AGENTCODE, loginResponseModel.getAgentCode());
         mEditor.putString(FIRSTNAME, loginResponseModel.getFirstName());
         mEditor.putString(LASTNAME, loginResponseModel.getLastName());
@@ -228,16 +228,19 @@ public class Global {
         mEditor.commit();
     }
 
-    public void clearUserData(boolean clearall){
+    public void clearUserData(){
 
+/*
         if (clearall) {
             clearUserName();
             mEditor.putString(TXID, null);
 
-            /*mEditor.putString(USERNAME, null);
-            mEditor.putString(PASSWORD, null);
-            mEditor.putString(TXID, null);*/
         }
+*/
+
+        clearUserName();
+        mEditor.putString(TXID, null);
+
         mEditor.putString(USERID, null);
         mEditor.putString(AGENTID, null);
         mEditor.putString(AGENTCODE, null);
