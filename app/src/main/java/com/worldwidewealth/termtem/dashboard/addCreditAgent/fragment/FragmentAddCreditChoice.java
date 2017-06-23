@@ -283,8 +283,11 @@ public class FragmentAddCreditChoice extends Fragment {
 
                 if (responseValues instanceof ResponseModel){
 //                    serviceEslip(model.getTranid());
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, AGENT_CASHIN, transid, mIsFav)).commit();
+                    if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityAddCreditAgent) {
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, AGENT_CASHIN, transid, mIsFav)).commit();
+                    }
 
                 }
             }

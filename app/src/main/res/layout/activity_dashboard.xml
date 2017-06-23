@@ -85,7 +85,7 @@
                                 app:backgroundTint="@android:color/holo_orange_light"
                                 android:text="@string/favorite"
                                 android:textSize="@dimen/small_text_size"
-                                android:drawableLeft="@drawable/ic_star"
+                                android:drawableLeft="@drawable/ic_star_white"
                                 android:textStyle="bold"
                                 android:gravity="center"
                                 android:drawablePadding="@dimen/activity_small_space"

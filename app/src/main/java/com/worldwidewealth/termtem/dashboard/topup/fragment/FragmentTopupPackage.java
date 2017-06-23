@@ -632,12 +632,16 @@ public class FragmentTopupPackage extends  Fragment{
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try{
                             getActivity().unregisterReceiver(myReceiver);
-                            mTimerTimeout.cancel();
-                            mTimerTimeout = null;
 
                         }catch (Exception e){
                             e.printStackTrace();
                         }
+
+                        if (mTimerTimeout != null) {
+                            mTimerTimeout.cancel();
+                            mTimerTimeout = null;
+                        }
+
 
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
 
@@ -682,9 +686,11 @@ public class FragmentTopupPackage extends  Fragment{
                                             mPhone + " " + MyApplication.getContext().getString(R.string.success),
                                     R.drawable.ic_check_circle_white);
 
+                            if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
 
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                            }
 
 //                            Global.getInstance().setProcessSubmit(null, null);
 

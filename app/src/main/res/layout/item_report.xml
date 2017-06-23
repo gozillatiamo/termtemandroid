@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:fillViewport="true"
+    android:clickable="true"
     app:cardBackgroundColor="@android:color/white">
+    
     <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"

@@ -81,7 +81,7 @@ public class FragmentTopupSlip extends Fragment {
     private String mPage;
     private byte[] mImageByte;
     private Bitmap mImageBitmap;
-    private APIServices services;
+    private APIServices services = APIServices.retrofit.create(APIServices.class);
     private String mTransID;
     private String mFileName;
     private String mPhoneNo;
@@ -164,7 +164,6 @@ public class FragmentTopupSlip extends Fragment {
         super.onCreate(savedInstanceState);
         new DialogCounterAlert.DialogProgress(getContext()).show();
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }
 
@@ -196,12 +195,6 @@ public class FragmentTopupSlip extends Fragment {
 
     @Override
     public void onStart() {
-        initBtn();
-        onBackPress();
-        setupBtnFavorite();
-        mHolder.mBtnAddFavorite.setChecked(mIsFav);
-        mHolder.mBtnAddFavorite.setClickable(!mIsFav);
-
         super.onStart();
     }
 
@@ -216,23 +209,40 @@ public class FragmentTopupSlip extends Fragment {
         DialogCounterAlert.DialogProgress.show();
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
-
+        getBalance();
         switch (mTypePage){
             case PREVIEW:
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                initBtn();
+                onBackPress();
+                setupBtnFavorite();
+                mHolder.mBtnAddFavorite.setChecked(mIsFav);
+                mHolder.mBtnAddFavorite.setClickable(!mIsFav);
+
                 setupPreviewSuccess();
                 break;
             case ESLIP:
                 mHolder.mLayoutInclude.setVisibility(View.GONE);
+                mHolder.mBtnBack.setVisibility(View.GONE);
                 serviceEslip();
                 break;
         }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mTypePage == PREVIEW) {
+            Global.getInstance().setLastSubmit(null, false);
+        }
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        Global.getInstance().setLastSubmit(null, false);
 
     }
 
@@ -267,12 +277,12 @@ public class FragmentTopupSlip extends Fragment {
 
     private void setupSlip(){
         mTransID = getArguments().getString(TRANID);
-        services = APIServices.retrofit.create(APIServices.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         Date now = new Date();
-        mFileName = formatter.format(now) + ".jpg";
+        mFileName = mTransID + ".jpg";
 
-        getBalance();
+        initEslip();
+
     }
 
     private void setupPreviewSuccess(){
@@ -282,17 +292,17 @@ public class FragmentTopupSlip extends Fragment {
 
         switch (mCarrier){
             case APIServices.AIS:
-                if (mTypeToup.equals(FragmentTopup.MOBILE))
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
-                else
+                if (mTypeToup.equals(FragmentTopup.PIN))
                     mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
+                else
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
 
                 break;
             case APIServices.TRUEMOVE:
-                if (mTypeToup.equals(FragmentTopup.MOBILE))
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemove);
-                else
+                if (mTypeToup.equals(FragmentTopup.PIN))
                     mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemoney);
+                else
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemove);
 
                 break;
             case APIServices.DTAC:
@@ -334,17 +344,38 @@ public class FragmentTopupSlip extends Fragment {
                 }).start();
 */
 
-        Animation loadanimation = AnimationUtils.loadAnimation(getContext(), R.anim.dialog_enter);
-        loadanimation.setDuration(2000);
+        Animation loadanimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+        loadanimation.setDuration(1000);
         loadanimation.setStartTime(2000);
         loadanimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                int width = mHolder.mTextSuccess.getMeasuredWidth();
+                View view = getView().findViewById(R.id.layout_status_success);
+                view.setTranslationX(((float) width)/2);
                 mHolder.mIconSuccess.setVisibility(View.VISIBLE);
+
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                View view = getView().findViewById(R.id.layout_status_success);
+                view.animate()
+                        .translationX(0f)
+                        .setDuration(700)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                super.onAnimationStart(animation);
+                                mHolder.mTextSuccess.setAlpha(0f);
+                                mHolder.mTextSuccess.setVisibility(View.VISIBLE);
+                                mHolder.mTextSuccess.animate()
+                                        .alpha(1f)
+                                        .setDuration(1000)
+                                        .start();
+                            }
+                        }).start();
+/*
                 animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
                 animation.setDuration(1000);
                 animation.setStartTime(3000);
@@ -367,6 +398,7 @@ public class FragmentTopupSlip extends Fragment {
                 });
 
                 mHolder.mTextSuccess.startAnimation(animation);
+*/
             }
 
             @Override
@@ -397,7 +429,7 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void getBalance(){
-        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, Global.getInstance().getLastSubmit().getData()));
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -412,7 +444,6 @@ public class FragmentTopupSlip extends Fragment {
                 }
 
                 if (mImageBitmap != null || mTransID != null) {
-                    initEslip();
                 }
 
 
@@ -664,8 +695,12 @@ public class FragmentTopupSlip extends Fragment {
             out.close();
             MediaScannerConnection.scanFile(FragmentTopupSlip.this.getContext(), new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
 
+            DialogCounterAlert.DialogProgress.dismiss();
+
             Toast.makeText(getContext(), getString(R.string.save_eslip_success), Toast.LENGTH_LONG).show();
 
+
+/*
             DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
             SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) dataRequestModel;
             EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), submitTopupRequestModel.getPHONENO());
@@ -691,6 +726,7 @@ public class FragmentTopupSlip extends Fragment {
                 }
 
             });
+*/
 
         } catch (Exception e) {
             e.printStackTrace();

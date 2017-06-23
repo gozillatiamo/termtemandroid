@@ -89,7 +89,7 @@ public class FavoritesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_favorites_outline);
+        getSupportActionBar().setLogo(R.drawable.ic_star);
     }
 
     private void setupRecyclear(){
@@ -207,7 +207,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 LoadFavResponseModel.EpinListModel epinListModel = model.getEpinlist().get(0);
 
                 intent = new Intent(FavoritesActivity.this, ActivityTopup.class);
-                intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.MOBILE);
+                intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.PIN);
                 intent.putExtra(ActivityTopup.KEY_PHONENO, epinListModel.getPhoneNo());
                 intent.putExtra(ActivityTopup.KEY_CARRIER, epinListModel.getCarrierCode());
                 intent.putExtra(ActivityTopup.KEY_AMT, epinListModel.getAmt());

@@ -81,8 +81,8 @@ public class VasAdapter extends RecyclerView.Adapter<VasAdapter.ViewHolder>{
 
     public String getAmount(int position){
         NumberFormat format = NumberFormat.getInstance();
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(2);
+        format.setMaximumFractionDigits(0);
+        format.setMinimumFractionDigits(0);
 
         return format.format(mListPG.get(position).getAmount());
     }

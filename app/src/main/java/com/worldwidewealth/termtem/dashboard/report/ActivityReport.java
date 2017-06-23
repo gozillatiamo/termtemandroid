@@ -147,6 +147,15 @@ public class ActivityReport extends MyAppcompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        setEnableTotal(true);
+
+        if (!getSupportFragmentManager().popBackStackImmediate()){
+            super.onBackPressed();
+        }
+    }
+
     private void initBottomAction(){
         mBottomSheet = new BottomSheetTypeReport(ActivityReport.this);
         mCurrentType = mBottomSheet.getCurrentType();
@@ -425,17 +434,23 @@ public class ActivityReport extends MyAppcompatActivity {
 
     }
 
+    public void setEnableTotal(boolean enable){
+        if (enable){
+            mHolder.mLayoutTotal.setVisibility(View.VISIBLE);
+        } else
+            mHolder.mLayoutTotal.setVisibility(View.GONE);
+    }
+
     private void setAmountTotal(int typePage, double amountTopup, double amonutDebit){
         DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
 
         final View layoutAmountDebit = findViewById(R.id.layout_amount_debit);
-        final View layoutTotal = findViewById(R.id.layout_totle);
         int heightView = layoutAmountDebit.getMeasuredHeight();
         switch (typePage){
             case PagerTypeReportAdapter.TEXT:
-                layoutTotal.animate()
+                mHolder.mLayoutTotal.animate()
                         .setDuration(300)
                         .translationY(0f)
                         .setListener(new AnimatorListenerAdapter() {
@@ -447,7 +462,7 @@ public class ActivityReport extends MyAppcompatActivity {
                         }).start();
                 break;
             case PagerTypeReportAdapter.GRAPH:
-                layoutTotal.animate()
+                mHolder.mLayoutTotal.animate()
                         .setDuration(300)
                         .translationY(heightView)
                         .setListener(new AnimatorListenerAdapter() {
@@ -619,7 +634,7 @@ public class ActivityReport extends MyAppcompatActivity {
         private ImageView mLogoIcon;
         private TabLayout mTabTypeReport;
         private ViewPager mPagerTypeReport;
-
+        private View mLayoutTotal;
         public ViewHolder(Activity itemView){
 //            mListReport = (RecyclerView) itemView.findViewById(R.id.list_report);
             mToolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
@@ -630,6 +645,8 @@ public class ActivityReport extends MyAppcompatActivity {
             mLogoIcon = (ImageView) itemView.findViewById(R.id.logo_menu);
             mTabTypeReport = (TabLayout) itemView.findViewById(R.id.tab_type_history_report);
             mPagerTypeReport = (ViewPager) itemView.findViewById(R.id.pager_type_history_report);
+            mLayoutTotal = findViewById(R.id.layout_totle);
+
         }
     }
 }

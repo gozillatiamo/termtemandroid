@@ -27,6 +27,7 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
     <LinearLayout
+        android:id="@+id/container_report"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -119,7 +120,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/colorPrimary"
-
             android:padding="@dimen/activity_space"
             android:elevation="10dp">
             <LinearLayout

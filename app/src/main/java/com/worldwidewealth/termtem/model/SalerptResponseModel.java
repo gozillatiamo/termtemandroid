@@ -21,6 +21,8 @@ public class SalerptResponseModel  implements Parcelable{
     private double MARKUP_AMT;
     private String AGENTNAME;
     private String AGENTCASHINID;
+    private String TransactionId;
+
 
 
     protected SalerptResponseModel(Parcel in) {
@@ -34,6 +36,7 @@ public class SalerptResponseModel  implements Parcelable{
         MARKUP_AMT = in.readDouble();
         AGENTNAME = in.readString();
         AGENTCASHINID = in.readString();
+        TransactionId = in.readString();
     }
 
     public static final Creator<SalerptResponseModel> CREATOR = new Creator<SalerptResponseModel>() {
@@ -64,17 +67,11 @@ public class SalerptResponseModel  implements Parcelable{
         return BILLER;
     }
 
-    public void setBILLER(String BILLER) {
-        this.BILLER = BILLER;
-    }
 
     public String getPHONENO() {
         return PHONENO;
     }
 
-    public void setPHONENO(String PHONENO) {
-        this.PHONENO = PHONENO;
-    }
 
     public String getTYPE() {
         return TYPE;
@@ -88,40 +85,28 @@ public class SalerptResponseModel  implements Parcelable{
         return AMOUNT;
     }
 
-    public void setAMOUNT(double AMOUNT) {
-        this.AMOUNT = AMOUNT;
-    }
 
     public double getCHECKTOTAL() {
         return CHECKTOTAL;
     }
 
-    public void setCHECKTOTAL(double CHECKTOTAL) {
-        this.CHECKTOTAL = CHECKTOTAL;
-    }
 
     public double getCOMM_AMT() {
         return COMM_AMT;
     }
 
-    public void setCOMM_AMT(double COMM_AMT) {
-        this.COMM_AMT = COMM_AMT;
-    }
 
     public String getPAYCODE() {
         return PAYCODE;
     }
 
-    public void setPAYCODE(String PAYCODE) {
-        this.PAYCODE = PAYCODE;
-    }
 
     public Date getPAYMENT_DATE() {
         return PAYMENT_DATE;
     }
 
-    public void setPAYMENT_DATE(Date PAYMENT_DATE) {
-        this.PAYMENT_DATE = PAYMENT_DATE;
+    public String getTransactionId() {
+        return TransactionId;
     }
 
     @Override
@@ -141,5 +126,6 @@ public class SalerptResponseModel  implements Parcelable{
         dest.writeDouble(MARKUP_AMT);
         dest.writeString(AGENTNAME);
         dest.writeString(AGENTCASHINID);
+        dest.writeString(TransactionId);
     }
 }
