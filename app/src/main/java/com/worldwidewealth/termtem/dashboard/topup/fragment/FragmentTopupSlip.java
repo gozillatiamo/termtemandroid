@@ -286,8 +286,10 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void setupPreviewSuccess(){
+        if (Global.getInstance().getLastTranId() == null) return;
         mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
-        mAmount = Double.valueOf(((SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData()).getAMT());
+        SubmitTopupRequestModel requestModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
+        mAmount = Double.valueOf(requestModel.getAMT());
         mCarrier = Global.getInstance().getLastSubmitCarrier();
 
         switch (mCarrier){
@@ -565,6 +567,7 @@ public class FragmentTopupSlip extends Fragment {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
                             .setTitle(R.string.set_title_favorite)
                             .setView(R.layout.dialog_edit_text)
+                            .setCancelable(false)
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -585,7 +588,8 @@ public class FragmentTopupSlip extends Fragment {
                                     EditText editFavoriteName = (EditText) alertDialog.findViewById(R.id.edit_text);
 
                                     String favName = editFavoriteName.getText().toString();
-                                    if (favName == null || favName.concat(" ").isEmpty()){
+//                                    favName.replaceAll(" ", "");
+                                    if (favName.trim().isEmpty()){
                                         Toast.makeText(getContext(), R.string.please_set_name, Toast.LENGTH_SHORT).show();
                                         return;
                                     }

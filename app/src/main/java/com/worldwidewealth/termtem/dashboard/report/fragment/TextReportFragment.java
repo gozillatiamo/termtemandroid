@@ -175,7 +175,17 @@ public class TextReportFragment extends Fragment {
     private void serviceEslip(final int position){
 //        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(getActionSlip(), new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+        Call<ResponseBody> call = null;
+
+        if (((ActivityReport)getActivity()).getmCurrentType().equals(ActivityReport.CASHIN_REPORT)) {
+            call = services.eslip(new RequestModel(getActionSlip(),
+                    new EslipRequestModel(mAdapter.getItem(position).getTransactionId(),
+                            mAdapter.getItem(position).getPHONENO())));
+        } else {
+            call = services.eslip(new RequestModel(getActionSlip(),
+                    new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+        }
+
 
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override

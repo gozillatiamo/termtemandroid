@@ -9,6 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:maxLines="1"
+        android:maxLength="50"
+        android:inputType="textPersonName"
+        android:imeOptions="actionDone"
         android:padding="@dimen/activity_space"
         android:background="@drawable/edittext_background"/>
 </LinearLayout>

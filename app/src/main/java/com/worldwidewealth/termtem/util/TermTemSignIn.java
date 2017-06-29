@@ -367,7 +367,7 @@ public class TermTemSignIn {
 
                 }
 
-                DialogCounterAlert.DialogProgress.dismiss();
+//                DialogCounterAlert.DialogProgress.dismiss();
             }
 
             @Override

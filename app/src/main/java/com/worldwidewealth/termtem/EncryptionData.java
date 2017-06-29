@@ -6,6 +6,10 @@ import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 
+/*
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
+*/
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -152,6 +156,7 @@ public class EncryptionData {
 
     private static int retry = 0;
     public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
+//        Trace mTrace = null;
 
         ResponseModel responseModel;
         RequestModel requestModel = null;
@@ -161,6 +166,10 @@ public class EncryptionData {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
+/*
+            mTrace = FirebasePerformance.getInstance().newTrace(requestModel.getAction());
+            mTrace.start();
+*/
         }
         try {
             strRespone = response.string();
@@ -262,6 +271,8 @@ public class EncryptionData {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            Log.e(TAG, "Finally");
         }
 
         return null;

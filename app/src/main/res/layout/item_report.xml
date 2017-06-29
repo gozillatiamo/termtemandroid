@@ -8,7 +8,7 @@
     android:fillViewport="true"
     android:clickable="true"
     app:cardBackgroundColor="@android:color/white">
-    
+
     <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"

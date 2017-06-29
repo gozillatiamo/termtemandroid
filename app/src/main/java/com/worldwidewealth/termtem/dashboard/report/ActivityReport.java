@@ -204,10 +204,18 @@ public class ActivityReport extends MyAppcompatActivity {
                             .dimColor(android.R.color.black)
                             .drawShadow(true)
                             .transparentTarget(true)
-                            .targetCircleColor(android.R.color.black));
+                            .targetCircleColor(android.R.color.black), new TapTargetView.Listener(){
+                        @Override
+                        public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                            super.onTargetDismissed(view, userInitiated);
+                            salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
+
+                        }
+                    });
             canShowTutorial = false;
+        } else {
+            salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
         }
-        salerptService(mPreviousDateFrom + "", mPeviousDateTo + "");
     }
 
 
@@ -529,7 +537,6 @@ public class ActivityReport extends MyAppcompatActivity {
                 if (responseValues == null) return;
 
                 if (!(responseValues instanceof ResponseModel)){
-                    loading.hide();
 
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
                     List<ChartResponseModel> modelList = gson
@@ -538,6 +545,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
                     updateListData(PagerTypeReportAdapter.GRAPH, modelList, GraphReportFragment.PIE, Long.parseLong(finalTimeFrom), Long.parseLong(timeTo));
 
+                    loading.hide();
 
                 } else {
                     loading.hide();

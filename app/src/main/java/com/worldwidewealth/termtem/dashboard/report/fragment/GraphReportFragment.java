@@ -404,6 +404,15 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         mListLineModel = listLineModel;
 
         setupLineChart();
+
+        mLineChart.setAlpha(1f);
+        mPieChart.setAlpha(1f);
+
+        mBtnLineChart.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        mLineChart.setVisibility(View.VISIBLE);
+        mBtnPieChart.setColorFilter(null);
+        mPieChart.setVisibility(View.GONE);
+
     }
 
     public void updatePieDataLineChart(List<ChartResponseModel> listPieModel){

@@ -90,9 +90,10 @@ public class ActivityTopup extends MyAppcompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Global.getInstance().getLastTranId() != null){
 
+        if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
             new DialogCounterAlert.DialogProgress(this).show();
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
                             MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),

@@ -98,21 +98,36 @@ public class FragmentAddCreditChoice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        new DialogCounterAlert.DialogProgress(getContext()).show();
 
+        if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
+                            MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
+                            Global.getInstance().getLastTranId(),
+                            Global.getInstance().getSubmitIsFav())).commit();
+//            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
+        }
+
+/*
         if (Global.getInstance().getAGENTID() != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (imageByte != null) {
                         getActivity().finish();
+*/
 /*
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(imageByte, transid)).commit();
-*/
+*//*
+
                     }
                 }
             }, 2000);
         }
+*/
 
     }
 
@@ -284,9 +299,12 @@ public class FragmentAddCreditChoice extends Fragment {
                 if (responseValues instanceof ResponseModel){
 //                    serviceEslip(model.getTranid());
                     if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityAddCreditAgent) {
-
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, AGENT_CASHIN, transid, mIsFav)).commit();
+                        try {
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, AGENT_CASHIN, transid, mIsFav)).commit();
+                        } catch (IllegalStateException e){
+                            e.printStackTrace();
+                        }
                     }
 
                 }

@@ -32,6 +32,7 @@ import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
 import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
 import com.worldwidewealth.termtem.broadcast.NotificationBroadCastReceiver;
+import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
@@ -208,7 +209,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         if (!canUseLeaving(currentActivity)) return;
         if (Global.getInstance().getLastTranId() != null &&
-                !(currentActivity instanceof ActivityTopup)){
+                !(currentActivity instanceof ActivityTopup)
+                && !(currentActivity instanceof ActivityAddCreditAgent)){
 
             if (Global.getInstance().getSubmitStatus()) {
                 Intent intent = new Intent(currentActivity, ActivityTopup.class);
@@ -288,7 +290,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return;
             }
 
-            new DialogCounterAlert.DialogProgress(activity).show();
+
+//            new DialogCounterAlert.DialogProgress(activity).show();
 
             Util.logoutAPI(activity, false);
 
@@ -589,7 +592,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                             if (finalSubmitModel != null) {
 
                                 if (responseValues == null) {
-
+                                    Global.getInstance().setLastSubmit(null, false);
                                     MyApplication.uploadFail(MyApplication.NOTITOPUP,
                                             finalSubmitModel.getTRANID(),
                                             finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() + " "

@@ -122,16 +122,9 @@ public class FragmentTopupPackage extends  Fragment{
 //                @Override
 //                public void run() {
 
-                if (!(intent.getExtras().containsKey("topup"))) return;
+            if (!(intent.getExtras().containsKey("topup"))) return;
 
-            if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
-                mAlertTimeout.cancel();
-            }
-
-
-            mTimerTimeout.cancel();
-            mTimerTimeout = null;
-
+            stopTimer();
 
             if (callSubmit != null && callSubmit.isExecuted()){
                     callSubmit.cancel();
@@ -193,6 +186,7 @@ public class FragmentTopupPackage extends  Fragment{
         mTopup = getArguments().getString(FragmentTopup.keyTopup);
         mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
         mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
+        getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
@@ -218,7 +212,6 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 
     }
 
@@ -227,7 +220,6 @@ public class FragmentTopupPackage extends  Fragment{
         super.onResume();
         if (mBottomAction != null)
             mBottomAction.setEnable(true);
-
     }
 
     @Override
@@ -239,17 +231,17 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onStop() {
         super.onStop();
-        try{
-            getActivity().unregisterReceiver(myReceiver);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
 
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        try{
+            getActivity().unregisterReceiver(myReceiver);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -637,11 +629,7 @@ public class FragmentTopupPackage extends  Fragment{
                             e.printStackTrace();
                         }
 
-                        if (mTimerTimeout != null) {
-                            mTimerTimeout.cancel();
-                            mTimerTimeout = null;
-                        }
-
+                        stopTimer();
 
                         Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
 
@@ -650,9 +638,11 @@ public class FragmentTopupPackage extends  Fragment{
                             if (msg.equals(APIServices.MSG_WAIT)) return;
                         }
 
+                        String title = MyApplication.getTitleTypeToup(mActionSumitTopup);
 
+/*
 
-                        if (mAlertTimeout != null && mAlertTimeout.isShowing())
+                        if (mAlertTimeout != null)
                             mAlertTimeout.cancel();
 
                         String title;
@@ -661,6 +651,7 @@ public class FragmentTopupPackage extends  Fragment{
                         } else {
                             title = MyApplication.getContext().getString(R.string.dashboard_pin);
                         }
+*/
 
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
@@ -687,9 +678,12 @@ public class FragmentTopupPackage extends  Fragment{
                                     R.drawable.ic_check_circle_white);
 
                             if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
-
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                                try {
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                                } catch (IllegalStateException e){
+                                    e.printStackTrace();
+                                }
                             }
 
 //                            Global.getInstance().setProcessSubmit(null, null);
@@ -702,29 +696,23 @@ public class FragmentTopupPackage extends  Fragment{
                         Log.e(TAG, "Exception submit topup: " + t.getMessage());
                         if (t.getMessage().equals("Canceled")) return;
 
-                        if (mTimerTimeout != null)
-                            mTimerTimeout.cancel();
+                        stopTimer();
 
-                        String title;
+                        String title = MyApplication.getTitleTypeToup(mActionSumitTopup);
+/*
                         if (mTopup.equals(FragmentTopup.MOBILE)) {
                             title = MyApplication.getContext().getString(R.string.title_topup);
                         } else {
                             title = MyApplication.getContext().getString(R.string.dashboard_pin);
                         }
+*/
 
-
-                        if (mAlertTimeout != null && mAlertTimeout.isShowing()) {
-                            mAlertTimeout.cancel();
-//                            Global.getInstance().setProcessSubmit(null, null);
-
-
-                        }
-                            MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
-                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
-                                            " " + MyApplication.getContext().getString(R.string.currency),
-                                    MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone +
-                                            " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                    android.R.drawable.stat_sys_warning);
+                        MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
+                                title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
+                                        " " + MyApplication.getContext().getString(R.string.currency),
+                                MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone +
+                                        " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                                android.R.drawable.stat_sys_warning);
 
 
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
@@ -741,11 +729,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void startTimeoutSubmit(final String tranid){
-
-        if (mTimerTimeout != null){
-            mTimerTimeout.cancel();
-            mTimerTimeout = null;
-        }
+        stopTimer();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
                 .setTitle(R.string.warning)
@@ -774,6 +758,7 @@ public class FragmentTopupPackage extends  Fragment{
         mTimerTimeout.schedule(new TimerTask() {
             @Override
             public void run() {
+                    if (getActivity() == null) return;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -791,6 +776,19 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
+    public void stopTimer(){
+
+        if (mAlertTimeout != null) {
+            mAlertTimeout.cancel();
+        }
+
+        if (mTimerTimeout != null) {
+            mTimerTimeout.cancel();
+            mTimerTimeout.purge();
+            mTimerTimeout = null;
+        }
+
+    }
 
     private void setupVAS(String response){
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
@@ -806,7 +804,6 @@ public class FragmentTopupPackage extends  Fragment{
             public void onItemClick(View view, int position) {
                 setAmt(mVasAdapter.getItem(position).getAmount(), mVasAdapter.getItem(position).getPackageId());
                 mPgName = mVasAdapter.getItem(position).getServiceNameTh();
-                if (!checkData()) return;
                 showDialogConfirmVAS(position);
             }
         }));
@@ -852,6 +849,7 @@ public class FragmentTopupPackage extends  Fragment{
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (!checkData()) return;
                         mBottomAction.setEnable(false);
                         mHolder.mRecyclerVAS.animate()
                                 .alpha(0.0f)

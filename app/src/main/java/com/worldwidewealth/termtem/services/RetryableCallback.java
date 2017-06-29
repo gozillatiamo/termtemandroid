@@ -3,6 +3,12 @@ package com.worldwidewealth.termtem.services;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
+import com.google.gson.Gson;
+import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.util.Util;
+
 import java.net.ConnectException;
 
 import retrofit2.Call;
@@ -18,10 +24,20 @@ public abstract class RetryableCallback<T> implements Callback<T> {
     private static final String TAG = RetryableCallback.class.getSimpleName();
     private final Call<T> call;
     private int retryCount = 0;
+    private Trace mTrace = null;
 
     public RetryableCallback(Call<T> call, int totalRetries){
         this.call = call;
         this.totalRetries = totalRetries;
+
+        String strRequest = Util.convertToStringRequest(call.request().body());
+        if (strRequest != null) {
+            RequestModel requestModel = new Gson().fromJson(strRequest, RequestModel.class);
+            mTrace = FirebasePerformance.getInstance().newTrace(requestModel.getAction());
+            mTrace.start();
+            mTrace.incrementCounter("REQUEST");
+        }
+
     }
 
     @Override
@@ -50,17 +66,27 @@ public abstract class RetryableCallback<T> implements Callback<T> {
     }
 
     public void onFinalResponse(Call<T> call, Response<T> response){
-
+        if (mTrace != null){
+            mTrace.stop();
+        }
     }
 
     public void onFinalFailure(Call<T> call, Throwable t){
-
+/*
+        if (mTrace != null){
+            mTrace.incrementCounter(t.getMessage());
+        }
+*/
     }
 
     private void retry(){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (mTrace != null){
+                    mTrace.incrementCounter("RETRY");
+                }
+
                 call.clone().enqueue(RetryableCallback.this);
             }
         }, 500);

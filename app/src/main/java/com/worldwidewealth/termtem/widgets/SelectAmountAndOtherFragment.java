@@ -26,6 +26,8 @@ import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.util.BottomAction;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.text.NumberFormat;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,6 +112,7 @@ public class SelectAmountAndOtherFragment extends Fragment {
             mBottomAction.updatePrice(0);
             ((AmountBtnAdapter)mHolder.mRecyclerAmount.getAdapter()).clearSelected();
         }
+
     }
 
 
@@ -118,10 +121,20 @@ public class SelectAmountAndOtherFragment extends Fragment {
         mHolder.mRecyclerAmount.setLayoutManager(gridLayoutManager);
         mAdapter = new AmountBtnAdapter();
         mHolder.mRecyclerAmount.setAdapter(mAdapter);
+        setAmtFavorite();
+
+    }
+
+    private void setAmtFavorite(){
 
         if (mFavAmt > 0){
 
-            for (int i = 0; i < (mListAmount.length-1); i++){
+            for (int i = 0; i < mListAmount.length; i++){
+
+                if (i == (mListAmount.length-1)){
+                    mDefaultPosition = i;
+                    break;
+                }
 
                 if (Double.parseDouble(mListAmount[i]) == mFavAmt){
                     mDefaultPosition = i;
@@ -130,12 +143,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
             }
 
             if (mDefaultPosition != -1){
-                mAdapter.setClickChoiceTopup(null, mDefaultPosition);
+                mAdapter.setClickChoiceTopup(mDefaultPosition);
             }
 
             mAdapter.setAmtOther(mFavAmt);
         }
-
 
     }
 
@@ -192,6 +204,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
         }
 
         @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mTextProductItem.setText(getItem(position));
 
@@ -206,7 +223,9 @@ public class SelectAmountAndOtherFragment extends Fragment {
             holder.mBtnChoice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setClickChoiceTopup(holder, position);
+                    clearSelected();
+
+                    setClickChoiceTopup(position);
 
                 }
             });
@@ -229,7 +248,6 @@ public class SelectAmountAndOtherFragment extends Fragment {
 
             if (previousSelectedPosition == position) return;
 
-            clearSelected();
         }
 
         public void clearSelected(){
@@ -260,12 +278,12 @@ public class SelectAmountAndOtherFragment extends Fragment {
 
         }
 
-        public void setClickChoiceTopup(ViewHolder holder, int position){
+        public void setClickChoiceTopup(int position){
 
             String nowAmt = "0";
             if (position != -1) {
                 if (previousSelectedPosition == position) return;
-                setBackgroundSelect(holder, position);
+//                setBackgroundSelect(holder, position);
                 if (position != getItemCount()-1) {
                     nowAmt = getItem(position);
                 } else {
@@ -291,10 +309,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
             mBottomAction.updatePrice(Double.parseDouble(nowAmt));
 
             mIsFav = (mFavAmt ==  Double.parseDouble(nowAmt));
+            notifyDataSetChanged();
         }
 
         public void setAmtOther(double amt){
-            mHolder.mEditAmountOther.setText(String.valueOf((int)amt));
+            /*mHolder.mEditAmountOther.setText(String.valueOf((int)amt));
             mHolder.mLayoutEditAmountOther.setVisibility(View.VISIBLE);
             mHolder.mLayoutEditAmountOther.setAlpha(0.0f);
             mHolder.mLayoutEditAmountOther.animate()
@@ -312,7 +331,11 @@ public class SelectAmountAndOtherFragment extends Fragment {
                     });
 
 
-            previousSelectedPosition = -1;
+            previousSelectedPosition = -1;*/
+            NumberFormat format = NumberFormat.getInstance();
+            format.setMinimumFractionDigits(2);
+            format.setMaximumFractionDigits(2);
+            mHolder.mEditAmountOther.setText(format.format(amt));
             mBottomAction.updatePrice(amt);
             mIsFav = (mFavAmt ==  amt);
 
