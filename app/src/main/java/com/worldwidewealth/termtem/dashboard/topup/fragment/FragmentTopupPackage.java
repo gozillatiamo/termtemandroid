@@ -133,9 +133,14 @@ public class FragmentTopupPackage extends  Fragment{
 
                 if (intent.getExtras().getBoolean("topup")){
                     if (Global.getInstance().getLastSubmit() != null){
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
-
+                        if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
+                            try {
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                            } catch (IllegalStateException e){
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 } else {
                     Global.getInstance().setLastSubmit(null, false);

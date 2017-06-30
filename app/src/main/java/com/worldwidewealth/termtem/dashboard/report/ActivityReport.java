@@ -34,6 +34,7 @@ import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.dashboard.report.adapter.PagerTypeReportAdapter;
 import com.worldwidewealth.termtem.dashboard.report.fragment.GraphReportFragment;
 import com.worldwidewealth.termtem.dashboard.report.fragment.TextReportFragment;
+import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
 import com.worldwidewealth.termtem.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -328,6 +329,7 @@ public class ActivityReport extends MyAppcompatActivity {
         builder.setNegativeButton(R.string.cancel, null);
 
         mChoiceDialog = builder.create();
+        mChoiceDialog.setOnShowListener(new MyShowListener());
         mChoiceDialog.show();
     }
 

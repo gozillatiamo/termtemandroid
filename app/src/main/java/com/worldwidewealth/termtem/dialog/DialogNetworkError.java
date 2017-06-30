@@ -102,10 +102,8 @@ public class DialogNetworkError {
         alertDialog.setOnDismissListener(dismissListener);
         try {
             alertDialog.show();
-/*
             TextView msgTxt = (TextView) alertDialog.findViewById(android.R.id.message);
             msgTxt.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.small_text_size));
-*/
 
         } catch (Exception e){}
 

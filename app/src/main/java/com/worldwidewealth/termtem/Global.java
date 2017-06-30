@@ -345,8 +345,15 @@ public class Global {
         return true;
     }
 
+
     public boolean getSubmitIsFav(){
         return mPreferences.getBoolean(SUBMIT_IS_FAV, false);
+    }
+
+    public void setSubmitIsFav(boolean isFav){
+
+        mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
+        mEditor.commit();
     }
 
     public RequestModel getLastSubmit(){

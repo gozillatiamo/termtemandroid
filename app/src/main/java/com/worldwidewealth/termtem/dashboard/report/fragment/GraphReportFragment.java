@@ -74,6 +74,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
     private TextView mTextTimeFrom, mTextTimeTo;
     private String textCenterPieChart = "PIE CHART";
     private Typeface mTf;
+    private int mLastPositionZoom = -1;
 
     private long mTimeFrom;
     private long mTimeTo;
@@ -166,10 +167,46 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
         xAxis.setTypeface(mTf);
+
+        Log.e(TAG, "Size: "+xAxisValues.size());
+        if (xAxisValues.size() > 8){
+            xAxis.setLabelCount(8, true);
+        } else {
+            xAxis.setLabelCount(xAxisValues.size(), true);
+        }
+
+        if (xAxisValues.size() < 2) {
+            xAxis.setAxisMinimum(-0.1f);
+        } else {
+        }
+
+        if (xAxisValues.size() == 1) {
+            xAxis.setCenterAxisLabels(true);
+            xAxis.setLabelRotationAngle(0f);
+        } else {
+            xAxis.setCenterAxisLabels(false);
+            xAxis.setLabelRotationAngle(45f);
+        }
+
+        mLastPositionZoom = -0x01;
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return xAxisValues.get((int)value);
+
+                int position = (int) value;
+                if (position == mLastPositionZoom)
+                    return "";
+
+                if (xAxisValues.size() != 1) {
+                    if (value >= xAxisValues.size())
+                        mLastPositionZoom = xAxisValues.size() - 1;
+                    else
+                        mLastPositionZoom = position;
+
+                } else
+                    mLastPositionZoom = 0;
+
+                return xAxisValues.get(mLastPositionZoom);
             }
         });
 
@@ -207,18 +244,33 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
                     +calendar.get(Calendar.YEAR)+"\nAmount: "+(float) model.getAMOUNT());
             rollCalendar(calendar);
             dateStart = calendar.getTimeInMillis();
+
         }
+
+/*
+        Log.e(TAG, "sizeData: "+mLineData.size());
+        Log.e(TAG, "sizeDes: "+xAxisValues.size());
+        mLineData.add(new Entry(mLineData.size(), (float) 0));
+
+        calendar.setTimeInMillis(mTimeTo);
+        rollCalendar(calendar);
+        xAxisValues.put(mLineData.size(), calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH")));
+*/
 
         addDateValues(calendar.getTimeInMillis(), mTimeTo);
 
         LineDataSet d1 = new LineDataSet(mLineData, getString(R.string.all_total));
 
         d1.setLineWidth(2.5f);
-        d1.setDrawCircleHole(false);
-        d1.setDrawCircles(false);
+
+        if (mLineData.size() > 8){
+            d1.setDrawCircleHole(false);
+            d1.setDrawCircles(false);
+        }
         d1.setHighLightColor(R.color.colorPrimary);
         d1.setDrawValues(false);
 
+        Log.e(TAG, xAxisValues.toString());
 
         LineData cd = new LineData(d1);
         cd.setValueTypeface(mTf);
@@ -344,6 +396,9 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
                     break;
                 case ActivityReport.EPIN_REPORT:
                     textCenterPieChart = getString(R.string.dashboard_pin);
+                    break;
+                case ActivityReport.VAS_REPORT:
+                    textCenterPieChart = getString(R.string.vas);
                     break;
                 case ActivityReport.CASHIN_REPORT:
                     textCenterPieChart = getString(R.string.add_credit_agent);

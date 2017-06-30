@@ -162,7 +162,11 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new DialogCounterAlert.DialogProgress(getContext()).show();
+//        new DialogCounterAlert.DialogProgress(getContext()).show();
+        mTypePage = getArguments().getInt(TYPEPAGE);
+        mTypeToup = getArguments().getString(TYPETOPUP);
+        mTransID = getArguments().getString(TRANID);
+        mIsFav = getArguments().getBoolean(FAVORITE);
 
 
     }
@@ -175,19 +179,13 @@ public class FragmentTopupSlip extends Fragment {
         mImageByte = getArguments().getByteArray(IMAGE);
         mTransID = getArguments().getString(TRANSID);
 */
-        mTypePage = getArguments().getInt(TYPEPAGE);
-        mTypeToup = getArguments().getString(TYPETOPUP);
-        mTransID = getArguments().getString(TRANID);
-        mIsFav = getArguments().getBoolean(FAVORITE);
-
-
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_slip, container, false);
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-
+        getBalance();
         setupDataType();
 
         return rootView;
@@ -201,15 +199,14 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mTransID == null){
+        if (Global.getInstance().getLastTranId() == null){
             getActivity().finish();
             return;
         }
 
-        DialogCounterAlert.DialogProgress.show();
+//        DialogCounterAlert.DialogProgress.show();
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
-        getBalance();
         switch (mTypePage){
             case PREVIEW:
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -233,17 +230,16 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (mTypePage == PREVIEW) {
-            Global.getInstance().setLastSubmit(null, false);
-        }
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
+    }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     private void setupDataType(){
@@ -431,7 +427,7 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void getBalance(){
-        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, new DataRequestModel()));
+        Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, Global.getInstance().getLastSubmit().getData()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -595,16 +591,20 @@ public class FragmentTopupSlip extends Fragment {
                                     }
 
                                     mHolder.mBtnAddFavorite.setClickable(false);
+                                    DataRequestModel requestModel = Global.getInstance().getLastSubmit().getData();
+                                    AddFavRequestModel favRequestModel = new AddFavRequestModel(mTransID, favName, getService());
+                                    favRequestModel.setAGENTID(requestModel.getAGENTID());
+                                    favRequestModel.setUSERID(requestModel.getUSERID());
+                                    favRequestModel.setTXID(requestModel.getTXID());
 
                                     Call<ResponseBody> call = services.service(new RequestModel(
-                                            APIServices.ACTION_ADD_FAV,
-                                            new AddFavRequestModel(mTransID, favName, getService())
-                                    ));
+                                            APIServices.ACTION_ADD_FAV, favRequestModel));
 
                                     APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                                            mIsFav = true;
+                                            Global.getInstance().setSubmitIsFav(mIsFav);
                                         }
 
                                         @Override
@@ -630,6 +630,10 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mTypePage == PREVIEW) {
+                    Global.getInstance().setLastSubmit(null, false);
+                }
+
                 getActivity().finish();
 
 /*

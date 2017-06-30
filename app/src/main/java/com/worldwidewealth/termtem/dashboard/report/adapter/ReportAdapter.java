@@ -75,6 +75,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         }
         holder.mTextAmount.setText(format.format(getItem(position).getAMOUNT()));
         holder.mTextPhoneNum.setText(getItem(position).getPHONENO());
+
+        if (getItem(position).getTYPE().equals(ActivityReport.VAS_REPORT)){
+            holder.mTextTitleAmonut.setText(R.string.title_text_price_vas);
+        } else {
+            holder.mTextTitleAmonut.setText(R.string.amount);
+        }
     }
 
     @Override
@@ -91,7 +97,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     }
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mTextCheckTotal, mTextPayCode, mTextBiller, mTextPhoneNum, mTextAmount
-                , mTextComAmount, mTextDatePayment, mTextTiltle, mTextAgentName;
+                , mTextComAmount, mTextDatePayment, mTextTiltle, mTextAgentName, mTextTitleAmonut;
         private View mLayoutCommisstion, mLayoutBiller, mLayoutAgentName;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,6 +113,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             mLayoutCommisstion = (View) itemView.findViewById(R.id.layout_commission);
             mLayoutBiller = (View) itemView.findViewById(R.id.layout_biller);
             mLayoutAgentName = (View) itemView.findViewById(R.id.layout_agent_name);
+            mTextTitleAmonut = (TextView) itemView.findViewById(R.id.title_amount_report);
         }
     }
 }

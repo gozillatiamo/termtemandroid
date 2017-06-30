@@ -90,15 +90,18 @@ public class ActivityTopup extends MyAppcompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!(getSupportFragmentManager().findFragmentById(R.id.container_topup) instanceof FragmentTopupSlip)) {
 
         if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
             new DialogCounterAlert.DialogProgress(this).show();
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
-                            MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
-                            Global.getInstance().getLastTranId(),
-                            Global.getInstance().getSubmitIsFav())).commit();
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
+                                MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
+                                Global.getInstance().getLastTranId(),
+                                Global.getInstance().getSubmitIsFav())).commit();
+            }
 
 //            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
         }

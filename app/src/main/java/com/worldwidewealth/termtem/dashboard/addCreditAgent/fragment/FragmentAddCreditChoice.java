@@ -98,7 +98,7 @@ public class FragmentAddCreditChoice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new DialogCounterAlert.DialogProgress(getContext()).show();
+//        new DialogCounterAlert.DialogProgress(getContext()).show();
 
         if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
 

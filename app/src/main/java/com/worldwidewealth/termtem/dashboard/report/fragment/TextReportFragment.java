@@ -72,6 +72,8 @@ public class TextReportFragment extends Fragment {
     private Bitmap mImageBitmap;
     private ImageView mImageSlip;
 
+    private List<SalerptResponseModel> mListData = null;
+
     public static final String TAG = TextReportFragment.class.getSimpleName();
 
     // TODO: Rename and change types of parameters
@@ -120,7 +122,7 @@ public class TextReportFragment extends Fragment {
 
     private void setupRecyclerView(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mAdapter = new ReportAdapter(getContext(), null);
+        mAdapter = new ReportAdapter(getContext(), mListData);
         mListReport.setLayoutManager(layoutManager);
         mListReport.setAdapter(new AlphaInAnimationAdapter(mAdapter));
         mListReport.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -169,7 +171,8 @@ public class TextReportFragment extends Fragment {
     }
 
     public void updateDataReport(List<SalerptResponseModel> listdata){
-        mAdapter.updateAll(listdata);
+        mListData = listdata;
+        mAdapter.updateAll(mListData);
     }
 
     private void serviceEslip(final int position){

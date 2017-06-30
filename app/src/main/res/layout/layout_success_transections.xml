@@ -136,11 +136,11 @@
                     android:id="@+id/text_success"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SUCCESS"
+                    android:text="@string/success"
 
                     android:textStyle="bold"
                     android:textColor="#4BB543"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:textSize="@dimen/my_text_large"/>
             </LinearLayout>
 

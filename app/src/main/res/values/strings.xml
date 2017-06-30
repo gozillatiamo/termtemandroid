@@ -278,7 +278,7 @@
     <string name="epin_title_amount">จำนวนเงิน (บาท)</string>
     <string name="menu">เมนู</string>
     <string name="messages_not_have">ไม่มีข้อความ</string>
-    <string name="add_to_favorite">เพิ่มรายการโปรด</string>
+    <string name="add_to_favorite">บันทึกรายการโปรด</string>
     <string name="note">หมายเหตุ :</string>
     <string name="favorite">รายการโปรด</string>
     <string name="note_detail">"กรุณาเก็บหลักฐานการฝาก หรือ การโอนเงินไว้แจ้งผ่านเมนู \"แจ้งโอนผ่านธนาคาร\" ในแอพฯเติมเต็ม"</string>
