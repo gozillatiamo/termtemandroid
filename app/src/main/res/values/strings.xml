@@ -41,8 +41,8 @@
     <string name="password_again">ยืนยันรหัสผ่าน</string>
     <string name="done">เสร็จสิ้น</string>
     <string name="register_done">&#9679;\t บริษัทได้รับคำขอสมัครใช้บริการเรียบร้อยแล้ว
-        \n\n &#9679;\t รอรับ “รหัสผู้ใช้งาน” และ “รหัสผ่าน” เมื่อได้รับการอนุมัติจากบริษัท
-        \n\n &#9679;\t สอบถามเพิ่มเติม ติดต่อ 02-331-4788</string>
+        \n\n&#9679;\t รอรับ “รหัสผู้ใช้งาน” และ “รหัสผ่าน” เมื่อได้รับการอนุมัติจากบริษัท
+        \n\n&#9679;\t สอบถามเพิ่มเติม ติดต่อ 02-331-4788</string>
     <string name="thank_register_done">ขอบคุณท่านที่ให้ความสนใจบริการเติมเต็ม</string>
     <string name="register_device_done">ลงทะเบียนเสร็จสิ้น ทางบริษัทจะติดต่อกลับโดยเร็วที่สุด</string>
     <string name="back_to_login">กลับหน้าเข้าสู่ระบบ</string>
@@ -56,7 +56,6 @@
     <string name="report_history">ประวัติรายการ</string>
     <string name="dashboard_other">อื่น ๆ</string>
     <string name="setting">ตั้งค่าโปรแกรม</string>
-    <string name="bill_payment">ชำระบิล</string>
     <string name="transfer">แล้เปลี่ยนเงิน</string>
     <string name="topup_online">Topup Online</string>
     <string name="topup_pin">Topup Pin</string>
@@ -127,6 +126,7 @@
     <string name="dashboard_web_passport">Web Passport</string>
     <string name="dashboard_credit">Credit</string>
     <string name="dashboard_service">TopUp</string>
+    <string name="dashboard_bill_pay">จ่ายบิล</string>
     <string name="dashboard_my_profile">My Profile</string>
     <string name="dashboard_settings">Settings</string>
     <string name="dashboard_time_line">Timeline</string>
@@ -293,7 +293,7 @@
     <string name="interested">สนใจ</string>
     <string name="ignore">ไม่สนใจ</string>
     <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
-    <string name="error_msg">เกิดข้อผิดพลาดในการรับข้อมูลกรุณาลองใหม่อีกครั้ง</string>
+    <string name="error_msg">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
 
 
     //Chat bot

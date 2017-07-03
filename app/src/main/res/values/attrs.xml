@@ -16,6 +16,7 @@
             <enum name="other" value="9"/>
             <enum name="ar" value="10"/>
             <enum name="vas" value="11"/>
+            <enum name="billpay" value="12"/>
         </attr>
         <attr name="mbv_visibility" format="enum">
             <enum name="show" value="0"/>

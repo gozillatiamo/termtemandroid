@@ -250,9 +250,7 @@ public class FavoritesActivity extends MyAppcompatActivity {
 
         if (intent != null){
             overridePendingTransition(R.anim.slide_in_right, 0);
-
             startActivity(intent);
-            finish();
         }
 
     }

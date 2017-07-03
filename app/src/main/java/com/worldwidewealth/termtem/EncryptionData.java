@@ -250,8 +250,15 @@ public class EncryptionData {
                                 return null;
                             }
 
-                            new ErrorNetworkThrowable(null).networkError(context,
-                                    MyApplication.getContext().getString(R.string.error_msg), call, callback, true);
+                            msg = responseModel.getMsg();
+
+                            switch (requestModel.getAction()){
+                                case APIServices.ACTION_GET_LISTPG:
+                                    msg = MyApplication.getContext().getString(R.string.error_msg);
+                                    break;
+                            }
+                            new ErrorNetworkThrowable(null).networkError(context, msg
+                                    , call, callback, true);
                     }
                 } catch (NullPointerException e){
                     DialogCounterAlert.DialogProgress.dismiss();

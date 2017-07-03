@@ -94,8 +94,12 @@ public class DialogNetworkError {
             });
         }
 
-        if (alertDialog != null && alertDialog.isShowing())
-            alertDialog.dismiss();
+        try {
+            if (alertDialog != null && alertDialog.isShowing())
+                alertDialog.cancel();
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
 
         alertDialog = builder.create();
         alertDialog.setOnShowListener(new MyShowListener());

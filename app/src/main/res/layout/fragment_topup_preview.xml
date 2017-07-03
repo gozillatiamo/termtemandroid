@@ -58,7 +58,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/layout_commission"
                     android:layout_width="match_parent"

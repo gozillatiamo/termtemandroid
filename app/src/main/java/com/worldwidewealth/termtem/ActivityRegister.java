@@ -411,6 +411,10 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                 Toast.makeText(this, R.string.error_image_identity, Toast.LENGTH_SHORT).show();
                 mHolder.mBtnAttach.requestFocus();
                 break;
+            case AGENT_TEL:
+                editText = mHolder.mEditTelAgent;
+                break;
+
 
         }
 
@@ -486,8 +490,10 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                             mFormatting = true;
                             PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
                             mFormatting = false;
-                            check = CheckSyntaxData.isPhoneValid(s.toString());
                         }
+
+                        check = CheckSyntaxData.isPhoneValid(s.toString().replaceAll("-", ""));
+
                         break;
                     case IDEN:
                         if (s.length() == 13){
@@ -505,8 +511,13 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                             mFormatting = true;
                             PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
                             mFormatting = false;
-                            check = CheckSyntaxData.isPhoneValid(s.toString());
                         }
+
+                        if (s.toString().equals(""))
+                            check = true;
+                        else
+                            check = CheckSyntaxData.isPhoneValid(s.toString().replaceAll("-", ""));
+
                         break;
                     default:
                         if (s.toString().equals("")){
@@ -521,7 +532,8 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                 else
                     imgCheck = getResources().getDrawable( R.drawable.ic_cancel );
 
-                if (type == EMAIL && s.toString().equals(""))
+                if ((type == EMAIL || type == AGENT_TEL)
+                        && s.toString().equals(""))
                     imgCheck = null;
 
 

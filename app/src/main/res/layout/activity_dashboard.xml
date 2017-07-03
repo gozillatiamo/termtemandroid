@@ -151,6 +151,18 @@
 
                                     </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
+                                    <com.worldwidewealth.termtem.widgets.MenuButtonView
+                                        android:id="@+id/mbv_bill_pay"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        app:mbv_icon="@drawable/ic_vas"
+                                        app:mbv_title="@string/dashboard_bill_pay"
+                                        app:mbv_type="billpay"
+                                        app:mbv_visibility="hide">
+
+                                    </com.worldwidewealth.termtem.widgets.MenuButtonView>
+
 
                                 </LinearLayout>
 

@@ -130,6 +130,11 @@ public class LocalService extends Service {
     private void countDownLogout(final Context context, final int startId){
         if (Global.getInstance().getUSERNAME() == null) return;
 
+        if (T != null) {
+            T.cancel();
+            T.purge();
+        }
+
         T = new Timer();
         T.scheduleAtFixedRate(new TimerTask() {
             @Override

@@ -80,8 +80,11 @@ public class ActivityTopup extends MyAppcompatActivity {
         }
 
         if (mPreviousTransId == null){
-            initContainer();
-            if (mPhoneNo != null) startWithOldPhoneNO();
+            if (mPhoneNo != null)
+                startWithOldPhoneNO();
+            else
+                initContainer();
+
         }
 
 
@@ -187,7 +190,6 @@ public class ActivityTopup extends MyAppcompatActivity {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                 .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo, mLastAmt))
-                .addToBackStack(null)
                 .commit();
 
     }
