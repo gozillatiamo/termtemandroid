@@ -20,6 +20,7 @@ import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.MenuPopupWindow;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -89,11 +90,12 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     private static final int ATTACH = 6;
     private static final int PEOPLE = 7;
     private static final int EMAIL = 8;
+    private static final int AGENT_TEL = 9;
     private String mEmail, mFirstName, mLastName, mTel, mIden;
     private Dialog mDialogCondition;
     private DatePickerDialog mDateDialog;
     private int mPerson = 0;
-    private boolean[] mDataCheck = new boolean[9];
+    private boolean[] mDataCheck = new boolean[10];
     private APIServices services;
     private TermTemLoading mLoading;
     private Calendar mCalendar = Calendar.getInstance();
@@ -112,6 +114,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         mHolder = new ViewHolder(this);
         mDataCheck[EMAIL] = true;
         mDataCheck[PEOPLE] = true;
+        mDataCheck[AGENT_TEL] = true;
         Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
         initToolbar();
@@ -297,7 +300,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                     mBitmapImage = null;
                                 }
 
-                                Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(new RegisterRequestModel.Data(
+                                RegisterRequestModel.Data registerRequestModel = new RegisterRequestModel.Data(
                                         mHolder.mEditTitleName.getText().toString(),
                                         mFirstName,
                                         mLastName,
@@ -307,7 +310,15 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                         mIden,
                                         mPerson,
                                         mAttachEncode
-                                )));
+                                );
+
+                                String agent_tel = mHolder.mEditTelAgent.getText().toString().replaceAll("-", "");
+
+                                if (agent_tel != null || !agent_tel.isEmpty()){
+                                    registerRequestModel.setREFCODE(agent_tel);
+                                }
+
+                                Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(registerRequestModel));
 
 
 
@@ -442,6 +453,8 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
 
     }
 
+    private boolean mFormatting;
+
     private TextWatcher onTextChanged(final EditText editText, final int type){
         return new TextWatcher() {
             @Override
@@ -469,7 +482,12 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                 switch (type){
 
                     case TEL:
-                        check = CheckSyntaxData.isPhoneValid(s.toString());
+                        if (!mFormatting){
+                            mFormatting = true;
+                            PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                            mFormatting = false;
+                            check = CheckSyntaxData.isPhoneValid(s.toString());
+                        }
                         break;
                     case IDEN:
                         if (s.length() == 13){
@@ -481,6 +499,14 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                             check = true;
                         else
                             check = CheckSyntaxData.isEmailValid(s.toString());
+                        break;
+                    case AGENT_TEL:
+                        if (!mFormatting){
+                            mFormatting = true;
+                            PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                            mFormatting = false;
+                            check = CheckSyntaxData.isPhoneValid(s.toString());
+                        }
                         break;
                     default:
                         if (s.toString().equals("")){
@@ -564,7 +590,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         private Button mBtnNext, mBtnAttach;
         private ImageView mImageAttach;
         private EditText mEditEmail, mEditFristName, mEditLastName, mEditTel, mEditIdentification,
-        mEditPeopleType, mEditBirth, mEditTitleName;
+        mEditPeopleType, mEditBirth, mEditTitleName, mEditTelAgent;
         private Toolbar mToolbar;
         private AutofitTextView mBtnSignIn;
 
@@ -601,6 +627,10 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
             mEditTitleName = (EditText) view.findViewById(R.id.edit_title_name);
             mEditTitleName.addTextChangedListener(onTextChanged(mEditTitleName, TITLENAME));
             mEditTitleName.setOnTouchListener(ActivityRegister.this);
+
+            mEditTelAgent  = (EditText) view.findViewById(R.id.edit_tel_agent);
+            mEditTelAgent.addTextChangedListener(onTextChanged(mEditTelAgent, AGENT_TEL));
+
 
             mBtnAttach = (Button) view.findViewById(R.id.btn_attach);
             mBtnAttach.setOnClickListener(ActivityRegister.this);

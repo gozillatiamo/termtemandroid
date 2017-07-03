@@ -33,6 +33,7 @@ public class RegisterRequestModel {
         private String PHONENO;
         private String IDCARD;
         private String TITLE_NAME;
+        private String REFCODE;
         private long BDAY;
         private String IDFILE;
         private int AGENTTYPE;
@@ -58,6 +59,10 @@ public class RegisterRequestModel {
             this.IDFILE = idfile;
 
 
+        }
+
+        public void setREFCODE(String REFCODE) {
+            this.REFCODE = REFCODE;
         }
     }
 }
