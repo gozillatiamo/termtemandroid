@@ -294,6 +294,14 @@
     <string name="ignore">ไม่สนใจ</string>
     <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
     <string name="error_msg">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
+    <string name="scan_barcode">สแกนบาร์โค้ด</string>
+    <string name="enter_phone_no">กรอกหมายเลข\nโทรศัพท์</string>
+    <string name="electricity_water_bill">ค่าน้ำ-ค่าไฟ</string>
+    <string name="internet_phone_bill">อินเทอร์เน็ต\nโทรศัพท์</string>
+    <string name="credit_card_bill">บัตรเครดิต</string>
+    <string name="insurance_bill">ประกันภัย</string>
+    <string name="home_car_bill">ผ่อนบ้าน/รถ</string>
+    <string name="shopping_bill">ค่าสินค้า</string>
 
 
     //Chat bot
@@ -546,6 +554,15 @@
         <item>ภาพ</item>
     </string-array>
 
+    <string-array name="list_main_bill_service">
+        <item>@string/electricity_water_bill</item>
+        <item>@string/internet_phone_bill</item>
+        <item>@string/credit_card_bill</item>
+        <item>@string/insurance_bill</item>
+        <item>@string/home_car_bill</item>
+        <item>@string/shopping_bill</item>
+    </string-array>
+
     <string-array name="list_advoid_device_id">
         <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
         <item>866234029722533</item>
@@ -579,4 +596,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_favorites">รายการโปรด</string>
+    <string name="title_activity_bill_payment">BillPayment</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -175,11 +175,16 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     private void setTextDate(Date date, TextView textDate){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+        String min = null;
+        if (calendar.get(Calendar.MINUTE) < 10)
+            min = "0" + calendar.get(Calendar.MINUTE);
+        else
+            min = ""+calendar.get(Calendar.MINUTE);
 
         String strDate = calendar.get(Calendar.DAY_OF_MONTH)+"-"+
                 calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH"))+"-"+
                 (calendar.get(Calendar.YEAR)+543)+" "+mContext.getString(R.string.time)+" "+
-                calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
+                calendar.get(Calendar.HOUR_OF_DAY)+":"+min;
 
         textDate.setText(strDate);
     }

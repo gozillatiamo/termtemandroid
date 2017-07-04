@@ -49,4 +49,13 @@
         <item>3</item>
         <item>3</item>
     </integer-array>
+
+    <integer-array name="list_icon_main_bill">
+        <item>@drawable/ic_electricity</item>
+        <item>@drawable/ic_internet</item>
+        <item>@drawable/ic_credit_card</item>
+        <item>@drawable/ic_insurance</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_shopping</item>
+    </integer-array>
 </resources>

@@ -1,0 +1,91 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.worldwidewealth.termtem.dashboard.billpayment.fragment.MainBillPayFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_space">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_bill_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fillViewport="true">
+        </android.support.v7.widget.RecyclerView>
+
+        <FrameLayout
+            android:id="@+id/layout_one_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                android:id="@+id/btn_scan_barcode_big"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                android:visibility="gone"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_space"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="@dimen/icon_big_size"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_barcode"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/scan_barcode"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        style="@style/TextAppearance.AppCompat.Large"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/layout_two_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                    android:id="@+id/btn_scan_barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:mbv_icon="@drawable/ic_barcode"
+                    app:mbv_title="@string/scan_barcode"
+                    app:mbv_visibility="show">
+
+                </com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+                <com.worldwidewealth.termtem.widgets.MenuButtonView
+                    android:id="@+id/btn_fill_phone_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:mbv_icon="@drawable/ic_star_white"
+                    app:mbv_title="@string/enter_phone_no"
+                    app:mbv_visibility="show">
+
+                </com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </LinearLayout>
+
+</FrameLayout>

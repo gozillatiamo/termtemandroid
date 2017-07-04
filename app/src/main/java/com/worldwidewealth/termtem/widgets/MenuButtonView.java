@@ -10,14 +10,18 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +35,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.OtherMenuFragment;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.mPayStation.SelectChoiceMpayActivity;
 import com.worldwidewealth.termtem.dashboard.myqrcode.ActivityMyQrCode;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
@@ -80,7 +85,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         EPIN(8),
         OTHER(9),
         AR(10),
-        VAS(11);
+        VAS(11),
+        BILLPAY(12);
 
         private int type;
         TYPE(int i) {
@@ -187,6 +193,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         setType(mType);
         setMenuVisibility(mVisibility);
     }
+
 
     private void setup(AttributeSet attrs){
         if(!isInEditMode()) {
@@ -332,6 +339,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         if (attrs != null){
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MenuButtonView);
             mTitle = typedArray.getString(R.styleable.MenuButtonView_mbv_title);
+
             mIcon = typedArray.getResourceId(R.styleable.MenuButtonView_mbv_icon, R.drawable.ic_people);
             mType = typedArray.getInt(R.styleable.MenuButtonView_mbv_type, -1);
             mVisibility = typedArray.getInt(R.styleable.MenuButtonView_mbv_visibility, VISIBILITY.HIDE.getVisibility());
@@ -479,6 +487,10 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.VAS);
                     break;
+                case BILLPAY:
+                    intent = new Intent(getContext(), BillPaymentActivity.class);
+                    break;
+
             }
 
             switch (TYPE.values()[this.mType]){
@@ -487,6 +499,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                 case AGENTCASHIN:
                 case SCAN:
                 case VAS:
+                case BILLPAY:
                     if (Global.getInstance().getLastTranId() != null) {
                         showDialogHasProcess(getContext());
                         return;

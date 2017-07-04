@@ -6,74 +6,82 @@
     android:foreground="?attr/selectableItemBackground"
     android:fillViewport="true"
     app:cardUseCompatPadding="true">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="@dimen/activity_space"
-        >
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_fav_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="1/1/2017"
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="bold"
+            android:textColor="#ccc"/>
 
-        <ImageView
-            android:id="@+id/icon_fav"
-            android:layout_width="@dimen/icon_large_size"
-            android:layout_height="@dimen/icon_large_size"
-            android:src="@drawable/ic_topup"
-            android:layout_margin="@dimen/activity_space"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_space"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/text_fav_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:lines="1"
-                android:ellipsize="end"
-                android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingLeft="@dimen/activity_space"
+            android:paddingRight="@dimen/activity_space"
+            android:paddingBottom="@dimen/activity_space"
+            >
+
+            <ImageView
+                android:id="@+id/icon_fav"
+                android:layout_width="@dimen/icon_large_size"
+                android:layout_height="@dimen/icon_large_size"
+                android:src="@drawable/ic_topup"
+                android:layout_marginLeft="@dimen/activity_space"
+                android:layout_marginRight="@dimen/activity_space"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginLeft="@dimen/activity_space"
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/text_fav_des"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/text_fav_title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="description"
-                    android:textSize="@dimen/small_text_size"/>
-                <TextView
-                    android:id="@+id/text_fav_amt"
-                    android:layout_width="wrap_content"
+                    android:text="Title"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textStyle="bold"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_marginLeft="@dimen/activity_small_space"
-                    android:textStyle="bold"
-                    android:text="10.00"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/activity_small_space"
-                    android:text="@string/currency"/>
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_fav_des"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="description"
+                        android:textSize="@dimen/small_text_size"/>
+                    <TextView
+                        android:id="@+id/text_fav_amt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginLeft="@dimen/activity_small_space"
+                        android:textStyle="bold"
+                        android:text="10.00"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/activity_small_space"
+                        android:text="@string/currency"/>
 
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_fav_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="1/1/2017"
-        android:textSize="@dimen/small_text_size"
-        android:textStyle="bold"
-        android:textColor="#ccc"
-        android:layout_margin="@dimen/activity_small_space"/>
 
 </android.support.v7.widget.CardView>

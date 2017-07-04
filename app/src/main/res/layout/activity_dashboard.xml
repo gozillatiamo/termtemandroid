@@ -159,7 +159,7 @@
                                         app:mbv_icon="@drawable/ic_vas"
                                         app:mbv_title="@string/dashboard_bill_pay"
                                         app:mbv_type="billpay"
-                                        app:mbv_visibility="hide">
+                                        app:mbv_visibility="show">
 
                                     </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
