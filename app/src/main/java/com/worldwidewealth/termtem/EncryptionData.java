@@ -10,6 +10,8 @@ import android.util.Log;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 */
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -156,7 +158,7 @@ public class EncryptionData {
 
     private static int retry = 0;
     public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
-//        Trace mTrace = null;
+        Trace mTrace = null;
 
         ResponseModel responseModel;
         RequestModel requestModel = null;
@@ -166,10 +168,8 @@ public class EncryptionData {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
-/*
             mTrace = FirebasePerformance.getInstance().newTrace(requestModel.getAction());
             mTrace.start();
-*/
         }
         try {
             strRespone = response.string();
@@ -192,6 +192,10 @@ public class EncryptionData {
                             }
                         }, 3000);
 
+                        if (mTrace != null){
+                            mTrace.incrementCounter("PENDING");
+                            mTrace.stop();
+                        }
                         return APIServices.MSG_WAIT;
                     }
 
@@ -199,6 +203,11 @@ public class EncryptionData {
             }
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
+                if (mTrace != null){
+                    mTrace.incrementCounter("FAIL");
+                    mTrace.stop();
+                }
+
                 try {
                     switch (requestModel.getAction()) {
 
@@ -267,6 +276,11 @@ public class EncryptionData {
                     return null;
                 }
             } else{
+                if (mTrace != null){
+                    mTrace.incrementCounter("SUCCESS");
+                    mTrace.stop();
+                }
+
                 return responseModel;
             }
 
@@ -274,12 +288,14 @@ public class EncryptionData {
 //            String converted = Util.ConvertJsonEncode(strRespone);
             String responDecode = Util.decode(strRespone);
             Log.e(TAG, "ResponDecode: "+ responDecode);
+            if (mTrace != null){
+                mTrace.incrementCounter("SUCCESS");
+                mTrace.stop();
+            }
             return responDecode;
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            Log.e(TAG, "Finally");
         }
 
         return null;

@@ -28,19 +28,6 @@ import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.model.AttachResponseModel;
@@ -56,8 +43,8 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 public class WidgetTypeInbox extends FrameLayout{
 
     private RecyclerView mRecyclerImage;
-    private View mLayoutVrView;
-    private VideoView mVideoView;
+//    private View mLayoutVrView;
+//    private VideoView mVideoView;
 
     private int mWidgetType;
     private List<AttachResponseModel> mListImage;
@@ -133,8 +120,8 @@ public class WidgetTypeInbox extends FrameLayout{
 
     private void bindView(){
         mRecyclerImage = (RecyclerView) findViewById(R.id.list_image);
-        mLayoutVrView = findViewById(R.id.layout_360_view);
-        mVideoView = (VideoView) findViewById(R.id.video_view);
+//        mLayoutVrView = findViewById(R.id.layout_360_view);
+//        mVideoView = (VideoView) findViewById(R.id.video_view);
     }
 
     private void setupStyleable(AttributeSet attrs){
@@ -151,14 +138,16 @@ public class WidgetTypeInbox extends FrameLayout{
     public void setWidgetType(int type){
         this.mWidgetType = type;
 //        mExoPlayerView.setVisibility(GONE);
-        mVideoView.setVisibility(GONE);
-        mLayoutVrView.setVisibility(GONE);
+//        mVideoView.setVisibility(GONE);
+//        mLayoutVrView.setVisibility(GONE);
         mRecyclerImage.setVisibility(GONE);
         if (type == -1) return;
         switch (InformationView.TYPE.getTypeAt(type)){
             case VIDEO:
+/*
                 mVideoView.setVisibility(VISIBLE);
                 mVideoView.play();
+*/
 //                mExoPlayerView.setVisibility(VISIBLE);
                 if (isInEditMode()) return;
 //                setVideo(Uri.parse("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"));

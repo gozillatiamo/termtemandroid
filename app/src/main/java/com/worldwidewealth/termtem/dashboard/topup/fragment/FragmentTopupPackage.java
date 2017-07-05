@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -585,6 +586,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
+    @AddTrace(name = "SUBMITSERVICE", enabled = true)
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
@@ -616,12 +618,13 @@ public class FragmentTopupPackage extends  Fragment{
         }
 
         final RequestModel requestModel = new RequestModel(mActionSumitTopup, submitTopupRequestModel);
-        callSubmit = services.submitTopup(requestModel);
 
         startTimeoutSubmit(transid);
 
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
+
+        callSubmit = services.submitTopup(Global.getInstance().getLastSubmit());
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -775,7 +778,7 @@ public class FragmentTopupPackage extends  Fragment{
                     });
 
                     }
-        }, 10000);
+        }, 60000);
 
 //        90000
 

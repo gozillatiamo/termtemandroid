@@ -46,6 +46,10 @@
 -dontwarn com.github.siyamed.**
 -keep class com.github.siyamed.shapeimageview.**{ *; }
 
+#-keep class com.google.** { *; }
+#-keep class android.support.** { *; }
+#-dontwarn com.google.**
+#-dontwarn android.support.**
 
 ###########################
 #

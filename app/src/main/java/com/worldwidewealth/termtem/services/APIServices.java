@@ -40,7 +40,7 @@ public interface APIServices {
     public static final int SUCCESS = 0;
 
     String MSG_SUCCESS = "Success";
-    String MSG_FAIL = "Fail";
+    String MSG_FAIL = "102";
     String MSG_WAIT = "100";
 
     public static final String ACTIONLOGIN = "LOGIN";

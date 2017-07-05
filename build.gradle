@@ -32,7 +32,7 @@ ext {
 
     // dependencies versions
     supportLibraryVersion = '26.0.0-alpha1'
-    playServicesVersion = '11.0.1'
+    playServicesVersion = '11.0.2'
 }
 
 task clean(type: Delete) {

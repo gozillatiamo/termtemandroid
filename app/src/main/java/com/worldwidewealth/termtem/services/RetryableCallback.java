@@ -49,8 +49,13 @@ public abstract class RetryableCallback<T> implements Callback<T> {
                 retry();
             } else
                 onFinalFailure(call, null);
-        } else
+        } else {
+            if (mTrace != null){
+                mTrace.stop();
+            }
+
             onFinalResponse(call, response);
+        }
     }
 
     @Override
@@ -60,23 +65,21 @@ public abstract class RetryableCallback<T> implements Callback<T> {
         if (retryCount++ < totalRetries){
             Log.v(TAG, "Retrying API Call - (" + retryCount + "/" + totalRetries +")");
             retry();
-        } else
+        } else {
+            if (mTrace != null){
+                mTrace.incrementCounter(t.getMessage());
+                mTrace.stop();
+
+            }
             onFinalFailure(call, t);
+        }
 
     }
 
     public void onFinalResponse(Call<T> call, Response<T> response){
-        if (mTrace != null){
-            mTrace.stop();
-        }
     }
 
     public void onFinalFailure(Call<T> call, Throwable t){
-/*
-        if (mTrace != null){
-            mTrace.incrementCounter(t.getMessage());
-        }
-*/
     }
 
     private void retry(){

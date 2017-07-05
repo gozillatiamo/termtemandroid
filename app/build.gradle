@@ -38,8 +38,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 //        consumerProguardFiles 'proguard-android.txt', 'proguard-rules.pro', 'proguard-gvr.txt'
-        versionCode 14
-        versionName "1.4."
+        versionCode 15
+        versionName "1.5."
 //        vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
@@ -67,6 +67,8 @@ android {
         }
 
         debug {
+            minifyEnabled false
+/*
             shrinkResources true
             minifyEnabled true
             debuggable true
@@ -74,6 +76,7 @@ android {
 //            proguardFiles.add(file('proguard-gvr.txt'))
 
             signingConfig signingConfigs.config
+*/
         }
 
     }
@@ -116,7 +119,7 @@ android {
 android.applicationVariants.all {
     // Set this to false to disable Firebase Performance Monitoring at compile time
     FirebasePerformance {
-        instrumentationEnabled false
+        instrumentationEnabled true
     }
 }
 
@@ -130,16 +133,11 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
-    /*
-            compile("com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"){
-                exclude group: 'com.android.support'
-            }
-        */
-    /*
-            compile("com.google.android.gms:play-services-maps:$rootProject.ext.playServicesVersion"){
-                exclude module: 'support-v4'
-            }
-        */
+/*
+    compile("com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"){
+        exclude group: 'com.android.support'
+    }
+*/
     compile "com.android.support:percent:$rootProject.ext.supportLibraryVersion"
     /*
                                         compile 'com.google.vr:sdk-audio:1.10.0'
@@ -148,9 +146,7 @@ dependencies {
     //chat bot
     compile "com.google.firebase:firebase-core:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.ext.playServicesVersion"
-    //    compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-perf:$rootProject.ext.playServicesVersion"
-    compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
 
     compile('jp.wasabeef:recyclerview-animators:2.2.5') {
         exclude group: 'com.android.support'
@@ -168,12 +164,16 @@ dependencies {
     compile('uk.co.chrisjenx:calligraphy:2.2.0') {
         exclude module: 'appcompat-v7'
     }
+/*
     compile('com.google.vr:sdk-videowidget:1.40.0') {
         exclude module: 'support-annotations'
     }
+*/
+/*
     compile('com.google.android.exoplayer:exoplayer:r2.3.1') {
         exclude module: 'support-annotations'
     }
+*/
     compile('com.github.chrisbanes:PhotoView:2.0.0') {
         exclude module: 'support-core-utils'
     }
@@ -198,7 +198,6 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
 }
 

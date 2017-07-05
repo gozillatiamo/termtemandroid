@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
     <LinearLayout
         android:id="@+id/layout_title_video"
         android:layout_width="match_parent"
@@ -113,4 +114,5 @@
             android:paddingRight="0dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"/>
     </LinearLayout>
+-->
 </LinearLayout>

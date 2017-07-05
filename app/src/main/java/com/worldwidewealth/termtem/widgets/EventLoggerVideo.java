@@ -1,3 +1,4 @@
+/*
 package com.worldwidewealth.termtem.widgets;
 
 import android.util.Log;
@@ -21,9 +22,11 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.io.IOException;
 
+*/
 /**
  * Created by user on 07-Apr-17.
- */
+ *//*
+
 
 final class EventLoggerVideo implements ExoPlayer.EventListener,
         AudioRendererEventListener, VideoRendererEventListener,
@@ -213,3 +216,4 @@ final class EventLoggerVideo implements ExoPlayer.EventListener,
 
     }
 }
+*/

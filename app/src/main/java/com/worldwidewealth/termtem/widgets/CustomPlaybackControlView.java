@@ -1,3 +1,4 @@
+/*
 package com.worldwidewealth.termtem.widgets;
 
 import android.content.Context;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.worldwidewealth.termtem.R;
 
+*/
 /**
  * Created by user on 08-May-17.
- */
+ *//*
+
 
 public class CustomPlaybackControlView extends PlaybackControlView
     implements View.OnClickListener{
@@ -66,3 +69,4 @@ public class CustomPlaybackControlView extends PlaybackControlView
         }
     }
 }
+*/

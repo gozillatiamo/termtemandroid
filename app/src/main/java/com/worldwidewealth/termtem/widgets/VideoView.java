@@ -1,3 +1,4 @@
+/*
 package com.worldwidewealth.termtem.widgets;
 
 import android.app.Activity;
@@ -30,9 +31,11 @@ import com.google.vr.sdk.widgets.video.VrVideoView;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 
+*/
 /**
  * Created by user on 05-May-17.
- */
+ *//*
+
 
 public class VideoView extends FrameLayout{
 
@@ -102,12 +105,14 @@ public class VideoView extends FrameLayout{
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
 //        eventLogger = new EventLoggerVideo();
+*/
 /*
         player.addListener(eventLogger);
         player.setAudioDebugListener(eventLogger);
         player.setVideoDebugListener(eventLogger);
         player.setMetadataOutput(eventLogger);
-*/
+*//*
+
         mExoPlayerView.setPlayer(player);
 //        player.setPlayWhenReady(true);
 
@@ -127,3 +132,4 @@ public class VideoView extends FrameLayout{
     }
 
 }
+*/

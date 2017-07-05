@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
@@ -169,6 +171,10 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                     new DialogHelp(MainActivity.this).show();
                     break;
                 case R.id.view_chat_bot:
+                    Trace trace = FirebasePerformance.getInstance().newTrace("CHATBOT");
+                    trace.start();
+                    trace.incrementCounter("COME_IN");
+                    trace.stop();
                     startActivity(ChatBotActivity.create(this));
                     break;
 

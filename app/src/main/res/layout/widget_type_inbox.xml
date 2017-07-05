@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+<!--
     <com.worldwidewealth.termtem.widgets.VideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
@@ -12,6 +13,8 @@
         android:visibility="gone">
 
     </com.worldwidewealth.termtem.widgets.VideoView>
+-->
+<!--
     <RelativeLayout
         android:id="@+id/layout_360_view"
         android:layout_width="match_parent"
@@ -34,6 +37,7 @@
             android:background="#20000000"
             android:padding="@dimen/activity_vertical_margin"/>
     </RelativeLayout>
+-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_image"

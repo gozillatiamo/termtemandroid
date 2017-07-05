@@ -16,6 +16,10 @@ public class UserMenuModel implements Serializable {
     }
 
     public String getSTATUS() {
+        if (STATUS == null || STATUS.isEmpty()){
+            return "HIDE";
+        }
+
         return STATUS;
     }
 }

@@ -28,6 +28,11 @@ public class MainBillPayFragment extends Fragment {
     private RecyclerView mRecyclerMenu;
     private BillPayMenuAdapter mAdapter;
 
+    public static final int MAIN_MENU = 0x00;
+    public static final int SUB_MENU = 0x01;
+
+
+
     public MainBillPayFragment() {
         // Required empty public constructor
     }

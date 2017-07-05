@@ -563,6 +563,18 @@
         <item>@string/shopping_bill</item>
     </string-array>
 
+    <string-array name="list_sub_bill_electricity">
+        <item>การไฟฟ้า/nนครหลวง</item>
+        <item>การไฟฟ้า/nส่วนภูมิภาค</item>
+        <item>การประปา/nนครหลวง</item>
+    </string-array>
+
+    <string-array name="list_logo_sub_bill_electricity">
+        <item>http://jobparttimes.com/wp-content/uploads/2016/07/2578b2777d24e8eb1992c017191398b1.jpg</item>
+        <item>http://dynamicwork.net/wp/wp-content/uploads/2014/01/logo-PEA.png</item>
+        <item>http://www.sarakadee.com/wp-content/uploads/14nov.jpg</item>
+    </string-array>
+
     <string-array name="list_advoid_device_id">
         <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
         <item>866234029722533</item>

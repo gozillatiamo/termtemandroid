@@ -19,6 +19,8 @@ public class BillPayMenuAdapter extends RecyclerView.Adapter<BillPayMenuAdapter.
     private Context mContext;
     private String[] mStrListMenu;
 
+
+
     public BillPayMenuAdapter(Context context, String[] listmenu) {
         this.mContext = context;
         mStrListMenu = listmenu;

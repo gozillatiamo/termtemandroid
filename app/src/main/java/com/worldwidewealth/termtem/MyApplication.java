@@ -22,11 +22,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
@@ -85,7 +80,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static final int REQUEST_IMAGE_CHOOSE = 2;
     private static Intent intentLocalService = null;
 
-    protected String userAgent;
+//    protected String userAgent;
 
     private static BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
@@ -100,29 +95,36 @@ public class MyApplication extends Application implements Application.ActivityLi
             if (FragmentTopupPackage.callSubmit != null && FragmentTopupPackage.callSubmit.isExecuted()){
                 FragmentTopupPackage.callSubmit.cancel();
             }
-
-            if (!(intent.getExtras().containsKey("topup"))) return;
-
             String action = Global.getInstance().getLastSubmitAction();
-            if (intent.getExtras().getBoolean("topup")){
-                MyApplication.uploadSuccess(MyApplication.NOTITOPUP, submitModel.getTRANID(),
-                        getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
-                                " " + MyApplication.getContext().getString(R.string.currency),
-                        MyApplication.getContext().getString(R.string.phone_number) + " " +
-                                submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                        R.drawable.ic_check_circle_white);
 
-            } else {
+            try {
+                if (!(intent.getExtras().containsKey("topup"))) return;
+
+                if (intent.getExtras().getBoolean("topup")) {
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, submitModel.getTRANID(),
+                            getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
+                                    " " + MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number) + " " +
+                                    submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
+                            R.drawable.ic_check_circle_white);
+
+                } else {
+
+                    Global.getInstance().setLastSubmit(null, false);
+                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
+                            submitModel.getTRANID(),
+                            getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
+                                    + MyApplication.getContext().getString(R.string.currency),
+                            MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
+                                    + MyApplication.getContext().getString(R.string.msg_upload_fail),
+                            android.R.drawable.stat_sys_warning);
+
+                }
+            } catch (NullPointerException e){
+                NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
 
                 Global.getInstance().setLastSubmit(null, false);
-                MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                        submitModel.getTRANID(),
-                        getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
-                                + MyApplication.getContext().getString(R.string.currency),
-                        MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
-                                + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                        android.R.drawable.stat_sys_warning);
-
             }
         }
     };
@@ -135,7 +137,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
-        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
+//        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
         mBus = new Bus();
         mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
@@ -255,6 +257,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
+/*
     public boolean useExtensionRenderers() {
         return BuildConfig.FLAVOR.equals("withExtensions");
     }
@@ -267,6 +270,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
     }
+*/
 
     public static void stopService(Activity activity){
         if (MyApplication.intentLocalService != null){
@@ -438,10 +442,10 @@ public class MyApplication extends Application implements Application.ActivityLi
         if (requestModel != null){
             mBuilder.setOngoing(true);
             Intent retryIntent = new Intent(mContext, retryButtonListener.class);
-            byte[] requestByte = Util.ParcelableUtil.toByteArray(requestModel);
+//            byte[] requestByte = Util.ParcelableUtil.toByteArray(requestModel);
 //            Global.getInstance().setProcessSubmit(null, null);
 
-            retryIntent.putExtra("REQUEST", requestByte);
+//            retryIntent.putExtra("REQUEST", requestByte);
             PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
                     retryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
@@ -529,10 +533,10 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 
 //            RequestModel requestModel = intent.getExtras().getby("REQUEST");
-            final RequestModel requestModel = Util.ParcelableUtil.toParcelable(intent.getExtras().getByteArray("REQUEST"), RequestModel.CREATOR);
+//            final RequestModel requestModel = Util.ParcelableUtil.toParcelable(intent.getExtras().getByteArray("REQUEST"), RequestModel.CREATOR);
 
-                    if (requestModel.getAction().contains("SUBMIT"))
-                        topupService(requestModel);
+//                    if (requestModel.getAction().contains("SUBMIT"))
+                        topupService(Global.getInstance().getLastSubmit());
 
 
         }
