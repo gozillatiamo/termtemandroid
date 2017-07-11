@@ -8,8 +8,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -26,9 +28,11 @@ import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 public class TermTemLoading extends RelativeLayout {
     private ViewGroup mRootView;
     public static final String TAG = TermTemLoading.class.getSimpleName();
+    private Context mContext;
     public TermTemLoading(Context context, ViewGroup rootview) {
         super(context);
-        this.mRootView = rootview;
+        this.mContext = context;
+        this.mRootView = ((AppCompatActivity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
         setupView();
     }
 
@@ -77,6 +81,17 @@ public class TermTemLoading extends RelativeLayout {
 
     public void show(){
         if (this.isShown()) return;
+        mRootView.setFocusableInTouchMode(true);
+        mRootView.requestFocus();
+        mRootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+
+                return false;
+            }
+        });
+
         TermTemLoading.this.setAlpha(0.0f);
         TermTemLoading.this.setVisibility(VISIBLE);
 
@@ -93,6 +108,13 @@ public class TermTemLoading extends RelativeLayout {
 
     public void hide(){
         DialogCounterAlert.DialogProgress.dismiss();
+        mRootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                return false;
+            }
+        });
+
         if (!(this.getVisibility() == VISIBLE)){
             return;
         }

@@ -23,6 +23,7 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -50,7 +51,9 @@ public class TermTemSignIn {
 
     private Context mContext;
     private APIServices services;
-    private String mUsername, mPassword, mTXID;
+    private String mUsername, mPassword;
+    private static String mTXID;
+    private static boolean isExecuting= false;
     private TYPE mType;
     private boolean isAlreadyShowProgress;
 
@@ -75,23 +78,29 @@ public class TermTemSignIn {
 
 
     public TermTemSignIn(Context context, TYPE type, boolean isAlreadyShowProgress) {
-        if (AlertWifi != null){
+        if (AlertWifi != null && AlertWifi.isShowing()){
             AlertWifi.dismiss();
         }
         this.mContext = context;
+        if (context instanceof SplashScreenWWW){
+            isExecuting = false;
+        }
         this.services = APIServices.retrofit.create(APIServices.class);
         this.mType = type;
         this.isAlreadyShowProgress = isAlreadyShowProgress;
     }
 
     public void getTXIDfromServer(){
+        if (isExecuting) return;
+
+        isExecuting = true;
 
         GPSTracker gpsTracker = new GPSTracker(mContext);
         if (gpsTracker.canGetLocation()){
             double mLat = gpsTracker.getLatitude();
             double mLong = gpsTracker.getLongitude();
 
-            PreRequestModel mPreRequestModel = new PreRequestModel("PRE", new PreRequestModel.Data(
+            final PreRequestModel mPreRequestModel = new PreRequestModel("PRE", new PreRequestModel.Data(
                     Global.getInstance().getTOKEN(),
                     Global.getInstance().getDEVICEID(),
                     mLat,
@@ -99,7 +108,35 @@ public class TermTemSignIn {
                     mContext.getString(R.string.platform)
             ));
 
-            SendDataService(mPreRequestModel);
+            if (Global.getInstance().getAGENTID() != null){
+                Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
+                        new DataRequestModel()));
+                APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
+
+                        if (responseValues instanceof ResponseModel &&
+                                ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
+                            Global.getInstance().clearUserData();
+                            SendDataService(mPreRequestModel);
+                        } else {
+                            if (Global.getInstance().getTXID() != null) {
+                                APIHelper.enqueueWithRetry(call.clone(), this);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        new ErrorNetworkThrowable(t).networkError(mContext, call, this);
+                        isExecuting = false;
+                    }
+                });
+            } else {
+                SendDataService(mPreRequestModel);
+            }
+
         } else {
             gpsTracker.showSettingsAlert();
         }
@@ -166,6 +203,8 @@ public class TermTemSignIn {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     new ErrorNetworkThrowable(t).networkError(mContext, call, this);
+                    isExecuting = false;
+
                 }
             });
         }
@@ -183,8 +222,19 @@ public class TermTemSignIn {
     private boolean checkVersionApp(String version){
         if (checkAdvoidDevice()) return true;
 
-        String currentVersion = (BuildConfig.VERSION_NAME).split("-")[0];
-        if (!version.equals(currentVersion)) {
+        String strCurrentVersion = (BuildConfig.VERSION_NAME).split("-")[0];
+        String removeDotVersion = version.replaceAll("\\.", "");
+        String removeDotCurrentVersion = strCurrentVersion.replaceAll("\\.", "");
+        Log.e(TAG, "serverVersion: "+removeDotVersion);
+        Log.e(TAG, "currentVersion: "+removeDotCurrentVersion);
+
+
+        int serverVersion = Integer.parseInt(removeDotVersion);
+        int currentVersion = Integer.parseInt(removeDotCurrentVersion);
+        Log.e(TAG, "serverVersion: "+serverVersion);
+        Log.e(TAG, "currentVersion: "+currentVersion);
+
+        if (currentVersion < serverVersion) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning);
             builder.setTitle(mContext.getString(R.string.update_app_title));
             builder.setMessage(mContext.getString(R.string.update_message));
@@ -293,6 +343,8 @@ public class TermTemSignIn {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(mContext, call, this);
+                isExecuting = false;
+
             }
         });
     }
@@ -328,7 +380,7 @@ public class TermTemSignIn {
                             Toast.makeText(mContext, responseModel.getMsg(),
                                     Toast.LENGTH_SHORT).show();
                             if (mType.equals(TYPE.RELOGIN)){
-                                Global.getInstance().clearUserData();
+//                                Global.getInstance().clearUserData();
                                 Util.backToSignIn(((Activity)mContext));
                             }
                         }
@@ -367,12 +419,14 @@ public class TermTemSignIn {
 
                 }
 
+                isExecuting = false;
 //                DialogCounterAlert.DialogProgress.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 new ErrorNetworkThrowable(t).networkError(mContext, call, this);
+                isExecuting = false;
             }
         });
 
@@ -419,6 +473,8 @@ public class TermTemSignIn {
                                     public void onFailure(Call<ResponseModel> call, Throwable t) {
                                         t.printStackTrace();
                                         new ErrorNetworkThrowable(t).networkError(mContext, call, this);
+                                        isExecuting = false;
+
                                     }
                                 });
 

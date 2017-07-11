@@ -107,7 +107,10 @@ public class EncryptionData {
 
     static public String DecryptData(String strData, String key) {
         if (strData == null || strData.equals("")) return "";
-
+        if (key == null){
+            Util.backToSignIn(MyApplication.LeavingOrEntering.currentActivity);
+            return "";
+        }
         String strResult = strData.replace("%2B", "+");
 
         byte[] bb = key.getBytes(characterSet);
@@ -168,8 +171,8 @@ public class EncryptionData {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
-            mTrace = FirebasePerformance.getInstance().newTrace(requestModel.getAction());
-            mTrace.start();
+            mTrace = FirebasePerformance.getInstance().startTrace(requestModel.getAction());
+//            mTrace.start();
         }
         try {
             strRespone = response.string();

@@ -42,8 +42,9 @@ public class LocalService extends Service {
     private NotificationManager mNM;
     private static Timer T;
     public static String TAG = LocalService.class.getSimpleName();
-    private int count;
+    private int count = 60;
     private int countRetry = 0;
+    private Call<ResponseBody> callLogout;
     private APIServices services = APIServices.retrofit.create(APIServices.class);
 
 
@@ -89,7 +90,6 @@ public class LocalService extends Service {
                 if (values instanceof ResponseModel){
                     ResponseModel model = (ResponseModel) values;
                     count = model.getIdlelimit();
-                    countDownLogout(context, startId);
 //                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                 } else if (countRetry < 3){
                     countRetry++;
@@ -107,6 +107,9 @@ public class LocalService extends Service {
                 t.printStackTrace();
             }
         });
+
+        serviceLogout(startId);
+        countDownLogout(context, startId);
 
     }
 
@@ -144,13 +147,16 @@ public class LocalService extends Service {
                         count--;
                         if (count == 0){
                             Global.getInstance().clearUserName();
-                            serviceLogout(startId);
+//                            serviceLogout(startId);
                             if (T != null) {
                                 T.cancel();
                                 T.purge();
                             }
                             T = null;
                             this.cancel();
+
+                            stopSelf(startId);
+
                         }
 
                         if ((count < 0 && T != null) ||
@@ -161,6 +167,9 @@ public class LocalService extends Service {
                             }
                             T = null;
                             this.cancel();
+
+                            stopSelf(startId);
+
                         }
 
                     }
@@ -175,36 +184,56 @@ public class LocalService extends Service {
         countRetry = 0;
 
         APIServices services = APIServices.retrofit.create(APIServices.class);
-        Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
+        callLogout = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
 
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(callLogout, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
-                if (values == null){
+                /*if (values == null){
                     if (countRetry < 3){
                         countRetry++;
                         retryService(call, this);
                     }
-                } else {
-                    Global.getInstance().clearUserData();
+                }*/
+                if (values instanceof ResponseModel){
+                    ResponseModel responseModel = (ResponseModel) values;
+                    if (responseModel.getMsg().equals(APIServices.MSG_SUCCESS)){
+                        Global.getInstance().clearUserData();
+                    }
+
+/*
                     if (MyApplication.LeavingOrEntering.currentActivity != null){
                         MyApplication.LeavingOrEntering.currentActivity.finish();
                     }
 
                     MyApplication.LeavingOrEntering.currentActivity = null;
                     stopSelf(statId);
-                }
+*/
+                } /*else {
+                    if (countRetry < 3){
+                        countRetry++;
+                        retryService(call, this);
+                    }
+
+                }*/
+                    /*else {
+                    stopSelf(statId);
+                }*/
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+/*
                 if (countRetry < 3){
                     countRetry++;
                     retryService(call, this);
-                }                    }
+                }
+*/
+            }
         });
 
 
@@ -214,6 +243,9 @@ public class LocalService extends Service {
     public void onDestroy() {
         // Cancel the persistent notification.
         Log.e("LocalService", "onDestroy");
+        if (callLogout != null && callLogout.isExecuted()){
+            callLogout.cancel();
+        }
 
         if (T != null) {
             T.cancel();

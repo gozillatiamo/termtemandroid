@@ -107,6 +107,7 @@ public class Util {
                     System.gc();
 
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
+                    Log.e(TAG, new StringBuilder(encoded).reverse().toString());
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
                     String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
 
@@ -235,24 +236,41 @@ public class Util {
 
     public static void logoutAPI(final Context context, final boolean clearData){
         if (Global.getInstance().getTXID() == null) return;
+        MyApplication.LeavingOrEntering.currentActivity = null;
         APIServices services = APIServices.retrofit.create(APIServices.class);
         Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                 new DataRequestModel()));
-
+        final boolean isisAlreadyShowProgress = DialogCounterAlert.DialogProgress.isShow();
+        if (!isisAlreadyShowProgress){
+            if (MyApplication.LeavingOrEntering.currentActivity != null) {
+                new DialogCounterAlert.DialogProgress(context).show();
+            }
+        }
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
                 if (values == null) return;
 
+                if (values instanceof ResponseModel &&
+                        (((ResponseModel)values).getMsg().equals(APIServices.MSG_SUCCESS))) {
+                    Global.getInstance().clearUserName();
+                    Global.getInstance().clearUserData();
+                }
 
+/*
                 if (!clearData) {
                     new TermTemSignIn(context,
                             TermTemSignIn.TYPE.RELOGIN,
-                            new DialogCounterAlert.DialogProgress(context).show()).getTXIDfromServer();
+                            isisAlreadyShowProgress).getTXIDfromServer();
                 } else {
-                    Global.getInstance().clearUserData();
+                    if (values instanceof ResponseModel &&
+                            (((ResponseModel)values).getMsg().equals(APIServices.MSG_SUCCESS))) {
+                        Global.getInstance().clearUserName();
+                        Global.getInstance().clearUserData();
+                    }
                 }
+*/
 
             }
 

@@ -98,16 +98,18 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             Object responseValues = EncryptionData.getModel(SplashScreenWWW.this, call, response.body(), this);
-                            if (responseValues == null){
-//                                new ErrorNetworkThrowable(null).networkError(SplashScreenWWW.this, call, this);
-                                getDataDevice();
-                                return;
-                            }
 
-                            if (responseValues instanceof ResponseModel){
+                            if (responseValues instanceof ResponseModel &&
+                                    ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
+                                Global.getInstance().clearUserName();
                                 Global.getInstance().clearUserData();
                                 getDataDevice();
-
+                            } else {
+                                if (Global.getInstance().getTXID() != null) {
+                                    APIHelper.enqueueWithRetry(call.clone(), this);
+                                } else {
+                                    getDataDevice();
+                                }
                             }
                         }
 

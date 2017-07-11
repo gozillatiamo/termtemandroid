@@ -33,8 +33,8 @@ public abstract class RetryableCallback<T> implements Callback<T> {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null) {
             RequestModel requestModel = new Gson().fromJson(strRequest, RequestModel.class);
-            mTrace = FirebasePerformance.getInstance().newTrace(requestModel.getAction());
-            mTrace.start();
+            mTrace = FirebasePerformance.getInstance().startTrace(requestModel.getAction());
+//            mTrace.start();
             mTrace.incrementCounter("REQUEST");
         }
 

@@ -147,19 +147,22 @@ public class FragmentReportMT extends Fragment {
 
             if (imgPath != null) {
                 getView().findViewById(R.id.text_des_pic).setVisibility(View.GONE);
-                new Handler().postDelayed(new Runnable() {
+                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         System.gc();
                         Glide.clear(mHolder.mImagePhoto);
 
-                        Glide.with(FragmentReportMT.this).load(imgPath)
-                                .override(300, 300)
-                                .crossFade()
-                                .placeholder(R.drawable.ic_picture)
-                                .into(mHolder.mImagePhoto);
+                        try {
+                            if (getActivity() != null && isAdded())
+                                Glide.with(FragmentReportMT.this).load(imgPath)
+                                        .override(300, 300)
+                                        .crossFade()
+                                        .placeholder(R.drawable.ic_picture)
+                                        .into(mHolder.mImagePhoto);
+                        } catch (IllegalArgumentException e){}
                     }
-                }, 300);
+                });
             }
 
 

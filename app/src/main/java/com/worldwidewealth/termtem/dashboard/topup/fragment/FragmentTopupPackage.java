@@ -407,35 +407,24 @@ public class FragmentTopupPackage extends  Fragment{
                     DialogCounterAlert.DialogProgress.dismiss();
                 }else {
                     DialogCounterAlert.DialogProgress.dismiss();
-                    FragmentTopupPackage.this.getChildFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_right,
-                                    R.anim.slide_out_left,
-                                    R.anim.slide_in_left,
-                                    R.anim.slide_out_right)
-                            .replace(R.id.container_topup_package, FragmentTopupPreview
-                                    .newInstance(mTopup, ((String)modelValues), mBottomAction.getPrice()))
-                            .addToBackStack(null)
-                            .commit();
-/*
-                    mBottomAction.swichType(BottomAction.SUBMIT, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mBottomAction.setEnable(false);
-                            if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
-                                FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
-                                if (!fragmentTopupPreview.canTopup()) {
-                                    mBottomAction.setEnable(true);
-                                    return;
-                                }
-                            }
 
-                            serviceTopup();
+                    try {
+                        if (getActivity() != null && isAdded()) {
 
+                            FragmentTopupPackage.this.getChildFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right,
+                                            R.anim.slide_out_left,
+                                            R.anim.slide_in_left,
+                                            R.anim.slide_out_right)
+                                    .replace(R.id.container_topup_package, FragmentTopupPreview
+                                            .newInstance(mTopup, ((String)modelValues), mBottomAction.getPrice()))
+                                    .addToBackStack(null)
+                                    .commit();
 
                         }
-                    });
-*/
+                    } catch (IllegalStateException e){}
+
                     setEnableEditPhone(false);
 
                 }
@@ -750,9 +739,9 @@ public class FragmentTopupPackage extends  Fragment{
                                 tranid,
                                 ((ActivityTopup)getActivity()).getTopupTitle()+" "
                                         +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
-                                        +getString(R.string.currency),
-                                getString(R.string.phone_number)+" "+mPhone+" "
-                                        +getString(R.string.processing),
+                                        +MyApplication.getContext().getString(R.string.currency),
+                                MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+" "
+                                        +MyApplication.getContext().getString(R.string.processing),
                                 android.R.drawable.stat_notify_sync);
                         getActivity().finish();
                     }
@@ -842,9 +831,16 @@ public class FragmentTopupPackage extends  Fragment{
             }
         }
 
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.container_topup_package, FragmentChoiceTopup.newInstance(finalDataList, defaultPosition))
-                .commit();
+        try {
+            if (getActivity() != null && isAdded()) {
+
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_topup_package, FragmentChoiceTopup.newInstance(finalDataList, defaultPosition))
+                        .commit();
+            }
+        } catch (IllegalStateException e){
+//            getActivity().onBackPressed();
+        }
 
 
     }

@@ -494,6 +494,7 @@ public class ActivityReport extends MyAppcompatActivity {
 
     private void serviceReportChart(String timeFrom, final String timeTo){
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
+        if (page == null) return;
 
         if (((GraphReportFragment)page).getmListLineModel() == null){
             Calendar calendar = Calendar.getInstance();

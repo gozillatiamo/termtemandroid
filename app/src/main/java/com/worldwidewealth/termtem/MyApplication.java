@@ -166,7 +166,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                 }
 
 //                Util.deleteCache(this);
-                Global.getInstance().clearAll();
+//                Global.getInstance().clearAll();
                 Global.getInstance().setVERSIONCODE(versionCode);
             }
 
@@ -297,7 +297,17 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 //            new DialogCounterAlert.DialogProgress(activity).show();
 
-            Util.logoutAPI(activity, false);
+            final boolean isisAlreadyShowProgress = DialogCounterAlert.DialogProgress.isShow();
+            if (!isisAlreadyShowProgress){
+                new DialogCounterAlert.DialogProgress(activity).show();
+            }
+
+            new TermTemSignIn(activity,
+                    TermTemSignIn.TYPE.RELOGIN,
+                    isisAlreadyShowProgress).getTXIDfromServer();
+
+
+//            Util.logoutAPI(activity, false);
 
 /*
             if (Global.getInstance().getAGENTID() == null){

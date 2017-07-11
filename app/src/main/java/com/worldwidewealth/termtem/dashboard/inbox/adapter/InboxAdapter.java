@@ -176,7 +176,12 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public InboxResponse getItem(int position){
-        return mListInbox.get(position);
+        try{
+            return mListInbox.get(position);
+        } catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+            return new InboxResponse();
+        }
     }
 
     @Override

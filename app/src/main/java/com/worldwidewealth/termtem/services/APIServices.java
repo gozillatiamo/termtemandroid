@@ -1,6 +1,8 @@
 package com.worldwidewealth.termtem.services;
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.worldwidewealth.termtem.MyApplication;
@@ -15,15 +17,19 @@ import com.worldwidewealth.termtem.util.Util;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
+import okhttp3.ConnectionSpec;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -165,11 +171,31 @@ public interface APIServices {
 
     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
+    ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(
+                    TlsVersion.TLS_1_0,
+                    TlsVersion.TLS_1_1,
+                    TlsVersion.TLS_1_2)
+            .supportsTlsExtensions(true)
+            .cipherSuites(
+                    CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+                    CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
+                    CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
+                    CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
+                    CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256,
+                    CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
+                    CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
+                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384)
+            .build();
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.MINUTES)
             .readTimeout(10, TimeUnit.MINUTES)
             .writeTimeout(10, TimeUnit.MINUTES)
+            .connectionSpecs(Collections.singletonList(spec))
             .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override
@@ -185,6 +211,7 @@ public interface APIServices {
 //                                .addHeader("connection", "close")
                                 .method(originalRequest.method(), Util.encode(originalRequest.body()));
                     }
+
 //                    Response response = client.newCall(builder.build()).execute();
                      return  chain.proceed(builder.build());
                 }

@@ -150,6 +150,7 @@ public class DialogCounterAlert {
         public static boolean show(){
             boolean isShow = isShow();
             if (mContext == null) return false;
+
             if (!isShow){
                 try {
                     progressDialog = ProgressDialog.show(mContext,

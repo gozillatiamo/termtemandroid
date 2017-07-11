@@ -22,8 +22,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.model.UserMenuModel;
+import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
+import com.worldwidewealth.termtem.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +140,18 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
 
     private void bindDataSubmenu(){
+        if (Global.getInstance().getUserMenuList() == null){
 
+            new ErrorNetworkThrowable(null).networkError(getContext(), MyApplication.getContext().getString(R.string.error_msg)
+                    , null, null, true, new OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            Util.backToSignIn((AppCompatActivity)getContext());
+                        }
+                    });
+
+            return;
+        }
         for (UserMenuModel model : Global.getInstance().getUserMenuList()){
 
             if (model.getSTATUS() == null || model.getSTATUS().equals("")) return;

@@ -91,7 +91,8 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     private static final int PEOPLE = 7;
     private static final int EMAIL = 8;
     private static final int AGENT_TEL = 9;
-    private String mEmail, mFirstName, mLastName, mTel, mIden;
+    private String mEmail, mFirstName, mLastName, mTel, mIden, mTitleName, mAgentTel;
+    private long mBirthDate;
     private Dialog mDialogCondition;
     private DatePickerDialog mDateDialog;
     private int mPerson = 0;
@@ -131,6 +132,19 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBooleanArray("CHECKDATA", mDataCheck);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mDataCheck = savedInstanceState.getBooleanArray("CHECKDATA");
     }
 
     @Override
@@ -232,11 +246,14 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                     }
                 }
 
+                mTitleName = mHolder.mEditTitleName.getText().toString();
+                mBirthDate = mCalendar.getTimeInMillis();
                 mEmail = mHolder.mEditEmail.getText().toString();
                 mFirstName = mHolder.mEditFristName.getText().toString();
                 mLastName = mHolder.mEditLastName.getText().toString();
-                mTel = mHolder.mEditTel.getText().toString();
+                mTel = mHolder.mEditTel.getText().toString().replaceAll("-", "");
                 mIden = mHolder.mEditIdentification.getText().toString();
+                mAgentTel = mHolder.mEditTelAgent.getText().toString().replaceAll("-", "");
 
                 if (!mEmail.equals("")){
                     if (!CheckSyntaxData.isEmailValid(mEmail)){
@@ -282,13 +299,13 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                         if (mLoading == null){
                             mLoading = new TermTemLoading(ActivityRegister.this, (ViewGroup) findViewById(R.id.layout_parent));
                         }
+                        mLoading.show();
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
 
 
-                                mLoading.show();
                                 mDialogCondition.cancel();
                                 checkboxSubmit.toggle();
                                 mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
@@ -301,10 +318,10 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                 }
 
                                 RegisterRequestModel.Data registerRequestModel = new RegisterRequestModel.Data(
-                                        mHolder.mEditTitleName.getText().toString(),
+                                        mTitleName,
                                         mFirstName,
                                         mLastName,
-                                        mCalendar.getTimeInMillis(),
+                                        mBirthDate,
                                         mEmail,
                                         mTel,
                                         mIden,
@@ -312,10 +329,9 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                         mAttachEncode
                                 );
 
-                                String agent_tel = mHolder.mEditTelAgent.getText().toString().replaceAll("-", "");
 
-                                if (agent_tel != null || !agent_tel.isEmpty()){
-                                    registerRequestModel.setREFCODE(agent_tel);
+                                if (mAgentTel != null || !mAgentTel.isEmpty()){
+                                    registerRequestModel.setREFCODE(mAgentTel);
                                 }
 
                                 Call<ResponseModel> call = services.SIGNUP(new RegisterRequestModel(registerRequestModel));
