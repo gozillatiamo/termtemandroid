@@ -86,6 +86,7 @@ public class FragmentChoiceTopup extends Fragment{
     }
 
     private void initGrid(){
+        if (mDataList == null) return;
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerBtnTopup.setLayoutManager(gridLayoutManager);
         mAdapter = new BtnTopupAdapter(FragmentChoiceTopup.this, mDataList);

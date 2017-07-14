@@ -22,6 +22,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
@@ -79,6 +81,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_CHOOSE = 2;
     private static Intent intentLocalService = null;
+    public static FirebasePerformance mPerformance;
 
 //    protected String userAgent;
 
@@ -139,6 +142,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         mContext = getApplicationContext();
 //        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
         mBus = new Bus();
+        mPerformance = FirebasePerformance.getInstance();
+        mPerformance.setPerformanceCollectionEnabled(true);
         mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
 //        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
@@ -390,6 +395,9 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static void uploadSuccess(int id, String tag, String title, String message, int smallicon){
+
+        isUpload = false;
+
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
 
 
@@ -402,7 +410,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
-        isUpload = false;
 
         if (id != NOTIUPLOAD){
             /*try {

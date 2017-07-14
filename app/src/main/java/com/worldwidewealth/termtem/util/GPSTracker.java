@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -24,6 +26,7 @@ import com.worldwidewealth.termtem.dialog.MyShowListener;
 public class GPSTracker extends Service implements LocationListener{
 
     private final Context mContext;
+    private static AlertDialog myAlertDialog;
     // flag for GPS status
     boolean isGPSEnabled = false;
     // flag for network status
@@ -133,41 +136,57 @@ public class GPSTracker extends Service implements LocationListener{
      * Function to show settings alert dialog
      * */
     public void showSettingsAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning);
 
-        // Setting Dialog Title
-        alertDialog.setTitle(mContext.getString(R.string.setting_gps_title));
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyAlertDialogWarning);
 
-        // Setting Dialog Message
-        alertDialog.setMessage(mContext.getString(R.string.setting_gps_message));
+            // Setting Dialog Title
+            alertDialog.setTitle(mContext.getString(R.string.setting_gps_title));
 
-        // On pressing Settings button
-        alertDialog.setPositiveButton(mContext.getString(R.string.setting), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
+            // Setting Dialog Message
+            alertDialog.setMessage(mContext.getString(R.string.setting_gps_message));
+
+            // On pressing Settings button
+            alertDialog.setPositiveButton(mContext.getString(R.string.setting), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    mContext.startActivity(intent);
+                }
+            });
+
+            // on pressing cancel button
+            alertDialog.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    ((Activity) mContext).finish();
+                }
+            });
+            // Showing Alert Message
+
+            myAlertDialog = alertDialog.create();
+            myAlertDialog.setOnShowListener(new MyShowListener());
+
+
+            if (!((AppCompatActivity) mContext).isFinishing()) {
+                try {
+                    myAlertDialog.show();
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
+                }
             }
-        });
 
-        // on pressing cancel button
-        alertDialog.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+    }
 
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                ((Activity)mContext).finish();
-            }
-        });
-        // Showing Alert Message
+    public static void dismiss(){
+        if (myAlertDialog == null) return;
 
-        AlertDialog myAlertDialog = alertDialog.create();
-        myAlertDialog.setOnShowListener(new MyShowListener());
-        myAlertDialog.show();
+        myAlertDialog.dismiss();
     }
 
     /**

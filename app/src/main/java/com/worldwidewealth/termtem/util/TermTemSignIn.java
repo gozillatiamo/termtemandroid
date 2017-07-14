@@ -108,7 +108,7 @@ public class TermTemSignIn {
                     mContext.getString(R.string.platform)
             ));
 
-            if (Global.getInstance().getAGENTID() != null){
+            if (Global.getInstance().getUSERNAME() != null){
                 Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                         new DataRequestModel()));
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -118,7 +118,7 @@ public class TermTemSignIn {
 
                         if (responseValues instanceof ResponseModel &&
                                 ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
-                            Global.getInstance().clearUserData();
+//                            Global.getInstance().clearUserData();
                             SendDataService(mPreRequestModel);
                         } else {
                             if (Global.getInstance().getTXID() != null) {
@@ -179,7 +179,11 @@ public class TermTemSignIn {
                                     String password = EncryptionData.DecryptData(Global.getInstance().getPASSWORD(),
                                             Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
                                     Global.getInstance().setTXID(mTXID);
-                                    checkWifi(username, password);
+//                                    checkWifi(username, password);
+                                    mUsername = username;
+                                    mPassword = password;
+
+                                    Login();
                                     break;
                             }
                         } else {
@@ -440,7 +444,7 @@ public class TermTemSignIn {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         new DialogCounterAlert.DialogProgress(mContext).show();
-                        new Handler().postDelayed(new Runnable() {
+                        new Handler().post(new Runnable() {
                             @Override
                             public void run() {
 
@@ -479,7 +483,7 @@ public class TermTemSignIn {
                                 });
 
                             }
-                        }, 1000);
+                        });
                     }
                 }).create();
 

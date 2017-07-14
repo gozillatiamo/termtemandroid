@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="timeout_submit">10000</integer>
+
     <integer-array name="ic_list_bank_start">
         <item>@drawable/bbl</item>
         <item>@drawable/ktb</item>
@@ -51,11 +53,11 @@
     </integer-array>
 
     <integer-array name="list_icon_main_bill">
-        <item>@drawable/ic_electricity</item>
-        <item>@drawable/ic_internet</item>
-        <item>@drawable/ic_credit_card</item>
-        <item>@drawable/ic_insurance</item>
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_shopping</item>
+        <item>@drawable/ic_bill_electric_water</item>
+        <item>@drawable/ic_bill_mobile</item>
+        <item>@drawable/ic_bill_credit_card</item>
+        <item>@drawable/ic_bill_insurance</item>
+        <item>@drawable/ic_bill_car</item>
+        <item>@drawable/ic_bill_shopping</item>
     </integer-array>
 </resources>

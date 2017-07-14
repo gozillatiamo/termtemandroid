@@ -116,6 +116,7 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
                 mHolder.mBtnDtac.setVisibility(View.GONE);
                 break;
             case VAS:
+                mHolder.mImageAis.setImageResource(R.drawable.ais_vas);
                 mHolder.mBtnAis.setVisibility(View.VISIBLE);
                 loading.hide();
                 break;
@@ -206,7 +207,7 @@ public class FragmentTopup extends Fragment implements View.OnClickListener{
 
     private void initData(){
 //        Util.setBalanceWallet(mHolder.mIncludeMyWallet);
-        Util.updateMyBalanceWallet(getContext(), mHolder.mIncludeMyWallet);
+        Util.setBalanceWallet(mHolder.mIncludeMyWallet);
     }
 
     private void startFragmentService(String service){

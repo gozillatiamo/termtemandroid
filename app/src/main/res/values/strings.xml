@@ -564,9 +564,9 @@
     </string-array>
 
     <string-array name="list_sub_bill_electricity">
-        <item>การไฟฟ้า/nนครหลวง</item>
-        <item>การไฟฟ้า/nส่วนภูมิภาค</item>
-        <item>การประปา/nนครหลวง</item>
+        <item>การไฟฟ้\nนครหลวง</item>
+        <item>การไฟฟ้า\nส่วนภูมิภาค</item>
+        <item>การประปา\nนครหลวง</item>
     </string-array>
 
     <string-array name="list_logo_sub_bill_electricity">

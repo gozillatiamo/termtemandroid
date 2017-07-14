@@ -224,21 +224,24 @@ public class Global {
     public void clearUserName(){
         mEditor.putString(USERNAME, null);
         mEditor.putString(PASSWORD, null);
-        mEditor.putString(TXID, null);
+//        mEditor.putString(TXID, null);
 
 //        mEditor.putString(SERVICE_TRAN_ID, null);
         mEditor.commit();
     }
 
+/*
     public void clearUserData(){
 
+*/
 /*
         if (clearall) {
             clearUserName();
             mEditor.putString(TXID, null);
 
         }
-*/
+*//*
+
 
 //        clearUserName();
 
@@ -255,6 +258,7 @@ public class Global {
         mEditor.commit();
 
     }
+*/
 
     public List<UserMenuModel> getUserMenuList() {
         return mUserMenuList;

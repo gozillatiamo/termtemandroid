@@ -255,7 +255,7 @@ public class Util {
                 if (values instanceof ResponseModel &&
                         (((ResponseModel)values).getMsg().equals(APIServices.MSG_SUCCESS))) {
                     Global.getInstance().clearUserName();
-                    Global.getInstance().clearUserData();
+//                    Global.getInstance().clearUserData();
                 }
 
 /*

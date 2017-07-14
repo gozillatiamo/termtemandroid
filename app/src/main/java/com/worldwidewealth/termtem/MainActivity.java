@@ -171,10 +171,10 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                     new DialogHelp(MainActivity.this).show();
                     break;
                 case R.id.view_chat_bot:
-                    Trace trace = FirebasePerformance.getInstance().startTrace("CHATBOT");
+                    Trace trace = MyApplication.mPerformance.startTrace("CHATBOT");
 //                    trace.start();
                     trace.incrementCounter("COME_IN");
-                    trace.stop();
+//                    trace.stop();
                     startActivity(ChatBotActivity.create(this));
                     break;
 

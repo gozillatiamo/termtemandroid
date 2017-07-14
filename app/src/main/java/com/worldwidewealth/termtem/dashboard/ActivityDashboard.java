@@ -66,7 +66,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
         setContentView(R.layout.activity_dashboard);
         registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
         mHolder = new ViewHolder(this);
-
+        updateBalance();
         initToolbar();
 
     }
@@ -75,8 +75,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
 
-
-        updateBalance();
+        Util.setBalanceWallet(mHolder.mIncludeMyWallet);
 
         mUserMenuList = Global.getInstance().getUserMenuList();
         initBtnMenu();

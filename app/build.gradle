@@ -15,6 +15,11 @@ buildscript {
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+/*
+    maven {
+        url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+    }
+*/
 }
 
 android {
@@ -115,13 +120,14 @@ android {
     }
 }
 
-
+/*
 android.applicationVariants.all {
     // Set this to false to disable Firebase Performance Monitoring at compile time
     FirebasePerformance {
         instrumentationEnabled true
     }
 }
+*/
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -198,6 +204,13 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
+/*
+    compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
+    compile 'com.embarkmobile:zxing-android-integration:2.0.0@aar'
+    compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
+*/
+
     testCompile 'junit:junit:4.12'
 }
 

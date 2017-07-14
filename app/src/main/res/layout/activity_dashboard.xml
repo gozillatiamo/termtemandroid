@@ -156,10 +156,10 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        app:mbv_icon="@drawable/ic_vas"
+                                        app:mbv_icon="@drawable/ic_bill"
                                         app:mbv_title="@string/dashboard_bill_pay"
                                         app:mbv_type="billpay"
-                                        app:mbv_visibility="hide">
+                                        app:mbv_visibility="show">
 
                                     </com.worldwidewealth.termtem.widgets.MenuButtonView>
 
@@ -261,7 +261,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    app:mbv_icon="@drawable/mpay_icon"
+                                    app:mbv_icon="@drawable/mpay"
                                     app:mbv_title="@string/menu_mpay"
                                     app:mbv_type="cashin"
                                     app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>
@@ -271,7 +271,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    app:mbv_icon="@drawable/mpay_icon"
+                                    app:mbv_icon="@drawable/mpay"
                                     app:mbv_title="@string/dashboard_ar"
                                     app:mbv_type="ar"
                                     app:mbv_visibility="hide"></com.worldwidewealth.termtem.widgets.MenuButtonView>

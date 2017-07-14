@@ -102,7 +102,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                             if (responseValues instanceof ResponseModel &&
                                     ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
                                 Global.getInstance().clearUserName();
-                                Global.getInstance().clearUserData();
+//                                Global.getInstance().clearUserData();
                                 getDataDevice();
                             } else {
                                 if (Global.getInstance().getTXID() != null) {
@@ -135,7 +135,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
-            handler.postDelayed(runnable, 3000);
+            handler.post(runnable);
 
     }
 
@@ -143,13 +143,13 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+        GPSTracker.dismiss();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         handler.removeCallbacks(runnable);
-
     }
 
     private void showLastSubmit(){

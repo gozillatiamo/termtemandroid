@@ -294,7 +294,7 @@ public class FragmentTopupPackage extends  Fragment{
     private void initPageTopup(){
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
-        new Handler().postDelayed(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
                 Call<ResponseBody> call = services.loadButton(new RequestModel(mActionLoadButton,
@@ -326,7 +326,7 @@ public class FragmentTopupPackage extends  Fragment{
                 });
 
             }
-        }, 500);
+        });
     }
 
     private void initData(){
@@ -750,7 +750,7 @@ public class FragmentTopupPackage extends  Fragment{
         mAlertTimeout = builder.create();
 
         mAlertTimeout.setOnShowListener(new MyShowListener());
-
+        int timeout_submit = getResources().getInteger(R.integer.timeout_submit);
         mTimerTimeout = new Timer();
         mTimerTimeout.schedule(new TimerTask() {
             @Override
@@ -767,7 +767,7 @@ public class FragmentTopupPackage extends  Fragment{
                     });
 
                     }
-        }, 60000);
+        }, timeout_submit);
 
 //        90000
 

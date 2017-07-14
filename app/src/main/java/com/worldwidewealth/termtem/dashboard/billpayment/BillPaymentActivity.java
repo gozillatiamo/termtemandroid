@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 
 
-public class BillPaymentActivity extends AppCompatActivity {
+public class BillPaymentActivity extends MyAppcompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

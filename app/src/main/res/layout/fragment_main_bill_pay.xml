@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.worldwidewealth.termtem.dashboard.billpayment.fragment.MainBillPayFragment">
 
@@ -11,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/activity_space">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_bill_service"
             android:layout_width="match_parent"
@@ -61,15 +63,27 @@
                 android:visibility="gone">
 
                 <com.worldwidewealth.termtem.widgets.MenuButtonView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    app:mbv_icon="@drawable/ic_barcode"
+                    app:mbv_title="@string/scan_barcode"
+                    app:mbv_visibility="hide">
+
+
+                </com.worldwidewealth.termtem.widgets.MenuButtonView>
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_scan_barcode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:mbv_icon="@drawable/ic_barcode"
-                    app:mbv_title="@string/scan_barcode"
-                    app:mbv_visibility="show">
-
-                </com.worldwidewealth.termtem.widgets.MenuButtonView>
+                    android:padding="@dimen/icon_size"
+                    android:backgroundTint="@android:color/white"
+                    android:gravity="center"
+                    android:drawablePadding="@dimen/activity_space"
+                    android:drawableLeft="@drawable/ic_barcode"
+                    android:text="@string/scan_barcode"/>
 
                 <com.worldwidewealth.termtem.widgets.MenuButtonView
                     android:id="@+id/btn_fill_phone_no"

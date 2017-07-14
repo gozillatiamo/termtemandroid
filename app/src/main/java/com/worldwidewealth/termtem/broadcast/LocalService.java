@@ -44,9 +44,8 @@ public class LocalService extends Service {
     public static String TAG = LocalService.class.getSimpleName();
     private int count = 60;
     private int countRetry = 0;
-    private Call<ResponseBody> callLogout;
+    private Call<ResponseBody> callLogout, callLeave;
     private APIServices services = APIServices.retrofit.create(APIServices.class);
-
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -82,8 +81,8 @@ public class LocalService extends Service {
 
     private void serviceLeave(final Context context, final int startId){
         countRetry = 0;
-        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+        callLeave = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(callLeave, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(context, call, response.body(), this);
@@ -93,7 +92,7 @@ public class LocalService extends Service {
 //                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                 } else if (countRetry < 3){
                     countRetry++;
-                    retryService(call, this);
+                    retryService(callLeave, this);
                 }
             }
 
@@ -101,14 +100,13 @@ public class LocalService extends Service {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 if (countRetry < 3){
                     countRetry++;
-                    retryService(call, this);
+                    retryService(callLeave, this);
                 }
 
                 t.printStackTrace();
             }
         });
 
-        serviceLogout(startId);
         countDownLogout(context, startId);
 
     }
@@ -147,16 +145,13 @@ public class LocalService extends Service {
                         count--;
                         if (count == 0){
                             Global.getInstance().clearUserName();
-//                            serviceLogout(startId);
+                            serviceLogout();
                             if (T != null) {
                                 T.cancel();
                                 T.purge();
                             }
                             T = null;
                             this.cancel();
-
-                            stopSelf(startId);
-
                         }
 
                         if ((count < 0 && T != null) ||
@@ -179,7 +174,7 @@ public class LocalService extends Service {
 
     }
 
-    private void serviceLogout(final int statId){
+    private void serviceLogout(){
         if (Global.getInstance().getTXID() == null) return;
         countRetry = 0;
 
@@ -200,7 +195,7 @@ public class LocalService extends Service {
                 if (values instanceof ResponseModel){
                     ResponseModel responseModel = (ResponseModel) values;
                     if (responseModel.getMsg().equals(APIServices.MSG_SUCCESS)){
-                        Global.getInstance().clearUserData();
+//                        Global.getInstance().clearUserData();
                     }
 
 /*
@@ -221,12 +216,15 @@ public class LocalService extends Service {
                     /*else {
                     stopSelf(statId);
                 }*/
+                stopSelf();
 
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                stopSelf();
+
 /*
                 if (countRetry < 3){
                     countRetry++;
@@ -243,6 +241,10 @@ public class LocalService extends Service {
     public void onDestroy() {
         // Cancel the persistent notification.
         Log.e("LocalService", "onDestroy");
+        if (callLeave != null && callLeave.isExecuted()){
+            callLeave.cancel();
+        }
+
         if (callLogout != null && callLogout.isExecuted()){
             callLogout.cancel();
         }
@@ -252,6 +254,8 @@ public class LocalService extends Service {
             T.purge();
             T = null;
         }
+
+        super.onDestroy();
 
 /*
         if (Global.getInstance().getProcessSubmit() != null) {
@@ -263,12 +267,17 @@ public class LocalService extends Service {
 //        Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
+
+
     @Override
     public void onTaskRemoved(final Intent rootIntent) {
+
 
         Log.e("LocalService", "onTaskRemoved");
         MyApplication.LeavingOrEntering.currentActivity = null;
         mNM.cancelAll();
+
+        startService(new Intent(getBaseContext(), LogoutService.class));
 
 /*
         if (Global.getInstance().getProcessSubmit() != null) {
@@ -279,7 +288,7 @@ public class LocalService extends Service {
 
 //        Util.logoutAPI(null, true);
 
-        super.onTaskRemoved(rootIntent);
+//        super.onTaskRemoved(rootIntent);
     }
 
     @Override

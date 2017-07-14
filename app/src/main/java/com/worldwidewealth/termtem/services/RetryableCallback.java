@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -33,7 +34,7 @@ public abstract class RetryableCallback<T> implements Callback<T> {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null) {
             RequestModel requestModel = new Gson().fromJson(strRequest, RequestModel.class);
-            mTrace = FirebasePerformance.getInstance().startTrace(requestModel.getAction());
+            mTrace = MyApplication.mPerformance.startTrace(requestModel.getAction());
 //            mTrace.start();
             mTrace.incrementCounter("REQUEST");
         }
@@ -50,9 +51,11 @@ public abstract class RetryableCallback<T> implements Callback<T> {
             } else
                 onFinalFailure(call, null);
         } else {
+/*
             if (mTrace != null){
                 mTrace.stop();
             }
+*/
 
             onFinalResponse(call, response);
         }
@@ -68,7 +71,7 @@ public abstract class RetryableCallback<T> implements Callback<T> {
         } else {
             if (mTrace != null){
                 mTrace.incrementCounter(t.getMessage());
-                mTrace.stop();
+//                mTrace.stop();
 
             }
             onFinalFailure(call, t);

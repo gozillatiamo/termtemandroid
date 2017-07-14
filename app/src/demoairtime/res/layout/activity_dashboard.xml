@@ -176,7 +176,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:mbv_icon="@drawable/mpay_icon"
+                        app:mbv_icon="@drawable/mpay"
                         app:mbv_visibility="hide"
                         app:mbv_type="cashin"
                         app:mbv_title="@string/menu_mpay"

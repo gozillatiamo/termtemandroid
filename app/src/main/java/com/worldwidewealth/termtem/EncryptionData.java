@@ -171,7 +171,7 @@ public class EncryptionData {
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
-            mTrace = FirebasePerformance.getInstance().startTrace(requestModel.getAction());
+            mTrace = MyApplication.mPerformance.startTrace(requestModel.getAction());
 //            mTrace.start();
         }
         try {
@@ -197,7 +197,7 @@ public class EncryptionData {
 
                         if (mTrace != null){
                             mTrace.incrementCounter("PENDING");
-                            mTrace.stop();
+//                            mTrace.stop();
                         }
                         return APIServices.MSG_WAIT;
                     }
@@ -208,7 +208,7 @@ public class EncryptionData {
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 if (mTrace != null){
                     mTrace.incrementCounter("FAIL");
-                    mTrace.stop();
+//                    mTrace.stop();
                 }
 
                 try {
@@ -253,7 +253,7 @@ public class EncryptionData {
                             DialogCounterAlert.DialogProgress.dismiss();
 
                             if (MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity) &&
-                                    Global.getInstance().getAGENTID() == null) {
+                                    Global.getInstance().getUSERNAME() == null) {
                                 try{
                                     Util.backToSignIn((Activity) context);
                                 } catch (ClassCastException e){
@@ -281,7 +281,7 @@ public class EncryptionData {
             } else{
                 if (mTrace != null){
                     mTrace.incrementCounter("SUCCESS");
-                    mTrace.stop();
+//                    mTrace.stop();
                 }
 
                 return responseModel;
@@ -293,7 +293,7 @@ public class EncryptionData {
             Log.e(TAG, "ResponDecode: "+ responDecode);
             if (mTrace != null){
                 mTrace.incrementCounter("SUCCESS");
-                mTrace.stop();
+//                mTrace.stop();
             }
             return responDecode;
 
