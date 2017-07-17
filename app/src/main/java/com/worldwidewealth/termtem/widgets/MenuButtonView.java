@@ -371,6 +371,10 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
     }
 
+    public ImageView getImageView(){
+        return mIconMenu;
+    }
+
     public void setType(int type){
         this.mType = type;
     }

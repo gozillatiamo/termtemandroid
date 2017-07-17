@@ -90,6 +90,8 @@ public interface APIServices {
     public static final String ACTION_ADD_FAV = "ADDFAV";
     public static final String ACTION_REMOVE_FAV = "REMOVEFAV";
     public static final String ACTION_LOAD_FAV = "LOADFAV";
+    public static final String ACTION_LOAD_BILL_CATEGORY = "LOADBILLCATEGORY";
+    public static final String ACTION_LOAD_BILL_SERVICE = "LOADBILLSERVICE";
 
 
 
@@ -167,6 +169,9 @@ public interface APIServices {
 
     @POST("fundin.ashx")
     Call<ResponseBody> genBarcode(@Body RequestModel requestModel);
+
+    @POST("billservice.ashx")
+    Call<ResponseBody> billService(@Body RequestModel requestModel);
 
 
     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);

@@ -370,6 +370,7 @@ public class FragmentTopupPackage extends  Fragment{
                 mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
                 break;
             default:
+                mHolder.mTextTitleCarrier.setText(mCarrier);
                 mHolder.mLogoService.setImageResource(R.drawable.logo_pea);
                 break;
         }
@@ -984,7 +985,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     public class ViewHolder{
 //        private Button mBtnNext, mBtnTopup, mBtnCancel;
-        private TextView mTextPrice, mTextHint, mTextTitleAccount;
+        private TextView mTextPrice, mTextHint, mTextTitleAccount, mTextTitleCarrier;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
@@ -1002,6 +1003,7 @@ public class FragmentTopupPackage extends  Fragment{
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mTextHint = (TextView) itemview.findViewById(R.id.text_hint);
             mTextTitleAccount = (TextView) itemview.findViewById(R.id.title_account);
+            mTextTitleCarrier = (TextView) itemview.findViewById(R.id.text_title_carrier);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
             mRecyclerVAS = (RecyclerView) itemview.findViewById(R.id.recycler_vas);

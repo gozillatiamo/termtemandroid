@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem.dashboard.billpayment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +38,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
     private BarcodeFormat mBarcodeFormat = BarcodeFormat.CODABAR;
 
     public static final String TAG = ScanBillActivity.class.getSimpleName();
+    public static final String KEY_SCAN_RESULT = "scanresult";
 
     private BarcodeCallback barcodeCallback = new BarcodeCallback() {
         @Override
@@ -58,15 +61,12 @@ public class ScanBillActivity extends MyAppcompatActivity {
                 mBarcodeView.resume();
                 return;
             }
+            Log.e(TAG, ""+getParent().toString());
+            Intent intent = getIntent();
+            intent.putExtra(KEY_SCAN_RESULT, result.getText());
 
+            setResult(Activity.RESULT_OK, intent);
             finish();
-            ((AppCompatActivity)getParent()).getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                    .replace(R.id.container_topup, FragmentTopupPackage.newInstance("electic", BillPaymentActivity.BILLPAY, result.getText(), 0))
-                    .commit();
-
-
         }
 
         @Override
