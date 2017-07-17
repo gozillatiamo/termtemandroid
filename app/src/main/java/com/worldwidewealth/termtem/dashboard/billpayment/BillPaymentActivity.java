@@ -12,7 +12,7 @@ import com.worldwidewealth.termtem.R;
 
 
 public class BillPaymentActivity extends MyAppcompatActivity {
-
+    public static final String BILLPAY = "billpay";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

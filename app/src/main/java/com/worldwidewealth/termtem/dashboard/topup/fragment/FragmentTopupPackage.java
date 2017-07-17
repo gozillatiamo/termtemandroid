@@ -38,6 +38,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -203,13 +204,17 @@ public class FragmentTopupPackage extends  Fragment{
         } else mHolder = (ViewHolder) rootView.getTag();
 
         setupService(mTopup);
+        initData();
 
         Util.setupUI(rootView);
-//        mHolder.mViewPage.setAdapter(new AdapterPageTopup(getChildFragmentManager()));
-//        mHolder.mTab.setupWithViewPager(mHolder.mViewPage);
-        initPageTopup();
-        initBtn();
-        initData();
+        if (mTopup != BillPaymentActivity.BILLPAY) {
+            initPageTopup();
+            initBtn();
+        } else {
+            mCarrier = APIServices.AIS;
+            setAmt(10, "ecd72632-6b02-4756-bffd-18f078429973");
+            servicePreview();
+        }
         mHolder.mEditPhone.requestFocus();
 
         return rootView;
@@ -272,6 +277,12 @@ public class FragmentTopupPackage extends  Fragment{
                 mActionGetOTP = APIServices.ACTION_GETOTP_VAS;
                 mActionSumitTopup = APIServices.ACTION_SUBMIT_VAS;
                 break;
+            case BillPaymentActivity.BILLPAY:
+                mActionLoadButton = APIServices.ACTIONLOADBUTTON;
+                mActionPreview = APIServices.ACTIONPREVIEW;
+                mActionGetOTP = APIServices.ACTIONGETOTP;
+                mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
+                break;
         }
 
     }
@@ -332,6 +343,10 @@ public class FragmentTopupPackage extends  Fragment{
     private void initData(){
         setAmt(mAmt, null);
         if (mPhone != null){
+            if (mTopup.equals(BillPaymentActivity.BILLPAY)){
+                mHolder.mEditPhone.setMaxLines(50);
+                mHolder.mEditPhone.addTextChangedListener(null);
+            }
             mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
             mHolder.mEditPhone.setText(mPhone);
             setEnableEditPhone(false);
@@ -354,6 +369,9 @@ public class FragmentTopupPackage extends  Fragment{
             case APIServices.DTAC:
                 mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
                 break;
+            default:
+                mHolder.mLogoService.setImageResource(R.drawable.logo_pea);
+                break;
         }
 
         switch (mTopup){
@@ -370,6 +388,11 @@ public class FragmentTopupPackage extends  Fragment{
                 mHolder.mTextHint.setText(R.string.vas);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
 
+                break;
+            case BillPaymentActivity.BILLPAY:
+                mHolder.mTextHint.setText(R.string.dashboard_bill_pay);
+                mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+                mHolder.mTextTitleAccount.setText("บัญชีผู้ใช้");
                 break;
         }
     }
@@ -961,7 +984,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     public class ViewHolder{
 //        private Button mBtnNext, mBtnTopup, mBtnCancel;
-        private TextView mTextPrice, mTextHint;
+        private TextView mTextPrice, mTextHint, mTextTitleAccount;
         private ImageView mLogoService;
         private EditText mEditPhone;
         private boolean mFormatting;
@@ -978,6 +1001,7 @@ public class FragmentTopupPackage extends  Fragment{
             mLogoService = (ImageView) itemview.findViewById(R.id.logo_service);
             mTextPrice = (TextView) itemview.findViewById(R.id.text_price);
             mTextHint = (TextView) itemview.findViewById(R.id.text_hint);
+            mTextTitleAccount = (TextView) itemview.findViewById(R.id.title_account);
             mEditPhone = (EditText) itemview.findViewById(R.id.edit_phone);
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
             mRecyclerVAS = (RecyclerView) itemview.findViewById(R.id.recycler_vas);

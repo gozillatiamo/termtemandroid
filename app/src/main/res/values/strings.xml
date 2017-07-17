@@ -267,6 +267,7 @@
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>
     <string name="unavailable_qrcode">คิวอาร์โค้ดนี้ไม่สามารถใช้งานได้</string>
+    <string name="unavailable_format_code">รูปแบบโค้ดนี้ไม่ตรงกับที่ท่านเลือก</string>
     <string name="delete">ลบ</string>
     <string name="confirm_delete_title">ลบข้อความ</string>
     <string name="confirm_delete_msg">คุณต้องการจะลบข้อความนี้ ?</string>

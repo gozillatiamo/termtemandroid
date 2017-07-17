@@ -48,19 +48,20 @@
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1">
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
                         android:padding="@dimen/activity_vertical_margin"
-                        android:src="@drawable/background_scan"/>
+                        android:tint="#529f49"
+                        android:src="@drawable/border_scan"/>
                 </RelativeLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dialog_avatar_height"
-                    android:text="Please the barcode at the center of\nthe box for scan"
+                    android:text="Please the QRcode at the center of\nthe box for scan"
                     android:textColor="@android:color/white"
                     android:gravity="center"
                     android:textSize="@dimen/small_text_size"

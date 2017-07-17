@@ -47,13 +47,14 @@
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1">
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
                         android:padding="@dimen/activity_vertical_margin"
-                        android:src="@drawable/background_scan"/>
+                        android:tint="#529f49"
+                        android:src="@drawable/border_scan"/>
                 </RelativeLayout>
 
                 <TextView

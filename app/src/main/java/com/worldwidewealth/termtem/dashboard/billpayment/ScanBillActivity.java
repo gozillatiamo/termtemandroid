@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -22,6 +23,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.AgentResponse;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
     private DecoratedBarcodeView mBarcodeView;
     private RadioGroup mReGroup;
-
+    private BarcodeFormat mBarcodeFormat = BarcodeFormat.CODABAR;
 
     public static final String TAG = ScanBillActivity.class.getSimpleName();
 
@@ -40,29 +42,31 @@ public class ScanBillActivity extends MyAppcompatActivity {
         public void barcodeResult(BarcodeResult result) {
             Log.e(TAG, "ScanResult: "+result);
             mBarcodeView.pause();
-            if (result.getText() != null) {
-                String strResult = result.getText();
-                AgentResponse agentResponse = null;
+            boolean isFormatCorrect;
 
-                try {
-                    agentResponse = new Gson().fromJson(strResult, AgentResponse.class);
-                } catch (JsonSyntaxException e){
-                    e.printStackTrace();
-                    Toast.makeText(ScanBillActivity.this, getString(R.string.unavailable_qrcode), Toast.LENGTH_SHORT).show();
-                }
-
-                if (agentResponse != null){
-                    String myAgentId = Global.getInstance().getAGENTID();
-                    String customerAgentId = EncryptionData.DecryptData(agentResponse.getAgentId(), agentResponse.getTXID());
-                    if (!myAgentId.equals(customerAgentId)) {
-                        agentResponse.setAgentId(customerAgentId);
-//                        addCreditAgent(agentResponse);
-                    }else {
-                        Toast.makeText(ScanBillActivity.this, getString(R.string.unavailable_qrcode), Toast.LENGTH_SHORT).show();
-                    }
-                }
+            switch (mBarcodeFormat){
+                case QR_CODE:
+                    isFormatCorrect = mBarcodeFormat == result.getBarcodeFormat();
+                    break;
+                default:
+                    isFormatCorrect = result.getBarcodeFormat() != BarcodeFormat.QR_CODE;
+                    break;
             }
-            mBarcodeView.resume();
+
+            if (!isFormatCorrect){
+                Toast.makeText(ScanBillActivity.this, getString(R.string.unavailable_format_code), Toast.LENGTH_SHORT).show();
+                mBarcodeView.resume();
+                return;
+            }
+
+            finish();
+            ((AppCompatActivity)getParent()).getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                    .replace(R.id.container_topup, FragmentTopupPackage.newInstance("electic", BillPaymentActivity.BILLPAY, result.getText(), 0))
+                    .commit();
+
+
         }
 
         @Override
@@ -77,11 +81,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
         setContentView(R.layout.activity_scan_bill);
 
         bindView();
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        mBarcodeView.initializeFromIntent(integrator.createScanIntent());
         mBarcodeView.decodeContinuous(barcodeCallback);
 
         mReGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -89,9 +89,11 @@ public class ScanBillActivity extends MyAppcompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
                 switch (i){
                     case R.id.scan_bill_code:
+                        mBarcodeFormat = BarcodeFormat.CODABAR;
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                         break;
                     case R.id.scan_bill_qr:
+                        mBarcodeFormat = BarcodeFormat.QR_CODE;
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                         break;
                 }

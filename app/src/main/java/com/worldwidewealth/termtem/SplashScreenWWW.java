@@ -105,11 +105,15 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 //                                Global.getInstance().clearUserData();
                                 getDataDevice();
                             } else {
+                                getDataDevice();
+
+/*
                                 if (Global.getInstance().getTXID() != null) {
                                     APIHelper.enqueueWithRetry(call.clone(), this);
                                 } else {
                                     getDataDevice();
                                 }
+*/
                             }
                         }
 

@@ -41,6 +41,7 @@ import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -265,6 +266,12 @@ public class FragmentTopupSlip extends Fragment {
                 mActionEslip = APIServices.ACTION_ESLIP_AGENT_CASHIN;
                 mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_agent_cashin);
                 mColorType = ContextCompat.getColor(getContext(), R.color.color_agent_cashin);
+
+                break;
+            case BillPaymentActivity.BILLPAY:
+                mActionEslip = APIServices.ACTIONESLIP;
+                mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_bill);
+                mColorType = ContextCompat.getColor(getContext(), R.color.color_bill_pay);
 
                 break;
         }

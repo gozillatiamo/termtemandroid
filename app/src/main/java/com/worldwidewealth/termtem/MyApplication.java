@@ -349,7 +349,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         public static void activityStopped(final Activity activity ) {
             String strCurrentAtivity = (currentActivity == null) ? null:currentActivity.getLocalClassName();
 
-            if (currentActivity == null) return;
+            if (currentActivity == null || !canUseLeaving(activity)) return;
 
             if ( strCurrentAtivity.equals(activity.getLocalClassName()) ) {
                 startService();

@@ -108,7 +108,7 @@ public class TermTemSignIn {
                     mContext.getString(R.string.platform)
             ));
 
-            if (Global.getInstance().getUSERNAME() != null){
+            if (Global.getInstance().getUSERNAME() != null && mType.equals(TYPE.RELOGIN)){
                 Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                         new DataRequestModel()));
                 APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
