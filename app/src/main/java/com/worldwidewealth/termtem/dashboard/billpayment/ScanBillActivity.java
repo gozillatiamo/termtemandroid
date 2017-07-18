@@ -23,6 +23,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
@@ -81,12 +82,14 @@ public class ScanBillActivity extends MyAppcompatActivity {
         setContentView(R.layout.activity_scan_bill);
 
         bindView();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mBarcodeView.decodeContinuous(barcodeCallback);
 
         mReGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                MyApplication.LeavingOrEntering.currentActivity = null;
+
                 switch (i){
                     case R.id.scan_bill_code:
                         mBarcodeFormat = BarcodeFormat.CODABAR;

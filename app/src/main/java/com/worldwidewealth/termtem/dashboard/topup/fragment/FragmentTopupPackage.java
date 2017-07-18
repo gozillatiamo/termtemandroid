@@ -204,12 +204,12 @@ public class FragmentTopupPackage extends  Fragment{
         } else mHolder = (ViewHolder) rootView.getTag();
 
         setupService(mTopup);
+        initBtn();
         initData();
 
         Util.setupUI(rootView);
         if (mTopup != BillPaymentActivity.BILLPAY) {
             initPageTopup();
-            initBtn();
         } else {
             mCarrier = APIServices.AIS;
             setAmt(10, "ecd72632-6b02-4756-bffd-18f078429973");
@@ -345,18 +345,24 @@ public class FragmentTopupPackage extends  Fragment{
         if (mPhone != null){
             if (mTopup.equals(BillPaymentActivity.BILLPAY)){
                 mHolder.mEditPhone.setMaxLines(50);
-                mHolder.mEditPhone.addTextChangedListener(null);
             }
-            mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+//            mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
             mHolder.mEditPhone.setText(mPhone);
             setEnableEditPhone(false);
         }
         switch (mCarrier){
             case APIServices.AIS:
-                if (mTopup.equals(FragmentTopup.PIN))
-                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
-                else
-                    mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
+                switch (mTopup){
+                    case FragmentTopup.MOBILE:
+                        mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
+                        break;
+                    case FragmentTopup.PIN:
+                        mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
+                        break;
+                    case FragmentTopup.VAS:
+                        mHolder.mLogoService.setImageResource(R.drawable.ais_vas);
+                        break;
+                }
 
                 break;
             case APIServices.TRUEMOVE:
@@ -486,7 +492,7 @@ public class FragmentTopupPackage extends  Fragment{
     private boolean checkData(){
         mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
-        if (mPhone.length() != 10){
+        if (mPhone.length() != 10 && mTopup != BillPaymentActivity.BILLPAY){
             AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                     .setMessage(R.string.please_phone_topup_error)
                     .setPositiveButton(R.string.confirm, null)
@@ -609,6 +615,7 @@ public class FragmentTopupPackage extends  Fragment{
         switch (mTopup){
             case FragmentTopup.MOBILE:
             case FragmentTopup.PIN:
+
                 submitTopupRequestModel = SubmitTopupRequestModel.SubmitTopupRequestModel(
                         String.valueOf(getmAmt()),
                         mCarrier,

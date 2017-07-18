@@ -92,6 +92,7 @@ public interface APIServices {
     public static final String ACTION_LOAD_FAV = "LOADFAV";
     public static final String ACTION_LOAD_BILL_CATEGORY = "LOADBILLCATEGORY";
     public static final String ACTION_LOAD_BILL_SERVICE = "LOADBILLSERVICE";
+    public static final String ACTION_LOAD_BILL_REF = "LOADBILLREF";
 
 
 

@@ -27,27 +27,6 @@ public class BillPaymentActivity extends MyAppcompatActivity {
         setupToolbar();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            switch (requestCode){
-                case SCAN:
-                    LoadBillServiceResponse response = data.getExtras().getParcelable(MainBillPayFragment.KEY_BILL_DATA);
-                    String result = data.getStringExtra(ScanBillActivity.KEY_SCAN_RESULT);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                            .replace(R.id.container_topup, FragmentTopupPackage.newInstance(response.getBILL_SERVICE_NAME(), BillPaymentActivity.BILLPAY, result, 0))
-                            .commit();
-                    finish();
-
-                    break;
-            }
-        }
-    }
-
-
     private void setupToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

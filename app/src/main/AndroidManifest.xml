@@ -173,13 +173,14 @@
         <activity
             android:name=".dashboard.billpayment.BillPaymentActivity"
             android:parentActivityName=".dashboard.ActivityDashboard"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.worldwidewealth.termtem.dashboard.ActivityDashboard" />
         </activity>
         <activity android:name=".dashboard.billpayment.ScanBillActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

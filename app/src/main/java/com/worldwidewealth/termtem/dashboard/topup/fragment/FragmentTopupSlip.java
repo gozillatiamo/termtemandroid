@@ -297,10 +297,17 @@ public class FragmentTopupSlip extends Fragment {
 
         switch (mCarrier){
             case APIServices.AIS:
-                if (mTypeToup.equals(FragmentTopup.PIN))
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
-                else
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
+                switch (mTypeToup){
+                    case FragmentTopup.MOBILE:
+                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
+                        break;
+                    case FragmentTopup.PIN:
+                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
+                        break;
+                    case FragmentTopup.VAS:
+                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.ais_vas);
+                        break;
+                }
 
                 break;
             case APIServices.TRUEMOVE:

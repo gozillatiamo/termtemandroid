@@ -1,7 +1,6 @@
 package com.worldwidewealth.termtem.dashboard.billpayment.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,13 +15,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.R;
-import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
-import com.worldwidewealth.termtem.dashboard.billpayment.ScanBillActivity;
 import com.worldwidewealth.termtem.dashboard.billpayment.adapter.BillPayCategoryAdapter;
 import com.worldwidewealth.termtem.dashboard.billpayment.adapter.BillPayServiceAdapter;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoadBillCategoryResponse;
-import com.worldwidewealth.termtem.model.LoadBillService;
+import com.worldwidewealth.termtem.model.LoadBillServiceRequest;
 import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
@@ -59,6 +56,7 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     private ArrayList<LoadBillCategoryResponse> mListBillCategory;
     private ArrayList<LoadBillServiceResponse> mListBillService;
     private APIServices services;
+//    private String mResult;
 
 
     public static final int MAIN_MENU = 0x00;
@@ -94,6 +92,8 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
             mType = MAIN_MENU;
             mBillCategoryID = null;
         }
+
+//        mResult = null;
     }
 
     @Override
@@ -106,10 +106,11 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
-
-        services = APIServices.retrofit.create(APIServices.class);
-        bindView();
-        getBillService();
+//        if (mResult == null) {
+            services = APIServices.retrofit.create(APIServices.class);
+            bindView();
+            getBillService();
+//        }
     }
 
     private void bindView(){
@@ -133,7 +134,7 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
                 break;
             case SUB_MENU:
                 requestModel = new RequestModel(APIServices.ACTION_LOAD_BILL_SERVICE,
-                        new LoadBillService(mBillCategoryID));
+                        new LoadBillServiceRequest(mBillCategoryID));
                 break;
         }
 
@@ -217,14 +218,15 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     }
 
     private void clickSubMainBill(int position){
+
         LoadBillServiceResponse response = mServiceAdapter.getItem(position);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_BILL_DATA, response);
-        if (response.getSCAN() > 0){
-            startActivityForResult(new Intent(getContext(), ScanBillActivity.class),
-                    BillPaymentActivity.SCAN,
-                    bundle);
-        }
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.fragment, BillActionFragment.newInstance(response))
+                .addToBackStack(null)
+                .commit();
     }
 
 

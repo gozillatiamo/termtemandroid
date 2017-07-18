@@ -44,7 +44,7 @@ public class BillPayCategoryAdapter extends RecyclerView.Adapter<BillPayCategory
 //        TypedArray typedArrayIcon = mContext.getResources().obtainTypedArray(R.array.list_icon_main_bill);
         Glide.with(mFragment).load(mFragment.getString(R.string.server)+response.getLOGOURL())
                 .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
-                .thumbnail(0.3f)
+                .thumbnail(0.6f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(menuButtonView.getImageView());
