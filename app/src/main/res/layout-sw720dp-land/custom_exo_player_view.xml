@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--
+    <com.google.android.exoplayer2.ui.AspectRatioFrameLayout android:id="@+id/video_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@android:color/black">
+
+        <View android:id="@+id/shutter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"/>
+
+    </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <com.worldwidewealth.termtem.widgets.CustomPlaybackControlView
+        android:id="@+id/control"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:controller_layout_id="@layout/custom_playback_control_view"/>
+-->
+
+</FrameLayout>

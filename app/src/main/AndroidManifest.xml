@@ -180,7 +180,8 @@
                 android:value="com.worldwidewealth.termtem.dashboard.ActivityDashboard" />
         </activity>
         <activity android:name=".dashboard.billpayment.ScanBillActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"
+            ></activity>
     </application>
 
 </manifest>

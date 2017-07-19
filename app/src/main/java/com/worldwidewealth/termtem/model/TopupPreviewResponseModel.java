@@ -11,6 +11,10 @@ public class TopupPreviewResponseModel {
     private double BALANCE;
     private double TOTAL;
     private float MARKUP;
+    private String TNID;
+    private double FEE;
+    private double NET;
+    private String REF1;
 
     public double getAMOUNT() {
         return AMOUNT;
@@ -34,5 +38,21 @@ public class TopupPreviewResponseModel {
 
     public float getMARKUP() {
         return MARKUP;
+    }
+
+    public String getTNID() {
+        return TNID;
+    }
+
+    public double getFEE() {
+        return FEE;
+    }
+
+    public double getNET() {
+        return NET;
+    }
+
+    public String getREF1() {
+        return REF1;
     }
 }

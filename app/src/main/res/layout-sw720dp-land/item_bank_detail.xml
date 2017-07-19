@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_space">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_small_space"
+        android:paddingRight="@dimen/activity_small_space"
+        android:paddingTop="@dimen/activity_space"
+        android:paddingBottom="@dimen/activity_space"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_bank_account_name"
+            android:layout_weight="1"
+            android:textSize="@dimen/contact_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="left"
+            android:text="@string/bank_account_name"
+            android:textSize="@dimen/contact_text_size"
+            style="@style/TextAppearance.AppCompat.Caption" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:gravity="center_vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/bank_logo_kbank"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:src="@drawable/kbank"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="horizontal"
+            android:gravity="left"
+            >
+            <TextView
+                android:id="@+id/bank_name_kbank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kbank"
+                android:textSize="@dimen/contact_text_size"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+
+            <TextView
+                android:id="@+id/bank_account_kbank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/contact_text_size"
+
+                android:layout_marginLeft="@dimen/activity_space"
+                android:text="@string/kbank_saving_account_number"
+                style="@style/TextAppearance.AppCompat.Caption" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/bank_logo_bbl"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:src="@drawable/bbl"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="horizontal"
+            android:gravity="left"
+            >
+            <TextView
+                android:id="@+id/bank_name_bbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bbl"
+                android:textSize="@dimen/contact_text_size"
+
+                style="@style/TextAppearance.AppCompat.Caption"/>
+
+            <TextView
+                android:id="@+id/bank_account_bbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/contact_text_size"
+
+                android:layout_marginLeft="@dimen/activity_space"
+                android:text="@string/bbl_saving_account_number"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/bank_logo_promptpay"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_termtem_promptpay"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="horizontal"
+            android:gravity="left"
+            >
+            <TextView
+                android:id="@+id/bank_name_promptpay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/promptpay_title"
+                android:textSize="@dimen/contact_text_size"
+
+                style="@style/TextAppearance.AppCompat.Caption"/>
+
+            <TextView
+                android:id="@+id/bank_account_promptpay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/contact_text_size"
+
+                android:layout_marginLeft="@dimen/activity_space"
+                android:text="@string/bbl_promptpay_account_number"
+                style="@style/TextAppearance.AppCompat.Caption" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bank_saving_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_small_space"
+        android:paddingRight="@dimen/activity_small_space"
+        android:paddingTop="@dimen/activity_space"
+        android:paddingBottom="@dimen/activity_space"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/contact_text_size"
+
+            android:text="@string/note"
+            android:textStyle="bold"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/saving_account_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:autoLink="all"
+            android:breakStrategy="balanced"
+            android:hyphenationFrequency="none"
+            android:textSize="@dimen/contact_text_size"
+            android:text="@string/note_detail"/>
+    </LinearLayout>
+
+</LinearLayout>

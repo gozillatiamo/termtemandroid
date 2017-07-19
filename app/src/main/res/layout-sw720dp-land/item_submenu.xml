@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+    <ImageView
+        android:id="@+id/icon_submenu"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_report_cashin"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/activity_vertical_margin"/>
+    <TextView
+        android:id="@+id/title_submenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingLeft="@dimen/icon_large_size"
+        android:paddingRight="@dimen/icon_large_size"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:text="@string/report_topup"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:lines="1"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:textColor="@android:color/darker_gray"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_icon_dashboard"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_app"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/activity_vertical_margin"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_text_size"
+            android:text="@string/content_version"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/activity_space"
+            android:textSize="@dimen/my_text_size"
+            android:textStyle="bold"
+            android:text="@string/versionName"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_my_qr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="center"
+        style="@style/MyButton"
+        android:text="@string/dashboard_my_qr"
+        android:drawableTop="@drawable/qr_code"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_forgot_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="center"
+        style="@style/MyButton"
+        android:text="@string/change_password"
+        app:backgroundTint="@android:color/holo_orange_dark"
+        />
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="?attr/background"
+    tools:context="com.worldwidewealth.termtem.dashboard.OtherMenuFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <com.worldwidewealth.termtem.widgets.MenuButtonView
+        android:id="@+id/mbv_setup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mbv_icon="@drawable/ic_setting"
+        app:mbv_title="@string/setting"
+        app:mbv_type="setup"
+        app:mbv_visibility="show">
+
+    </com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+    <com.worldwidewealth.termtem.widgets.MenuButtonView
+        android:id="@+id/mbv_support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mbv_icon="@drawable/ic_support"
+        app:mbv_title="@string/support"
+        app:mbv_type="support"
+        app:mbv_visibility="show">
+
+    </com.worldwidewealth.termtem.widgets.MenuButtonView>
+
+    <com.worldwidewealth.termtem.widgets.MenuButtonView
+        android:id="@+id/mbv_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mbv_icon="@drawable/ic_scan_qr"
+        app:mbv_title="@string/dashboard_scan_qr"
+        app:mbv_type="scan"
+        app:mbv_visibility="show" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_back_to_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back_to_main"
+        android:textStyle="bold"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:padding="@dimen/activity_vertical_margin"
+        app:backgroundTint="@color/colorAccent"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+
+
+</LinearLayout>

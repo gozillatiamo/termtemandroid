@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/layout_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
+    <LinearLayout
+        android:id="@+id/layout_title_video"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_titlel_menu_video"
+        android:padding="@dimen/activity_space"
+        android:gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Small.Inverse"
+                android:text="Title"/>
+            <TextView
+                android:id="@+id/text_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:attr/textColorTertiaryInverse"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:text="subtitle"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_change_resolution"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:text="@string/resolution_video"
+            android:textSize="@dimen/my_text_size"
+            android:drawableLeft="@drawable/ic_settings"
+            android:drawableTint="?android:attr/textColorTertiaryInverse"
+            android:drawablePadding="@dimen/activity_space"
+            android:textColor="?android:attr/textColorTertiaryInverse"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#20000000">
+
+        <ImageButton
+            android:id="@id/exo_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:tint="#E0FFFFFF"
+            style="@style/ExoMediaButton.Play"/>
+
+        <ImageButton android:id="@id/exo_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="#E0FFFFFF"
+            android:layout_centerInParent="true"
+            style="@style/ExoMediaButton.Pause"/>
+
+        <ProgressBar
+            android:id="@+id/progress_video"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#E0FFFFFF"
+            android:visibility="visible"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/activity_space"
+        android:background="@drawable/bg_bottom_menu_video">
+
+        <TextView
+            android:id="@id/exo_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Small.Inverse"
+            android:text="2:44"/>
+        <SeekBar
+            android:id="@id/exo_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@id/exo_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Small.Inverse"
+            android:text="10:21"/>
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_fullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_fullscreen"
+            android:minWidth="@dimen/activity_space"
+            android:paddingRight="0dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+    </LinearLayout>
+-->
+</LinearLayout>

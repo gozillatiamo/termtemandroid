@@ -1,0 +1,23 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">24dp</dimen>
+    <dimen name="activity_vertical_margin">24dp</dimen>
+    <dimen name="activity_space">24dp</dimen>
+    <dimen name="activity_small_space">8dp</dimen>
+    <dimen name="padding_icon_dashboard">32dp</dimen>
+    <dimen name="text_menu_size_dashboard">24sp</dimen>
+    <dimen name="my_text_size">18sp</dimen>
+    <dimen name="small_text_size">14sp</dimen>
+    <dimen name="contact_text_size">12sp</dimen>
+    <dimen name="icon_size">40dp</dimen>
+    <dimen name="icon_large_size">56dp</dimen>
+    <dimen name="icon_big_size">100dp</dimen>
+    <dimen name="padding_column_list">16dp</dimen>
+    <dimen name="elevation_cardview">4dp</dimen>
+    <dimen name="my_text_large">32sp</dimen>
+    <dimen name="menu_size">120dp</dimen>
+    <dimen name="max_width_thumbnail">240dp</dimen>
+    <dimen name="height_item_inbox">140dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+
+</resources>

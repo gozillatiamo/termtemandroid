@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<!--
+    <com.worldwidewealth.termtem.widgets.VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="40%"
+        android:visibility="gone">
+
+    </com.worldwidewealth.termtem.widgets.VideoView>
+-->
+<!--
+    <RelativeLayout
+        android:id="@+id/layout_360_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.google.vr.sdk.widgets.video.VrVideoView
+            android:id="@+id/vr_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.google.vr.sdk.widgets.video.VrVideoView>
+
+        <SeekBar
+            android:id="@+id/seek_vr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#20000000"
+            android:padding="@dimen/activity_vertical_margin"/>
+    </RelativeLayout>
+-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_small_space"
+        android:nestedScrollingEnabled="false"
+        android:visibility="visible">
+
+    </android.support.v7.widget.RecyclerView>
+</android.support.percent.PercentRelativeLayout>

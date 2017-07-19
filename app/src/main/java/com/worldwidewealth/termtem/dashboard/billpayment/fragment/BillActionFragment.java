@@ -116,7 +116,10 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                            .replace(R.id.container_topup, FragmentTopupPackage.newInstance(response.getBILL_SERVICE_NAME(), BillPaymentActivity.BILLPAY, result, 0))
+                            .replace(R.id.container_topup, FragmentTopupPackage.newInstanceBill(
+                                    BillPaymentActivity.BILLPAY,
+                                    result,
+                                    response))
                             .commit();
 
                     break;
@@ -158,7 +161,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_scan:
-                MyApplication.LeavingOrEntering.currentActivity = null;
+//                MyApplication.LeavingOrEntering.currentActivity = null;
                 Intent intent = new Intent(getContext(), ScanBillActivity.class);
                 intent.putExtra(MainBillPayFragment.KEY_BILL_DATA, mResponse);
                 startActivityForResult(intent,

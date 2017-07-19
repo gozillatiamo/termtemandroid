@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/height_item_inbox"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/layout_image_row1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/image_thumbnail_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_weight="1"/>
+        <ImageView
+            android:id="@+id/image_thumbnail_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_image_row2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/image_thumbnail_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            android:layout_weight="1"/>
+
+        <FrameLayout
+            android:id="@+id/layout_last_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="visible"
+            >
+
+            <ImageView
+                android:id="@+id/image_thumbnail_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+
+                />
+            <TextView
+                android:id="@+id/text_more"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="+2"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="visible"
+                android:background="#A0000000"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

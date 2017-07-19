@@ -14,6 +14,7 @@ import com.worldwidewealth.termtem.dashboard.billpayment.fragment.MainBillPayFra
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.util.Util;
 
 
 public class BillPaymentActivity extends MyAppcompatActivity {
@@ -33,6 +34,9 @@ public class BillPaymentActivity extends MyAppcompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Util.setBalanceWallet(findViewById(R.id.include_my_wallet));
+
     }
 
     private void bindView(){

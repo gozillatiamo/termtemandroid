@@ -36,7 +36,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
     private DecoratedBarcodeView mBarcodeView;
     private RadioGroup mReGroup;
-    private BarcodeFormat mBarcodeFormat = BarcodeFormat.CODABAR;
+    private static BarcodeFormat mBarcodeFormat = BarcodeFormat.CODABAR;
 
     public static final String TAG = ScanBillActivity.class.getSimpleName();
     public static final String KEY_SCAN_RESULT = "scanresult";
@@ -62,7 +62,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
                 mBarcodeView.resume();
                 return;
             }
-            Log.e(TAG, ""+getParent().toString());
+//            Log.e(TAG, ""+getParent().toString());
             Intent intent = getIntent();
             intent.putExtra(KEY_SCAN_RESULT, result.getText());
 
@@ -80,7 +80,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_bill);
-
+        Log.e(TAG, ""+getRequestedOrientation());
         bindView();
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mBarcodeView.decodeContinuous(barcodeCallback);
@@ -88,8 +88,6 @@ public class ScanBillActivity extends MyAppcompatActivity {
         mReGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                MyApplication.LeavingOrEntering.currentActivity = null;
-
                 switch (i){
                     case R.id.scan_bill_code:
                         mBarcodeFormat = BarcodeFormat.CODABAR;
@@ -115,6 +113,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
     @Override
     public void onPause() {
         mBarcodeView.pause();
+        MyApplication.LeavingOrEntering.currentActivity = null;
         super.onPause();
     }
 

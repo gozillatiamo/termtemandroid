@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <FrameLayout
+        android:id="@+id/container_topup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/activity_space"
+            android:orientation="vertical"
+            >
+            <include
+                android:id="@+id/include_my_wallet"
+                layout="@layout/card_my_wallet"/>
+            <include layout="@layout/content_bill_payment" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="8dp"
+        android:layout_marginLeft="40dp"
+        app:layout_anchor="@+id/toolbar"
+        app:layout_anchorGravity="bottom"
+        >
+
+        <ImageView
+            android:id="@+id/logo_menu"
+            android:layout_width="@dimen/icon_big_size"
+            android:layout_height="@dimen/icon_big_size"
+            android:src="@drawable/ic_topup"
+            android:visibility="visible"
+            android:layout_marginBottom="@dimen/icon_large_size"
+            android:layout_marginTop="@dimen/activity_small_space"
+            />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="1"
+            android:text="@string/dashboard_bill_pay"
+            android:gravity="center"
+            android:paddingRight="@dimen/icon_big_size"
+            style="@style/MyTitleActionBar"
+            android:layout_gravity="top"
+            />
+
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

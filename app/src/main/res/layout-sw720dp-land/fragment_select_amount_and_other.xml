@@ -1,0 +1,69 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <LinearLayout
+            android:id="@+id/container_mpay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <LinearLayout
+                android:id="@+id/layout_mpay_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_space"
+                >
+                <me.grantland.widget.AutofitTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_amount_to_agent_transfer"
+                    android:gravity="center"
+                    app:sizeToFit="true"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_menu_size_dashboard"
+                    android:layout_marginTop="@dimen/activity_space"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_space"
+                    android:paddingRight="@dimen/activity_space"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    >
+                </android.support.v7.widget.RecyclerView>
+                <RelativeLayout
+                    android:id="@+id/layout_edit_amount_other"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/edit_amount_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/please_enter_amount"
+                        android:inputType="numberDecimal"
+                        android:gravity="center"
+                        android:imeOptions="actionDone"
+                        android:padding="@dimen/activity_space"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:background="@android:drawable/editbox_background_normal"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
+
+

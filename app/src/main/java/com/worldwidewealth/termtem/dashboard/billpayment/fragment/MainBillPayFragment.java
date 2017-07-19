@@ -107,9 +107,11 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     public void onStart() {
         super.onStart();
 //        if (mResult == null) {
-            services = APIServices.retrofit.create(APIServices.class);
-            bindView();
-            getBillService();
+            if (mListBillCategory == null) {
+                services = APIServices.retrofit.create(APIServices.class);
+                bindView();
+                getBillService();
+            }
 //        }
     }
 

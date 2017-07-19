@@ -29,16 +29,21 @@
                 android:padding="@dimen/activity_space">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
+                    <me.grantland.widget.AutofitTextView
                         android:id="@+id/text_title_carrier"
                         style="@style/TextAppearance.AppCompat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        app:sizeToFit="true"
+                        app:minTextSize="4sp"
                         android:padding="@dimen/activity_small_space"
                         android:text="ผู้ให้บริการ" />
 
@@ -53,6 +58,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.3"
                     android:orientation="vertical">
 
                     <TextView
@@ -82,11 +88,6 @@
                 </LinearLayout>
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </LinearLayout>
 
             </LinearLayout>
 

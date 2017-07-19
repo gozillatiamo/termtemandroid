@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.perf.metrics.AddTrace;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,8 +46,10 @@ import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
+import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.model.PGResponseModel;
+import com.worldwidewealth.termtem.model.PreviewBillRequest;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -89,6 +95,9 @@ public class FragmentTopupPackage extends  Fragment{
     private String mCarrier;
     private String mTopup;
     private String mPhone;
+    private String mBarcode;
+    private LoadBillServiceResponse mBillService;
+
     private double mFavAmt = 0;
     private boolean mIsFAV = false;
     private APIServices services;
@@ -113,6 +122,9 @@ public class FragmentTopupPackage extends  Fragment{
     private String mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
 
     private static final String CARRIER = "carrier";
+    private static final String KEY_BARCODE = "barcode";
+    private static final String KEY_BILL_SERVICE = "billcode";
+
     private static final int postDelay = 1000;
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -174,10 +186,34 @@ public class FragmentTopupPackage extends  Fragment{
         return fragment;
     }
 
+    public static Fragment newInstanceBill(String topup, String barcode, LoadBillServiceResponse billservice){
+        FragmentTopupPackage fragment = new FragmentTopupPackage();
+        Bundle bundle = new Bundle();
+        bundle.putString(FragmentTopup.keyTopup, topup);
+        bundle.putString(KEY_BARCODE, barcode);
+        bundle.putParcelable(KEY_BILL_SERVICE, billservice);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            mTopup = getArguments().getString(FragmentTopup.keyTopup);
+            switch (mTopup){
+                case BillPaymentActivity.BILLPAY:
+                    mBarcode = getArguments().getString(KEY_BARCODE);
+                    mBillService = getArguments().getParcelable(KEY_BILL_SERVICE);
+                    break;
+                default:
+                    mCarrier = getArguments().getString(CARRIER);
+                    mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+                    mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
 
+            }
+        }
     }
 
     @Override
@@ -189,12 +225,8 @@ public class FragmentTopupPackage extends  Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mCarrier = getArguments().getString(CARRIER);
-        mTopup = getArguments().getString(FragmentTopup.keyTopup);
-        mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
-        mFavAmt = getArguments().getDouble(ActivityTopup.KEY_AMT);
-        getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 
+        getActivity().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
         mHandler = new Handler();
         services = APIServices.retrofit.create(APIServices.class);
         if (rootView == null){
@@ -208,13 +240,6 @@ public class FragmentTopupPackage extends  Fragment{
         initData();
 
         Util.setupUI(rootView);
-        if (mTopup != BillPaymentActivity.BILLPAY) {
-            initPageTopup();
-        } else {
-            mCarrier = APIServices.AIS;
-            setAmt(10, "ecd72632-6b02-4756-bffd-18f078429973");
-            servicePreview();
-        }
         mHolder.mEditPhone.requestFocus();
 
         return rootView;
@@ -279,7 +304,7 @@ public class FragmentTopupPackage extends  Fragment{
                 break;
             case BillPaymentActivity.BILLPAY:
                 mActionLoadButton = APIServices.ACTIONLOADBUTTON;
-                mActionPreview = APIServices.ACTIONPREVIEW;
+                mActionPreview = APIServices.ACTION_PREVIEW_BILL;
                 mActionGetOTP = APIServices.ACTIONGETOTP;
                 mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
                 break;
@@ -342,6 +367,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void initData(){
         setAmt(mAmt, null);
+
         if (mPhone != null){
             if (mTopup.equals(BillPaymentActivity.BILLPAY)){
                 mHolder.mEditPhone.setMaxLines(50);
@@ -350,58 +376,73 @@ public class FragmentTopupPackage extends  Fragment{
             mHolder.mEditPhone.setText(mPhone);
             setEnableEditPhone(false);
         }
-        switch (mCarrier){
-            case APIServices.AIS:
-                switch (mTopup){
-                    case FragmentTopup.MOBILE:
-                        mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
-                        break;
-                    case FragmentTopup.PIN:
-                        mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
-                        break;
-                    case FragmentTopup.VAS:
-                        mHolder.mLogoService.setImageResource(R.drawable.ais_vas);
-                        break;
-                }
 
-                break;
-            case APIServices.TRUEMOVE:
-                if (mTopup.equals(FragmentTopup.MOBILE))
-                    mHolder.mLogoService.setImageResource(R.drawable.logo_truemove);
-                else
-                    mHolder.mLogoService.setImageResource(R.drawable.logo_truemoney);
+        if (mCarrier != null) {
+            switch (mCarrier) {
+                case APIServices.AIS:
+                    switch (mTopup) {
+                        case FragmentTopup.MOBILE:
+                            mHolder.mLogoService.setImageResource(R.drawable.logo_ais);
+                            break;
+                        case FragmentTopup.PIN:
+                            mHolder.mLogoService.setImageResource(R.drawable.logo_ais_pin);
+                            break;
+                        case FragmentTopup.VAS:
+                            mHolder.mLogoService.setImageResource(R.drawable.ais_vas);
+                            break;
+                    }
 
-                break;
-            case APIServices.DTAC:
-                mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
-                break;
-            default:
-                mHolder.mTextTitleCarrier.setText(mCarrier);
-                mHolder.mLogoService.setImageResource(R.drawable.logo_pea);
-                break;
+                    break;
+                case APIServices.TRUEMOVE:
+                    if (mTopup.equals(FragmentTopup.MOBILE))
+                        mHolder.mLogoService.setImageResource(R.drawable.logo_truemove);
+                    else
+                        mHolder.mLogoService.setImageResource(R.drawable.logo_truemoney);
+
+                    break;
+                case APIServices.DTAC:
+                    mHolder.mLogoService.setImageResource(R.drawable.logo_dtac);
+                    break;
+            }
         }
 
         switch (mTopup){
             case FragmentTopup.MOBILE:
                 mHolder.mTextHint.setText(R.string.topup);
                 mBottomAction.setTitleAmount(getString(R.string.topup_title_amount));
+                initPageTopup();
+
                 break;
             case FragmentTopup.PIN:
                 mHolder.mTextHint.setText(R.string.dashboard_pin);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+                initPageTopup();
+
 
                 break;
             case FragmentTopup.VAS:
                 mHolder.mTextHint.setText(R.string.vas);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+                initPageTopup();
+
 
                 break;
             case BillPaymentActivity.BILLPAY:
                 mHolder.mTextHint.setText(R.string.dashboard_bill_pay);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
-                mHolder.mTextTitleAccount.setText("บัญชีผู้ใช้");
+                mHolder.mTextTitleAccount.setText(mBillService.getBILL_SERVICE_DESC());
+                mHolder.mTextTitleCarrier.setText(mBillService.getBILL_SERVICE_NAME());
+                Glide.with(this).load(getString(R.string.server)+mBillService.getLOGOURL())
+                        .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
+                        .thumbnail(0.6f)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(mHolder.mLogoService);
+                servicePreview();
+
                 break;
         }
+
     }
 
     private void initBtn(){
@@ -417,12 +458,23 @@ public class FragmentTopupPackage extends  Fragment{
     private void servicePreview(){
         mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
-        if (!checkData()) return;
+        if (mTopup != BillPaymentActivity.BILLPAY && !checkData()) return;
 
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
 
-        Call<ResponseBody> call = services.preview(new RequestModel(mActionPreview,
-                new TopupPreviewRequestModel(mAmt, mCarrier)));
+        Call<ResponseBody> call;
+
+        switch (mTopup){
+            case BillPaymentActivity.BILLPAY:
+                call = services.billService(new RequestModel(mActionPreview,
+                        new PreviewBillRequest(mBarcode, mBillService.getBILL_SERVICE_CODE(),
+                                mBillService.getBILL_SERVICE_ID())));
+                break;
+            default:
+                call = services.preview(new RequestModel(mActionPreview,
+                        new TopupPreviewRequestModel(mAmt, mCarrier)));
+        }
+
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

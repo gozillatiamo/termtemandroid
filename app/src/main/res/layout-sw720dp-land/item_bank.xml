@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_item_bank"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/activity_space"
+    android:paddingBottom="@dimen/activity_space"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    >
+
+    <ImageView
+        android:id="@+id/item_icon_bank"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_promptpay"
+        android:layout_weight="1"
+        android:layout_marginRight="@dimen/activity_space"
+        />
+    <TextView
+        android:id="@+id/txt_list_bank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:text="ธนาคารกสิกร"
+        android:textSize="@dimen/my_text_size"
+        style="@style/TextAppearance.AppCompat.Subhead" />
+</LinearLayout>

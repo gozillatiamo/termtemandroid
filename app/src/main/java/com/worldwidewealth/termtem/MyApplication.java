@@ -292,7 +292,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 */
 
-            if (!(canUseLeaving(activity))) return;
+            if (activity == null || !(canUseLeaving(activity))) return;
 
             if (Global.getInstance().getUSERNAME() == null) {
                 Util.backToSignIn(activity);

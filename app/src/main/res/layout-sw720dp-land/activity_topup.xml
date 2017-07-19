@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_topup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.worldwidewealth.termtem.dashboard.topup.ActivityTopup">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_topup"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="8dp"
+            app:theme="@style/ToolbarColored">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/MyTitleActionBar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/title_topup" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/container_topup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_space"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></FrameLayout>
+
+    <ImageView
+        android:id="@+id/logo_menu"
+        android:layout_width="@dimen/icon_big_size"
+        android:layout_height="@dimen/icon_big_size"
+        android:src="@drawable/ic_topup"
+        app:layout_anchor="@+id/toolbar_topup"
+        android:layout_marginLeft="40dp"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/activity_space"
+        android:elevation="8dp"
+        />
+
+</android.support.design.widget.CoordinatorLayout>
