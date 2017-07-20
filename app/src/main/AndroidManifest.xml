@@ -68,7 +68,7 @@
 
         <activity
             android:name=".SplashScreenWWW"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,16 +78,16 @@
         </activity>
         <activity
             android:name=".dashboard.ActivityDashboard"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ActivityShowNotify"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="com.worldwidewealth.wealthwallet.click.notification" />
@@ -98,27 +98,27 @@
         <activity
             android:name=".ActivityRegister"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.topup.ActivityTopup"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.report.ActivityReport"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.myqrcode.ActivityMyQrCode"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="locked" />
         <activity
             android:name=".dashboard.addCreditAgent.ActivityAddCreditAgent"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
 
         <meta-data
@@ -127,19 +127,19 @@
 
         <activity
             android:name=".dashboard.mPayStation.MPayStationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.mPayStation.SelectChoiceMpayActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.scan.ActivityScan"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.inbox.InboxActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -152,14 +152,18 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".dashboard.maps.MapsActivity" />
+
+        <activity android:name=".dashboard.maps.MapsActivity"
+            android:screenOrientation="locked"
+            />
+
         <activity
             android:name=".chat.ChatBotActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".chat.PhotoViewActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.favorite.FavoritesActivity"
@@ -174,6 +178,7 @@
             android:name=".dashboard.billpayment.BillPaymentActivity"
             android:parentActivityName=".dashboard.ActivityDashboard"
             android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="locked"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

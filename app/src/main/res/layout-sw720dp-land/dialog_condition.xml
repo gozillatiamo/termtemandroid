@@ -29,6 +29,7 @@
             style="@style/Widget.AppCompat.Button.Colored"
             app:backgroundTint="@android:color/holo_red_dark"
             android:text="@string/cancel"
+            android:textSize="@dimen/my_text_size"
             android:textStyle="bold"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

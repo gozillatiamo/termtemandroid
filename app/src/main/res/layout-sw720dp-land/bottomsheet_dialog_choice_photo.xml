@@ -12,7 +12,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:text="@string/take_photo"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="@dimen/my_text_size"
             android:drawableTop="@drawable/ic_camera_alt"
             android:textColor="@android:color/darker_gray"
             />
@@ -28,7 +28,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:drawableTop="@drawable/ic_photo_library"
             android:text="@string/choose_pic"
-            android:textSize="16sp"
+            android:textSize="@dimen/my_text_size"
             android:textColor="@android:color/darker_gray"
             android:textStyle="bold"/>
 </LinearLayout>

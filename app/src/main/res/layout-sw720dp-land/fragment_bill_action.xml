@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="การไฟฟ้านครหลวง"
                 android:textColor="@color/color_bill_pay"
+                android:textSize="@dimen/my_text_size"
                 android:gravity="center"
                 android:padding="@dimen/icon_size"
                 android:textStyle="bold"
@@ -53,6 +54,7 @@
                             android:drawableTop="@drawable/ic_qr_code_scan"
                             android:text="@string/scan_barcode"
                             android:textStyle="bold"
+                            android:textSize="@dimen/my_text_size"
                             android:textColor="@android:color/tertiary_text_light"
                             android:drawablePadding="@dimen/activity_space"
                             style="@style/Base.Widget.AppCompat.Button.Borderless"
@@ -65,7 +67,7 @@
                             android:text="@string/enter_reference"
                             android:textStyle="bold"
                             android:textColor="@android:color/tertiary_text_light"
-
+                            android:textSize="@dimen/my_text_size"
                             android:drawablePadding="@dimen/activity_space"
                             style="@style/Base.Widget.AppCompat.Button.Borderless"
                             android:layout_weight="1"/>

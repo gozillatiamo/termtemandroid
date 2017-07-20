@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.worldwidewealth.termtem">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -41,7 +42,8 @@
 
         <activity
             android:name=".SplashScreenWWW"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,20 +54,22 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".demoairtime.dashboard.ActivityDashboard"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+        <activity android:name=".dashboard.ActivityDashboard"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            >
 
         </activity>
-
 
         <activity
             android:name=".ActivityShowNotify"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="com.worldwidewealth.wealthwallet.click.notification" />
@@ -75,27 +79,34 @@
         </activity>
         <activity
             android:name=".ActivityRegister"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.topup.ActivityTopup"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.report.ActivityReport"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.myqrcode.ActivityMyQrCode"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.reportmoneytransfer.ActivityReportMT"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            />
         <activity
             android:name=".dashboard.addCreditAgent.ActivityAddCreditAgent"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
 
         <meta-data
@@ -104,19 +115,23 @@
 
         <activity
             android:name=".dashboard.mPayStation.MPayStationActivity"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.mPayStation.SelectChoiceMpayActivity"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.scan.ActivityScan"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.inbox.InboxActivity"
-            android:screenOrientation="portrait"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -131,9 +146,44 @@
         </activity>
         <activity android:name=".dashboard.maps.MapsActivity" />
 
-        <activity android:name=".demoairtime.MainActivitytest">
-
+        <activity
+            android:name=".chat.ChatBotActivity"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".chat.PhotoViewActivity"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".dashboard.favorite.FavoritesActivity"
+            android:label="@string/title_activity_favorites"
+            android:parentActivityName=".dashboard.ActivityDashboard"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.worldwidewealth.termtem.dashboard.ActivityDashboard" />
         </activity>
+        <activity
+            android:name=".dashboard.billpayment.BillPaymentActivity"
+            android:parentActivityName=".dashboard.ActivityDashboard"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.worldwidewealth.termtem.dashboard.ActivityDashboard" />
+        </activity>
+        <activity android:name=".dashboard.billpayment.ScanBillActivity"
+            tools:replace="screenOrientation"
+            android:screenOrientation="landscape"
+            ></activity>
+
+
     </application>
 
 </manifest>

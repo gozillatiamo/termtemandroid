@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:clickable="true"
     android:id="@+id/layout_parent"
     android:background="@color/colorBackground"
@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:paddingBottom="@dimen/icon_large_size"
 
         >
 
@@ -33,7 +32,232 @@
             android:layout_marginTop="@dimen/icon_size"
             android:adjustViewBounds="true"
             android:paddingTop="@dimen/activity_vertical_margin"
+            android:layout_centerInParent="true"
             android:src="@drawable/termtem_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/activity_space"
+            android:alpha="0.5"
+            android:text="@string/versionName"
+            android:layout_gravity="bottom|left"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/small_text_size" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingRight="@dimen/icon_large_size"
+                android:paddingLeft="@dimen/icon_large_size"
+                android:layout_marginLeft="@dimen/icon_size"
+                android:layout_marginRight="@dimen/icon_size"
+                android:gravity="center|bottom"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/username"
+                            android:typeface="monospace"
+                            android:textSize="@dimen/my_text_size"
+                            android:textColor="@android:color/tertiary_text_light"
+                            android:textAllCaps="true"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/text_phone_country"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:visibility="gone"
+                                android:gravity="center"
+                                android:digits="0123456789+"
+                                android:text="+66"
+                                ></TextView>
+
+                            <com.worldwidewealth.termtem.util.InstantAutoComplete
+
+                                android:id="@+id/edit_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edittext_background"
+                                android:inputType="phone"
+                                android:maxLength="12"
+                                android:hint="xxx-xxx-xxxx"
+                                android:textSize="@dimen/my_text_size"
+                                android:layout_margin="@dimen/activity_small_space"
+                                android:digits="0123456789-"
+                                android:textColorHint="@android:color/secondary_text_dark_nodisable"
+                                android:imeOptions="actionNext"
+                                >
+                            </com.worldwidewealth.termtem.util.InstantAutoComplete>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/activity_small_space">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/password"
+                            android:textColor="@android:color/tertiary_text_light"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/my_text_size"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/edit_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="@dimen/my_text_size"
+                            android:layout_margin="@dimen/activity_small_space"
+                            android:background="@drawable/edittext_background"
+                            android:inputType="numberPassword"
+                            android:imeOptions="actionGo"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingTop="@dimen/activity_small_space"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/my_text_size"
+                    android:layout_margin="@dimen/activity_small_space"
+                    android:typeface="monospace"
+                    android:background="@drawable/ripple_button"
+                    android:text="@string/sign_in" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <me.grantland.widget.AutofitTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/not_have_account"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/small_text_size"
+                        app:sizeToFit="true"
+                        android:textAllCaps="true" />
+                    <me.grantland.widget.AutofitTextView
+                        android:id="@+id/btn_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/my_text_size"
+                        android:singleLine="true"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:text="@string/sign_up"
+                        android:paddingTop="@dimen/activity_space"
+                        android:paddingBottom="@dimen/activity_space"
+                        android:textAllCaps="true"
+                        app:sizeToFit="true"
+                        android:layout_marginLeft="@dimen/activity_space"
+                        android:textColor="@android:color/holo_orange_dark" />
+                </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/help"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/small_text_size"/>
+
+                    <!--
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="@dimen/activity_vertical_margin"
+                                        android:background="@android:color/darker_gray"
+                                        android:layout_margin="@dimen/activity_space"/>
+                                    <TextView
+                                        android:id="@+id/btn_forgot_password"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:background="?attr/selectableItemBackground"
+                                        android:clickable="true"
+                                        android:gravity="left"
+                                        android:paddingBottom="@dimen/activity_vertical_margin"
+                                        android:paddingTop="@dimen/activity_space"
+                                        android:text="@string/forgot_password"
+                                        android:textColor="@color/colorPrimary"
+                                        android:textSize="@dimen/small_text_size"
+                                        android:textStyle="bold" />
+                    -->
+
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_chat_bot"
@@ -51,224 +275,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:layout_weight="1.2">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingRight="@dimen/icon_large_size"
-            android:paddingLeft="@dimen/icon_large_size"
-            android:layout_marginLeft="@dimen/icon_size"
-            android:layout_marginRight="@dimen/icon_size"
-            android:gravity="center"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/username"
-                        android:typeface="monospace"
-                        android:textSize="@dimen/my_text_size"
-                        android:textColor="@android:color/tertiary_text_light"
-                        android:textAllCaps="true"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/text_phone_country"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:visibility="gone"
-                            android:gravity="center"
-                            android:digits="0123456789+"
-                            android:text="+66"
-                            ></TextView>
-
-                        <com.worldwidewealth.termtem.util.InstantAutoComplete
-
-                            android:id="@+id/edit_phone"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/edittext_background"
-                            android:inputType="phone"
-                            android:maxLength="12"
-                            android:hint="xxx-xxx-xxxx"
-                            android:textSize="@dimen/my_text_size"
-                            android:layout_margin="@dimen/activity_space"
-                            android:digits="0123456789-"
-                            android:textColorHint="@android:color/secondary_text_dark_nodisable"
-                            android:imeOptions="actionNext"
-                            >
-                        </com.worldwidewealth.termtem.util.InstantAutoComplete>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/activity_space">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/password"
-                        android:textColor="@android:color/tertiary_text_light"
-                        android:textAllCaps="true"
-                        android:textSize="@dimen/my_text_size"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"/>
-
-                    <EditText
-                        android:id="@+id/edit_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="@dimen/my_text_size"
-                        android:layout_margin="@dimen/activity_space"
-                        android:background="@drawable/edittext_background"
-                        android:inputType="numberPassword"
-                        android:imeOptions="actionGo"/>
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="@dimen/my_text_size"
-                android:layout_margin="@dimen/activity_space"
-                android:minHeight="30dp"
-                android:typeface="monospace"
-                android:background="@drawable/ripple_button"
-                android:text="@string/sign_in" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/activity_space"
-                android:gravity="center">
-                <me.grantland.widget.AutofitTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="@string/not_have_account"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/small_text_size"
-                    app:sizeToFit="true"
-                    android:textAllCaps="true" />
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/btn_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:textSize="@dimen/small_text_size"
-                    android:singleLine="true"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:text="@string/sign_up"
-                    android:paddingTop="@dimen/activity_space"
-                    android:paddingBottom="@dimen/activity_space"
-                    android:textAllCaps="true"
-                    app:sizeToFit="true"
-                    android:layout_marginLeft="@dimen/activity_space"
-                    android:textColor="@android:color/holo_orange_dark" />
-            </LinearLayout>
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/help"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/help"
-                    android:paddingTop="@dimen/activity_space"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/small_text_size"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/activity_space"
-                    android:alpha="0.5"
-                    android:text="@string/versionName"
-                    android:layout_gravity="bottom|left"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="@dimen/small_text_size" />
-
-                <!--
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="@dimen/activity_vertical_margin"
-                                    android:background="@android:color/darker_gray"
-                                    android:layout_margin="@dimen/activity_space"/>
-                                <TextView
-                                    android:id="@+id/btn_forgot_password"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:background="?attr/selectableItemBackground"
-                                    android:clickable="true"
-                                    android:gravity="left"
-                                    android:paddingBottom="@dimen/activity_vertical_margin"
-                                    android:paddingTop="@dimen/activity_space"
-                                    android:text="@string/forgot_password"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/small_text_size"
-                                    android:textStyle="bold" />
-                -->
-
-
-            </FrameLayout>
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
 
 </LinearLayout>

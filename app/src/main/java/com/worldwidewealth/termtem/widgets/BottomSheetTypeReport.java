@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,6 +102,10 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog
                         .findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+                BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+                bottomSheetBehavior.setPeekHeight(bottomSheet.getMeasuredHeight());
             }
         });
     }

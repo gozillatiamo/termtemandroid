@@ -26,11 +26,11 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textSize="@dimen/my_text_large"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
                 android:text="@string/sign_up"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,17 +38,25 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
         <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             android:layout_weight="1"
             android:scrollbars="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:paddingLeft="@dimen/icon_large_size"
                 android:paddingRight="@dimen/icon_large_size">
 
@@ -61,12 +69,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_name"
+                        android:textSize="@dimen/my_text_size"
                         android:textAllCaps="true" />
 
                     <EditText
                         android:id="@+id/edit_title_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/my_text_size"
                         android:background="@android:color/transparent"
                         android:clickable="true"
                         android:editable="false"
@@ -90,6 +100,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/my_text_size"
                         android:text="@string/first_name"
                         android:textAllCaps="true" />
 
@@ -97,6 +108,7 @@
                         android:id="@+id/edit_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/my_text_size"
                         android:background="@android:color/transparent"
                         android:imeOptions="actionNext"
                         android:inputType="text"
@@ -121,6 +133,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/last_name"
+                        android:textSize="@dimen/my_text_size"
                         android:textAllCaps="true" />
 
                     <EditText
@@ -130,6 +143,8 @@
                         android:background="@android:color/transparent"
                         android:imeOptions="actionNext"
                         android:inputType="text"
+                        android:textSize="@dimen/my_text_size"
+
                         android:nextFocusForward="@+id/edit_tel"
                         android:padding="@dimen/activity_space" />
 
@@ -150,6 +165,8 @@
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/my_text_size"
+
                         android:text="@string/birth_day"
                         android:textAllCaps="true" />
 
@@ -160,6 +177,8 @@
                         android:background="@android:color/transparent"
                         android:clickable="true"
                         android:editable="false"
+                        android:textSize="@dimen/my_text_size"
+
                         android:hint="@string/hint_birthday"
                         android:padding="@dimen/activity_space"
                         android:textColorHint="@android:color/darker_gray" />
@@ -182,6 +201,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/email"
+                        android:textSize="@dimen/my_text_size"
+
                         android:textAllCaps="true" />
 
                     <EditText
@@ -192,6 +213,8 @@
                         android:foreground="?attr/selectableItemBackground"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
+                        android:textSize="@dimen/my_text_size"
+
                         android:padding="@dimen/activity_space" />
 
                     <View
@@ -200,6 +223,31 @@
                         android:background="@drawable/line_divider" />
 
                 </LinearLayout>
+
+
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+            android:layout_margin="@dimen/activity_vertical_margin"/>
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingLeft="@dimen/icon_large_size"
+                android:paddingRight="@dimen/icon_large_size">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,7 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
@@ -346,79 +394,50 @@
                         android:background="@drawable/line_divider" />
 
                 </LinearLayout>
-                <!--
-                <LinearLayout
+
+                <Button
+                    android:id="@+id/btn_next"
+                    style="@style/MyButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-                    <CheckBox
-                        android:id="@+id/check_submit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/small_text_size"
-                        android:text="@string/submit_service"/>
-                    <Button
-                        android:id="@+id/btn_condition_termtem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/small_text_size"
-                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                        android:text="@string/goto_service"/>
-
-                </LinearLayout>
--->
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:text="@string/create"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white" />
 
 
             </LinearLayout>
-
         </android.support.v4.widget.NestedScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_vertical_margin">
+
+        <me.grantland.widget.AutofitTextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/already_have_account"
+            android:textAllCaps="true"
+            app:sizeToFit="true" />
 
-            <Button
-                android:id="@+id/btn_next"
-                style="@style/MyButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/icon_large_size"
-                android:layout_marginRight="@dimen/icon_large_size"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:text="@string/create"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/btn_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_space"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/sign_in"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            app:sizeToFit="true" />
+    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_space">
-
-                <me.grantland.widget.AutofitTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/already_have_account"
-                    android:textAllCaps="true"
-                    app:sizeToFit="true" />
-
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/btn_signin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_space"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="@string/sign_in"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorAccent"
-                    app:sizeToFit="true" />
-            </LinearLayout>
-
-        </LinearLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
