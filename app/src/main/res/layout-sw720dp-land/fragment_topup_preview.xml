@@ -35,7 +35,6 @@
 
                     <TextView
                         android:id="@+id/text_title_price"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/amount" />
@@ -49,7 +48,6 @@
 
                         <me.grantland.widget.AutofitTextView
                             android:id="@+id/txt_select_amount"
-                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="190.00"
@@ -67,20 +65,17 @@
 
                     <TextView
                         android:id="@+id/textView2"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Commission " />
 
                     <TextView
                         android:id="@+id/txt_commission_rate"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0%" />
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/currency_hint" />
@@ -94,7 +89,6 @@
 
                         <me.grantland.widget.AutofitTextView
                             android:id="@+id/txt_commission_amount"
-                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="10.00"
@@ -112,7 +106,6 @@
 
                     <TextView
                         android:id="@+id/textView"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/markup" />
@@ -126,7 +119,6 @@
 
                         <me.grantland.widget.AutofitTextView
                             android:id="@+id/txt_markup"
-                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="9,800.00"
@@ -143,7 +135,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -200,7 +191,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
@@ -216,7 +206,6 @@
 
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/txt_amount"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="190.00"
@@ -233,7 +222,6 @@
 
                 <TextView
                     android:id="@+id/textView9"
-                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/balance_toup_preview"
@@ -249,7 +237,6 @@
 
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/txt_balance"
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"

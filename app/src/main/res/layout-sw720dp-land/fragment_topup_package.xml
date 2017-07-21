@@ -7,6 +7,7 @@
     android:clickable="true"
     android:id="@+id/layout_parent"
     android:focusableInTouchMode="true"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
     android:background="@color/colorBackground"
     >
 
@@ -31,21 +32,22 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical">
-
-                    <TextView
+                    <me.grantland.widget.AutofitTextView
                         android:id="@+id/text_title_carrier"
-                        style="@style/TextAppearance.AppCompat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        app:sizeToFit="true"
+                        app:minTextSize="4sp"
                         android:padding="@dimen/activity_small_space"
                         android:text="ผู้ให้บริการ" />
-
                     <ImageView
                         android:id="@+id/logo_service"
-                        android:layout_width="64dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/icon_big_size"
+                        android:layout_height="@dimen/icon_big_size"
                         android:src="@drawable/logo_ais" />
 
                 </LinearLayout>
@@ -57,7 +59,6 @@
 
                     <TextView
                         android:id="@+id/title_account"
-                        style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -68,9 +69,10 @@
 
                     <EditText
                         android:id="@+id/edit_phone"
-                        style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
                         android:background="@drawable/background_editext_topup"
                         android:digits="0123456789-"
                         android:hint="@string/hint_phone_number"

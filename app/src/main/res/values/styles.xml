@@ -21,6 +21,7 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/my_text_size</item>
+        <item name="android:padding">@dimen/activity_space</item>
         <item name="android:textColorHint">@android:color/secondary_text_dark_nodisable</item>
     </style>
 

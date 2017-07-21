@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +50,10 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
 
         holder.itemView.setClickable(true);
         holder.itemView.setBackgroundResource(typedValue.resourceId);
-
+        int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                mContext.getResources().getDimension(R.dimen.activity_vertical_margin),
+                mContext.getResources().getDisplayMetrics());
+        holder.mTitleNotify.setPadding(padding, padding, padding, padding);
         holder.mTitleNotify.setText(getItem(position).getFirstName() + "\t" + getItem(position).getLastName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

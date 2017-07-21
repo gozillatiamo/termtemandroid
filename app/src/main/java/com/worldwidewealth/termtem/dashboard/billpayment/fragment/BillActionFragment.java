@@ -5,11 +5,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -115,6 +117,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                     String result = data.getStringExtra(ScanBillActivity.KEY_SCAN_RESULT);
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
+                            .addToBackStack(null)
                             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                             .replace(R.id.container_topup, FragmentTopupPackage.newInstanceBill(
                                     BillPaymentActivity.BILLPAY,
@@ -212,7 +215,15 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
 
                     if (mListBillRef != null && mListBillRef.size() > 0){
                         BillRefAdapter adapter = new BillRefAdapter(mListBillRef);
-                        mRecyclerRef.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                        switch (MyApplication.getTypeScreenLayout()){
+                            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                                mRecyclerRef.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                                break;
+                            default:
+                                mRecyclerRef.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                        }
                         mRecyclerRef.setAdapter(new ScaleInAnimationAdapter(adapter));
                     }
                 }

@@ -180,6 +180,12 @@ public class MyApplication extends Application implements Application.ActivityLi
         }
     }
 
+    public static int getTypeScreenLayout(){
+        int screenLayout = getContext().getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        return screenLayout;
+    }
+
     public static Context getContext(){
         return mContext;
     }

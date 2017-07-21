@@ -33,12 +33,13 @@
                 android:orientation="vertical">
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dialog_avatar_height"
+                    android:layout_height="@dimen/icon_big_size"
                     android:background="#50000000">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textSize="@dimen/my_text_large"
                         style="@style/Base.TextAppearance.AppCompat.Title.Inverse"
                         android:text="SCAN"/>
 
@@ -60,8 +61,8 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dialog_avatar_height"
-                    android:text="Please the QRcode at the center of\nthe box for scan"
+                    android:layout_height="@dimen/icon_big_size"
+                    android:text="Please the Code at the center of\nthe box for scan"
                     android:textColor="@android:color/white"
                     android:gravity="center"
                     android:textSize="@dimen/small_text_size"
@@ -78,6 +79,7 @@
             android:id="@+id/group_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:checkedButton="@+id/scan_bill_code"
             android:orientation="horizontal">
             <RadioButton

@@ -107,11 +107,12 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     public void onStart() {
         super.onStart();
 //        if (mResult == null) {
-            if (mListBillCategory == null) {
+        bindView();
+            if (mListBillCategory == null && mListBillService == null) {
                 services = APIServices.retrofit.create(APIServices.class);
-                bindView();
                 getBillService();
-            }
+            } else
+                setupRecyclearView();
 //        }
     }
 

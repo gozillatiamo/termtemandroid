@@ -140,7 +140,7 @@
 
                     android:textStyle="bold"
                     android:textColor="#4BB543"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:textSize="@dimen/my_text_large"/>
             </LinearLayout>
 

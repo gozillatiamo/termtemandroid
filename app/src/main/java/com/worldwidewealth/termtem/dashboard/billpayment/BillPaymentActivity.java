@@ -26,6 +26,13 @@ public class BillPaymentActivity extends MyAppcompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_payment);
         setupToolbar();
+
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.fragment, MainBillPayFragment.newInstance(MainBillPayFragment.MAIN_MENU, null))
+                .commit();
+
     }
 
     private void setupToolbar(){

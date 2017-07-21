@@ -12,10 +12,11 @@
         layout="@layout/card_my_wallet"/>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="600dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:layout_margin="@dimen/activity_small_space">
+        android:layout_marginTop="@dimen/activity_space">
         <include
             android:id="@+id/include_layout_success"
             layout="@layout/layout_success_transections"/>
@@ -51,6 +52,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorBackground"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatButton
@@ -62,6 +64,8 @@
                     android:textAllCaps="false"
                     app:backgroundTint="@color/colorAccent"
                     style="@style/MyButton"
+                    android:layout_marginRight="@dimen/height_item_inbox"
+                    android:layout_marginLeft="@dimen/height_item_inbox"
                     />
 
                 <Button

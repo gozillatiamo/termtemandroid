@@ -303,6 +303,7 @@
     <string name="insurance_bill">ประกันภัย</string>
     <string name="home_car_bill">ผ่อนบ้าน/รถ</string>
     <string name="shopping_bill">ค่าสินค้า</string>
+    <string name="phone_no_customer">หมายเลขโทรศัพท์ผู้ชำระ</string>
 
 
     //Chat bot

@@ -29,8 +29,8 @@
         android:layout_marginTop="@dimen/icon_size"
         android:textColor="@color/zxing_status_text"/>
     <RelativeLayout
-        android:layout_height="250dp"
-        android:layout_width="250dp"
+        android:layout_height="400dp"
+        android:layout_width="400dp"
         android:layout_gravity="center"
         android:background="@drawable/background_scan">
 
@@ -43,7 +43,7 @@
         android:layout_gravity="bottom|center"
         style="@style/MyButton"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:drawableTop="@drawable/qr_code"
+        android:drawableTop="@drawable/ic_qr_code"
         android:text="@string/dashboard_my_qr"
         />
 

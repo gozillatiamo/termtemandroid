@@ -4,11 +4,18 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <FrameLayout
-        android:id="@+id/layout_border"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        app:cardElevation="0dp"
+        >
+        <FrameLayout
+            android:id="@+id/layout_border"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_detail"
@@ -53,14 +60,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.65"
                         android:text="@string/phone_num_second"
-                        android:textSize="@dimen/my_text_size"
+                        android:textSize="@dimen/small_text_size"
                         android:gravity="right"
                         android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/text_phone_no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/my_text_size"
+                        android:textSize="@dimen/small_text_size"
                         android:layout_weight="1"
                         android:gravity="right"
                         android:text="086-025-4055"/>
@@ -76,14 +83,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.65"
                         android:text="@string/amount"
-                        android:textSize="@dimen/my_text_size"
+                        android:textSize="@dimen/small_text_size"
                         android:gravity="right"
                         android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/text_amount_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/my_text_size"
+                        android:textSize="@dimen/small_text_size"
                         android:layout_weight="1"
                         android:gravity="right"
                         android:text="100"/>
@@ -113,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#ffffbb33"
                     style="@style/TextAppearance.AppCompat.Caption"
-                    android:textSize="@dimen/my_text_size"
+                    android:textSize="@dimen/small_text_size"
                     android:textStyle="bold"
                     android:text="@string/add_to_favorite"/>
             </LinearLayout>
@@ -128,8 +135,8 @@
 
                 <ImageView
                     android:id="@+id/icon_success"
-                    android:layout_width="@dimen/icon_large_size"
-                    android:layout_height="@dimen/icon_large_size"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:visibility="invisible"
                     android:src="@drawable/ic_check_success" />
                 <TextView
@@ -140,8 +147,8 @@
 
                     android:textStyle="bold"
                     android:textColor="#4BB543"
-                    android:visibility="visible"
-                    android:textSize="@dimen/my_text_large"/>
+                    android:visibility="invisible"
+                    android:textSize="@dimen/my_text_size"/>
             </LinearLayout>
 
         </LinearLayout>

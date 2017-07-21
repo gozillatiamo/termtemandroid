@@ -3,6 +3,7 @@ package com.worldwidewealth.termtem.dashboard.billpayment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,19 +49,24 @@ public class ScanBillActivity extends MyAppcompatActivity {
             mBarcodeView.pause();
             boolean isFormatCorrect;
 
-            switch (mBarcodeFormat){
-                case QR_CODE:
-                    isFormatCorrect = mBarcodeFormat == result.getBarcodeFormat();
-                    break;
-                default:
-                    isFormatCorrect = result.getBarcodeFormat() != BarcodeFormat.QR_CODE;
-                    break;
-            }
+            if (MyApplication.getTypeScreenLayout() != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                switch (mBarcodeFormat) {
+                    case QR_CODE:
+                        isFormatCorrect = mBarcodeFormat == result.getBarcodeFormat();
+                        break;
+                    default:
+                        isFormatCorrect = result.getBarcodeFormat() != BarcodeFormat.QR_CODE;
+                        break;
+                }
 
-            if (!isFormatCorrect){
-                Toast.makeText(ScanBillActivity.this, getString(R.string.unavailable_format_code), Toast.LENGTH_SHORT).show();
-                mBarcodeView.resume();
-                return;
+                if (!isFormatCorrect) {
+                    Toast.makeText(ScanBillActivity.this, getString(R.string.unavailable_format_code), Toast.LENGTH_SHORT).show();
+                    mBarcodeView.resume();
+                    return;
+                }
+
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
             }
 //            Log.e(TAG, ""+getParent().toString());
             Intent intent = getIntent();
@@ -77,6 +83,12 @@ public class ScanBillActivity extends MyAppcompatActivity {
     };
 
     @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mBarcodeFormat = BarcodeFormat.CODABAR;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_bill);
@@ -84,7 +96,6 @@ public class ScanBillActivity extends MyAppcompatActivity {
         bindView();
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mBarcodeView.decodeContinuous(barcodeCallback);
-
         mReGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -103,6 +114,14 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (MyApplication.getTypeScreenLayout() != Configuration.SCREENLAYOUT_SIZE_XLARGE){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
+        super.onBackPressed();
+    }
 
     @Override
     public void onResume() {
@@ -117,7 +136,10 @@ public class ScanBillActivity extends MyAppcompatActivity {
         super.onPause();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     private void bindView(){
         mBarcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_view);

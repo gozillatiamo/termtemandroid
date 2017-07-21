@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -975,7 +977,10 @@ public class FragmentTopupPackage extends  Fragment{
 
         final EditText editPhone = new EditText(getContext());
         editPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-        editPhone.setPadding(20, 20, 20, 20);
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                getResources().getDimension(R.dimen.activity_space),
+                getResources().getDisplayMetrics());
+//        editPhone.setPadding(padding, padding, padding, padding);
         editPhone.setGravity(Gravity.CENTER);
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(12);
