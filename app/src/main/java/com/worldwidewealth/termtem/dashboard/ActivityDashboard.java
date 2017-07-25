@@ -52,6 +52,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
     private static final String TAG = ActivityDashboard.class.getSimpleName();
     private List<UserMenuModel> mUserMenuList;
     private LayerDrawable mIconNoti;
+    private boolean mIsFromPOS;
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
@@ -66,6 +67,10 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
         setContentView(R.layout.activity_dashboard);
         registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
         mHolder = new ViewHolder(this);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            mIsFromPOS = bundle.getBoolean("frompos");
+        }
         updateBalance();
         initToolbar();
 
@@ -132,6 +137,11 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
         MenuItem itemCart = menu.findItem(R.id.action_in_box);
         mIconNoti = (LayerDrawable) itemCart.getIcon();
         BadgeDrawable.setBadgeCount(this, mIconNoti, Global.getInstance().getMSGREAD());
+
+        if (!mIsFromPOS){
+            itemCart = menu.findItem(R.id.action_to_pos);
+            itemCart.setVisible(false);
+        }
         return true;
     }
 
@@ -144,6 +154,13 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent);
 
+                break;
+            case R.id.action_to_pos:
+                finish();
+/*
+                Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage("com.www.pos");
+                startActivity(LaunchIntent);
+*/
                 break;
         }
         return super.onOptionsItemSelected(item);

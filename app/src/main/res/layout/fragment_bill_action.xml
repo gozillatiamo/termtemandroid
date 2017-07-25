@@ -27,10 +27,13 @@
                 android:text="@string/phone_no_customer"/>
 
             <EditText
+                android:id="@+id/edit_phone_no"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/MyEditTextStyle"
+                android:maxLength="12"
                 android:inputType="phone"
+                android:gravity="center"
                 android:layout_marginTop="@dimen/activity_space"
                 android:background="@drawable/background_editext_topup"/>
         </LinearLayout>

@@ -200,14 +200,14 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (Global.getInstance().getLastTranId() == null){
+        if (!Global.getInstance().hasSubmit()){
             getActivity().finish();
             return;
         }
 
 //        DialogCounterAlert.DialogProgress.show();
         NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
+        mNM.cancel(MyApplication.NOTITOPUP);
         switch (mTypePage){
             case PREVIEW:
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -289,11 +289,13 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void setupPreviewSuccess(){
-        if (Global.getInstance().getLastTranId() == null) return;
-        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
+        if (!Global.getInstance().hasSubmit()) return;
+//        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
         SubmitTopupRequestModel requestModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
         mAmount = Double.valueOf(requestModel.getAMT());
-        mCarrier = Global.getInstance().getLastSubmitCarrier();
+//        mCarrier = Global.getInstance().getLastSubmitCarrier();
+        mPhoneNo = requestModel.getPHONENO();
+        mCarrier = requestModel.getCARRIER();
 
         switch (mCarrier){
             case APIServices.AIS:

@@ -50,6 +50,8 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     private Runnable runnable;
     private Handler handler;
     private int mRetryToken = 0;
+    private String mUserName, mPassword;
+    private TermTemSignIn termTemSignIn;
     public static final String TAG = SplashScreenWWW.class.getSimpleName();
 
     @Override
@@ -63,6 +65,8 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
+        termTemSignIn = new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN, true);
+        checkDataIntent();
 
         String deviceId = Global.getInstance().getDEVICEID();
 
@@ -72,13 +76,13 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 deviceId = mngr.getDeviceId();
             } else {
                 deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
-            }
+    }
         }
 
         Global.getInstance().setDEVICEID(deviceId);
 
 
-        if (Global.getInstance().getLastTranId() != null){
+        if (Global.getInstance().hasSubmit()){
 
             if ((FragmentTopupPackage.callSubmit == null || FragmentTopupPackage.callSubmit.isCanceled())
                     && !Global.getInstance().getSubmitStatus()){
@@ -156,23 +160,30 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         handler.removeCallbacks(runnable);
     }
 
+    private void checkDataIntent(){
+        Intent intent = getIntent();
+        String action = getIntent().getAction();
+        String type = getIntent().getType();
+
+        if (Intent.ACTION_SEND.equals(action) && "text/plain".equals(type)){
+            if (intent.getExtras() != null) {
+                mUserName = intent.getStringExtra("username");
+                mPassword = intent.getStringExtra("password");
+                termTemSignIn.setUserPass(mUserName, mPassword);
+            }
+        }
+    }
+
     private void showLastSubmit(){
+        RequestModel requestModel = Global.getInstance().getLastSubmit();
+        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+        if (submitTopupRequestModel.getTRANID() == null || Global.getInstance().getLastTranId() != null){
+            Global.getInstance().clearLastSubmit();
+            return;
+        }
+        Call<ResponseBody> callSubmit = services.topupService(requestModel);
 
-        final SubmitTopupRequestModel submitModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
-
-        final String tranId = Global.getInstance().getLastTranId();
-        final String action = Global.getInstance().getLastSubmitAction();
-        final String title = getTitleTypeToup(action);
-
-        Call<ResponseBody> callSubmit = services.topupService(new RequestModel(action, submitModel));
-
-        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
-                tranId,
-                title+" " +submitModel.getCARRIER()+" "+submitModel.getAMT()+" "
-                        +getContext().getString(R.string.currency),
-                getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
-                        +getContext().getString(R.string.processing),
-                android.R.drawable.stat_notify_sync);
+        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
 
         APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -182,25 +193,14 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null) {
 
-                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                            tranId,
-                            title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
-                                    + MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
-                                    + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                            android.R.drawable.stat_sys_warning);
+                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                     return;
                 }
 
                 if (responseValues instanceof ResponseModel) {
 
-                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, tranId,
-                            title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
-                                    " " + MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number) + " " +
-                                    submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                            R.drawable.ic_check_circle_white);
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
                 }
             }
 
@@ -208,12 +208,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 if (t.getMessage().equals("Canceled")) return;
 
-                MyApplication.uploadFail(MyApplication.NOTITOPUP, tranId,
-                        title + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
-                                " " + MyApplication.getContext().getString(R.string.currency),
-                        MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() +
-                                " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                        android.R.drawable.stat_sys_warning);
+                MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
             }
         });
@@ -263,7 +258,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                     return;
                 }
 
-                new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN, true).getTXIDfromServer();
+                termTemSignIn.getTXIDfromServer();
 
 
             }

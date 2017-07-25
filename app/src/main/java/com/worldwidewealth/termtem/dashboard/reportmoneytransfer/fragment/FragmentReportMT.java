@@ -293,11 +293,7 @@ public class FragmentReportMT extends Fragment {
                                                 mStrBankEnd));
 
                                 final Call<okhttp3.ResponseBody> req = services.notipay(requestModel);
-                                MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD,
-                                        String.valueOf(MyApplication.NOTIUPLOAD),
-                                        getString(R.string.title_upload),
-                                        getString(R.string.msg_upload),
-                                        android.R.drawable.stat_sys_upload);
+                                MyApplication.showNotifyUpload(MyApplication.NOTIUPLOAD);
                                 APIHelper.enqueueWithRetry(req, new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -307,11 +303,7 @@ public class FragmentReportMT extends Fragment {
                                         if (responseValues instanceof ResponseModel) {
                                             ResponseModel responseModel = (ResponseModel) responseValues;
                                             if (responseModel.getStatus() == APIServices.SUCCESS)
-                                                MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD,
-                                                        String.valueOf(MyApplication.NOTIUPLOAD),
-                                                        MyApplication.getContext().getString(R.string.title_upload_success),
-                                                        MyApplication.getContext().getString(R.string.msg_upload_success),
-                                                        android.R.drawable.stat_sys_upload_done);
+                                                MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD);
                                             else
                                                 setUploadFail(responseModel.getMsg());
                                         } else {
@@ -411,11 +403,7 @@ public class FragmentReportMT extends Fragment {
     }
 
     private void setUploadFail(String msg){
-        MyApplication.uploadFail(MyApplication.NOTIUPLOAD,
-                String.valueOf(MyApplication.NOTIUPLOAD),
-                MyApplication.getContext().getString(R.string.title_upload_fail),
-                (msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail)),
-                android.R.drawable.stat_notify_error);
+        MyApplication.uploadFail(MyApplication.NOTIUPLOAD, msg);
     }
 
     private void showTimeDialog(){

@@ -2,12 +2,12 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberUtils;
@@ -23,7 +22,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +44,7 @@ import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
+import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.adapter.VasAdapter;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -52,6 +52,7 @@ import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.LoadButtonResponseModel;
 import com.worldwidewealth.termtem.model.PGResponseModel;
 import com.worldwidewealth.termtem.model.PreviewBillRequest;
+import com.worldwidewealth.termtem.model.TopupPreviewResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -59,7 +60,6 @@ import com.worldwidewealth.termtem.FragmentTopupPreview;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.GetOTPRequestModel;
 import com.worldwidewealth.termtem.model.LoadButtonRequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
@@ -74,8 +74,11 @@ import com.worldwidewealth.termtem.util.Util;
 
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -99,6 +102,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mPhone;
     private String mBarcode;
     private LoadBillServiceResponse mBillService;
+    private TopupPreviewResponseModel mPreviewModel;
 
     private double mFavAmt = 0;
     private boolean mIsFAV = false;
@@ -117,6 +121,7 @@ public class FragmentTopupPackage extends  Fragment{
     private Timer mTimerTimeout = null;
     private AlertDialog mAlertTimeout;
     private VasAdapter mVasAdapter;
+    private FragmentTopupPreview mFragmentTopupPreview;
 
     private String mActionLoadButton = APIServices.ACTIONLOADBUTTON;
     private String mActionPreview = APIServices.ACTIONPREVIEW;
@@ -188,12 +193,15 @@ public class FragmentTopupPackage extends  Fragment{
         return fragment;
     }
 
-    public static Fragment newInstanceBill(String topup, String barcode, LoadBillServiceResponse billservice){
+    public static Fragment newInstanceBill(String topup, String barcode,
+                                           LoadBillServiceResponse billservice, String phone_no){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
         bundle.putString(FragmentTopup.keyTopup, topup);
         bundle.putString(KEY_BARCODE, barcode);
         bundle.putParcelable(KEY_BILL_SERVICE, billservice);
+        bundle.putString(ActivityTopup.KEY_PHONENO, phone_no);
+
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -208,6 +216,8 @@ public class FragmentTopupPackage extends  Fragment{
                 case BillPaymentActivity.BILLPAY:
                     mBarcode = getArguments().getString(KEY_BARCODE);
                     mBillService = getArguments().getParcelable(KEY_BILL_SERVICE);
+                    mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+
                     break;
                 default:
                     mCarrier = getArguments().getString(CARRIER);
@@ -307,8 +317,8 @@ public class FragmentTopupPackage extends  Fragment{
             case BillPaymentActivity.BILLPAY:
                 mActionLoadButton = APIServices.ACTIONLOADBUTTON;
                 mActionPreview = APIServices.ACTION_PREVIEW_BILL;
-                mActionGetOTP = APIServices.ACTIONGETOTP;
-                mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
+                mActionGetOTP = APIServices.ACTION_GETOTP_BILL;
+                mActionSumitTopup = APIServices.ACTION_SUBMIT_BILL;
                 break;
         }
 
@@ -370,11 +380,7 @@ public class FragmentTopupPackage extends  Fragment{
     private void initData(){
         setAmt(mAmt, null);
 
-        if (mPhone != null){
-            if (mTopup.equals(BillPaymentActivity.BILLPAY)){
-                mHolder.mEditPhone.setMaxLines(50);
-            }
-//            mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
+        if (mPhone != null && !mTopup.equals(BillPaymentActivity.BILLPAY)){
             mHolder.mEditPhone.setText(mPhone);
             setEnableEditPhone(false);
         }
@@ -495,6 +501,13 @@ public class FragmentTopupPackage extends  Fragment{
                     try {
                         if (getActivity() != null && isAdded()) {
 
+                            mPreviewModel = new Gson().fromJson(((String)modelValues), TopupPreviewResponseModel.class);
+
+                            if (mPreviewModel.getREF1() != null){
+                                mHolder.mEditPhone.setMaxEms(50);
+                                mHolder.mEditPhone.setText(mPreviewModel.getREF1());
+                            }
+
                             FragmentTopupPackage.this.getChildFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim.slide_in_right,
@@ -502,7 +515,7 @@ public class FragmentTopupPackage extends  Fragment{
                                             R.anim.slide_in_left,
                                             R.anim.slide_out_right)
                                     .replace(R.id.container_topup_package, FragmentTopupPreview
-                                            .newInstance(mTopup, ((String)modelValues), mBottomAction.getPrice()))
+                                            .newInstance(mTopup, mPreviewModel, mBottomAction.getPrice()))
                                     .addToBackStack(null)
                                     .commit();
 
@@ -609,8 +622,8 @@ public class FragmentTopupPackage extends  Fragment{
                 public void onClick(View v) {
                     mBottomAction.setEnable(false);
                     if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
-                        FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
-                        if (!fragmentTopupPreview.canTopup()) {
+                        mFragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
+                        if (!mFragmentTopupPreview.canTopup()) {
                             mBottomAction.setEnable(true);
                             return;
                         }
@@ -663,42 +676,17 @@ public class FragmentTopupPackage extends  Fragment{
     private void serviceSubmitToup(final String responseStr){
 
         final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        SubmitTopupRequestModel submitTopupRequestModel = null;
         this.transid = model.getTranid();
 
-        switch (mTopup){
-            case FragmentTopup.MOBILE:
-            case FragmentTopup.PIN:
+        final RequestModel requestModel = getRequestSubmit();
 
-                submitTopupRequestModel = SubmitTopupRequestModel.SubmitTopupRequestModel(
-                        String.valueOf(getmAmt()),
-                        mCarrier,
-                        mPhone,
-                        transid,
-                        mButtonID
-                );
-                break;
-            case FragmentTopup.VAS:
-                submitTopupRequestModel = SubmitTopupRequestModel.SubmitVasRequestModel(
-                        String.valueOf(getmAmt()),
-                        mCarrier,
-                        mPhone,
-                        transid,
-                        mPgName,
-                        mButtonID
-                );
 
-                break;
-        }
-
-        final RequestModel requestModel = new RequestModel(mActionSumitTopup, submitTopupRequestModel);
-
-        startTimeoutSubmit(transid);
+        startTimeoutSubmit();
 
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
 
-        callSubmit = services.submitTopup(Global.getInstance().getLastSubmit());
+        callSubmit = getServiceSubmit();
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -739,25 +727,14 @@ public class FragmentTopupPackage extends  Fragment{
                             mBottomAction.setEnable(true);
                             Global.getInstance().setLastSubmit(null, false);
 
-                            MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                                    model.getTranid(),
-                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() + " "
-                                            + MyApplication.getContext().getString(R.string.currency),
-                                    MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone + " "
-                                            + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                    android.R.drawable.stat_sys_warning);
+                            MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                             return;
                         }
 
                         if (responseValues instanceof ResponseModel) {
 
-                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP, model.getTranid(),
-                                    title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
-                                            " " + MyApplication.getContext().getString(R.string.currency),
-                                    MyApplication.getContext().getString(R.string.phone_number) + " " +
-                                            mPhone + " " + MyApplication.getContext().getString(R.string.success),
-                                    R.drawable.ic_check_circle_white);
+                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
 
                             if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
                                 try {
@@ -789,19 +766,14 @@ public class FragmentTopupPackage extends  Fragment{
                         }
 */
 
-                        MyApplication.uploadFail(MyApplication.NOTITOPUP, model.getTranid(),
-                                title + " " + mCarrier + " " + mHolder.mTextPrice.getText().toString() +
-                                        " " + MyApplication.getContext().getString(R.string.currency),
-                                MyApplication.getContext().getString(R.string.phone_number) + " " + mPhone +
-                                        " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                android.R.drawable.stat_sys_warning);
+                        MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
 
                         new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
                                 null, call, this, false, new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                startTimeoutSubmit(model.getTranid());
+                                startTimeoutSubmit();
                             }
                         });
                         mBottomAction.setEnable(true);
@@ -810,7 +782,102 @@ public class FragmentTopupPackage extends  Fragment{
                 });
     }
 
-    private void startTimeoutSubmit(final String tranid){
+    private RequestModel getRequestSubmit(){
+
+        SubmitTopupRequestModel submitTopupRequestModel = null;
+
+        switch (mTopup){
+            case FragmentTopup.MOBILE:
+            case FragmentTopup.PIN:
+
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitTopupRequestModel(
+                        String.valueOf(getmAmt()),
+                        mCarrier,
+                        mPhone,
+                        transid,
+                        mButtonID
+                );
+                break;
+            case FragmentTopup.VAS:
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitVasRequestModel(
+                        String.valueOf(getmAmt()),
+                        mCarrier,
+                        mPhone,
+                        transid,
+                        mPgName,
+                        mButtonID
+                );
+                break;
+            case BillPaymentActivity.BILLPAY:
+                String useBarcode = (mBarcode != null) ? "Y":"N";
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyy");
+
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitBillRequestModel(mFragmentTopupPreview.getTNID(),
+                        mBillService.getBILL_SERVICE_ID(), mBillService.getBILL_SERVICE_CODE(),
+                        useBarcode, dateFormat.format(calendar.getTime()), mPhone);
+                break;
+        }
+
+        return new RequestModel(mActionSumitTopup, submitTopupRequestModel);
+
+    }
+
+/*
+    private void initDueDateDialog(long longdate, final Button btn, final int type){
+        mCalendar.setTimeInMillis(longdate);
+        mDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+                if (calendar.getTimeInMillis() > mDatePickerDialog.getDatePicker().getMaxDate() ||
+                        calendar.getTimeInMillis() < mDatePickerDialog.getDatePicker().getMinDate()){
+                    new AlertDialog.Builder(ActivityReport.this)
+                            .setCancelable(false)
+                            .setMessage(R.string.error_date_limit)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mDatePickerDialog.show();
+                                    return;
+                                }
+                            }).show();
+                }
+
+                btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
+                switch (type){
+                    case FORM:
+                        mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
+                        break;
+                    case TO:
+                        mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23, 59, 59);
+                        break;
+                }
+
+            }
+        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+        if (type == TO){
+            mDatePickerDialog.getDatePicker().setMinDate(mPreviousDateFrom);
+        }
+        mDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        mDatePickerDialog.setCancelable(false);
+        mDatePickerDialog.show();
+    }
+*/
+
+
+    private Call<ResponseBody> getServiceSubmit(){
+
+        switch (mTopup){
+            case BillPaymentActivity.BILLPAY:
+                return services.billService(Global.getInstance().getLastSubmit());
+            default:
+                return services.submitTopup(Global.getInstance().getLastSubmit());
+        }
+    }
+
+    private void startTimeoutSubmit(){
         stopTimer();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
@@ -820,14 +887,7 @@ public class FragmentTopupPackage extends  Fragment{
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
-                                tranid,
-                                ((ActivityTopup)getActivity()).getTopupTitle()+" "
-                                        +mCarrier+" "+mHolder.mTextPrice.getText().toString()+" "
-                                        +MyApplication.getContext().getString(R.string.currency),
-                                MyApplication.getContext().getString(R.string.phone_number)+" "+mPhone+" "
-                                        +MyApplication.getContext().getString(R.string.processing),
-                                android.R.drawable.stat_notify_sync);
+                        MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
                         getActivity().finish();
                     }
                 });

@@ -23,6 +23,65 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     private String PGNAME;
     private String BUTTONID;
 
+    private String TNID;
+    private String BILL_SERVICE_ID;
+    private String BILL_SERVICE_CODE;
+    private String USEBARCODE;
+    private String DUEDATE;
+
+
+    protected SubmitTopupRequestModel(Parcel in) {
+        super(in);
+        CARRIER = in.readString();
+        AMT = in.readString();
+        PHONENO = in.readString();
+        TRANID = in.readString();
+        AGENTIDCASHIN = in.readString();
+        PGID = in.readString();
+        PGNAME = in.readString();
+        BUTTONID = in.readString();
+        TNID = in.readString();
+        BILL_SERVICE_ID = in.readString();
+        BILL_SERVICE_CODE = in.readString();
+        USEBARCODE = in.readString();
+        DUEDATE = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(CARRIER);
+        dest.writeString(AMT);
+        dest.writeString(PHONENO);
+        dest.writeString(TRANID);
+        dest.writeString(AGENTIDCASHIN);
+        dest.writeString(PGID);
+        dest.writeString(PGNAME);
+        dest.writeString(BUTTONID);
+        dest.writeString(TNID);
+        dest.writeString(BILL_SERVICE_ID);
+        dest.writeString(BILL_SERVICE_CODE);
+        dest.writeString(USEBARCODE);
+        dest.writeString(DUEDATE);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<SubmitTopupRequestModel> CREATOR = new Creator<SubmitTopupRequestModel>() {
+        @Override
+        public SubmitTopupRequestModel createFromParcel(Parcel in) {
+            return new SubmitTopupRequestModel(in);
+        }
+
+        @Override
+        public SubmitTopupRequestModel[] newArray(int size) {
+            return new SubmitTopupRequestModel[size];
+        }
+    };
+
     public static SubmitTopupRequestModel SubmitAgentRequestModel(String amt, String phone_no, String tran_id, String agent_id){
        return new SubmitTopupRequestModel(amt, null, phone_no, tran_id, null, agent_id, null, null);
     }
@@ -33,6 +92,12 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
 
     public static SubmitTopupRequestModel SubmitVasRequestModel(String amt, String carrier, String phone_no, String tran_id, String pg_name, String pg_id){
         return new SubmitTopupRequestModel(amt, carrier, phone_no, tran_id, null, null, pg_id, pg_name);
+    }
+
+    public static SubmitTopupRequestModel SubmitBillRequestModel(String tnid, String bill_service_id, String bill_service_code,
+                                                                 String userbarcode, String duedate, String phoneno){
+        return new SubmitTopupRequestModel(tnid, bill_service_id, bill_service_code, userbarcode,
+                duedate, phoneno);
     }
 
     public SubmitTopupRequestModel(String amt, String carrier, String phone_no, String tran_id,
@@ -47,15 +112,15 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         this.PGID = pg_id;
     }
 
-    protected SubmitTopupRequestModel(Parcel in) {
-        this.CARRIER = in.readString();
-        this.AMT = in.readString();
-        this.PHONENO = in.readString();
-        this.TRANID = in.readString();
-        this.AGENTIDCASHIN = in.readString();
-        this.BUTTONID = in.readString();
-        this.PGNAME = in.readString();
-        this.PGID = in.readString();
+    public SubmitTopupRequestModel(String tnid, String bill_service_id, String bill_service_code,
+                                   String userbarcode, String duedate, String phoneno){
+        this.TNID = tnid;
+        this.BILL_SERVICE_ID = bill_service_id;
+        this.BILL_SERVICE_CODE = bill_service_code;
+        this.USEBARCODE = userbarcode;
+        this.DUEDATE = duedate;
+        this.PHONENO = phoneno;
+
     }
 
     public String getCARRIER() {
@@ -69,7 +134,7 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         if (AMT != null)
             return EncryptionData.DecryptData(AMT, Global.getInstance().getDEVICEID() + TRANID);
 
-        return AMT;
+        return "0";
     }
 
     public String getPHONENO() {
@@ -99,32 +164,23 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         return PGNAME;
     }
 
-    public static final Creator<SubmitTopupRequestModel> CREATOR = new Creator<SubmitTopupRequestModel>() {
-        @Override
-        public SubmitTopupRequestModel createFromParcel(Parcel in) {
-            return new SubmitTopupRequestModel(in);
-        }
-
-        @Override
-        public SubmitTopupRequestModel[] newArray(int size) {
-            return new SubmitTopupRequestModel[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getTNID() {
+        return TNID;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.CARRIER);
-        dest.writeString(this.AMT);
-        dest.writeString(this.PHONENO);
-        dest.writeString(this.TRANID);
-        dest.writeString(this.AGENTIDCASHIN);
-        dest.writeString(this.BUTTONID);
-        dest.writeString(this.PGID);
-        dest.writeString(this.PGNAME);
+    public String getBILL_SERVICE_ID() {
+        return BILL_SERVICE_ID;
+    }
+
+    public String getBILL_SERVICE_CODE() {
+        return BILL_SERVICE_CODE;
+    }
+
+    public String getUSEBARCODE() {
+        return USEBARCODE;
+    }
+
+    public String getDUEDATE() {
+        return DUEDATE;
     }
 }

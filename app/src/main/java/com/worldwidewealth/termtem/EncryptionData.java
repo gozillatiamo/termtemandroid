@@ -60,39 +60,41 @@ public class EncryptionData {
         if (strData == null || strData.equals("")) return "";
 
         String strResult = strData + ";" ;
-//        if (strData.length() > 92160)
-//        {
-//            strResult = strData;
-//            return strResult;
-//        }
 
-
-//        byte[] bb = key.getBytes(characterSet);
-//        key = Base64.encodeToString(bb, Base64.DEFAULT);
-
-        byte[] bb = key.getBytes(characterSet);
-        String strKeyBase64 = Base64.encodeToString(bb, Base64.NO_WRAP);
-//
-
-        if (!InitKey(strKeyBase64))
-        {
-            strResult = strData;
-            return strResult;
-        }
 
         byte[] rbData = strResult.getBytes(characterSet);
 
-        try {
+        return EncryptWithBytes(rbData, key);
+    }
 
-//            SecretKey secretKey = new SecretKeySpec(m_Key, "DESede");
+    static public String DecryptData(String strData, String key) {
+        byte[] decoded = DecrptWithByte(strData, key);
+
+        if (decoded == null) return "";
+
+        String strDecode = new String(decoded, Charset.forName("UTF8"));
+        String[] convertDecode = strDecode.split(";");
+        return convertDecode[0];
+    }
+
+    static public String EncryptWithBytes(byte[] bytesData, String key){
+
+        byte[] bb = key.getBytes(characterSet);
+        String strKeyBase64 = Base64.encodeToString(bb, Base64.NO_WRAP);
+
+        if (!InitKey(strKeyBase64))
+        {
+            return "";
+        }
+
+        try {
 
             KeySpec keySpec = new DESKeySpec(m_Key);
             SecretKey secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
             IvParameterSpec iv = new IvParameterSpec(m_IV);
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-//            Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
-            byte[] encoded = cipher.doFinal(rbData);
+            byte[] encoded = cipher.doFinal(bytesData);
 
             String strEncoded = Base64.encodeToString(encoded, Base64.NO_WRAP);
             String convertPlus = strEncoded.replace("+", "%2B");
@@ -103,14 +105,17 @@ public class EncryptionData {
             return  "";
         }
 
+
     }
 
-    static public String DecryptData(String strData, String key) {
-        if (strData == null || strData.equals("")) return "";
+    static public byte[] DecrptWithByte(String strData, String key){
+
+        if (strData == null || strData.equals("")) return null;
         if (key == null){
             Util.backToSignIn(MyApplication.LeavingOrEntering.currentActivity);
-            return "";
+            return null;
         }
+
         String strResult = strData.replace("%2B", "+");
 
         byte[] bb = key.getBytes(characterSet);
@@ -118,8 +123,7 @@ public class EncryptionData {
 
         if (!InitKey(strKeyBase64))
         {
-            strResult = "";
-            return strResult;
+            return null;
         }
 
         byte[] rbData = Base64.decode(strResult.getBytes(characterSet), Base64.NO_WRAP);
@@ -132,13 +136,12 @@ public class EncryptionData {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
             byte[] decoded = cipher.doFinal(rbData);
-            String strDecode = new String(decoded, Charset.forName("UTF8"));
-            String[] convertDecode = strDecode.split(";");
-            return convertDecode[0];
+            return decoded;
         } catch (Exception e){
             Log.e(TAG, "DecryptFail");
-            return  "";
+            return  null;
         }
+
     }
 
     static private boolean InitKey(String strKey) {
@@ -160,6 +163,7 @@ public class EncryptionData {
     }
 
     private static int retry = 0;
+
     public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
         Trace mTrace = null;
 

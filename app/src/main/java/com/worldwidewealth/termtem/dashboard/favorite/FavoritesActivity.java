@@ -112,7 +112,7 @@ public class FavoritesActivity extends MyAppcompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
 //                            showDialogConfirm(position);
-                            if (Global.getInstance().getLastTranId() != null) {
+                            if (Global.getInstance().hasSubmit()) {
                                 MenuButtonView.showDialogHasProcess(FavoritesActivity.this);
                                 return;
                             }

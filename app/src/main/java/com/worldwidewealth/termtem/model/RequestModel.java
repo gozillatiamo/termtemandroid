@@ -20,7 +20,7 @@ public class RequestModel implements Parcelable{
     protected RequestModel(Parcel in) {
         this.action = in.readString();
         this.data = in.readParcelable(DataRequestModel.class.getClassLoader());
-        Log.e("readTranId", ((SubmitTopupRequestModel)data).getTRANID());
+        Log.e("readTranId", ""+((SubmitTopupRequestModel)data).getTRANID());
 
     }
 

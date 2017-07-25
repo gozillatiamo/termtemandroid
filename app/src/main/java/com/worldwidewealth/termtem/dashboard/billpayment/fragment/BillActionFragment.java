@@ -14,6 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -64,11 +68,13 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     private LoadBillServiceResponse mResponse;
 
     private TextView mTextTitleService;
+    private EditText mEditPhoneNo;
     private ImageView mLogoService;
     private Button mBtnScan, mBtnKeyIn, mBtnNext;
     private View mLayoutKeyIn;
     private RecyclerView mRecyclerRef;
     private APIServices services;
+    private String mPhoneNo;
 
     public BillActionFragment() {
         // Required empty public constructor
@@ -122,7 +128,8 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                             .replace(R.id.container_topup, FragmentTopupPackage.newInstanceBill(
                                     BillPaymentActivity.BILLPAY,
                                     result,
-                                    response))
+                                    response,
+                                    mPhoneNo))
                             .commit();
 
                     break;
@@ -131,6 +138,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
 
     }
 
+    private boolean mFormatting;
 
     private void bindView(){
         mTextTitleService = getView().findViewById(R.id.text_title_service);
@@ -140,6 +148,26 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
         mBtnNext = getView().findViewById(R.id.btn_next);
         mLayoutKeyIn = getView().findViewById(R.id.layout_enter_ref);
         mRecyclerRef = getView().findViewById(R.id.recycler_reference);
+        mEditPhoneNo = getView().findViewById(R.id.edit_phone_no);
+
+        mEditPhoneNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting){
+                    mFormatting = true;
+                    PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                    mFormatting = false;
+                }
+            }
+        });
 
 
         mBtnKeyIn.setOnClickListener(this);
@@ -162,6 +190,11 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        mPhoneNo = mEditPhoneNo.getText().toString().replaceAll("-", "");
+        if (mPhoneNo.length() < 10){
+            Toast.makeText(getContext(), R.string.hint_phone_number, Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (view.getId()){
             case R.id.btn_scan:
 //                MyApplication.LeavingOrEntering.currentActivity = null;

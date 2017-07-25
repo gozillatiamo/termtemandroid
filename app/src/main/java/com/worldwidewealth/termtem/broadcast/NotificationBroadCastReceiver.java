@@ -9,6 +9,7 @@ import android.util.Log;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 
 import static com.worldwidewealth.termtem.MyFirebaseMessagingService.BOX;
 import static com.worldwidewealth.termtem.MyFirebaseMessagingService.INTENT_FILTER;
@@ -24,7 +25,7 @@ public class NotificationBroadCastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "I'm in!!!");
-        if (Global.getInstance().getLastTranId() == null) return;
+        if (!Global.getInstance().hasSubmit()) return;
         Bundle dataBundle = intent.getExtras();
 
         boolean checkStatus = checkMsgTopup(dataBundle.getString(BOX));
@@ -34,9 +35,11 @@ public class NotificationBroadCastReceiver extends WakefulBroadcastReceiver {
             intentBroadcast.putExtra("topup", checkStatus);
         } else return;
 
+        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
+
         if (checkStatus) {
-            if (!(dataBundle.getString(BOX).contains(Global.getInstance().getLastSubmitPhoneNo()))
-                    || !(dataBundle.getString(BOX).contains(Global.getInstance().getLastSubmitAmt())))
+            if (!(dataBundle.getString(BOX).contains(submitTopupRequestModel.getPHONENO()))
+                    || !(dataBundle.getString(BOX).contains(submitTopupRequestModel.getAMT())))
                 return;
         }
 

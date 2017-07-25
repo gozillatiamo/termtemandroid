@@ -24,7 +24,6 @@ public class FragmentTopupPreview extends Fragment {
     private View rootView;
     private ViewHolder mHolder;
     private APIServices service;
-    private String mData;
     private String mSelectAmout;
     private TopupPreviewResponseModel mModel;
     private NumberFormat format = NumberFormat.getInstance();
@@ -32,11 +31,11 @@ public class FragmentTopupPreview extends Fragment {
     private static final String SELECT_AMOUNT = "selectamount";
     private String mTopup;
 
-    public static Fragment newInstance(String type, String data, String selectAmount){
+    public static Fragment newInstance(String type, TopupPreviewResponseModel data, String selectAmount){
         FragmentTopupPreview fragment = new FragmentTopupPreview();
         Bundle bundle = new Bundle();
         bundle.putString(FragmentTopup.keyTopup, type);
-        bundle.putString(DATA, data);
+        bundle.putParcelable(DATA, data);
         bundle.putString(SELECT_AMOUNT, selectAmount);
         fragment.setArguments(bundle);
         return fragment;
@@ -69,7 +68,7 @@ public class FragmentTopupPreview extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         service = APIServices.retrofit.create(APIServices.class);
         mTopup = getArguments().getString(FragmentTopup.keyTopup);
-        mData = getArguments().getString(DATA);
+        mModel = getArguments().getParcelable(DATA);
         mSelectAmout = getArguments().getString(SELECT_AMOUNT);
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_topup_preview, container, false);
@@ -77,8 +76,7 @@ public class FragmentTopupPreview extends Fragment {
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
 
-        if (mData != null) {
-            transferData();
+        if (mModel != null) {
             setData();
         }
         return rootView;
@@ -121,11 +119,6 @@ public class FragmentTopupPreview extends Fragment {
         initBackPress();
     }
 */
-
-    private void transferData(){
-        mModel = new Gson().fromJson(mData, TopupPreviewResponseModel.class);
-
-    }
 
 /*
     private void initBackPress(){
@@ -194,6 +187,10 @@ public class FragmentTopupPreview extends Fragment {
         if (mModel.getBALANCE() < 0) return false;
 
         return true;
+    }
+
+    public String getTNID(){
+        return mModel.getTNID();
     }
 
 

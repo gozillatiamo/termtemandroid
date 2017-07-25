@@ -95,6 +95,8 @@ public interface APIServices {
     public static final String ACTION_LOAD_BILL_REF = "LOADBILLREF";
     public static final String ACTION_PREVIEW_BILL = "PREVIEWBILL";
     public static final String ACTION_GETOTP_BILL = "GETOTPBILL";
+    public static final String ACTION_SUBMIT_BILL = "SUBMITBILL";
+    public static final String ACTION_ESLIP_BILL = "ESLIPBILL";
 
 
 

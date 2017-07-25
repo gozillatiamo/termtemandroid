@@ -24,6 +24,7 @@ import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
+import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.Util;
 
@@ -39,10 +40,10 @@ public class ActivityTopup extends MyAppcompatActivity {
     private String mTopup;
     private ImageView mMenuIcon;
     private TextView mTitle;
-    private String mPreviousTransId;
     private String mPhoneNo;
     private String mCarrier;
     private double mLastAmt = 0;
+    private boolean hasSubmit = false;
 
     public static final String KEY_PHONENO = "phoneno";
     public static final String KEY_CARRIER = "carrier";
@@ -53,7 +54,6 @@ public class ActivityTopup extends MyAppcompatActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         mTopup = bundle.getString(FragmentTopup.keyTopup);
-        mPreviousTransId = Global.getInstance().getLastTranId();
 
         if (bundle.containsKey(KEY_PHONENO)){
             mPhoneNo = bundle.getString(KEY_PHONENO);
@@ -79,7 +79,9 @@ public class ActivityTopup extends MyAppcompatActivity {
                 break;
         }
 
-        if (mPreviousTransId == null){
+        hasSubmit = Global.getInstance().hasSubmit();
+
+        if (!hasSubmit){
             if (mPhoneNo != null)
                 startWithOldPhoneNO();
             else
@@ -95,15 +97,16 @@ public class ActivityTopup extends MyAppcompatActivity {
         super.onResume();
         if (!(getSupportFragmentManager().findFragmentById(R.id.container_topup) instanceof FragmentTopupSlip)) {
 
-        if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
+        if (Global.getInstance().hasSubmit() && Global.getInstance().getSubmitStatus()){
             new DialogCounterAlert.DialogProgress(this).show();
 
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
-                                MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
-                                Global.getInstance().getLastTranId(),
-                                Global.getInstance().getSubmitIsFav())).commit();
+            RequestModel requestModel = Global.getInstance().getLastSubmit();
+            SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
+                            MyApplication.getTypeToup(requestModel.getAction()),
+                            submitTopupRequestModel.getTRANID(),
+                            Global.getInstance().getSubmitIsFav())).commit();
             }
 
 //            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
@@ -168,7 +171,7 @@ public class ActivityTopup extends MyAppcompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (mPreviousTransId != null){
+        if (hasSubmit){
             new DialogCounterAlert.DialogProgress(this).show();
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 

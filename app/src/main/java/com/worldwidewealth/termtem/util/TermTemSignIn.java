@@ -56,6 +56,7 @@ public class TermTemSignIn {
     private static boolean isExecuting= false;
     private TYPE mType;
     private boolean isAlreadyShowProgress;
+    private boolean mIsFromPOS = false;
 
     private static AlertDialog AlertWifi;
 
@@ -88,6 +89,11 @@ public class TermTemSignIn {
         this.services = APIServices.retrofit.create(APIServices.class);
         this.mType = type;
         this.isAlreadyShowProgress = isAlreadyShowProgress;
+    }
+
+    public void setUserPass(String username, String password){
+        this.mUsername = username;
+        this.mPassword = password;
     }
 
     public void getTXIDfromServer(){
@@ -166,7 +172,13 @@ public class TermTemSignIn {
                             switch (mType){
                                 case NEWLOGIN:
                                     if (checkVersionApp(responseModel.getVersion())) {
-                                        startLogin();
+                                        if (mUsername == null) {
+                                            startLogin();
+                                        } else {
+                                            Global.getInstance().setTXID(mTXID);
+                                            mIsFromPOS = true;
+                                            Login();
+                                        }
                                     }
                                     break;
                                 case RELOGIN:
@@ -415,6 +427,8 @@ public class TermTemSignIn {
                             } else {
                                 intent = new Intent(mContext, ActivityDashboard.class);
                             }
+
+                            intent.putExtra("frompos", mIsFromPOS);
                             mContext.startActivity(intent);
                             ((AppCompatActivity)mContext).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
                             ((AppCompatActivity)mContext).finish();

@@ -25,6 +25,7 @@ import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAge
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.adapter.AgentAdapter;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
+import com.worldwidewealth.termtem.model.TopupPreviewResponseModel;
 import com.worldwidewealth.termtem.widgets.SelectAmountAndOtherFragment;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.AgentResponse;
@@ -100,12 +101,13 @@ public class FragmentAddCreditChoice extends Fragment {
         super.onResume();
 //        new DialogCounterAlert.DialogProgress(getContext()).show();
 
-        if (Global.getInstance().getLastTranId() != null && Global.getInstance().getSubmitStatus()){
-
+        if (Global.getInstance().hasSubmit() && Global.getInstance().getSubmitStatus()){
+            RequestModel requestModel = Global.getInstance().getLastSubmit();
+            SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container_add_credit, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
-                            MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction()),
-                            Global.getInstance().getLastTranId(),
+                            MyApplication.getTypeToup(requestModel.getAction()),
+                            submitTopupRequestModel.getTRANID(),
                             Global.getInstance().getSubmitIsFav())).commit();
 //            Util.getPreviousEslip(this, mTopup, R.id.container_topup);
         }
@@ -200,6 +202,7 @@ public class FragmentAddCreditChoice extends Fragment {
                 if (objectResponse instanceof String) {
                     SelectAmountAndOtherFragment fragmentAmount = (SelectAmountAndOtherFragment) getChildFragmentManager().findFragmentById(R.id.container_select_amount);
                     mIsFav = fragmentAmount.getIsFav();
+                    TopupPreviewResponseModel model = new Gson().fromJson((String) objectResponse, TopupPreviewResponseModel.class);
                     FragmentTransaction transaction = getChildFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right,
@@ -207,7 +210,7 @@ public class FragmentAddCreditChoice extends Fragment {
                                     R.anim.slide_in_left,
                                     R.anim.slide_out_right)
                             .addToBackStack(null)
-                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance(AGENT_CASHIN, ((String)objectResponse), mBottomAction.getPrice()));
+                            .replace(R.id.container_select_amount, FragmentTopupPreview.newInstance(AGENT_CASHIN, model, mBottomAction.getPrice()));
                     transaction.commit();
 
 

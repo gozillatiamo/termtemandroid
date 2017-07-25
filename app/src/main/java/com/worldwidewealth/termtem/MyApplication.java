@@ -31,6 +31,7 @@ import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
 import com.worldwidewealth.termtem.broadcast.NotificationBroadCastReceiver;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
@@ -89,43 +90,29 @@ public class MyApplication extends Application implements Application.ActivityLi
         @Override
         public void onReceive(Context context, Intent intent) {
             SubmitTopupRequestModel submitModel = null;
-            if (Global.getInstance().getLastTranId() != null){
+            if (Global.getInstance().hasSubmit()){
                 submitModel = (SubmitTopupRequestModel)Global.getInstance().getLastSubmit().getData();
-            }
-
-            if (submitModel == null) return;
+            } else return;
 
             if (FragmentTopupPackage.callSubmit != null && FragmentTopupPackage.callSubmit.isExecuted()){
                 FragmentTopupPackage.callSubmit.cancel();
             }
-            String action = Global.getInstance().getLastSubmitAction();
 
             try {
                 if (!(intent.getExtras().containsKey("topup"))) return;
 
                 if (intent.getExtras().getBoolean("topup")) {
-                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, submitModel.getTRANID(),
-                            getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() +
-                                    " " + MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number) + " " +
-                                    submitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                            R.drawable.ic_check_circle_white);
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
 
                 } else {
 
                     Global.getInstance().setLastSubmit(null, false);
-                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                            submitModel.getTRANID(),
-                            getTitleTypeToup(action) + " " + submitModel.getCARRIER() + " " + submitModel.getAMT() + " "
-                                    + MyApplication.getContext().getString(R.string.currency),
-                            MyApplication.getContext().getString(R.string.phone_number) + " " + submitModel.getPHONENO() + " "
-                                    + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                            android.R.drawable.stat_sys_warning);
+                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                 }
             } catch (NullPointerException e){
                 NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                mNM.cancel(Global.getInstance().getLastTranId(), MyApplication.NOTITOPUP);
+                mNM.cancel(MyApplication.NOTITOPUP);
 
                 Global.getInstance().setLastSubmit(null, false);
             }
@@ -221,13 +208,14 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static void startSlip(){
 
         if (!canUseLeaving(currentActivity)) return;
-        if (Global.getInstance().getLastTranId() != null &&
+
+        if (Global.getInstance().hasSubmit() &&
                 !(currentActivity instanceof ActivityTopup)
                 && !(currentActivity instanceof ActivityAddCreditAgent)){
 
             if (Global.getInstance().getSubmitStatus()) {
                 Intent intent = new Intent(currentActivity, ActivityTopup.class);
-                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmitAction()));
+                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
                 currentActivity.startActivity(intent);
             }
 
@@ -377,12 +365,36 @@ public class MyApplication extends Application implements Application.ActivityLi
         return can;
     }
 
-    public static void showNotifyUpload(int id, String tag, String title, String message, int smallicon){
+    public static void showNotifyUpload(int id){
 
+/*
         if (id != NOTIUPLOAD){
-            if (Global.getInstance().getLastSubmit() == null) return;
-            getContext().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
 //            mLastRequest = Global.getInstance().getLastSubmit();
+        }
+
+*/
+        String title = null, message = null;
+        int smallicon = android.R.drawable.stat_sys_upload;
+
+        switch (id){
+            case NOTIUPLOAD:
+                title = getContext().getString(R.string.title_upload);
+                message = getContext().getString(R.string.msg_upload);
+                smallicon = android.R.drawable.stat_sys_upload;
+                break;
+            case NOTITOPUP:
+                if (!Global.getInstance().hasSubmit()) return;
+                getContext().registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
+
+                RequestModel requestModel = Global.getInstance().getLastSubmit();
+                SubmitTopupRequestModel submitModel = (SubmitTopupRequestModel) requestModel.getData();
+
+                title = getTitleTypeToup(requestModel.getAction()) + " " + submitModel.getCARRIER()
+                        + " " + submitModel.getAMT() + getContext().getString(R.string.currency);
+                message = getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
+                        +MyApplication.getContext().getString(R.string.processing);
+                smallicon = android.R.drawable.stat_notify_sync;
+                break;
         }
 
         mNotifyManager =
@@ -396,16 +408,45 @@ public class MyApplication extends Application implements Application.ActivityLi
                 .setSmallIcon(smallicon);
 
         mBuilder.setProgress(0, 0, true);
-        mNotifyManager.notify(tag, id, mBuilder.build());
+        mNotifyManager.notify(id, mBuilder.build());
         isUpload = true;
     }
 
-    public static void uploadSuccess(int id, String tag, String title, String message, int smallicon){
+    public static void uploadSuccess(int id){
 
         isUpload = false;
 
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
 
+        String title = null, message = null;
+        int smallicon = android.R.drawable.stat_sys_upload_done;
+
+        switch (id){
+            case NOTIUPLOAD:
+                title = getContext().getString(R.string.title_upload_success);
+                message = getContext().getString(R.string.msg_upload_success);
+                smallicon = android.R.drawable.stat_sys_upload_done;
+                break;
+            case NOTITOPUP:
+                if (Global.getInstance().getLastSubmit() == null) return;
+                RequestModel requestModel = Global.getInstance().getLastSubmit();
+                SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+                title = getTitleTypeToup(requestModel.getAction()) + " " +
+                        submitTopupRequestModel.getCARRIER() + " " + submitTopupRequestModel.getAMT() +
+                        " " + getContext().getString(R.string.currency);
+                message = getContext().getString(R.string.phone_number) + " " +
+                        submitTopupRequestModel.getPHONENO() + " " + getContext().getString(R.string.success);
+                smallicon = R.drawable.ic_check_circle_white;
+
+                Intent intent = new Intent(mContext, ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
+                intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(pendingIntent);
+                startSlip();
+
+                break;
+        }
 
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(message);
@@ -416,44 +457,54 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
-
-        if (id != NOTIUPLOAD){
-            /*try {
-//                Global.getInstance().setProcessSubmit(null);
-                mNotifyManager.cancel(Global.getInstance().getProcessSubmit(), id);
-                Intent intent = new Intent(mContext, ActivityTopup.class);
-                intent.putExtra(FragmentTopup.keyTopup, type);
-                intent.putExtra("transid", tag);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
-                mBuilder = null;
-                return;
-            } catch (Exception e){
-                e.printStackTrace();
-            }*/
-
-            if (Global.getInstance().getLastSubmit() == null) return;
-
-            Intent intent = new Intent(mContext, ActivityTopup.class);
-            intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmitAction()));
-//            Global.getInstance().setProcessSubmit(null, null);
-            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.setContentIntent(pendingIntent);
-            startSlip();
-
-//            mLastRequest = null;
-
-        }
-
-        mNotifyManager.notify(tag, id, mBuilder.build());
+        mNotifyManager.notify(id, mBuilder.build());
         mBuilder = null;
 
 
     }
 
-    public static void uploadFail(int id, String tag, String title, String message, int smallicon){
+    public static void uploadFail(int id, String msg){
         if (mBuilder == null && (id != NOTIUPLOAD)) return;
+
+        String title = null, message = null;
+        int smallicon = android.R.drawable.stat_notify_error;
+
+
+        switch (id){
+            case NOTIUPLOAD:
+                title = getContext().getString(R.string.title_upload_fail);
+                message = msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail);
+                smallicon = android.R.drawable.stat_notify_error;
+                break;
+            case NOTITOPUP:
+                RequestModel requestModel = Global.getInstance().getLastSubmit();
+                SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+                title = getTitleTypeToup(requestModel.getAction()) + " " +
+                        submitTopupRequestModel.getCARRIER() + " " + submitTopupRequestModel.getAMT() + " "
+                        + MyApplication.getContext().getString(R.string.currency);
+                message = getContext().getString(R.string.phone_number) + " " + submitTopupRequestModel.getPHONENO() + " "
+                        + MyApplication.getContext().getString(R.string.msg_upload_fail);
+                smallicon = android.R.drawable.stat_sys_warning;
+
+                if (requestModel != null){
+                    mBuilder.setOngoing(true);
+                    Intent retryIntent = new Intent(mContext, retryButtonListener.class);
+                    PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
+                            retryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
+                } else {
+                    mBuilder.setOngoing(false);
+                    isUpload = false;
+/*
+                    if (id == NOTITOPUP) {
+                        Global.getInstance().setLastSubmit(null, false);
+                    }
+*/
+                    mBuilder.setAutoCancel(true);
+                }
+
+                break;
+        }
 
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(message);
@@ -461,37 +512,9 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setProgress(0, 0, false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-        RequestModel requestModel = Global.getInstance().getLastSubmit();
-        if (requestModel != null){
-            mBuilder.setOngoing(true);
-            Intent retryIntent = new Intent(mContext, retryButtonListener.class);
-//            byte[] requestByte = Util.ParcelableUtil.toByteArray(requestModel);
-//            Global.getInstance().setProcessSubmit(null, null);
 
-//            retryIntent.putExtra("REQUEST", requestByte);
-            PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
-                    retryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.addAction(R.drawable.ic_refresh, mContext.getString(R.string.retry), pendingRetryIntent);
-        } else {
-            mBuilder.setOngoing(false);
-            isUpload = false;
-
-            if (id == NOTITOPUP) {
-//                if (Global.getInstance().getLastSubmit() == null) return;
-                Global.getInstance().setLastSubmit(null, false);
-//                mLastRequest = null;
-//                mNotifyManager.cancel(tag, id);
-/*
-                mBuilder = null;
-                return;
-*/
-            }
-            mBuilder.setAutoCancel(true);
-        }
-
-        Log.e(TAG, "TAG: "+tag);
         Log.e(TAG, "ID: "+id);
-        mNotifyManager.notify(tag, id, mBuilder.build());
+        mNotifyManager.notify(id, mBuilder.build());
 
         mBuilder = null;
 
@@ -518,6 +541,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return FragmentAddCreditChoice.AGENT_CASHIN;
             case APIServices.ACTION_SUBMIT_VAS:
                 return FragmentTopup.VAS;
+            case APIServices.ACTION_SUBMIT_BILL:
+                return BillPaymentActivity.BILLPAY;
 
         }
 
@@ -535,6 +560,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 return MyApplication.getContext().getString(R.string.add_credit_agent);
             case APIServices.ACTION_SUBMIT_VAS:
                 return MyApplication.getContext().getString(R.string.vas);
+            case APIServices.ACTION_SUBMIT_BILL:
+                return MyApplication.getContext().getString(R.string.dashboard_bill_pay);
         }
 
         return null;
@@ -589,13 +616,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                 submitModel = (SubmitTopupRequestModel) requestModel.getData();
 
-                MyApplication.showNotifyUpload(MyApplication.NOTITOPUP,
-                        submitModel.getTRANID(),
-                        title+" " +submitModel.getCARRIER()+" "+submitModel.getPHONENO()+" "
-                                +getContext().getString(R.string.currency),
-                        getContext().getString(R.string.phone_number)+" "+submitModel.getPHONENO()+" "
-                                +getContext().getString(R.string.processing),
-                        android.R.drawable.stat_notify_sync);
+                MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
 
             }
 
@@ -620,25 +641,14 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                                 if (responseValues == null) {
                                     Global.getInstance().setLastSubmit(null, false);
-                                    MyApplication.uploadFail(MyApplication.NOTITOPUP,
-                                            finalSubmitModel.getTRANID(),
-                                            finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() + " "
-                                                    + MyApplication.getContext().getString(R.string.currency),
-                                            MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() + " "
-                                                    + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                            android.R.drawable.stat_sys_warning);
+                                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                                     return;
                                 }
 
                                 if (responseValues instanceof ResponseModel) {
 
-                                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, finalSubmitModel.getTRANID(),
-                                            finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() +
-                                                    " " + MyApplication.getContext().getString(R.string.currency),
-                                            MyApplication.getContext().getString(R.string.phone_number) + " " +
-                                                    finalSubmitModel.getPHONENO() + " " + MyApplication.getContext().getString(R.string.success),
-                                            R.drawable.ic_check_circle_white);
+                                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
                                 }
                             }
                         }
@@ -649,12 +659,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                             if (finalSubmitModel != null) {
 
-                                MyApplication.uploadFail(MyApplication.NOTITOPUP, finalSubmitModel.getTRANID(),
-                                        finalTitle + " " + finalSubmitModel.getCARRIER() + " " + finalSubmitModel.getAMT() +
-                                                " " + MyApplication.getContext().getString(R.string.currency),
-                                        MyApplication.getContext().getString(R.string.phone_number) + " " + finalSubmitModel.getPHONENO() +
-                                                " " + MyApplication.getContext().getString(R.string.msg_upload_fail),
-                                        android.R.drawable.stat_sys_warning);
+                                MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
                             }
 
                         }

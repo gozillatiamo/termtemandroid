@@ -10,7 +10,7 @@ import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.model.UserMenuModel;
-import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.util.ParcelableUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +49,18 @@ public class Global {
     private static final String AMT = "amt";
     private static final String SUBMIT_PHONENO = "submitphoneno";
     private static final String TRANID = "tranid";
+
+    private static final String SUBMIT_ACTION = "submitaction";
+    private static final String SUBMIT_STATUS = "submitstatus";
+    private static final String SUBMIT_IS_FAV = "submitisfav";
+
+/*
+    private static final String SUBMIT_TNID = "submittnid";
+    private static final String SUBMIT_BILL_SERVICE_ID = "submitbillsereviceid";
+    private static final String SUBMIT_BILL_SERVICE_CODE = "submitbillservicecode";
+    private static final String SUBMIT_USEBARCODE = "submitusebarcode";
+    private static final String SUBMIT_DUEDATE = "submitduedate";
+*/
     private static final String AGENTIDCASHIN = "agentidcashid";
     private static final String BUTTONID = "buttonid";
     private static final String SUBMIT_PG_ID = "submitpgid";
@@ -58,9 +70,7 @@ public class Global {
     private static final String SUBMIT_AGENTID = "submitagentid";
     private static final String SUBMIT_USERID = "submituserid";
 
-    private static final String SUBMIT_ACTION = "submitaction";
-    private static final String SUBMIT_STATUS = "submitstatus";
-    private static final String SUBMIT_IS_FAV = "submitisfav";
+    private static final String LAST_SUBMIT = "lastsubmit";
 
 
 
@@ -298,26 +308,18 @@ public class Global {
 
     public void setLastSubmit(RequestModel model, boolean isFav){
         if (model == null){
-            mEditor.putString(SUBMIT_ACTION, null);
-            mEditor.putString(SUBMIT_AGENTID, null);
-            mEditor.putString(SUBMIT_DEVICEID, null);
-            mEditor.putString(SUBMIT_TXID, null);
-            mEditor.putString(SUBMIT_USERID, null);
-            mEditor.putString(BUTTONID, null);
-            mEditor.putString(AGENTIDCASHIN, null);
-            mEditor.putString(TRANID, null);
-            mEditor.putString(SUBMIT_PHONENO, null);
-            mEditor.putString(AMT, null);
-            mEditor.putString(CARRIER, null);
-            mEditor.putString(SUBMIT_PG_ID, null);
-            mEditor.putString(SUBMIT_PG_NAME, null);
-            mEditor.putBoolean(SUBMIT_IS_FAV, false);
-            mEditor.commit();
-            setSubmitStatus(null);
+            clearLastSubmit();
             return;
         }
 
+        byte[] bytesModel = ParcelableUtil.marshall(model);
+        String encryptionSubmit = EncryptionData.EncryptWithBytes(bytesModel, getDEVICEID());
+        mEditor.putString(LAST_SUBMIT, encryptionSubmit);
+        mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
+        mEditor.commit();
 
+/*
+        RequestModel requestModel = getLastSubmit();
         SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel)model.getData();
 
         mEditor.putString(SUBMIT_ACTION, model.getAction());
@@ -335,7 +337,9 @@ public class Global {
         mEditor.putString(SUBMIT_PG_NAME, submitTopupRequestModel.getPGNAME());
         mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
         mEditor.commit();
+*/
     }
+
 
     public void setSubmitStatus(String status){
         mEditor.putString(SUBMIT_STATUS, status);
@@ -343,6 +347,32 @@ public class Global {
 
     }
 
+    public void clearLastSubmit(){
+        mEditor.putString(SUBMIT_ACTION, null);
+        mEditor.putString(TRANID, null);
+        mEditor.putString(SUBMIT_PHONENO, null);
+        mEditor.putString(AMT, null);
+        mEditor.putString(CARRIER, null);
+        mEditor.putBoolean(SUBMIT_IS_FAV, false);
+        mEditor.putString(LAST_SUBMIT, null);
+
+        mEditor.putString(SUBMIT_PG_ID, null);
+        mEditor.putString(SUBMIT_PG_NAME, null);
+        mEditor.putString(SUBMIT_AGENTID, null);
+        mEditor.putString(SUBMIT_DEVICEID, null);
+        mEditor.putString(SUBMIT_TXID, null);
+        mEditor.putString(SUBMIT_USERID, null);
+        mEditor.putString(BUTTONID, null);
+        mEditor.putString(AGENTIDCASHIN, null);
+
+
+
+        mEditor.putString(SUBMIT_STATUS, null);
+
+        mEditor.commit();
+
+
+    }
     public boolean getSubmitStatus(){
         String status = mPreferences.getString(SUBMIT_STATUS, null);
         if (status == null || !status.equals("Success")) return false;
@@ -361,10 +391,18 @@ public class Global {
         mEditor.commit();
     }
 
+    public boolean hasSubmit(){
+        return mPreferences.getString(LAST_SUBMIT, null) != null;
+    }
+
     public RequestModel getLastSubmit(){
 
-        if (mPreferences.getString(TRANID, null) == null) return null;
+        if (!hasSubmit()) return null;
 
+        byte[] bytesLastSubmit = EncryptionData.DecrptWithByte(mPreferences.getString(LAST_SUBMIT, null), getDEVICEID());
+        RequestModel requestModel = ParcelableUtil.unmarshall(bytesLastSubmit, RequestModel.CREATOR);
+
+/*
         SubmitTopupRequestModel submitTopupRequestModel = new SubmitTopupRequestModel(
                 mPreferences.getString(AMT, null),
                 mPreferences.getString(CARRIER, null),
@@ -381,16 +419,21 @@ public class Global {
         submitTopupRequestModel.setUSERID(mPreferences.getString(SUBMIT_USERID, null));
 
         return new RequestModel(mPreferences.getString(SUBMIT_ACTION, null), submitTopupRequestModel);
+*/
+        return requestModel;
     }
 
     public String getLastTranId(){
         return mPreferences.getString(TRANID, null);
     }
 
+/*
     public String getLastSubmitAction(){
         return mPreferences.getString(SUBMIT_ACTION, null);
     }
+*/
 
+/*
     public String getLastSubmitPhoneNo(){
         return mPreferences.getString(SUBMIT_PHONENO, null);
     }
@@ -403,6 +446,7 @@ public class Global {
         return mPreferences.getString(AMT, null);
     }
 
+*/
 
 /*
     public String getProcessSubmit(){
