@@ -17,6 +17,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/zxing_barcode_surface"
                 />
+<!--
+            app:zxing_framing_rect_width="1000dp"
+            app:zxing_framing_rect_height="1000dp"
+-->
 
             <com.journeyapps.barcodescanner.ViewfinderView
                 android:layout_width="match_parent"
@@ -78,7 +82,6 @@
             android:id="@+id/group_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkedButton="@+id/scan_bill_code"
             android:orientation="horizontal">
             <RadioButton
                 android:id="@+id/scan_bill_code"

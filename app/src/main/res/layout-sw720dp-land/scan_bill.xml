@@ -80,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:checkedButton="@+id/scan_bill_code"
             android:orientation="horizontal">
             <RadioButton
                 android:id="@+id/scan_bill_code"

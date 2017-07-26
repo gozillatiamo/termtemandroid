@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,8 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     private APIServices services;
     private String mPhoneNo;
 
+    public static final String TAG = BillActionFragment.class.getSimpleName();
+
     public BillActionFragment() {
         // Required empty public constructor
     }
@@ -121,6 +124,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                 case BillPaymentActivity.SCAN:
                     LoadBillServiceResponse response = data.getExtras().getParcelable(MainBillPayFragment.KEY_BILL_DATA);
                     String result = data.getStringExtra(ScanBillActivity.KEY_SCAN_RESULT);
+                    Log.e(TAG, "result OnActivityResult: "+result);
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .addToBackStack(null)

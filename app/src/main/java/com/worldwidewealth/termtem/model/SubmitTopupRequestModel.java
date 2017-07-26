@@ -95,9 +95,9 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     public static SubmitTopupRequestModel SubmitBillRequestModel(String tnid, String bill_service_id, String bill_service_code,
-                                                                 String userbarcode, String duedate, String phoneno){
+                                                                 String userbarcode, String duedate, String phoneno, String tranid){
         return new SubmitTopupRequestModel(tnid, bill_service_id, bill_service_code, userbarcode,
-                duedate, phoneno);
+                duedate, phoneno, tranid);
     }
 
     public SubmitTopupRequestModel(String amt, String carrier, String phone_no, String tran_id,
@@ -113,13 +113,14 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     public SubmitTopupRequestModel(String tnid, String bill_service_id, String bill_service_code,
-                                   String userbarcode, String duedate, String phoneno){
+                                   String userbarcode, String duedate, String phoneno, String tranid){
         this.TNID = tnid;
         this.BILL_SERVICE_ID = bill_service_id;
         this.BILL_SERVICE_CODE = bill_service_code;
         this.USEBARCODE = userbarcode;
         this.DUEDATE = duedate;
         this.PHONENO = phoneno;
+        this.TRANID = tranid;
 
     }
 

@@ -100,6 +100,8 @@ public class FragmentTopupPackage extends  Fragment{
     private String mCarrier;
     private String mTopup;
     private String mPhone;
+    private String mDueDate;
+    private long mDueDateTimestamp = System.currentTimeMillis();
     private String mBarcode;
     private LoadBillServiceResponse mBillService;
     private TopupPreviewResponseModel mPreviewModel;
@@ -216,8 +218,6 @@ public class FragmentTopupPackage extends  Fragment{
                 case BillPaymentActivity.BILLPAY:
                     mBarcode = getArguments().getString(KEY_BARCODE);
                     mBillService = getArguments().getParcelable(KEY_BILL_SERVICE);
-                    mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
-
                     break;
                 default:
                     mCarrier = getArguments().getString(CARRIER);
@@ -474,6 +474,7 @@ public class FragmentTopupPackage extends  Fragment{
 
         switch (mTopup){
             case BillPaymentActivity.BILLPAY:
+                Log.e(TAG, "BeforePreview: "+mBarcode);
                 call = services.billService(new RequestModel(mActionPreview,
                         new PreviewBillRequest(mBarcode, mBillService.getBILL_SERVICE_CODE(),
                                 mBillService.getBILL_SERVICE_ID())));
@@ -518,6 +519,8 @@ public class FragmentTopupPackage extends  Fragment{
                                             .newInstance(mTopup, mPreviewModel, mBottomAction.getPrice()))
                                     .addToBackStack(null)
                                     .commit();
+
+                            if (mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
 
                         }
                     } catch (IllegalStateException e){}
@@ -646,7 +649,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
-        Call<ResponseBody> call = services.getOTP(new RequestModel(mActionGetOTP,
+        Call<ResponseBody> call = getServiceSubmit(new RequestModel(mActionGetOTP,
                 new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -686,7 +689,7 @@ public class FragmentTopupPackage extends  Fragment{
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
 
-        callSubmit = getServiceSubmit();
+        callSubmit = getServiceSubmit(requestModel);
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -810,12 +813,11 @@ public class FragmentTopupPackage extends  Fragment{
                 break;
             case BillPaymentActivity.BILLPAY:
                 String useBarcode = (mBarcode != null) ? "Y":"N";
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyy");
+                mPhone = getArguments().getString(ActivityTopup.KEY_PHONENO);
 
-                submitTopupRequestModel = SubmitTopupRequestModel.SubmitBillRequestModel(mFragmentTopupPreview.getTNID(),
+                submitTopupRequestModel = SubmitTopupRequestModel.SubmitBillRequestModel(mPreviewModel.getTNID(),
                         mBillService.getBILL_SERVICE_ID(), mBillService.getBILL_SERVICE_CODE(),
-                        useBarcode, dateFormat.format(calendar.getTime()), mPhone);
+                        useBarcode, mDueDate, mPhone, transid);
                 break;
         }
 
@@ -823,57 +825,34 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
-/*
-    private void initDueDateDialog(long longdate, final Button btn, final int type){
-        mCalendar.setTimeInMillis(longdate);
-        mDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+    private void initDueDateDialog(){
+        final Calendar mCalendar = Calendar.getInstance();
+        mCalendar.setTimeInMillis(mDueDateTimestamp);
+        DatePickerDialog mDatePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-                if (calendar.getTimeInMillis() > mDatePickerDialog.getDatePicker().getMaxDate() ||
-                        calendar.getTimeInMillis() < mDatePickerDialog.getDatePicker().getMinDate()){
-                    new AlertDialog.Builder(ActivityReport.this)
-                            .setCancelable(false)
-                            .setMessage(R.string.error_date_limit)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mDatePickerDialog.show();
-                                    return;
-                                }
-                            }).show();
-                }
+                mCalendar.set(year, month, dayOfMonth);
+                mDueDateTimestamp = mCalendar.getTimeInMillis();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyy");
 
-                btn.setText(dayOfMonth+"/"+(month+1)+"/"+ year);
-                switch (type){
-                    case FORM:
-                        mPreviousDateFrom = Util.getTimestamp(calendar.getTimeInMillis(), 0, 0, 0);
-                        break;
-                    case TO:
-                        mPeviousDateTo = Util.getTimestamp(calendar.getTimeInMillis(), 23, 59, 59);
-                        break;
-                }
+                mDueDate = dateFormat.format(mCalendar.getTime());
 
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
-        if (type == TO){
-            mDatePickerDialog.getDatePicker().setMinDate(mPreviousDateFrom);
-        }
-        mDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
 
         mDatePickerDialog.setCancelable(false);
         mDatePickerDialog.show();
     }
-*/
 
 
-    private Call<ResponseBody> getServiceSubmit(){
+    private Call<ResponseBody> getServiceSubmit(RequestModel requestModel){
 
         switch (mTopup){
             case BillPaymentActivity.BILLPAY:
-                return services.billService(Global.getInstance().getLastSubmit());
+                return services.billService(requestModel);
             default:
-                return services.submitTopup(Global.getInstance().getLastSubmit());
+                return services.topupService(requestModel);
         }
     }
 
