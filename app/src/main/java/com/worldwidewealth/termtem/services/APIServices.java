@@ -97,6 +97,7 @@ public interface APIServices {
     public static final String ACTION_GETOTP_BILL = "GETOTPBILL";
     public static final String ACTION_SUBMIT_BILL = "SUBMITBILL";
     public static final String ACTION_ESLIP_BILL = "ESLIPBILL";
+    public static final String ACTION_MGM_CAPTION = "MGMCAPTION";
 
 
 

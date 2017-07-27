@@ -340,36 +340,34 @@ public class ActivityReport extends MyAppcompatActivity {
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_topup);
                 mHolder.mTextType.setText(R.string.topup);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_topup);
-                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
                 break;
             case EPIN_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_epin);
                 mHolder.mTextType.setText(R.string.dashboard_pin);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_epin);
-                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-
                 break;
 
             case VAS_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_vas_report);
                 mHolder.mTextType.setText(R.string.vas);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_vas_report);
-                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-
                 break;
 
             case CASHIN_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_cashin);
                 mHolder.mTextType.setText(R.string.add_credit_agent);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_cashin);
-                mHolder.mLogoIcon.setVisibility(View.VISIBLE);
-
                 break;
 
             case BILL_REPORT:
+                mHolder.mIconType.setImageResource(R.drawable.ic_bill);
+                mHolder.mTextType.setText(R.string.dashboard_bill_pay);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_bill);
                 break;
 
         }
+
+        mHolder.mLogoIcon.setVisibility(View.VISIBLE);
 
         findViewById(R.id.card_title_type).setVisibility(View.VISIBLE);
 

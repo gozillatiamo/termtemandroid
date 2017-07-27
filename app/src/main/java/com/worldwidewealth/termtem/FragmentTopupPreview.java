@@ -46,11 +46,11 @@ public class FragmentTopupPreview extends Fragment {
 
     public class ViewHolder{
 
-        private TextView mTextAmount, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
+        private TextView mTextDebit, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
         mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice;
         private View mLayoutCommission, mLayoutMarkup;
         public ViewHolder(View itemview){
-            mTextAmount = (TextView) itemview.findViewById(R.id.txt_amount);
+            mTextDebit = (TextView) itemview.findViewById(R.id.txt_debit);
             mTextTitlePrice = (TextView) itemview.findViewById(R.id.text_title_price);
             mTextCommissionRate = (TextView) itemview.findViewById(R.id.txt_commission_rate);
             mTextCommissionAmout = (TextView) itemview.findViewById(R.id.txt_commission_amount);
@@ -164,8 +164,9 @@ public class FragmentTopupPreview extends Fragment {
         }
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
-        mHolder.mTextAmount.setText(format.format(mModel.getAMOUNT()));
-        mHolder.mTextSelectAmout.setText(mSelectAmout);
+        double debit = mModel.getNET() == 0 ? mModel.getAMOUNT() : mModel.getNET();
+        mHolder.mTextDebit.setText(format.format(debit));
+        mHolder.mTextSelectAmout.setText(format.format(mModel.getAMOUNT()));
         if (mModel.getCOMMISSION_AMOUNT() != 0) {
             mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
             mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
@@ -174,10 +175,12 @@ public class FragmentTopupPreview extends Fragment {
             mHolder.mLayoutCommission.setVisibility(View.GONE);
         }
 
-        if (mModel.getMARKUP() == 0)
+        if (mModel.getMARKUP() == 0 && mModel.getFEE() == 0)
             mHolder.mLayoutMarkup.setVisibility(View.GONE);
-        else
-            mHolder.mTextMarkup.setText(format.format(mModel.getMARKUP()));
+        else {
+            double markup = mModel.getMARKUP() > mModel.getFEE() ? mModel.getMARKUP() : mModel.getFEE();
+            mHolder.mTextMarkup.setText(format.format(markup));
+        }
 
         mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
         mHolder.mTextTotal.setText(format.format(mModel.getTOTAL()));

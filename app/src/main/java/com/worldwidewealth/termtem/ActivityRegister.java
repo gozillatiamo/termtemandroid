@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -51,9 +53,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
+import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RegisterRequestModel;
+import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -61,6 +67,9 @@ import com.worldwidewealth.termtem.util.CheckSyntaxData;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.TermTemLoading;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +79,7 @@ import java.util.GregorianCalendar;
 import java.util.zip.Inflater;
 
 import me.grantland.widget.AutofitTextView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -118,10 +128,19 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         mDataCheck[AGENT_TEL] = true;
         Util.setupUI(findViewById(R.id.layout_parent));
         services = APIServices.retrofit.create(APIServices.class);
+        getMGMcaption();
         initToolbar();
         initNext();
         setupDialogCondition();
         setupCalendar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MyApplication.getTypeScreenLayout() != Configuration.SCREENLAYOUT_SIZE_XLARGE){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     @Override
@@ -210,6 +229,29 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void getMGMcaption(){
+        Call<ResponseBody> call = services.service(new RequestModel(APIServices.ACTION_MGM_CAPTION, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object objectResponse = EncryptionData.getModel(ActivityRegister.this, call, response.body(), this);
+                if (objectResponse instanceof String){
+                    try {
+                        JSONObject json = new JSONObject((String) objectResponse);
+                        mHolder.mTitleMGMcaption.setText(json.getString("caption"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     private void showDropDown(final EditText editText, int itemResource){
@@ -309,12 +351,14 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                 mDialogCondition.cancel();
                                 checkboxSubmit.toggle();
                                 mBitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-
+                                System.gc();
                                 mAttachEncode = Util.encodeBitmapToUpload(mBitmapImage);
 
                                 if (mBitmapImage != null && !mBitmapImage.isRecycled()) {
                                     mBitmapImage.recycle();
                                     mBitmapImage = null;
+                                    System.gc();
+
                                 }
 
                                 RegisterRequestModel.Data registerRequestModel = new RegisterRequestModel.Data(
@@ -385,7 +429,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                                 });
 
                             }
-                        }, 300);
+                        }, 100);
 
                     }
                 }
@@ -621,6 +665,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
         mEditPeopleType, mEditBirth, mEditTitleName, mEditTelAgent;
         private Toolbar mToolbar;
         private AutofitTextView mBtnSignIn;
+        private TextView mTitleMGMcaption;
 
         public ViewHolder(final Activity view){
 
@@ -664,6 +709,7 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
             mBtnAttach.setOnClickListener(ActivityRegister.this);
 
             mImageAttach = (ImageView) view.findViewById(R.id.image_identity);
+            mTitleMGMcaption = view.findViewById(R.id.title_mgm_caption);
         }
     }
 

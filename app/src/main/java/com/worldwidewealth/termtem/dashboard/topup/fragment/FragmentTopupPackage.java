@@ -80,6 +80,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -100,7 +101,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mCarrier;
     private String mTopup;
     private String mPhone;
-    private String mDueDate;
+    private String mDueDate = "";
     private long mDueDateTimestamp = System.currentTimeMillis();
     private String mBarcode;
     private LoadBillServiceResponse mBillService;
@@ -520,8 +521,8 @@ public class FragmentTopupPackage extends  Fragment{
                                     .addToBackStack(null)
                                     .commit();
 
-                            if (mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
-
+//                            if (mPreviewModel.getNEEDDUEDATE() != null && mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
+                            initDueDateDialog();
                         }
                     } catch (IllegalStateException e){}
 
@@ -826,23 +827,49 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void initDueDateDialog(){
-        final Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTimeInMillis(mDueDateTimestamp);
-        DatePickerDialog mDatePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_duedate, null, false);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView)
+                .setCancelable(false).show();
+        final Button btn_select_date = dialogView.findViewById(R.id.btn_select_duedate);
+        btn_select_date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                mCalendar.set(year, month, dayOfMonth);
-                mDueDateTimestamp = mCalendar.getTimeInMillis();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyy");
+            public void onClick(View view) {
+                final Calendar mCalendar = Calendar.getInstance();
+                mCalendar.setTimeInMillis(mDueDateTimestamp);
+                DatePickerDialog mDatePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        mCalendar.set(year, month, dayOfMonth);
+                        String strDate = dayOfMonth+"-"+
+                                mCalendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH"))+"-"+
+                                (year+543);
 
-                mDueDate = dateFormat.format(mCalendar.getTime());
+                        btn_select_date.setText(strDate);
+
+                        mDueDateTimestamp = mCalendar.getTimeInMillis();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyy");
+
+                        mDueDate = dateFormat.format(mCalendar.getTime());
+
+                    }
+                }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+                mDatePickerDialog.setCancelable(false);
+                mDatePickerDialog.show();
 
             }
-        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+        });
 
-
-        mDatePickerDialog.setCancelable(false);
-        mDatePickerDialog.show();
+        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });
     }
 
 
