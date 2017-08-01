@@ -207,7 +207,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     public static void startSlip(){
 
-        if (!canUseLeaving(currentActivity)) return;
+        if (!canUseLeaving(currentActivity) || currentActivity instanceof ActivityShowNotify) return;
 
         if (Global.getInstance().hasSubmit() &&
                 !(currentActivity instanceof ActivityTopup)
@@ -356,7 +356,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean canUseLeaving(Activity activity){
 
        boolean can = !(activity instanceof SplashScreenWWW |
-               activity instanceof ActivityShowNotify |
+//               activity instanceof ActivityShowNotify |
                activity instanceof MainActivity |
                activity instanceof ActivityRegister |
                activity instanceof ChatBotActivity |

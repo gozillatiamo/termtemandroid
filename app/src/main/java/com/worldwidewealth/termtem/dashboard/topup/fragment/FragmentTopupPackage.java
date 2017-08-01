@@ -520,7 +520,8 @@ public class FragmentTopupPackage extends  Fragment{
                                     .addToBackStack(null)
                                     .commit();
 
-                            if (mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
+                            if (mPreviewModel.getNEEDDUEDATE() != null &&
+                                    mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
 
                         }
                     } catch (IllegalStateException e){}

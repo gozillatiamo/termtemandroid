@@ -80,6 +80,11 @@ public class LocalService extends Service {
     }
 
     private void serviceLeave(final Context context, final int startId){
+        if (Global.getInstance().getUSERNAME() == null){
+            stopSelf(startId);
+            return;
+        }
+
         countRetry = 0;
         callLeave = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(callLeave, new Callback<ResponseBody>() {
