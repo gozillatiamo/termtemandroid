@@ -257,6 +257,11 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
                         mHolder.mMenuVAS.setMenuVisibility(
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;
+                    case BILLPAY:
+                        mHolder.mMenuBillPay.setMenuVisibility(
+                                MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
+                        break;
+
 
 
                 }
@@ -278,7 +283,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
 
         private Toolbar mToolbar;
         private MenuButtonView  mMenuCashIn, mMenuAgentCashIn, mMenuTopup,
-                                mMenuNotiPay, mMenuHistory, mMenuTopupPIN, mMenuOther, mMenuVAS;
+                                mMenuNotiPay, mMenuHistory, mMenuTopupPIN, mMenuOther, mMenuVAS, mMenuBillPay;
         private TextView mTextUserName;
         private View mIncludeMyWallet;
         private AppCompatButton mBtnFavorites;
@@ -297,6 +302,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
             mTextUserName = (TextView) view.findViewById(R.id.text_username);
             mMenuOther = (MenuButtonView) view.findViewById(R.id.mbv_other);
             mMenuVAS = (MenuButtonView) view.findViewById(R.id.mbv_vas);
+            mMenuBillPay = (MenuButtonView) view.findViewById(R.id.mbv_bill_pay);
             mBtnFavorites = (AppCompatButton) view.findViewById(R.id.btn_favorites);
 
             mBtnFavorites.setOnClickListener(ActivityDashboard.this);

@@ -51,7 +51,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder>{
         holder.itemView.setClickable(true);
         holder.itemView.setBackgroundResource(typedValue.resourceId);
         int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                mContext.getResources().getDimension(R.dimen.activity_vertical_margin),
+                mContext.getResources().getDimension(R.dimen.activity_space),
                 mContext.getResources().getDisplayMetrics());
         holder.mTitleNotify.setPadding(padding, padding, padding, padding);
         holder.mTitleNotify.setText(getItem(position).getFirstName() + "\t" + getItem(position).getLastName());

@@ -205,6 +205,7 @@
     <string name="retry">ลองใหม่อีกครั้ง</string>
     <string name="please_enter_reference">กรุณากรอกหมายเลขอ้างอิง</string>
     <string name="please_select_date_time">กรุณาเลือก วันที่-เวลา</string>
+    <string name="please_select_date">กรุณาเลือกวันที</string>
     <string name="please_select_bank_start">กรุณาเลือก ธนาคารต้นทาง</string>
     <string name="please_select_bank_end">กรุณาเลือก ธนาคารปลายทาง</string>
     <string name="airtime">ยอดเติมเงิน</string>
@@ -304,6 +305,8 @@
     <string name="home_car_bill">ผ่อนบ้าน/รถ</string>
     <string name="shopping_bill">ค่าสินค้า</string>
     <string name="phone_no_customer">หมายเลขโทรศัพท์ผู้ชำระ</string>
+    <string name="duedate_title">กรุณาเลือกวันครบกำหนด</string>
+    <string name="example">ตัวอย่าง</string>
 
 
     //Chat bot

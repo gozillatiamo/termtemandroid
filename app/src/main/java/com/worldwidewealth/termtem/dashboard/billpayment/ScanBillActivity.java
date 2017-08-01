@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -130,7 +131,6 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
     @Override
     public void onResume() {
-        mBarcodeView.resume();
         super.onResume();
 
         if (mCurrentChecked == -1){
@@ -161,7 +161,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
         mBarcodeView.decodeContinuous(barcodeCallback);
         mBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(true);
-        mBarcodeView.getBarcodeView().getCameraInstance().setTorch(true);
+//        mBarcodeView.getBarcodeView().getCameraInstance().setTorch(true);
         mReGroup.check(mCurrentChecked);
 
         mReGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -187,10 +187,17 @@ public class ScanBillActivity extends MyAppcompatActivity {
         mBarcodeView.getViewFinder().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+
                 int width = mBarcodeView.getViewFinder().getMeasuredWidth(), height = mBarcodeView.getViewFinder().getMeasuredHeight();
-                mBarcodeView.getBarcodeView().setFramingRectSize(new Size(width, height));
+
+                mBarcodeView.getBarcodeView().setFramingRectSize(
+                        new Size((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics()),
+                                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics())));
             }
         });
+
+        mBarcodeView.resume();
+
 
     }
 

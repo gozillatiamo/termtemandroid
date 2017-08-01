@@ -215,7 +215,7 @@
                     android:orientation="horizontal">
 
                     <me.grantland.widget.AutofitTextView
-                        android:id="@+id/txt_amount"
+                        android:id="@+id/txt_debit"
                         style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
