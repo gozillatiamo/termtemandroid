@@ -111,6 +111,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStart() {
         super.onStart();
+        Util.setupUI(getView());
         bindView();
         setupData();
 

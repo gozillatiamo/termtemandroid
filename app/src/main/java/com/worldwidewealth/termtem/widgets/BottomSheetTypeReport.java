@@ -251,9 +251,9 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
             if (sparseBooleanArray.get(MenuButtonView.TYPE.BILLPAY.getType())){
                 ContentValues values = new ContentValues();
-                values.put(TITLE, getContext().getString(R.string.dashboard_bill_pay));
+                values.put(TITLE, getContext().getString(R.string.report_bill));
                 values.put(TYPE, ActivityReport.BILL_REPORT);
-                values.put(ICON, R.drawable.ic_bill);
+                values.put(ICON, R.drawable.ic_report_bill);
                 mListData.add(values);
             }
 

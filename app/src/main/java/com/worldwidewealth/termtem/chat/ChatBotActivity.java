@@ -36,6 +36,8 @@ import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import com.stfalcon.chatkit.utils.DateFormatter;
+import com.worldwidewealth.termtem.ActivityRegister;
+import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
@@ -45,19 +47,26 @@ import com.worldwidewealth.termtem.chat.holder.CustomOutcomingImageMessageViewHo
 import com.worldwidewealth.termtem.chat.holder.CustomOutcomingTextMessageViewHolder;
 import com.worldwidewealth.termtem.chat.model.Message;
 import com.worldwidewealth.termtem.chat.model.User;
+import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RegisterRequestModel;
+import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.CheckSyntaxData;
 import com.worldwidewealth.termtem.util.Util;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,6 +86,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private static final String IMG_MPAY = "mpay";
     private static final String IMG_ATM = "atm";
     private static final String IMG_TRANSFER = "transfer";
+    private static String mCaptionMGM = "";
 
     private MessagesList messagesList;
     protected MessagesListAdapter<Message> messagesAdapter;
@@ -183,6 +193,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
 
         service = APIServices.retrofit.create(APIServices.class);
         handler = new Handler();
+        getMGMcaption();
         bindView();
         setUpView();
         initAdapter();
@@ -356,6 +367,30 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             }
         });
     }
+
+    private void getMGMcaption(){
+        Call<ResponseBody> call = service.service(new RequestModel(APIServices.ACTION_MGM_CAPTION, new DataRequestModel()));
+        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Object objectResponse = EncryptionData.getModel(ChatBotActivity.this, call, response.body(), this);
+                if (objectResponse instanceof String){
+                    try {
+                        JSONObject json = new JSONObject((String) objectResponse);
+                        mCaptionMGM = json.getString("caption");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onClick(View v) {

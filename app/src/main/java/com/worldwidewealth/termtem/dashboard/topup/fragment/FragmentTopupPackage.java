@@ -758,7 +758,10 @@ public class FragmentTopupPackage extends  Fragment{
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e(TAG, "Exception submit topup: " + t.getMessage());
-                        if (t.getMessage().equals("Canceled")) return;
+                        if (t.getMessage().equals("Canceled")) {
+                            callSubmit = null;
+                            return;
+                        }
 
                         stopTimer();
 
@@ -773,15 +776,16 @@ public class FragmentTopupPackage extends  Fragment{
 
                         MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
-
-                        new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
-                                null, call, this, false, new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                startTimeoutSubmit();
-                            }
-                        });
-                        mBottomAction.setEnable(true);
+                        if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
+                            new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
+                                    null, call, this, false, new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            startTimeoutSubmit();
+                                        }
+                                    });
+                            mBottomAction.setEnable(true);
+                        }
 
                     }
                 });

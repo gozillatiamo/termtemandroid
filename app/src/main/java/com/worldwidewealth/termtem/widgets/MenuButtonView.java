@@ -2,6 +2,7 @@ package com.worldwidewealth.termtem.widgets;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.OtherMenuFragment;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
@@ -543,6 +545,8 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         });
 
         alertDialog.show();
+
+        MyApplication.showCurrentStatusbar(MyApplication.NOTITOPUP);
 
     }
 

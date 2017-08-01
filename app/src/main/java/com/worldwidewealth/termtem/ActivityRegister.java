@@ -138,9 +138,11 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
     @Override
     protected void onResume() {
         super.onResume();
+/*
         if(MyApplication.getTypeScreenLayout() != Configuration.SCREENLAYOUT_SIZE_XLARGE){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+*/
     }
 
     @Override

@@ -264,6 +264,7 @@
     <string name="report_epin">ประวัติการขายบัตรเงินสด</string>
     <string name="report_cashin_agent">ประวัติการโอนเงินให้ Agent</string>
     <string name="report_vas">ประวัติการขายแพ็กเกจเสริม</string>
+    <string name="report_bill">ประวัติการจ่ายบิล</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
     <string name="update_message">แอพพลิเคชั่น "เติมเต็ม"\nมีการอัพเดทใหม่ กรุณาอัพเดทเป็นเวอร์ชั่นล่าสุดก่อนใช้งาน</string>
     <string name="title_report_cashin">CASH-IN</string>

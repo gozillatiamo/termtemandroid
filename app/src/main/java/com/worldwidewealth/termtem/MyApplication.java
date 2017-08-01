@@ -22,6 +22,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.google.gson.Gson;
@@ -94,7 +95,9 @@ public class MyApplication extends Application implements Application.ActivityLi
                 submitModel = (SubmitTopupRequestModel)Global.getInstance().getLastSubmit().getData();
             } else return;
 
-            if (FragmentTopupPackage.callSubmit != null && FragmentTopupPackage.callSubmit.isExecuted()){
+            if (FragmentTopupPackage.callSubmit != null
+                    && FragmentTopupPackage.callSubmit.isExecuted()
+                    && !FragmentTopupPackage.callSubmit.isCanceled()){
                 FragmentTopupPackage.callSubmit.cancel();
             }
 
@@ -475,6 +478,8 @@ public class MyApplication extends Application implements Application.ActivityLi
                 title = getContext().getString(R.string.title_upload_fail);
                 message = msg + " " + MyApplication.getContext().getString(R.string.msg_upload_fail);
                 smallicon = android.R.drawable.stat_notify_error;
+                isUpload = false;
+
                 break;
             case NOTITOPUP:
                 RequestModel requestModel = Global.getInstance().getLastSubmit();
@@ -515,11 +520,18 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         Log.e(TAG, "ID: "+id);
         mNotifyManager.notify(id, mBuilder.build());
-
-        mBuilder = null;
+        if (!isUpload) {
+            mBuilder = null;
+        }
 
     }
 
+    public static void showCurrentStatusbar(int id){
+        if (mBuilder == null) return;
+
+        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+        mNotifyManager.notify(id, mBuilder.build());
+    }
     public static boolean isUpload(Context context, int message){
         if (isUpload) {
             AlertDialog alertDialog = new AlertDialog.Builder(context)

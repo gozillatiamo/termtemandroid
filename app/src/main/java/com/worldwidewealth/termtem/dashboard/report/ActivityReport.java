@@ -360,9 +360,9 @@ public class ActivityReport extends MyAppcompatActivity {
                 break;
 
             case BILL_REPORT:
-                mHolder.mIconType.setImageResource(R.drawable.ic_bill);
-                mHolder.mTextType.setText(R.string.dashboard_bill_pay);
-                mHolder.mLogoIcon.setImageResource(R.drawable.ic_bill);
+                mHolder.mIconType.setImageResource(R.drawable.ic_report_bill);
+                mHolder.mTextType.setText(R.string.report_bill);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_bill);
                 break;
 
         }
