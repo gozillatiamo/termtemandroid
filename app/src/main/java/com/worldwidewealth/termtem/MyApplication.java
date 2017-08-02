@@ -419,7 +419,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         isUpload = false;
 
-        if (mBuilder == null && (id != NOTIUPLOAD)) return;
+        if (mBuilder == null || (mBuilder == null && (id != NOTIUPLOAD))) return;
 
         String title = null, message = null;
         int smallicon = android.R.drawable.stat_sys_upload_done;
@@ -467,7 +467,8 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     public static void uploadFail(int id, String msg){
-        if (mBuilder == null && (id != NOTIUPLOAD)) return;
+
+        if (mBuilder == null || (mBuilder == null && (id != NOTIUPLOAD))) return;
 
         String title = null, message = null;
         int smallicon = android.R.drawable.stat_notify_error;

@@ -8,6 +8,7 @@ public class ResponseModel{
 
     private int Status;
     private String Msg;
+    private String Appdisplay;
     private String TXID;
     private String ff;
     private String version;
@@ -50,5 +51,9 @@ public class ResponseModel{
 
     public String getDesc() {
         return desc;
+    }
+
+    public String getAppdisplay() {
+        return Appdisplay;
     }
 }

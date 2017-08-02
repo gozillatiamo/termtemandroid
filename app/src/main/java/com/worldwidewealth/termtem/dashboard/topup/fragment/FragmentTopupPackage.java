@@ -28,6 +28,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -730,9 +731,8 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
-                            Global.getInstance().setLastSubmit(null, false);
-
                             MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
+                            Global.getInstance().setLastSubmit(null, false);
 
                             return;
                         }
@@ -1046,39 +1046,10 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void showDialogEditPhone(final int position){
 
-        final EditText editPhone = new EditText(getContext());
-        editPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                getResources().getDimension(R.dimen.activity_space),
-                getResources().getDisplayMetrics());
-//        editPhone.setPadding(padding, padding, padding, padding);
-        editPhone.setGravity(Gravity.CENTER);
-        InputFilter[] FilterArray = new InputFilter[1];
-        FilterArray[0] = new InputFilter.LengthFilter(12);
-        editPhone.setFilters(FilterArray);
-
-        editPhone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!mFormatting){
-                    mFormatting = true;
-                    PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
-                    mFormatting = false;
-                }
-            }
-        });
 
         AlertDialog.Builder builderEditPhone = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogWarning)
                 .setTitle(R.string.phone_number)
-                .setView(editPhone)
+                .setView(R.layout.dialog_edit_text)
                 .setPositiveButton(R.string.confirm, null)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -1094,6 +1065,32 @@ public class FragmentTopupPackage extends  Fragment{
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 super.onShow(dialogInterface);
+                final EditText editPhone = (EditText) dialogEditPhone.findViewById(R.id.edit_text);
+
+                editPhone.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(12);
+                editPhone.setFilters(FilterArray);
+
+                editPhone.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (!mFormatting){
+                            mFormatting = true;
+                            PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
+                            mFormatting = false;
+                        }
+                    }
+                });
+
                 Button btnConfirm = dialogEditPhone.getButton(AlertDialog.BUTTON_POSITIVE);
                 btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override

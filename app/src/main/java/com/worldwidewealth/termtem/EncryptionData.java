@@ -2,7 +2,9 @@ package com.worldwidewealth.termtem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 
@@ -167,10 +169,11 @@ public class EncryptionData {
     public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
         Trace mTrace = null;
 
-        ResponseModel responseModel;
+        final ResponseModel responseModel;
         RequestModel requestModel = null;
         Gson gson = new Gson();
         String msg;
+        String dialogTitle;
         String strRespone = null;
         String strRequest = Util.convertToStringRequest(call.request().body());
         if (strRequest != null){
@@ -183,6 +186,10 @@ public class EncryptionData {
             responseModel = gson.fromJson(strRespone, ResponseModel.class);
             Log.e(TAG, "Response: "+ strRespone);
             if (responseModel == null) return null;
+
+            dialogTitle = MyApplication.getContext().getString(R.string.alert_topup_fail);
+
+            msg = responseModel.getAppdisplay();
 
             switch (requestModel.getAction()){
                 case APIServices.ACTIONSUBMITTOPUP:
@@ -229,7 +236,10 @@ public class EncryptionData {
                                 Global.getInstance().setLastSubmit(null, false);
                             }
 
-                            msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
+                            if (msg == null || msg.isEmpty()){
+                                msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
+                            }
+
                             new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
                             DialogCounterAlert.DialogProgress.dismiss();
 
@@ -288,7 +298,20 @@ public class EncryptionData {
 //                    mTrace.stop();
                 }
 
-                return responseModel;
+                if (msg != null && !msg.isEmpty()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(context)
+                            .setMessage(msg)
+                            .setPositiveButton(MyApplication.getContext().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    
+                                }
+                            }).show();
+                    DialogCounterAlert.DialogProgress.dismiss();
+
+                } else {
+                    return responseModel;
+                }
             }
 
         } catch (JsonSyntaxException e){
@@ -307,4 +330,6 @@ public class EncryptionData {
 
         return null;
     }
+
+
 }

@@ -148,6 +148,12 @@
                     android:visibility="gone"/>
 
                 <include
+                    android:id="@+id/input_mgm"
+                    layout="@layout/view_input_mgm"
+                    android:visibility="gone"/>
+
+
+                <include
                     android:id="@+id/input_image"
                     layout="@layout/view_input_image"
                     android:visibility="gone"/>
