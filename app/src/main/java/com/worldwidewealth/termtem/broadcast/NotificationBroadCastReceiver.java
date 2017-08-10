@@ -9,6 +9,7 @@ import android.util.Log;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 
 import static com.worldwidewealth.termtem.MyFirebaseMessagingService.BOX;
@@ -43,6 +44,11 @@ public class NotificationBroadCastReceiver extends WakefulBroadcastReceiver {
                 return;
         }
 
+        if (FragmentTopupPackage.callSubmit != null
+                && FragmentTopupPackage.callSubmit.isExecuted()
+                && !FragmentTopupPackage.callSubmit.isCanceled()){
+            FragmentTopupPackage.callSubmit.cancel();
+        }
 
         MyApplication.getContext().sendBroadcast(intentBroadcast);
 

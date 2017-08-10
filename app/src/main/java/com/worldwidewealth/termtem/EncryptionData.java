@@ -25,10 +25,12 @@ import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.io.IOException;
+import java.io.SyncFailedException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -166,7 +168,7 @@ public class EncryptionData {
 
     private static int retry = 0;
 
-    public static final Object getModel(Context context, final Call call, ResponseBody response, final Callback callback){
+    public static final Object getModel(final Context context, final Call call, ResponseBody response, final Callback callback){
         Trace mTrace = null;
 
         final ResponseModel responseModel;
@@ -187,8 +189,7 @@ public class EncryptionData {
             Log.e(TAG, "Response: "+ strRespone);
             if (responseModel == null) return null;
 
-            dialogTitle = MyApplication.getContext().getString(R.string.alert_topup_fail);
-
+            dialogTitle = null;
             msg = responseModel.getAppdisplay();
 
             switch (requestModel.getAction()){
@@ -216,6 +217,11 @@ public class EncryptionData {
                     break;
             }
 
+/*
+            if (requestModel.getAction().equals(APIServices.ACTION_SUBMIT_VAS))
+                responseModel.setStatus(-2);
+*/
+
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 if (mTrace != null){
                     mTrace.incrementCounter("FAIL");
@@ -232,17 +238,26 @@ public class EncryptionData {
                         case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                         case APIServices.ACTION_SUBMIT_VAS:
 
-                            if (responseModel.getMsg().equals(APIServices.MSG_FAIL)) {
+/*
+                            if (responseModel.getMsg().contains(APIServices.MSG_FAIL) || responseModel.getMsg().equals("Fail")) {
                                 Global.getInstance().setLastSubmit(null, false);
                             }
+*/
 
                             if (msg == null || msg.isEmpty()){
                                 msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
+                                dialogTitle = MyApplication.getContext().getString(R.string.error);
+                                new DialogCounterAlert(context, dialogTitle, msg, null);
                             }
 
-                            new DialogCounterAlert(context, context.getString(R.string.error), msg, null);
-                            DialogCounterAlert.DialogProgress.dismiss();
+                            showErrorMSG(context, responseModel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ((Activity) context).finish();
+                                }
+                            });
 
+                            DialogCounterAlert.DialogProgress.dismiss();
                             return null;
 
                         case APIServices.ACTIONLOGIN:
@@ -298,20 +313,7 @@ public class EncryptionData {
 //                    mTrace.stop();
                 }
 
-                if (msg != null && !msg.isEmpty()) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(context)
-                            .setMessage(msg)
-                            .setPositiveButton(MyApplication.getContext().getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    
-                                }
-                            }).show();
-                    DialogCounterAlert.DialogProgress.dismiss();
-
-                } else {
-                    return responseModel;
-                }
+                return responseModel;
             }
 
         } catch (JsonSyntaxException e){
@@ -329,6 +331,28 @@ public class EncryptionData {
         }
 
         return null;
+    }
+
+    public static boolean showErrorMSG(Context context, ResponseModel responseModel, DialogInterface.OnClickListener listener) {
+        Activity activity = null;
+        try {
+            activity = (Activity) context;
+            Activity currentActivity = MyApplication.LeavingOrEntering.currentActivity;
+            if (activity.getLocalClassName().equals(currentActivity.getLocalClassName())) {
+                String msg = responseModel.getAppdisplay();
+                if (msg != null && !msg.isEmpty()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                            .setMessage(msg)
+                            .setCancelable(false)
+                            .setPositiveButton(MyApplication.getContext().getString(R.string.confirm), listener).show();
+                    return true;
+                }
+            }
+
+        } catch (ClassCastException e){}
+
+        MyApplication.uploadFail(MyApplication.NOTITOPUP, responseModel.getAppdisplay());
+        return false;
     }
 
 

@@ -166,7 +166,8 @@
         <activity
             android:name=".chat.ChatBotActivity"
             android:screenOrientation="locked"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".chat.PhotoViewActivity"
             android:screenOrientation="locked"

@@ -327,8 +327,10 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:imeOptions="actionDone"
-                        android:inputType="phone"
-                        android:maxLength="12"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:hint="@string/hint_mgm"
+                        android:textColorHint="@android:color/darker_gray"
                         android:padding="@dimen/activity_space" />
 
                     <View

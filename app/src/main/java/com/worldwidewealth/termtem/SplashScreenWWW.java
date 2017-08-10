@@ -181,7 +181,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
             Global.getInstance().clearLastSubmit();
             return;
         }
-        Call<ResponseBody> callSubmit = services.topupService(requestModel);
+        Call<ResponseBody> callSubmit = MyApplication.getServiceSubmit(requestModel);
 
         MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
 
@@ -193,14 +193,14 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null) {
 
-                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
+//                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                     return;
                 }
 
                 if (responseValues instanceof ResponseModel) {
 
-                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, ((ResponseModel)responseValues).getAppdisplay());
                 }
             }
 

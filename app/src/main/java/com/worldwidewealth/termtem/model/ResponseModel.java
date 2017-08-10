@@ -56,4 +56,8 @@ public class ResponseModel{
     public String getAppdisplay() {
         return Appdisplay;
     }
+
+    public void setStatus(int status) {
+        Status = status;
+    }
 }

@@ -15,9 +15,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
+            android:maxLength="10"
             android:hint="@string/hint_mgm"/>
 
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_skip_mgm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/skip"
+        android:background="@drawable/btn_chat_bot"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
     <Button
         android:id="@+id/btn_confirm_mgm"
@@ -29,14 +40,5 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-    <Button
-        android:id="@+id/btn_skip_mgm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/skip"
-        android:background="@drawable/btn_chat_bot"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
 </LinearLayout>

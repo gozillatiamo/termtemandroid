@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -98,7 +100,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private static final String IMG_MPAY = "mpay";
     private static final String IMG_ATM = "atm";
     private static final String IMG_TRANSFER = "transfer";
-    private static String mCaptionMGM = "";
+    private static String mCaptionMGM;
 
     private MessagesList messagesList;
     protected MessagesListAdapter<Message> messagesAdapter;
@@ -212,7 +214,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         service = APIServices.retrofit.create(APIServices.class);
         handler = new Handler();
         bindView();
-        getMGMcaption();
+        mCaptionMGM = getString(R.string.title_mgm);
+//        getMGMcaption();
         setUpView();
         initAdapter();
         createDialog();
@@ -394,6 +397,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         });
     }
 
+/*
     private void getMGMcaption(){
         Call<ResponseBody> call = service.service(new RequestModel(APIServices.ACTION_MGM_CAPTION, new DataRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -418,6 +422,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             }
         });
     }
+*/
 
 
     @Override
@@ -803,7 +808,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 break;
             case PREVIEW_REGSTEP:
                 registerStep = PRECONFIRM_REGSTEP;
-                String format = phoneMGM == null ? "%s%s %s\n%s : %s\n%s : %s\n%s : %s": "%s%s %s\n%s : %s\n%s : %s\n%s : %s\n%s : %s";
+                if(phoneMGM == null || phoneMGM.isEmpty()) phoneMGM = "-";
+                String format = "%s%s %s\n%s : %s\n%s : %s\n%s : %s\n%s : %s";
                 addTextMessage(String.format(format,prefixName, firstName, lastName,
                         getString(R.string.hint_birthday), edtBirth.getText().toString(),
                         getString(R.string.phone_number), phoneNumber,
@@ -1064,8 +1070,8 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                         registerStep = MGM_REGSTEP;
                         idCard = edtIdCard.getText().toString();
                         addTextMessageNotDelay(idCard, User.getUser());
-                        addTextMessage(String.format("คุณ%s %s%s %s", firstName, getString(R.string.chat_enter_mgm_first),
-                                mCaptionMGM, getString(R.string.chat_enter_mgm_second)), User.getTermTemUser());
+                        addTextMessage(String.format("คุณ%s %s", firstName, getString(R.string.chat_enter_mgm))
+                                , User.getTermTemUser());
                         expandableLayout.collapse();
                     }else {
                         idCard = edtIdCard.getText().toString();
@@ -1320,20 +1326,27 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             switch (requestCode) {
                 case MyApplication.REQUEST_IMAGE_CAPTURE:
                     imgPath = Util.getRealPathFromURI(photoURI);
-                    Glide.with(getContext()).load(imgPath).into(idCardImage);
+                    Glide.clear(idCardImage);
+                    Glide.with(getContext()).load(imgPath)
+                            .override(300, 300)
+                            .placeholder(new ColorDrawable(Color.GRAY))
+                            .into(idCardImage);
                     break;
             }
         }
     }
 
     private Call<ResponseModel> getApiService(){
-        System.gc();
-        Glide.clear(idCardImage);
-        Bitmap bitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-        String image = Util.encodeBitmapToUpload(bitmapImage);
-        if (bitmapImage != null) {
-            bitmapImage.recycle();
-        }
+        String image;
+        do {
+            System.gc();
+            Glide.clear(idCardImage);
+            Bitmap bitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+            image = Util.encodeBitmapToUpload(bitmapImage);
+            if (bitmapImage != null) {
+                bitmapImage.recycle();
+            }
+        } while (image == null);
 
         RegisterRequestModel.Data data = new RegisterRequestModel.Data(
                 prefixName,
@@ -1369,6 +1382,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         calendar = Calendar.getInstance();
         setupCalendar();
         edtIdCard.setText("");
+        edtAgentMGM.setText("");
         edtPhoneNumber.setText("");
         edtLastName.setText("");
         edtName.setText("");

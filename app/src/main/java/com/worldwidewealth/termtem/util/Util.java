@@ -122,9 +122,24 @@ public class Util {
     }
 
     public static String decode(String strEncode){
-        String jsonconvert = new StringBuilder(strEncode).reverse().toString();
+        String strDecode;
+        String jsonconvert;
+
+        jsonconvert = new StringBuilder(strEncode).reverse().toString();
         byte[] decode = Base64.decode(jsonconvert, Base64.DEFAULT);
-        return new String(decode);
+        strDecode = new String(decode);
+        return strDecode;
+
+/*
+        do {
+            try {
+            } catch (OutOfMemoryError e){
+                jsonconvert = null;
+                strDecode = null;
+            }
+            System.gc();
+        } while (strDecode == null || jsonconvert == null);*/
+
     }
 
 

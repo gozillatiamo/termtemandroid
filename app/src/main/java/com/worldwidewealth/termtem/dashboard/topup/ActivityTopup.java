@@ -102,11 +102,13 @@ public class ActivityTopup extends MyAppcompatActivity {
 
             RequestModel requestModel = Global.getInstance().getLastSubmit();
             SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+            String errorMsg = getIntent().getExtras().containsKey(FragmentTopupSlip.ERRORMSG) ?
+                    getIntent().getExtras().getString(FragmentTopupSlip.ERRORMSG) : null;
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW,
                             MyApplication.getTypeToup(requestModel.getAction()),
                             submitTopupRequestModel.getTRANID(),
-                            Global.getInstance().getSubmitIsFav())).commit();
+                            Global.getInstance().getSubmitIsFav(), errorMsg)).commit();
             }
 
 //            Util.getPreviousEslip(this, mTopup, R.id.container_topup);

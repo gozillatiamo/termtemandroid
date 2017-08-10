@@ -271,7 +271,7 @@
                         android:id="@+id/title_mgm_caption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/phone_number_agent_adviser" />
+                        android:text="@string/title_mgm" />
 
                     <EditText
                         android:id="@+id/edit_tel_agent"
@@ -279,8 +279,10 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:imeOptions="actionDone"
-                        android:inputType="phone"
-                        android:maxLength="12"
+                        android:inputType="number"
+                        android:hint="@string/hint_mgm"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:maxLength="10"
                         android:padding="@dimen/activity_space" />
 
                     <View

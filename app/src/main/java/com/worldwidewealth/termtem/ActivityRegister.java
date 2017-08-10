@@ -569,16 +569,22 @@ public class ActivityRegister extends MyAppcompatActivity implements View.OnTouc
                             check = CheckSyntaxData.isEmailValid(s.toString());
                         break;
                     case AGENT_TEL:
+/*
                         if (!mFormatting){
                             mFormatting = true;
                             PhoneNumberUtils.formatNumber(s, PhoneNumberUtils.FORMAT_NANP);
                             mFormatting = false;
                         }
+*/
 
+                        check = true;
+
+/*
                         if (s.toString().equals(""))
                             check = true;
                         else
                             check = CheckSyntaxData.isPhoneValid(s.toString().replaceAll("-", ""));
+*/
 
                         break;
                     default:

@@ -107,6 +107,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mBarcode;
     private LoadBillServiceResponse mBillService;
     private TopupPreviewResponseModel mPreviewModel;
+    private static Context mContext;
 
     private double mFavAmt = 0;
     private boolean mIsFAV = false;
@@ -214,6 +215,7 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getContext();
         if (getArguments() != null){
             mTopup = getArguments().getString(FragmentTopup.keyTopup);
             switch (mTopup){
@@ -652,7 +654,7 @@ public class FragmentTopupPackage extends  Fragment{
 
     private void serviceTopup(){
         new DialogCounterAlert.DialogProgress(FragmentTopupPackage.this.getContext()).show();
-        Call<ResponseBody> call = getServiceSubmit(new RequestModel(mActionGetOTP,
+        Call<ResponseBody> call = MyApplication.getServiceSubmit(new RequestModel(mActionGetOTP,
                 new GetOTPRequestModel()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -692,7 +694,7 @@ public class FragmentTopupPackage extends  Fragment{
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         Global.getInstance().setSubmitStatus(null);
 
-        callSubmit = getServiceSubmit(requestModel);
+        callSubmit = MyApplication.getServiceSubmit(requestModel);
 
                 APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
@@ -707,11 +709,11 @@ public class FragmentTopupPackage extends  Fragment{
 
                         stopTimer();
 
-                        Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                        Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
 
                         if (responseValues instanceof String){
                             String msg = (String)responseValues;
-                            if (msg.equals(APIServices.MSG_WAIT)) return;
+                            if (msg.contains(APIServices.MSG_WAIT)) return;
                         }
 
                         String title = MyApplication.getTitleTypeToup(mActionSumitTopup);
@@ -731,7 +733,6 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (responseValues == null) {
                             mBottomAction.setEnable(true);
-                            MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
                             Global.getInstance().setLastSubmit(null, false);
 
                             return;
@@ -739,12 +740,21 @@ public class FragmentTopupPackage extends  Fragment{
 
                         if (responseValues instanceof ResponseModel) {
 
-                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
+                            MyApplication.uploadSuccess(MyApplication.NOTITOPUP, ((ResponseModel)responseValues).getAppdisplay());
 
                             if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
                                 try {
-                                    getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+                                    boolean hasError = EncryptionData.showErrorMSG(getActivity(), (ResponseModel) responseValues, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            newInstanceSlip();
+                                        }
+                                    });
+
+                                    if (!hasError){
+                                        newInstanceSlip();
+                                    }
+
                                 } catch (IllegalStateException e){
                                     e.printStackTrace();
                                 }
@@ -774,7 +784,7 @@ public class FragmentTopupPackage extends  Fragment{
                         }
 */
 
-                        MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
+                        MyApplication.uploadFail(MyApplication.NOTITOPUP, MyApplication.getContext().getString(R.string.network_disconnect));
 
                         if (MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup) {
                             new ErrorNetworkThrowable(t).networkError(FragmentTopupPackage.this.getContext(),
@@ -789,6 +799,12 @@ public class FragmentTopupPackage extends  Fragment{
 
                     }
                 });
+    }
+
+    private void newInstanceSlip(){
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_topup, FragmentTopupSlip.newInstance(FragmentTopupSlip.PREVIEW, mTopup, transid, mIsFAV)).commit();
+
     }
 
     private RequestModel getRequestSubmit(){
@@ -875,17 +891,6 @@ public class FragmentTopupPackage extends  Fragment{
                 alertDialog.cancel();
             }
         });
-    }
-
-
-    private Call<ResponseBody> getServiceSubmit(RequestModel requestModel){
-
-        switch (mTopup){
-            case BillPaymentActivity.BILLPAY:
-                return services.billService(requestModel);
-            default:
-                return services.topupService(requestModel);
-        }
     }
 
     private void startTimeoutSubmit(){

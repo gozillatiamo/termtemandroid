@@ -47,18 +47,6 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
     <Button
-        android:id="@+id/btn_edit_agent_mgm"
-        android:text="@string/hint_mgm"
-        android:visibility="visible"
-        android:background="@drawable/btn_chat_bot"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
-
-    <Button
         android:id="@+id/btn_edit_id_card_image"
         android:text="@string/chat_id_card_image"
         android:visibility="visible"
@@ -80,6 +68,19 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+    <Button
+        android:id="@+id/btn_edit_agent_mgm"
+        android:text="@string/title_mgm"
+        android:visibility="visible"
+        android:background="@drawable/btn_chat_bot"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
 
 
 </LinearLayout>

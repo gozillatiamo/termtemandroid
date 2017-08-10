@@ -38,6 +38,7 @@ import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.chat.PhotoViewActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -52,6 +53,7 @@ import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -95,17 +97,12 @@ public class MyApplication extends Application implements Application.ActivityLi
                 submitModel = (SubmitTopupRequestModel)Global.getInstance().getLastSubmit().getData();
             } else return;
 
-            if (FragmentTopupPackage.callSubmit != null
-                    && FragmentTopupPackage.callSubmit.isExecuted()
-                    && !FragmentTopupPackage.callSubmit.isCanceled()){
-                FragmentTopupPackage.callSubmit.cancel();
-            }
 
             try {
                 if (!(intent.getExtras().containsKey("topup"))) return;
 
                 if (intent.getExtras().getBoolean("topup")) {
-                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
+                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, null);
 
                 } else {
 
@@ -202,28 +199,34 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         LeavingOrEntering.activityResumed(activity);
 
-        startSlip();
+        startSlip(null);
 
 
 
     }
 
-    public static void startSlip(){
+    public static boolean startSlip(String msg){
 
-        if (!canUseLeaving(currentActivity) || currentActivity instanceof ActivityShowNotify) return;
+        if (!canUseLeaving(currentActivity) || currentActivity instanceof ActivityShowNotify) return false;
 
         if (Global.getInstance().hasSubmit() &&
                 !(currentActivity instanceof ActivityTopup)
                 && !(currentActivity instanceof ActivityAddCreditAgent)){
 
             if (Global.getInstance().getSubmitStatus()) {
+                NotificationManager mNM = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNM.cancel(MyApplication.NOTITOPUP);
+
                 Intent intent = new Intent(currentActivity, ActivityTopup.class);
                 intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
+                intent.putExtra(FragmentTopupSlip.ERRORMSG, msg);
                 currentActivity.startActivity(intent);
+                return true;
             }
 
         }
 
+        return false;
     }
 
     @Override
@@ -415,52 +418,113 @@ public class MyApplication extends Application implements Application.ActivityLi
         isUpload = true;
     }
 
-    public static void uploadSuccess(int id){
+    public static void uploadSuccess(int id, String msg){
 
         isUpload = false;
 
         if (mBuilder == null || (mBuilder == null && (id != NOTIUPLOAD))) return;
 
-        String title = null, message = null;
-        int smallicon = android.R.drawable.stat_sys_upload_done;
+        String title, message;
+        int smallicon;
 
         switch (id){
             case NOTIUPLOAD:
                 title = getContext().getString(R.string.title_upload_success);
                 message = getContext().getString(R.string.msg_upload_success);
                 smallicon = android.R.drawable.stat_sys_upload_done;
+
+                mBuilder.setContentTitle(title);
+                mBuilder.setContentText(message);
+                mBuilder.setSmallIcon(smallicon);
+                mBuilder.setProgress(0, 0, false);
+                mBuilder.setOngoing(false);
+                mBuilder.setAutoCancel(true);
+                mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
+                mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+
+                mNotifyManager.notify(id, mBuilder.build());
+                mBuilder = null;
+
                 break;
             case NOTITOPUP:
                 if (Global.getInstance().getLastSubmit() == null) return;
-                RequestModel requestModel = Global.getInstance().getLastSubmit();
-                SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
-                title = getTitleTypeToup(requestModel.getAction()) + " " +
-                        submitTopupRequestModel.getCARRIER() + " " + submitTopupRequestModel.getAMT() +
-                        " " + getContext().getString(R.string.currency);
-                message = getContext().getString(R.string.phone_number) + " " +
-                        submitTopupRequestModel.getPHONENO() + " " + getContext().getString(R.string.success);
-                smallicon = R.drawable.ic_check_circle_white;
+                final RequestModel requestModel = Global.getInstance().getLastSubmit();
+                if (msg == null){
+                    Call<ResponseBody> call = getServiceSubmit(requestModel);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Object objectValues = EncryptionData.getModel(getContext(), call, response.body(), this);
+                            String newMsg = null;
+                            if (objectValues instanceof ResponseModel){
+                                newMsg = ((ResponseModel)objectValues).getAppdisplay();
+                            }
 
-                Intent intent = new Intent(mContext, ActivityTopup.class);
-                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
-                intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
-                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(pendingIntent);
-                startSlip();
+                            setSuccessForTopup(requestModel, newMsg);
+                        }
 
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            setSuccessForTopup(requestModel, null);
+                        }
+                    });
+                } else
+                    setSuccessForTopup(requestModel, msg);
                 break;
         }
 
-        mBuilder.setContentTitle(title);
-        mBuilder.setContentText(message);
-        mBuilder.setSmallIcon(smallicon);
-        mBuilder.setProgress(0, 0, false);
-        mBuilder.setOngoing(false);
-        mBuilder.setAutoCancel(true);
-        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
-        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
-        mNotifyManager.notify(id, mBuilder.build());
+    }
+
+    private static void setSuccessForTopup(RequestModel requestModel, String msg){
+        String title, message = null;
+        int smallicon;
+
+        if (!startSlip(msg)) {
+            SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
+
+            title = getTitleTypeToup(requestModel.getAction()) + " " +
+                    submitTopupRequestModel.getCARRIER();
+            smallicon = R.drawable.ic_check_circle_white;
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            ArrayList<String> events = new ArrayList<>();
+            events.add(getContext().getString(R.string.success));
+
+            if (msg != null && !msg.isEmpty()) {
+                for (String str : msg.split(" ", 2)) {
+                    events.add(str);
+                }
+            }
+            events.add(getContext().getString(R.string.phone_number) + " " +
+                    submitTopupRequestModel.getPHONENO());
+            events.add(submitTopupRequestModel.getAMT() +
+                    " " + getContext().getString(R.string.currency));
+
+            for (int i = 0; i < events.size(); i++) {
+                inboxStyle.addLine(events.get(i));
+            }
+
+            Intent intent = new Intent(mContext, ActivityTopup.class);
+            intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
+            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            if (mBuilder == null) return;
+            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setContentTitle(title);
+            mBuilder.setContentText(message);
+            mBuilder.setStyle(inboxStyle);
+            mBuilder.setSmallIcon(smallicon);
+            mBuilder.setProgress(0, 0, false);
+            mBuilder.setOngoing(false);
+            mBuilder.setAutoCancel(true);
+            mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
+            mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+
+            mNotifyManager.notify(NOTITOPUP, mBuilder.build());
+        }
+
         mBuilder = null;
 
 
@@ -473,7 +537,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         String title = null, message = null;
         int smallicon = android.R.drawable.stat_notify_error;
 
-
+        NotificationCompat.InboxStyle inboxStyle = null;
         switch (id){
             case NOTIUPLOAD:
                 title = getContext().getString(R.string.title_upload_fail);
@@ -483,16 +547,32 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                 break;
             case NOTITOPUP:
+                msg = (msg == null || msg.isEmpty()) ?  MyApplication.getContext().getString(R.string.alert_topup_fail) : msg;
                 RequestModel requestModel = Global.getInstance().getLastSubmit();
                 SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
-                title = getTitleTypeToup(requestModel.getAction()) + " " +
-                        submitTopupRequestModel.getCARRIER() + " " + submitTopupRequestModel.getAMT() + " "
-                        + MyApplication.getContext().getString(R.string.currency);
-                message = getContext().getString(R.string.phone_number) + " " + submitTopupRequestModel.getPHONENO() + " "
-                        + MyApplication.getContext().getString(R.string.msg_upload_fail);
+                title = getTitleTypeToup(requestModel.getAction()) + submitTopupRequestModel.getCARRIER();
+
+                String[] splipMsg = msg.split(" ", 2);
+                ArrayList<String> events = new ArrayList<>();
+
+                for (String str: splipMsg){
+                    events.add(str);
+                }
+
+                events.add(getContext().getString(R.string.phone_number) + " " + submitTopupRequestModel.getPHONENO());
+                events.add(submitTopupRequestModel.getCARRIER() + " " + submitTopupRequestModel.getAMT() + " "
+                        + MyApplication.getContext().getString(R.string.currency));
+
+                inboxStyle = new NotificationCompat.InboxStyle();
+
+                for (int i = 0; i < events.size(); i++){
+                    inboxStyle.addLine(events.get(i));
+                }
+
+
                 smallicon = android.R.drawable.stat_sys_warning;
 
-                if (requestModel != null){
+                if (Global.getInstance().getStrSubmitStatus() == null){
                     mBuilder.setOngoing(true);
                     Intent retryIntent = new Intent(mContext, retryButtonListener.class);
                     PendingIntent pendingRetryIntent = PendingIntent.getBroadcast(mContext, 0,
@@ -501,6 +581,7 @@ public class MyApplication extends Application implements Application.ActivityLi
                 } else {
                     mBuilder.setOngoing(false);
                     isUpload = false;
+                    Global.getInstance().setLastSubmit(null, false);
 /*
                     if (id == NOTITOPUP) {
                         Global.getInstance().setLastSubmit(null, false);
@@ -514,6 +595,9 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(message);
+        if (inboxStyle != null)
+            mBuilder.setStyle(inboxStyle);
+
         mBuilder.setSmallIcon(smallicon);
         mBuilder.setProgress(0, 0, false);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
@@ -533,6 +617,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         mNotifyManager.notify(id, mBuilder.build());
     }
+
     public static boolean isUpload(Context context, int message){
         if (isUpload) {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -546,14 +631,23 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     public static String getTypeToup(String action){
         switch (action){
+            case APIServices.ACTIONGETOTP:
             case APIServices.ACTIONSUBMITTOPUP:
                 return FragmentTopup.MOBILE;
+
+            case APIServices.ACTION_GET_OTP_EPIN:
             case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 return FragmentTopup.PIN;
+
+            case APIServices.ACTION_GETOTP_AGENT_CASHIN:
             case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                 return FragmentAddCreditChoice.AGENT_CASHIN;
+
+            case APIServices.ACTION_GETOTP_VAS:
             case APIServices.ACTION_SUBMIT_VAS:
                 return FragmentTopup.VAS;
+
+            case APIServices.ACTION_GETOTP_BILL:
             case APIServices.ACTION_SUBMIT_BILL:
                 return BillPaymentActivity.BILLPAY;
 
@@ -579,6 +673,17 @@ public class MyApplication extends Application implements Application.ActivityLi
 
         return null;
 
+    }
+
+    public static Call<ResponseBody> getServiceSubmit(RequestModel requestModel){
+        APIServices services = APIServices.retrofit.create(APIServices.class);
+
+        switch (getTypeToup(requestModel.getAction())){
+            case BillPaymentActivity.BILLPAY:
+                return services.billService(requestModel);
+            default:
+                return services.topupService(requestModel);
+        }
     }
 
 
@@ -654,14 +759,14 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                                 if (responseValues == null) {
                                     Global.getInstance().setLastSubmit(null, false);
-                                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
+//                                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
 
                                     return;
                                 }
 
                                 if (responseValues instanceof ResponseModel) {
 
-                                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP);
+                                    MyApplication.uploadSuccess(MyApplication.NOTITOPUP, ((ResponseModel)responseValues).getAppdisplay());
                                 }
                             }
                         }
@@ -671,7 +776,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                             Log.e(TAG, "Exception submit topup: " + t.getMessage());
 
                             if (finalSubmitModel != null) {
-
                                 MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
                             }
 

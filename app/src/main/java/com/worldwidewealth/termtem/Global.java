@@ -380,6 +380,10 @@ public class Global {
         return true;
     }
 
+    public String getStrSubmitStatus(){
+        String status = mPreferences.getString(SUBMIT_STATUS, null);
+        return status;
+    }
 
     public boolean getSubmitIsFav(){
         return mPreferences.getBoolean(SUBMIT_IS_FAV, false);

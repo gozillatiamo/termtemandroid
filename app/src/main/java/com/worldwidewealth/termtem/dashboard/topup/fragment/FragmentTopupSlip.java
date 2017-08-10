@@ -87,6 +87,7 @@ public class FragmentTopupSlip extends Fragment {
     private String mFileName;
     private String mPhoneNo;
     private String mCarrier;
+    private String mErrorMsg;
     private int mColorType;
     private Double mAmount;
     private String mTypeToup;
@@ -106,6 +107,7 @@ public class FragmentTopupSlip extends Fragment {
     public static final String TRANID = "tranid";
     public static final String TYPEPAGE = "typepage";
     public static final String TYPETOPUP = "typetopup";
+    public static final String ERRORMSG = "errormsg";
 
 
 
@@ -122,15 +124,21 @@ public class FragmentTopupSlip extends Fragment {
 */
 
     public static Fragment newInstance(int type, String typetopup, String tranid, boolean isFav){
+        return newInstance(type, typetopup, tranid, isFav, null);
+    }
+
+    public static Fragment newInstance(int type, String typetopup, String tranid, boolean isFav, String msgError){
         Bundle bundle = new Bundle();
         bundle.putInt(TYPEPAGE, type);
         bundle.putString(TYPETOPUP, typetopup);
         bundle.putString(TRANID, tranid);
         bundle.putBoolean(FAVORITE, isFav);
+        bundle.putString(ERRORMSG, msgError);
         FragmentTopupSlip fragment = new FragmentTopupSlip();
         fragment.setArguments(bundle);
         return fragment;
     }
+
 
 
 
@@ -168,6 +176,7 @@ public class FragmentTopupSlip extends Fragment {
         mTypeToup = getArguments().getString(TYPETOPUP);
         mTransID = getArguments().getString(TRANID);
         mIsFav = getArguments().getBoolean(FAVORITE);
+        mErrorMsg = getArguments().getString(ERRORMSG);
 
 
     }
@@ -185,6 +194,13 @@ public class FragmentTopupSlip extends Fragment {
             mHolder = new ViewHolder(rootView);
             rootView.setTag(mHolder);
         } else mHolder = (ViewHolder) rootView.getTag();
+
+        if (mErrorMsg != null && !mErrorMsg.isEmpty()){
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                    .setMessage(mErrorMsg)
+                    .setCancelable(false)
+                    .setPositiveButton(MyApplication.getContext().getString(R.string.confirm), null).show();
+        }
 
         getBalance();
         setupDataType();

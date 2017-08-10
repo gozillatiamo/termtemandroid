@@ -303,7 +303,7 @@ public class FragmentReportMT extends Fragment {
                                         if (responseValues instanceof ResponseModel) {
                                             ResponseModel responseModel = (ResponseModel) responseValues;
                                             if (responseModel.getStatus() == APIServices.SUCCESS)
-                                                MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD);
+                                                MyApplication.uploadSuccess(MyApplication.NOTIUPLOAD, null);
                                             else
                                                 setUploadFail(responseModel.getMsg());
                                         } else {
