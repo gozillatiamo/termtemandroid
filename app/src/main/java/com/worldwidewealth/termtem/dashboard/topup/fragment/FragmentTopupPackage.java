@@ -8,13 +8,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberUtils;
@@ -22,6 +27,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -41,6 +47,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.perf.metrics.AddTrace;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
@@ -137,16 +144,13 @@ public class FragmentTopupPackage extends  Fragment{
     private static final String KEY_BARCODE = "barcode";
     private static final String KEY_BILL_SERVICE = "billcode";
 
+    private TextWatcher mTextWatcher;
     private static final int postDelay = 1000;
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             if (intent.getExtras() == null) return;
-
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
 
             if (!(intent.getExtras().containsKey("topup"))) return;
 
@@ -178,11 +182,8 @@ public class FragmentTopupPackage extends  Fragment{
                         e.printStackTrace();
                     }
 
-//                        getActivity().finish();
                 }
 
-//                }
-//            }, 3000);
         }
     };
 
@@ -283,7 +284,8 @@ public class FragmentTopupPackage extends  Fragment{
     @Override
     public void onStop() {
         super.onStop();
-
+        if (mPreviewModel == null)
+            getActivity().finish();
     }
 
     @Override
@@ -442,8 +444,13 @@ public class FragmentTopupPackage extends  Fragment{
             case BillPaymentActivity.BILLPAY:
                 mHolder.mTextHint.setText(R.string.dashboard_bill_pay);
                 mBottomAction.setTitleAmount(getString(R.string.epin_title_amount));
+/*
                 mHolder.mTextTitleAccount.setText(mBillService.getBILL_SERVICE_DESC());
                 mHolder.mTextTitleCarrier.setText(mBillService.getBILL_SERVICE_NAME());
+*/
+                mHolder.mTextTitleCarrier.setVisibility(View.INVISIBLE);
+                mHolder.mTextTitleAccount.setText(mBillService.getBILL_SERVICE_NAME());
+
                 Glide.with(this).load(getString(R.string.server)+mBillService.getLOGOURL())
                         .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
                         .thumbnail(0.6f)
@@ -455,12 +462,15 @@ public class FragmentTopupPackage extends  Fragment{
                 break;
         }
 
+        if (mTopup != BillPaymentActivity.BILLPAY){
+            mHolder.mEditPhone.setHint(getString(R.string.hint_phone_number));
+        }
     }
 
     private void initBtn(){
-        mBottomAction = new BottomAction(getContext(), mHolder.mIncludeBottomAction, BottomAction.NEXT, new View.OnClickListener() {
+        mBottomAction = new BottomAction(getContext(), mHolder.mIncludeBottomAction, BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onActionClick() {
                 mBottomAction.setEnable(false);
                 servicePreview();
             }
@@ -481,7 +491,7 @@ public class FragmentTopupPackage extends  Fragment{
                 Log.e(TAG, "BeforePreview: "+mBarcode);
                 call = services.billService(new RequestModel(mActionPreview,
                         new PreviewBillRequest(mBarcode, mBillService.getBILL_SERVICE_CODE(),
-                                mBillService.getBILL_SERVICE_ID())));
+                                mBillService.getBILL_SERVICE_ID(), getArguments().getString(ActivityTopup.KEY_PHONENO))));
                 break;
             default:
                 call = services.preview(new RequestModel(mActionPreview,
@@ -509,20 +519,33 @@ public class FragmentTopupPackage extends  Fragment{
                             mPreviewModel = new Gson().fromJson(((String)modelValues), TopupPreviewResponseModel.class);
 
                             if (mPreviewModel.getREF1() != null){
-                                mHolder.mEditPhone.setMaxEms(50);
-                                mHolder.mEditPhone.setText(mPreviewModel.getREF1());
+                                mHolder.mEditPhone.removeTextChangedListener(mTextWatcher);
+                                InputFilter[] fArray = new InputFilter[1];
+                                fArray[0] = new InputFilter.LengthFilter(50);
+                                mHolder.mEditPhone.setFilters(fArray);
+                                String textRef1 = getString(R.string.ref1_bill_title)+" "+mPreviewModel.getREF1();
+                                mHolder.mEditPhone.setText(textRef1);
+                                mHolder.mEditPhone.setGravity(Gravity.LEFT);
+                                mHolder.mEditPhone.setTextSize(TypedValue.applyDimension(
+                                        TypedValue.COMPLEX_UNIT_SP,
+                                        8,
+                                        getResources().getDisplayMetrics()));
                             }
 
-                            FragmentTopupPackage.this.getChildFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right,
+                            FragmentTransaction fragmentManager = FragmentTopupPackage.this
+                                    .getChildFragmentManager().beginTransaction();
+
+                            fragmentManager.setCustomAnimations(R.anim.slide_in_right,
                                             R.anim.slide_out_left,
                                             R.anim.slide_in_left,
                                             R.anim.slide_out_right)
                                     .replace(R.id.container_topup_package, FragmentTopupPreview
-                                            .newInstance(mTopup, mPreviewModel, mBottomAction.getPrice()))
-                                    .addToBackStack(null)
-                                    .commit();
+                                            .newInstance(mTopup, mPreviewModel, mBottomAction.getPrice()));
+                            if (mTopup != BillPaymentActivity.BILLPAY)
+                                fragmentManager.addToBackStack(null);
+
+                            fragmentManager.commit();
+
 
                             if (mPreviewModel.getNEEDDUEDATE() != null &&
                                     mPreviewModel.getNEEDDUEDATE().equals("Y")) initDueDateDialog();
@@ -609,25 +632,32 @@ public class FragmentTopupPackage extends  Fragment{
             mHolder.mBtnNext.setVisibility(View.VISIBLE);
             mHolder.mLayoutBtnTopup.setVisibility(View.GONE);
 */
-            mBottomAction.swichType(BottomAction.NEXT, new View.OnClickListener() {
+            mBottomAction.swichType(BottomAction.NEXT, new BottomAction.OnActionClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onActionClick() {
                     mBottomAction.setEnable(false);
                     servicePreview();
-
                 }
             });
             mHolder.mEditPhone.requestFocus();
+            mHolder.mEditPhone.setCursorVisible(true);
+
+            if (mHolder.mEditPhone.getTag() != null)
+                mHolder.mEditPhone.setKeyListener((KeyListener) mHolder.mEditPhone.getTag());
+
         } else {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
-            mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
+            mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_TEXT);
+            mHolder.mEditPhone.setCursorVisible(false);
+            mHolder.mEditPhone.setTag(mHolder.mEditPhone.getKeyListener());
+            mHolder.mEditPhone.setKeyListener(null);
 /*
             mHolder.mBtnNext.setVisibility(View.GONE);
             mHolder.mLayoutBtnTopup.setVisibility(View.VISIBLE);
 */
-            mBottomAction.swichType(BottomAction.SUBMIT, new View.OnClickListener() {
+            mBottomAction.swichType(BottomAction.SUBMIT, new BottomAction.OnActionClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onActionClick() {
                     mBottomAction.setEnable(false);
                     if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                         mFragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
@@ -638,8 +668,6 @@ public class FragmentTopupPackage extends  Fragment{
                     }
 
                     serviceTopup();
-
-
                 }
             });
 
@@ -647,7 +675,8 @@ public class FragmentTopupPackage extends  Fragment{
 
         if (mFavAmt > 0) {
             mHolder.mEditPhone.setBackgroundResource(android.R.color.transparent);
-            mHolder.mEditPhone.setInputType(InputType.TYPE_NULL);
+            mHolder.mEditPhone.setInputType(InputType.TYPE_CLASS_TEXT);
+            mHolder.mEditPhone.setCursorVisible(false);
 
         }
     }
@@ -691,7 +720,15 @@ public class FragmentTopupPackage extends  Fragment{
 
         startTimeoutSubmit();
 
+        SubmitTopupRequestModel submitTopupRequestModel  = (SubmitTopupRequestModel) requestModel.getData();
+        if (submitTopupRequestModel.getAMT().equals("0")){
+            ((SubmitTopupRequestModel)requestModel.getData()).setAMT(String.valueOf(mPreviewModel.getNET()));
+        }
+
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
+        if (mBillService != null){
+            Global.getInstance().setLastBillService(mBillService);
+        }
         Global.getInstance().setSubmitStatus(null);
 
         callSubmit = MyApplication.getServiceSubmit(requestModel);
@@ -840,6 +877,7 @@ public class FragmentTopupPackage extends  Fragment{
                 submitTopupRequestModel = SubmitTopupRequestModel.SubmitBillRequestModel(mPreviewModel.getTNID(),
                         mBillService.getBILL_SERVICE_ID(), mBillService.getBILL_SERVICE_CODE(),
                         useBarcode, mDueDate, mPhone, transid);
+
                 break;
         }
 
@@ -891,6 +929,8 @@ public class FragmentTopupPackage extends  Fragment{
                 alertDialog.cancel();
             }
         });
+        dialogView.findViewById(R.id.text_title).setVisibility(View.VISIBLE);
+        dialogView.findViewById(R.id.layout_duedate).setVisibility(View.VISIBLE);
     }
 
     private void startTimeoutSubmit(){
@@ -1145,7 +1185,7 @@ public class FragmentTopupPackage extends  Fragment{
             mIncludeBottomAction = (View) itemview.findViewById(R.id.include_bottom_action);
             mRecyclerVAS = (RecyclerView) itemview.findViewById(R.id.recycler_vas);
 //            mEditPhone.setOnFocusChangeListener(Util.onFocusEditText());
-            mEditPhone.addTextChangedListener(new TextWatcher() {
+            mTextWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -1162,7 +1202,9 @@ public class FragmentTopupPackage extends  Fragment{
                         mFormatting = false;
                     }
                 }
-            });
+            };
+
+            mEditPhone.addTextChangedListener(mTextWatcher);
 
         }
     }

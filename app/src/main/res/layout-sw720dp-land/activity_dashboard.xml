@@ -150,8 +150,8 @@
                                         android:layout_weight="1"
                                         app:mbv_icon="@drawable/ic_bill"
                                         app:mbv_title="@string/dashboard_bill_pay"
-                                        app:mbv_type="billpay"
-                                        app:mbv_visibility="show"/>
+                                        app:mbv_type="bill"
+                                        app:mbv_visibility="hide"/>
 
 
                                 </LinearLayout>

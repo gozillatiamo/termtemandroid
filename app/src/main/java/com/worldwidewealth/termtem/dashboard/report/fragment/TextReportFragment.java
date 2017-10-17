@@ -163,7 +163,7 @@ public class TextReportFragment extends Fragment {
             case ActivityReport.CASHIN_REPORT:
                 return APIServices.ACTION_ESLIP_AGENT_CASHIN;
             case ActivityReport.BILL_REPORT:
-                return null;
+                return APIServices.ACTION_ESLIP_BILL;
         }
 
         return null;
@@ -179,7 +179,24 @@ public class TextReportFragment extends Fragment {
 //        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
 
         Call<ResponseBody> call = null;
+        String currentType = ((ActivityReport)getActivity()).getmCurrentType();
 
+        switch (currentType){
+            case ActivityReport.CASHIN_REPORT:
+                call = services.eslip(new RequestModel(getActionSlip(),
+                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(),
+                                mAdapter.getItem(position).getPHONENO())));
+                break;
+            case ActivityReport.BILL_REPORT:
+                call = services.billService(new RequestModel(getActionSlip(),
+                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+                break;
+            default:
+                call = services.eslip(new RequestModel(getActionSlip(),
+                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+                break;
+        }
+/*
         if (((ActivityReport)getActivity()).getmCurrentType().equals(ActivityReport.CASHIN_REPORT)) {
             call = services.eslip(new RequestModel(getActionSlip(),
                     new EslipRequestModel(mAdapter.getItem(position).getTransactionId(),
@@ -188,6 +205,7 @@ public class TextReportFragment extends Fragment {
             call = services.eslip(new RequestModel(getActionSlip(),
                     new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
         }
+*/
 
 
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {

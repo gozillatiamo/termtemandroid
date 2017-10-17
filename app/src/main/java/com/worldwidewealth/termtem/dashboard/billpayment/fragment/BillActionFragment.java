@@ -4,6 +4,8 @@ package com.worldwidewealth.termtem.dashboard.billpayment.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -11,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +42,9 @@ import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.billpayment.ScanBillActivity;
+import com.worldwidewealth.termtem.dashboard.favorite.FavoritesActivity;
+import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
+import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.LoadBillRefRequest;
 import com.worldwidewealth.termtem.model.LoadBillRefResponse;
@@ -45,11 +52,15 @@ import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.util.CheckSyntaxData;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.Util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
@@ -126,6 +137,18 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                     LoadBillServiceResponse response = data.getExtras().getParcelable(MainBillPayFragment.KEY_BILL_DATA);
                     String result = data.getStringExtra(ScanBillActivity.KEY_SCAN_RESULT);
                     Log.e(TAG, "result OnActivityResult: "+result);
+
+                    Intent intent = new Intent(getContext(), ActivityTopup.class);
+                    intent.putExtra(FragmentTopup.keyTopup, BillPaymentActivity.BILLPAY);
+                    intent.putExtra(ActivityTopup.KEY_PHONENO, mPhoneNo);
+                    intent.putExtra(ActivityTopup.KEY_BARCODE, result);
+                    intent.putExtra(ActivityTopup.KEY_BILLSERVICE, response);
+
+                    startActivity(intent);
+                    getActivity().finish();
+
+
+/*
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .addToBackStack(null)
@@ -136,6 +159,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                                     response,
                                     mPhoneNo))
                             .commit();
+*/
 
                     break;
             }
@@ -196,17 +220,21 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         mPhoneNo = mEditPhoneNo.getText().toString().replaceAll("-", "");
-        if (mPhoneNo.length() < 10){
+        if (!CheckSyntaxData.isPhoneValid(mPhoneNo)){
             Toast.makeText(getContext(), R.string.hint_phone_number, Toast.LENGTH_SHORT).show();
             return;
         }
         switch (view.getId()){
             case R.id.btn_scan:
 //                MyApplication.LeavingOrEntering.currentActivity = null;
-                Intent intent = new Intent(getContext(), ScanBillActivity.class);
-                intent.putExtra(MainBillPayFragment.KEY_BILL_DATA, mResponse);
-                startActivityForResult(intent,
-                        BillPaymentActivity.SCAN);
+                if (mResponse.getBILL_SERVICE_CODE().equals("3000000000003581")){
+                    initExampleDialog();
+                } else {
+                    Intent intent = new Intent(getContext(), ScanBillActivity.class);
+                    intent.putExtra(MainBillPayFragment.KEY_BILL_DATA, mResponse);
+                    startActivityForResult(intent,
+                            BillPaymentActivity.SCAN);
+                }
 
                 break;
             case R.id.btn_key_in:
@@ -220,6 +248,30 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                 break;
         }
     }
+
+    private void initExampleDialog(){
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_duedate, null, false);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView)
+                .setCancelable(false).show();
+
+        ImageView image_example = dialogView.findViewById(R.id.image_example);
+        image_example.setImageResource(R.drawable.guide_bill);
+        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+                Intent intent = new Intent(getContext(), ScanBillActivity.class);
+                intent.putExtra(MainBillPayFragment.KEY_BILL_DATA, mResponse);
+                startActivityForResult(intent,
+                        BillPaymentActivity.SCAN);
+
+            }
+        });
+    }
+
 
     private void setupRecycler(){
         mBtnNext.setAlpha(0f);

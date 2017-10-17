@@ -91,7 +91,6 @@
     <string name="total_withdrawal_fees">Total Withdrawal Fees :</string>
     <string name="payment">ชำระเงิน</string>
     <string name="recipient_sets">Recipient sets :</string>
-    <string name="fee">FEE :</string>
     <string name="commission">Commission (บาท) :</string>
     <string name="total">ยอดที่ชำระ (บาท) :</string>
     <string name="all_total">รวมยอดเติม (บาท) :</string>
@@ -102,7 +101,7 @@
     <string name="currency">บาท</string>
     <string name="currency_hint">" "(บาท) :</string>
     <string name="date_transfer">วันที่โอน :</string>
-    <string name="time">เวลา :</string>
+    <string name="time">เวลาที่โอน :</string>
     <string name="evidance">หลักฐาน :</string>
     <string name="bank_start">ธนาคารต้นทาง :</string>
     <string name="bank_end">ธนาคารปลายทาง :</string>
@@ -152,6 +151,9 @@
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
     <string name="amount">ยอดเติม (บาท) :</string>
+    <string name="amount_bill">ยอดขำระ (บาท) :</string>
+    <string name="ref1_bill_title">ข้อมูลชำระ :</string>
+    <string name="fee">ค่าบริการ (บาท) :</string>
     <string name="debit">หักบัญชี (บาท) :</string>
     <string name="all_debit">รวมยอดหักบัญชี (บาท) :</string>
     <string name="paycode">Paycode :</string>
@@ -195,8 +197,8 @@
     <string name="title_mpay_bank">Mpay ช่องทางธนาคาร</string>
     <string name="please_add_image">กรุณาเพิ่มรูป</string>
     <string name="please_enter_agent_phone">กรุณาใส่หมายเลขโทรศัพท์มือถือ Agent</string>
-    <string name="hint_mgm">รหัสเพื่อน/รหัสอ้างอิง</string>
-    <string name="title_mgm">รหัสเพื่อนแนะนำเพื่อน/รหัสอ้างอิง (ถ้ามี)</string>
+    <string name="hint_mgm">หมายเลขผู้แนะนำ/รหัสอ้างอิง</string>
+    <string name="title_mgm">หมายเลขผู้แนะนำ/รหัสอ้างอิง (ถ้ามี)</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="choose_amount_to_agent_transfer">กรุณาเลือกจำนวนเงินที่ท่านต้องการโอน</string>
     <string name="email_syntax_error">รูปแบบอีเมล์ผิดกรุณาตรวจสอบให้ถูกต้อง</string>
@@ -262,6 +264,8 @@
     <string name="later">ไว้ภายหลัง</string>
     <string name="agent">Agent :</string>
     <string name="agent_name">ชื่อ-นามสกุล Agent :</string>
+    <string name="bill_name">จ่ายบิล :</string>
+    <string name="bill_ref_1">หมายเลขอ้างอิง 1 :</string>
     <string name="type_report">เลือกประเภทประวัติรายการ</string>
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
     <string name="report_epin">ประวัติการขายบัตรเงินสด</string>
@@ -299,7 +303,9 @@
     <string name="interested">สนใจ</string>
     <string name="ignore">ไม่สนใจ</string>
     <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
-    <string name="error_msg">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
+    <string name="title_text_price_bill">ยอดชำระ:</string>
+    <string name="error_msg_data">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
+    <string name="error_msg">เกิดข้อผิดพลาด\nกรุณาลองใหม่อีกครั้ง</string>
     <string name="scan_barcode">สแกนบาร์โค้ด</string>
     <string name="enter_phone_no">กรอกหมายเลข\nโทรศัพท์</string>
     <string name="electricity_water_bill">ค่าน้ำ-ค่าไฟ</string>
@@ -308,7 +314,7 @@
     <string name="insurance_bill">ประกันภัย</string>
     <string name="home_car_bill">ผ่อนบ้าน/รถ</string>
     <string name="shopping_bill">ค่าสินค้า</string>
-    <string name="phone_no_customer">หมายเลขโทรศัพท์ผู้ชำระ</string>
+    <string name="phone_no_customer">เบอร์โทรลูกค้า (เพื่อยืนยันการจ่ายบิล)</string>
     <string name="duedate_title">กรุณาเลือกวันครบกำหนด</string>
     <string name="example">ตัวอย่าง</string>
 
@@ -357,8 +363,9 @@
     <string name="chat_please_check">ช่วยตรวจสอบความถูกต้อง ข้อมูลการสมัคร ด้วยครับ</string>
     <string name="chat_id_card_is_invalid">ใส่เลขบัตรประชาชนไม่ถูกต้องนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_enter_id">ใส่เลขบัตรประชาชนไม่ครบ 13 หลักนะครับ ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
-    <string name="chat_enter_mgm">กรุณาใส่รหัสเพื่อนแนะนำเพื่อน/รหัสอ้างอิง (ถ้ามี)ด้วยครับ</string>
-    <string name="chat_please_enter_mgm">ใส่รหัสเพื่อนแนะนำเพื่อน/รหัสอ้างอิง (ถ้ามี) ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
+    <string name="chat_enter_mgm">กรุณาใส่หมายเลขผู้แนะนำ/รหัสอ้างอิง (ถ้ามี)ด้วยครับ</string>
+    <string name="chat_edit_cancel">ยกเลิกการแก้ไข</string>
+    <string name="chat_please_enter_mgm">ใส่หมายเลขผู้แนะนำ/รหัสอ้างอิง (ถ้ามี) ช่วยตรวจสอบข้อมูลอีกครั้งด้วยนะครับ</string>
     <string name="chat_please_select_image">เติมเต็มขอรูปบัตรประจำตัวประชาชนด้วยครับ</string>
     <string name="chat_id_card_image">ภาพบัตรประจำตัวประชาชน</string>
     <string name="chat_accept_link">โปรดแตะข้อความด้านล่างเพื่อดูข้อตกลงและเงื่อนไขการเข้าใช้บริการเติมเต็ม</string>
@@ -611,7 +618,7 @@
         <item>231a7ba6-205f-4c89-9923-87a68b025dbf</item>
         <item>359525071446317</item>
         <item>ce55b6ad-a67d-426b-916f-ba07febbc7e3</item>
-        <item>357406060061213</item>
+        <!--<item>357406060061213</item>-->
     </string-array>
 
 

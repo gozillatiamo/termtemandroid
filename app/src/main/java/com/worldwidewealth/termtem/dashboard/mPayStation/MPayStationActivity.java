@@ -139,9 +139,9 @@ public class MPayStationActivity extends MyAppcompatActivity {
             }
         });
 */
-        mBottomAction = new BottomAction(this, mIncludeBottomAction, BottomAction.NEXT, new View.OnClickListener() {
+        mBottomAction = new BottomAction(this, mIncludeBottomAction, BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onActionClick() {
                 String AMT = (mBottomAction.getPrice());
                 if (Double.parseDouble(AMT) < 1 || Double.parseDouble(AMT) > 49000){
                     Toast.makeText(MPayStationActivity.this, getString(R.string.alert_amount_mpay_over), Toast.LENGTH_LONG).show();

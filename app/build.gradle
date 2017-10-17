@@ -43,7 +43,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 //        consumerProguardFiles 'proguard-android.txt', 'proguard-rules.pro', 'proguard-gvr.txt'
-        versionCode 16
+        versionCode 17
         versionName "1.5."
 //        vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
@@ -139,6 +139,8 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+
 /*
     compile("com.google.android.gms:play-services:$rootProject.ext.playServicesVersion"){
         exclude group: 'com.android.support'
@@ -211,7 +213,6 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
 }
 

@@ -88,7 +88,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
         OTHER(9),
         AR(10),
         VAS(11),
-        BILLPAY(12);
+        BILL(12);
 
         private int type;
         TYPE(int i) {
@@ -493,7 +493,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, FragmentTopup.VAS);
                     break;
-                case BILLPAY:
+                case BILL:
                     intent = new Intent(getContext(), BillPaymentActivity.class);
                     break;
 
@@ -505,7 +505,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                 case AGENTCASHIN:
                 case SCAN:
                 case VAS:
-                case BILLPAY:
+                case BILL:
                     if (Global.getInstance().hasSubmit()) {
                         showDialogHasProcess(getContext());
                         return;

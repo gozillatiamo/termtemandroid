@@ -11,6 +11,9 @@ import java.util.List;
  */
 
 public class InboxResponse implements Parcelable {
+
+    // STATUS_CODE = '0000' , STATUS_DESC = 'SUCCESS'
+
     private String msgid;
     private String title;
     private String msg;

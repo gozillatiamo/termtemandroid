@@ -86,10 +86,15 @@ public class DialogNetworkError {
             builder.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    ((Activity)mContext).finish();
+
+/*
                     if (context instanceof SplashScreenWWW)
                         ((Activity)mContext).finish();
                     else
                         dialog.dismiss();
+*/
                 }
             });
         }

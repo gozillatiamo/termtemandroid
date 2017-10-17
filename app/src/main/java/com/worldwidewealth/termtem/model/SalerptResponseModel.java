@@ -14,8 +14,11 @@ public class SalerptResponseModel  implements Parcelable{
     private double AMOUNT;
     private double COMM_AMT;
     private double CHECKTOTAL;
+    private double CALFEE;
     private Date PAYMENT_DATE;
+    private String BILLNAME;
     private String BILLER;
+    private String REF1;
     private String TYPE;
     private String PHONENO;
     private double MARKUP_AMT;
@@ -23,20 +26,47 @@ public class SalerptResponseModel  implements Parcelable{
     private String AGENTCASHINID;
     private String TransactionId;
 
-
-
     protected SalerptResponseModel(Parcel in) {
         PAYCODE = in.readString();
         AMOUNT = in.readDouble();
         COMM_AMT = in.readDouble();
         CHECKTOTAL = in.readDouble();
+        CALFEE = in.readDouble();
+        BILLNAME = in.readString();
         BILLER = in.readString();
+        REF1 = in.readString();
         TYPE = in.readString();
         PHONENO = in.readString();
         MARKUP_AMT = in.readDouble();
         AGENTNAME = in.readString();
         AGENTCASHINID = in.readString();
         TransactionId = in.readString();
+        PAYMENT_DATE = new Date(in.readLong());
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(PAYCODE);
+        dest.writeDouble(AMOUNT);
+        dest.writeDouble(COMM_AMT);
+        dest.writeDouble(CHECKTOTAL);
+        dest.writeDouble(CALFEE);
+        dest.writeString(BILLNAME);
+        dest.writeString(BILLER);
+        dest.writeString(REF1);
+        dest.writeString(TYPE);
+        dest.writeString(PHONENO);
+        dest.writeDouble(MARKUP_AMT);
+        dest.writeString(AGENTNAME);
+        dest.writeString(AGENTCASHINID);
+        dest.writeString(TransactionId);
+        dest.writeLong(PAYMENT_DATE.getTime());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<SalerptResponseModel> CREATOR = new Creator<SalerptResponseModel>() {
@@ -109,23 +139,15 @@ public class SalerptResponseModel  implements Parcelable{
         return TransactionId;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public double getCALFEE() {
+        return CALFEE;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(PAYCODE);
-        dest.writeDouble(AMOUNT);
-        dest.writeDouble(COMM_AMT);
-        dest.writeDouble(CHECKTOTAL);
-        dest.writeString(BILLER);
-        dest.writeString(TYPE);
-        dest.writeString(PHONENO);
-        dest.writeDouble(MARKUP_AMT);
-        dest.writeString(AGENTNAME);
-        dest.writeString(AGENTCASHINID);
-        dest.writeString(TransactionId);
+    public String getBILLNAME() {
+        return BILLNAME;
+    }
+
+    public String getREF1() {
+        return REF1;
     }
 }

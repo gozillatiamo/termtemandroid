@@ -40,7 +40,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String TYPE = "_type";
 
     public static final String INTENT_FILTER = "INTENT_FILTER";
-
     private String urlImagePreview;
     private int mType = 0;
 

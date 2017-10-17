@@ -27,6 +27,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.RecyclerItemClickListener;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +57,7 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     private ArrayList<LoadBillCategoryResponse> mListBillCategory;
     private ArrayList<LoadBillServiceResponse> mListBillService;
     private APIServices services;
+    private TermTemLoading mLoading;
 //    private String mResult;
 
 
@@ -129,6 +131,10 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
     }
 
     private void getBillService(){
+        if (mLoading == null) mLoading = new TermTemLoading(getContext()
+                , (ViewGroup) getActivity().findViewById(R.id.container_parent));
+
+        mLoading.show();
         RequestModel requestModel = null;
         switch (mType){
             case MAIN_MENU:
@@ -208,6 +214,8 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
                 }
             }
         }));
+
+        mLoading.hide();
     }
 
 

@@ -156,9 +156,9 @@ public class FragmentAddCreditChoice extends Fragment {
     private void initBtn(){
         mBottomAction = new BottomAction(getContext(),
                 mHolder.mIncludeBottom,
-                BottomAction.NEXT, new View.OnClickListener() {
+                BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onActionClick() {
                 mBottomAction.setEnable(false);
                 if (Double.parseDouble(mBottomAction.getPrice()) == 0){
                     Toast.makeText(getContext(), R.string.please_choice_topup, Toast.LENGTH_LONG).show();
@@ -214,9 +214,9 @@ public class FragmentAddCreditChoice extends Fragment {
                     transaction.commit();
 
 
-                    mBottomAction.swichType(BottomAction.SUBMIT, new View.OnClickListener() {
+                    mBottomAction.swichType(BottomAction.SUBMIT, new BottomAction.OnActionClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onActionClick() {
                             mBottomAction.setEnable(false);
                             if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                                 FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
@@ -227,8 +227,6 @@ public class FragmentAddCreditChoice extends Fragment {
                             }
 
                             serviceTopup();
-
-
                         }
                     });
                 }

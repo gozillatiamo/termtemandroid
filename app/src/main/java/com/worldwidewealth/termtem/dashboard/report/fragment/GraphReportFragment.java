@@ -34,6 +34,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -333,6 +334,8 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
                 case APIServices.DTAC:
                     color = Color.parseColor("#009edf");
                     break;
+                default:
+                    color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
             }
 
             if (color != -1 && !colors.contains(color)){
@@ -402,6 +405,9 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
                     break;
                 case ActivityReport.CASHIN_REPORT:
                     textCenterPieChart = getString(R.string.add_credit_agent);
+                    break;
+                case ActivityReport.BILL_REPORT:
+                    textCenterPieChart = getString(R.string.dashboard_bill_pay);
                     break;
             }
         }

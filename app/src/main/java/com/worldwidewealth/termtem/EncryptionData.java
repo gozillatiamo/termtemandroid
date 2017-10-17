@@ -130,9 +130,9 @@ public class EncryptionData {
             return null;
         }
 
-        byte[] rbData = Base64.decode(strResult.getBytes(characterSet), Base64.NO_WRAP);
 
         try {
+            byte[] rbData = Base64.decode(strResult.getBytes(characterSet), Base64.NO_WRAP);
 
             KeySpec keySpec = new DESKeySpec(m_Key);
             SecretKey secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
@@ -151,7 +151,6 @@ public class EncryptionData {
     static private boolean InitKey(String strKey) {
         try
         {
-
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(strKey.getBytes(characterSet), 0, strKey.length());
             byte[] sha1hash = md.digest();
@@ -198,6 +197,7 @@ public class EncryptionData {
                 case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                 case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                 case APIServices.ACTION_SUBMIT_VAS:
+                case APIServices.ACTION_SUBMIT_BILL:
                     Global.getInstance().setSubmitStatus(responseModel.getMsg());
                     if (responseModel.getMsg().contains(APIServices.MSG_WAIT)) {
                         new Handler().postDelayed(new Runnable() {
@@ -237,6 +237,8 @@ public class EncryptionData {
                         case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
                         case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                         case APIServices.ACTION_SUBMIT_VAS:
+                        case APIServices.ACTION_SUBMIT_BILL:
+
 
 /*
                             if (responseModel.getMsg().contains(APIServices.MSG_FAIL) || responseModel.getMsg().equals("Fail")) {
@@ -291,13 +293,16 @@ public class EncryptionData {
                                 return null;
                             }
 
-                            msg = responseModel.getMsg();
+//                            msg = responseModel.getMsg();
+                            msg = MyApplication.getContext().getString(R.string.error_msg);
 
                             switch (requestModel.getAction()){
                                 case APIServices.ACTION_GET_LISTPG:
-                                    msg = MyApplication.getContext().getString(R.string.error_msg);
+                                    msg = MyApplication.getContext().getString(R.string.error_msg_data);
                                     break;
                             }
+
+                            if (msg.substring(0, 3).equals(APIServices.MSG_FAIL)) msg = "Fail";
                             new ErrorNetworkThrowable(null).networkError(context, msg
                                     , call, callback, true);
                     }

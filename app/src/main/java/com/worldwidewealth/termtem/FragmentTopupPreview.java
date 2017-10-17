@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.TopupPreviewResponseModel;
@@ -160,6 +161,9 @@ public class FragmentTopupPreview extends Fragment {
         switch (mTopup){
             case FragmentTopup.VAS:
                 mHolder.mTextTitlePrice.setText(R.string.title_text_price_vas);
+                break;
+            case BillPaymentActivity.BILLPAY:
+                mHolder.mTextTitlePrice.setText(R.string.title_text_price_bill);
                 break;
         }
         format.setMaximumFractionDigits(2);

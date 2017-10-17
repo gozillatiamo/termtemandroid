@@ -232,7 +232,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     @Override
     public void onActivityPaused(Activity activity) {
 //        DialogCounterAlert.DialogProgress.dismiss();
-        DialogNetworkError.dismiss();
+//        DialogNetworkError.dismiss();
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.text.NumberFormat;
  * Created by user on 19-Jan-17.
  */
 
-public class BottomAction {
+public class BottomAction implements View.OnClickListener{
 
     private ViewHolder mHolder;
     private  NumberFormat mFormat;
@@ -23,8 +23,14 @@ public class BottomAction {
     private int mCurrentType = 0;
     public static final int NEXT = 0;
     public static final int SUBMIT = 1;
+    private boolean isClick;
+    private OnActionClickListener mNextListener, mSubmitListener;
 
-    public BottomAction(final Context context, View view, int type , View.OnClickListener listener){
+    public interface OnActionClickListener{
+        void onActionClick();
+    }
+
+    public BottomAction(final Context context, View view, int type , OnActionClickListener listener){
         mHolder = new ViewHolder(view);
         this.mContext = context;
         mFormat = NumberFormat.getInstance();
@@ -40,26 +46,20 @@ public class BottomAction {
         mHolder.mTextTitleAmount.setText(titleAmount);
     }
 
-    public void swichType(int type, View.OnClickListener listener){
+    public void swichType(int type, OnActionClickListener listener){
         mCurrentType = type;
         switch (mCurrentType){
             case NEXT:
                 mHolder.mBtnNext.setVisibility(View.VISIBLE);
                 mHolder.mLayoutSubmit.setVisibility(View.GONE);
                 mHolder.mLayoutAmountPreview.setVisibility(View.VISIBLE);
-                mHolder.mBtnNext.setOnClickListener(listener);
+                mNextListener = listener;
                 break;
             case SUBMIT:
                 mHolder.mBtnNext.setVisibility(View.GONE);
                 mHolder.mLayoutAmountPreview.setVisibility(View.GONE);
                 mHolder.mLayoutSubmit.setVisibility(View.VISIBLE);
-                mHolder.mBtnSubmit.setOnClickListener(listener);
-                mHolder.mBtnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((Activity)mContext).finish();
-                    }
-                });
+                mSubmitListener = listener;
                 break;
         }
 
@@ -96,6 +96,28 @@ public class BottomAction {
     public void setEnable(boolean enable){
         mHolder.mBtnNext.setEnabled(enable);
         mHolder.mBtnSubmit.setEnabled(enable);
+        mHolder.mBtnCancel.setEnabled(enable);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (isClick) return;
+
+        isClick = true;
+
+        switch (view.getId()){
+            case R.id.btn_next:
+                if (mNextListener != null) mNextListener.onActionClick();
+                break;
+            case R.id.btn_submit:
+                if (mSubmitListener != null) mSubmitListener.onActionClick();
+                break;
+            case R.id.btn_cancel:
+                ((Activity)mContext).finish();
+                break;
+        }
+
+        isClick = false;
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder{
@@ -112,6 +134,10 @@ public class BottomAction {
             mLayoutSubmit = (View) itemView.findViewById(R.id.layout_btn_submit);
             mLayoutAmountPreview = (View) itemView.findViewById(R.id.layout_amout_preview);
             mTextTitleAmount = (TextView) itemView.findViewById(R.id.text_title_amount);
+
+            mBtnCancel.setOnClickListener(BottomAction.this);
+            mBtnNext.setOnClickListener(BottomAction.this);
+            mBtnSubmit.setOnClickListener(BottomAction.this);
         }
     }
 }

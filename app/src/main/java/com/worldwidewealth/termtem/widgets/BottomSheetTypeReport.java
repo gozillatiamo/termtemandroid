@@ -149,7 +149,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
     private void bindDataSubmenu(){
         if (Global.getInstance().getUserMenuList() == null){
 
-            new ErrorNetworkThrowable(null).networkError(getContext(), MyApplication.getContext().getString(R.string.error_msg)
+            new ErrorNetworkThrowable(null).networkError(getContext(), MyApplication.getContext().getString(R.string.error_msg_data)
                     , null, null, true, new OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
@@ -174,7 +174,6 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                             case EPIN:
                                 sparseBooleanArray.put(MenuButtonView.TYPE.valueOf(model.getBUTTON()).getType(), true);
                                 break;
-
                             case AGENTCASHIN:
                             case SCAN:
                                 sparseBooleanArray.put(MenuButtonView.TYPE.AGENTCASHIN.getType(), true);
@@ -182,7 +181,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                             case VAS:
                                 sparseBooleanArray.put(MenuButtonView.TYPE.valueOf(model.getBUTTON()).getType(), true);
                                 break;
-                            case BILLPAY:
+                            case BILL:
                                 sparseBooleanArray.put(MenuButtonView.TYPE.valueOf(model.getBUTTON()).getType(), true);
                                 break;
 
@@ -194,7 +193,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
             }
 
-            sparseBooleanArray.put(MenuButtonView.TYPE.BILLPAY.getType(), true);
+//            sparseBooleanArray.put(MenuButtonView.TYPE.BILLPAY.getType(), true);
 
         }
 
@@ -249,7 +248,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
                 mListData.add(values);
             }
 
-            if (sparseBooleanArray.get(MenuButtonView.TYPE.BILLPAY.getType())){
+            if (sparseBooleanArray.get(MenuButtonView.TYPE.BILL.getType())){
                 ContentValues values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_bill));
                 values.put(TYPE, ActivityReport.BILL_REPORT);

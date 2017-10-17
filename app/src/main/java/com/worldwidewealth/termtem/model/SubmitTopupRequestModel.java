@@ -132,15 +132,24 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     public String getAMT() {
-        if (AMT != null)
-            return EncryptionData.DecryptData(AMT, Global.getInstance().getDEVICEID() + TRANID);
+        String encode;
+        if (AMT != null) {
+            encode = EncryptionData.DecryptData(AMT, Global.getInstance().getDEVICEID() + TRANID);
+            encode = (encode == null || encode.isEmpty()) ? AMT : encode;
+            return encode;
+        }
 
         return "0";
     }
 
     public String getPHONENO() {
-        if (PHONENO != null)
-            return EncryptionData.DecryptData(PHONENO, Global.getInstance().getDEVICEID() + TRANID);
+        String encode;
+        if (PHONENO != null) {
+            encode =  EncryptionData.DecryptData(PHONENO, Global.getInstance().getDEVICEID() + TRANID);
+            encode = (encode == null || encode.isEmpty()) ? PHONENO : encode;
+            return encode;
+
+        }
 
         return PHONENO;
     }
@@ -183,5 +192,9 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
 
     public String getDUEDATE() {
         return DUEDATE;
+    }
+
+    public void setAMT(String AMT) {
+        this.AMT = AMT;
     }
 }

@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
@@ -35,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.worldwidewealth.termtem.EncryptionData;
@@ -47,6 +51,7 @@ import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.AddFavRequestModel;
 import com.worldwidewealth.termtem.model.DataRequestModel;
+import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
@@ -127,6 +132,7 @@ public class FragmentTopupSlip extends Fragment {
         return newInstance(type, typetopup, tranid, isFav, null);
     }
 
+
     public static Fragment newInstance(int type, String typetopup, String tranid, boolean isFav, String msgError){
         Bundle bundle = new Bundle();
         bundle.putInt(TYPEPAGE, type);
@@ -145,9 +151,9 @@ public class FragmentTopupSlip extends Fragment {
 
     public class ViewHolder{
         private Button mBtnBack, mBtnGame, mBtnSavePic;
-        private TextView mTextPhone, mTextAmount, mTextSuccess;
+        private TextView mTextPhone, mTextAmount, mTextSuccess, mTextTitleAmount;
         private ImageView mImageSlip, mIconService, mIconCarrier, mIconSuccess;
-        private View mIncludeMyWallet, mLayoutInclude, mLayoutBorder;
+        private View mIncludeMyWallet, mLayoutInclude, mLayoutBorder, mLayoutBtnFav;
         private ShineButton mBtnAddFavorite;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
@@ -164,6 +170,8 @@ public class FragmentTopupSlip extends Fragment {
             mIconSuccess = (ImageView) itemview.findViewById(R.id.icon_success);
             mTextSuccess = (TextView) itemview.findViewById(R.id.text_success);
             mLayoutBorder = itemview.findViewById(R.id.layout_border);
+            mLayoutBtnFav = itemview.findViewById(R.id.layout_btn_fav);
+            mTextTitleAmount = itemview.findViewById(R.id.text_title_amount);
 
         }
     }
@@ -285,7 +293,7 @@ public class FragmentTopupSlip extends Fragment {
 
                 break;
             case BillPaymentActivity.BILLPAY:
-                mActionEslip = APIServices.ACTIONESLIP;
+                mActionEslip = APIServices.ACTION_ESLIP_BILL;
                 mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_bill);
                 mColorType = ContextCompat.getColor(getContext(), R.color.color_bill_pay);
 
@@ -313,38 +321,59 @@ public class FragmentTopupSlip extends Fragment {
         mPhoneNo = requestModel.getPHONENO();
         mCarrier = requestModel.getCARRIER();
 
-        switch (mCarrier){
-            case APIServices.AIS:
-                switch (mTypeToup){
-                    case FragmentTopup.MOBILE:
-                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
-                        break;
-                    case FragmentTopup.PIN:
-                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
-                        break;
-                    case FragmentTopup.VAS:
-                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.ais_vas);
-                        break;
-                }
+        if (mCarrier != null) {
 
-                break;
-            case APIServices.TRUEMOVE:
-                if (mTypeToup.equals(FragmentTopup.PIN))
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemoney);
-                else
-                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemove);
+            switch (mCarrier) {
+                case APIServices.AIS:
+                    switch (mTypeToup) {
+                        case FragmentTopup.MOBILE:
+                            mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais);
+                            break;
+                        case FragmentTopup.PIN:
+                            mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_ais_pin);
+                            break;
+                        case FragmentTopup.VAS:
+                            mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.ais_vas);
+                            break;
+                    }
 
-                break;
-            case APIServices.DTAC:
-                mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_dtac);
-                break;
+                    break;
+                case APIServices.TRUEMOVE:
+                    if (mTypeToup.equals(FragmentTopup.PIN))
+                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemoney);
+                    else
+                        mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_truemove);
+
+                    break;
+                case APIServices.DTAC:
+                    mIconCarrier = ContextCompat.getDrawable(getContext(), R.drawable.logo_dtac);
+                    break;
+            }
+
+            mHolder.mIconCarrier.setImageDrawable(mIconCarrier);
+
+        } else if (mTypeToup.equals(BillPaymentActivity.BILLPAY)){
+            LoadBillServiceResponse billServiceResponse = Global.getInstance().getLastBillService();
+            if (billServiceResponse == null){
+                getActivity().finish();
+                return;
+            }
+            Glide.with(this).load(getString(R.string.server)+billServiceResponse.getLOGOURL())
+                    .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
+                    .thumbnail(0.6f)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
+                    .into(mHolder.mIconCarrier);
+
+            mHolder.mLayoutBtnFav.setVisibility(View.GONE);
+            mHolder.mTextTitleAmount.setText(getString(R.string.amount_bill));
+
         }
 
 //        mTypeToup = MyApplication.getTypeToup(Global.getInstance().getLastSubmitAction());
 
         mHolder.mLayoutBorder.setBackgroundColor(mColorType);
         mHolder.mIconService.setImageDrawable(mIconTypeTopup);
-        mHolder.mIconCarrier.setImageDrawable(mIconCarrier);
         EditText editText = new EditText(getContext());
         editText.setText(mPhoneNo);
         PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);

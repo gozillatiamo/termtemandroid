@@ -257,7 +257,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
                         mHolder.mMenuVAS.setMenuVisibility(
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;
-                    case BILLPAY:
+                    case BILL:
                         mHolder.mMenuBillPay.setMenuVisibility(
                                 MenuButtonView.VISIBILITY.valueOf(model.getSTATUS()).getVisibility());
                         break;

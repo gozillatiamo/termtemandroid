@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
@@ -69,6 +70,7 @@ public class Global {
     private static final String SUBMIT_TXID = "submittxid";
     private static final String SUBMIT_AGENTID = "submitagentid";
     private static final String SUBMIT_USERID = "submituserid";
+    private static final String SUBMIT_BILLSERVICE = "submitbillservice";
 
     private static final String LAST_SUBMIT = "lastsubmit";
 
@@ -340,6 +342,28 @@ public class Global {
 */
     }
 
+    public void setLastBillService(LoadBillServiceResponse billService){
+
+        byte[] bytesModel = ParcelableUtil.marshall(billService);
+        String encryptionSubmit = EncryptionData.EncryptWithBytes(bytesModel, getDEVICEID());
+        mEditor.putString(SUBMIT_BILLSERVICE, encryptionSubmit);
+        mEditor.commit();
+
+    }
+
+    public LoadBillServiceResponse getLastBillService(){
+        try {
+            byte[] bytesLastSubmit = EncryptionData.DecrptWithByte(mPreferences.getString(SUBMIT_BILLSERVICE, null), getDEVICEID());
+            LoadBillServiceResponse billServiceResponse = ParcelableUtil.unmarshall(bytesLastSubmit, LoadBillServiceResponse.CREATOR);
+            return billServiceResponse;
+
+        } catch (NullPointerException e){
+            clearLastSubmit();
+            return null;
+        }
+
+    }
+
 
     public void setSubmitStatus(String status){
         mEditor.putString(SUBMIT_STATUS, status);
@@ -364,7 +388,7 @@ public class Global {
         mEditor.putString(SUBMIT_USERID, null);
         mEditor.putString(BUTTONID, null);
         mEditor.putString(AGENTIDCASHIN, null);
-
+        mEditor.putString(SUBMIT_BILLSERVICE, null);
 
 
         mEditor.putString(SUBMIT_STATUS, null);

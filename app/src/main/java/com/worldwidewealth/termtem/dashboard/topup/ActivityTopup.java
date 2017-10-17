@@ -18,11 +18,13 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
+import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.model.EslipRequestModel;
+import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -48,6 +50,8 @@ public class ActivityTopup extends MyAppcompatActivity {
     public static final String KEY_PHONENO = "phoneno";
     public static final String KEY_CARRIER = "carrier";
     public static final String KEY_AMT = "amt";
+    public static final String KEY_BARCODE = "barcode";
+    public static final String KEY_BILLSERVICE = "billservice";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,11 @@ public class ActivityTopup extends MyAppcompatActivity {
                 mTitle.setText(getString(R.string.vas));
                 mMenuIcon.setImageResource(R.drawable.ic_vas);
                 break;
+            case BillPaymentActivity.BILLPAY:
+                mTitle.setText(getString(R.string.dashboard_bill_pay));
+                mMenuIcon.setImageResource(R.drawable.ic_bill);
+                break;
+
         }
 
         hasSubmit = Global.getInstance().hasSubmit();
@@ -191,11 +200,28 @@ public class ActivityTopup extends MyAppcompatActivity {
 
     private void startWithOldPhoneNO(){
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo, mLastAmt))
-                .commit();
+        switch (mTopup){
+            case BillPaymentActivity.BILLPAY:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                        .replace(R.id.container_topup, FragmentTopupPackage.newInstanceBill(
+                                BillPaymentActivity.BILLPAY,
+                                getIntent().getExtras().getString(KEY_BARCODE),
+                                (LoadBillServiceResponse) getIntent().getExtras().getParcelable(KEY_BILLSERVICE),
+                                mPhoneNo))
+                        .commit();
+
+                break;
+            default:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                        .replace(R.id.container_topup, FragmentTopupPackage.newInstance(mCarrier, mTopup, mPhoneNo, mLastAmt))
+                        .commit();
+
+                break;
+        }
 
     }
 

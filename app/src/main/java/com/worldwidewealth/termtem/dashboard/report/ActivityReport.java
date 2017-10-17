@@ -169,7 +169,7 @@ public class ActivityReport extends MyAppcompatActivity {
                     Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
                     ((GraphReportFragment)page).updateListDataLineChart(null);
 
-                    if (mCurrentType.equals(ActivityReport.CASHIN_REPORT) || mCurrentType.equals(ActivityReport.BILL_REPORT)){
+                    if (mCurrentType.equals(ActivityReport.CASHIN_REPORT)){
                         ((GraphReportFragment)page).hidePieChart();
                     } else {
                         ((GraphReportFragment) page).showPieChart();

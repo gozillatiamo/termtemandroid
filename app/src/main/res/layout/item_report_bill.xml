@@ -82,8 +82,9 @@
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/layout_agent_name"
+            android:id="@+id/layout_bill_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -92,10 +93,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:textSize="@dimen/small_text_size"
-                android:text="@string/agent_name"
+                android:text="@string/bill_name"
                 android:gravity="right"/>
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/txt_agent_name"
+                android:id="@+id/txt_bill_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/small_text_size"
@@ -107,10 +108,8 @@
 
         </LinearLayout>
 
-
-
         <LinearLayout
-            android:id="@+id/layout_biller"
+            android:id="@+id/layout_ref_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -119,10 +118,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:textSize="@dimen/small_text_size"
-                android:text="@string/carrier"
+                android:text="@string/ref1_bill_title"
                 android:gravity="right"/>
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/txt_biller"
+                android:id="@+id/txt_bill_ref_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/small_text_size"
@@ -133,6 +132,7 @@
                 android:text="AIS"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/layout_phoneno"
             android:layout_width="match_parent"
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:textSize="@dimen/small_text_size"
-                android:text="@string/amount"
+                android:text="@string/amount_bill"
                 android:gravity="right"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -179,13 +179,7 @@
                 android:gravity="right"
                 android:layout_weight="1">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:textSize="@dimen/small_text_size"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content"
-                    android:text="@string/currency"/>
-                <TextView
-                    android:id="@+id/txt_check_total"
+                    android:id="@+id/txt_amount"
                     android:textSize="@dimen/small_text_size"
                     android:layout_marginLeft="@dimen/activity_small_space"
                     android:layout_width="wrap_content"
@@ -195,6 +189,38 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_fee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/title_fee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
+                android:text="@string/fee"
+                android:gravity="right"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/txt_fee"
+                    android:textSize="@dimen/small_text_size"
+                    android:layout_marginLeft="@dimen/activity_small_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9.82"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/layout_commission"
             android:layout_width="match_parent"
@@ -256,7 +282,7 @@
                     android:visibility="gone"
                     android:text="@string/currency"/>
                 <TextView
-                    android:id="@+id/txt_amount"
+                    android:id="@+id/txt_check_total"
                     android:layout_marginLeft="@dimen/activity_small_space"
                     android:layout_width="wrap_content"
                     android:textSize="@dimen/small_text_size"

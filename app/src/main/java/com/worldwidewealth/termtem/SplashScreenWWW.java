@@ -65,8 +65,6 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
         services = APIServices.retrofit.create(APIServices.class);
-        termTemSignIn = new TermTemSignIn(this, TermTemSignIn.TYPE.NEWLOGIN, true);
-        checkDataIntent();
 
         String deviceId = Global.getInstance().getDEVICEID();
 
@@ -76,7 +74,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 deviceId = mngr.getDeviceId();
             } else {
                 deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
-    }
+            }
         }
 
         Global.getInstance().setDEVICEID(deviceId);
@@ -94,6 +92,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
+
+                termTemSignIn = new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN, true);
+                checkDataIntent();
 
                 if (Global.getInstance().getAGENTID() != null) {
 
@@ -143,7 +144,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
-            handler.post(runnable);
+        handler.post(runnable);
 
     }
 

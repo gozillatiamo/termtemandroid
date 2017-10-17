@@ -17,6 +17,7 @@ import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
+import com.worldwidewealth.termtem.dialog.DialogNetworkError;
 import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
@@ -277,7 +278,7 @@ public class LocalService extends Service {
     @Override
     public void onTaskRemoved(final Intent rootIntent) {
 
-
+        DialogNetworkError.dismiss();
         Log.e("LocalService", "onTaskRemoved");
         MyApplication.LeavingOrEntering.currentActivity = null;
         mNM.cancelAll();

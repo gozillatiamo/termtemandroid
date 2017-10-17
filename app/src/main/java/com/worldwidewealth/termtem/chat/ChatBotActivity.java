@@ -1087,7 +1087,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
 
     private void confirmMGMClick(){
         disable(inputAgentMGM);
-        if (edtAgentMGM.getText().toString().trim().equals("")){
+        if (edtAgentMGM.getText().toString().trim().equals("") && !isEdit){
             enable(inputAgentMGM);
             addTextMessage(String.format("ขอโทษด้วยครับ คุณ%s %s",firstName, getString(R.string.chat_please_enter_mgm)), User.getTermTemUser());
         }else {
@@ -1098,7 +1098,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
                 addTextMessage(String.format("คุณ%s %s", firstName, getString(R.string.chat_please_select_image)), User.getTermTemUser());
                 expandableLayout.collapse();
             }else {
-                phoneMGM = edtAgentMGM.getText().toString();
+                phoneMGM = edtAgentMGM.getText().toString().equals("") ? null : edtAgentMGM.getText().toString();
                 onEditSuccess();
             }
         }
@@ -1111,6 +1111,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
             addTextMessage(String.format("คุณ%s %s", firstName, getString(R.string.chat_please_select_image)), User.getTermTemUser());
             expandableLayout.collapse();
         }else {
+            edtAgentMGM.setText(phoneMGM.replaceAll("-", ""));
             onEditSuccess();
         }
     }
@@ -1226,6 +1227,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         disable(inputEdit);
         registerStep = MGM_REGSTEP;
         addTextMessage(mCaptionMGM, User.getUser());
+        btnSkipAgentMGM.setText(getString(R.string.chat_edit_cancel));
         expandableLayout.collapse();
     }
 
@@ -1339,13 +1341,15 @@ public class ChatBotActivity extends MyAppcompatActivity implements
     private Call<ResponseModel> getApiService(){
         String image;
         do {
-            System.gc();
-            Glide.clear(idCardImage);
-            Bitmap bitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
-            image = Util.encodeBitmapToUpload(bitmapImage);
-            if (bitmapImage != null) {
-                bitmapImage.recycle();
-            }
+            try {
+                System.gc();
+                Glide.clear(idCardImage);
+                Bitmap bitmapImage = Util.flip(Util.decodeSampledBitmapFromResource(imgPath, 300, 300), imgPath);
+                image = Util.encodeBitmapToUpload(bitmapImage);
+                if (bitmapImage != null) {
+                    bitmapImage.recycle();
+                }
+            } catch (OutOfMemoryError e){ image = null; }
         } while (image == null);
 
         RegisterRequestModel.Data data = new RegisterRequestModel.Data(
@@ -1383,6 +1387,7 @@ public class ChatBotActivity extends MyAppcompatActivity implements
         setupCalendar();
         edtIdCard.setText("");
         edtAgentMGM.setText("");
+        btnSkipAgentMGM.setText(getString(R.string.skip));
         edtPhoneNumber.setText("");
         edtLastName.setText("");
         edtName.setText("");

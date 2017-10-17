@@ -109,7 +109,7 @@ public class Util {
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                     Log.e(TAG, new StringBuilder(encoded).reverse().toString());
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
-                    String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
+//                    String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
 
                     System.gc();
                     sink.write(converted);
