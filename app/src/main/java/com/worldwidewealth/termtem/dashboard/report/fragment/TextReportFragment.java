@@ -71,8 +71,9 @@ public class TextReportFragment extends Fragment {
     private String mFileName;
     private Bitmap mImageBitmap;
     private ImageView mImageSlip;
+    private RecyclerItemClickListener mItemClickListener;
 
-    private List<SalerptResponseModel> mListData = null;
+    private List mListData = null;
 
     public static final String TAG = TextReportFragment.class.getSimpleName();
 
@@ -115,6 +116,20 @@ public class TextReportFragment extends Fragment {
         setupRecyclerView();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        DialogCounterAlert.DialogProgress.dismiss();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mItemClickListener != null){
+            mListReport.removeOnItemTouchListener(mItemClickListener);
+        }
+    }
+
     private void bindView(){
         mListReport = (RecyclerView) getView().findViewById(R.id.list_report);
 
@@ -125,9 +140,13 @@ public class TextReportFragment extends Fragment {
         mAdapter = new ReportAdapter(getContext(), mListData);
         mListReport.setLayoutManager(layoutManager);
         mListReport.setAdapter(new AlphaInAnimationAdapter(mAdapter));
-        mListReport.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+        mItemClickListener = new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                String currentType = ((ActivityReport)getActivity()).getmCurrentType();
+
+                if (currentType.equals(ActivityReport.FUNDIN_REPORT)) return;
+
                 new DialogCounterAlert.DialogProgress(getContext()).show();
 
                 if (mImageBitmap != null && !mImageBitmap.isRecycled()){
@@ -148,11 +167,13 @@ public class TextReportFragment extends Fragment {
 
 */
             }
-        }));
+        });
+        mListReport.addOnItemTouchListener(mItemClickListener);
     }
 
     private String getActionSlip(){
         String currentTypeReport = ((ActivityReport)getActivity()).getmCurrentType();
+
         switch (currentTypeReport){
             case ActivityReport.TOPUP_REPORT:
                 return APIServices.ACTIONESLIP;
@@ -170,8 +191,10 @@ public class TextReportFragment extends Fragment {
 
     }
 
-    public void updateDataReport(List<SalerptResponseModel> listdata){
+    public void updateDataReport(List listdata){
         mListData = listdata;
+        String currentTypeReport = ((ActivityReport)getActivity()).getmCurrentType();
+        mAdapter.setCurrentType(currentTypeReport);
         mAdapter.updateAll(mListData);
     }
 
@@ -180,20 +203,20 @@ public class TextReportFragment extends Fragment {
 
         Call<ResponseBody> call = null;
         String currentType = ((ActivityReport)getActivity()).getmCurrentType();
-
+        final SalerptResponseModel model = (SalerptResponseModel) mAdapter.getItem(position);
         switch (currentType){
             case ActivityReport.CASHIN_REPORT:
                 call = services.eslip(new RequestModel(getActionSlip(),
-                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(),
-                                mAdapter.getItem(position).getPHONENO())));
+                        new EslipRequestModel(model.getTransactionId(),
+                                model.getPHONENO())));
                 break;
             case ActivityReport.BILL_REPORT:
                 call = services.billService(new RequestModel(getActionSlip(),
-                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+                        new EslipRequestModel(model.getTransactionId(), null)));
                 break;
             default:
                 call = services.eslip(new RequestModel(getActionSlip(),
-                        new EslipRequestModel(mAdapter.getItem(position).getTransactionId(), null)));
+                        new EslipRequestModel(model.getTransactionId(), null)));
                 break;
         }
 /*
@@ -221,7 +244,7 @@ public class TextReportFragment extends Fragment {
                     mImageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
 
-                    initEslip(mAdapter.getItem(position).getTransactionId());
+                    initEslip(model.getTransactionId());
                 }
 
             }

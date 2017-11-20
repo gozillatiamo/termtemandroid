@@ -28,7 +28,7 @@
             android:src="@drawable/ic_topup"
             />
 
-        <me.grantland.widget.AutofitTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/menuo_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -36,6 +36,8 @@
             android:textSize="@dimen/text_menu_size_dashboard"
             android:gravity="center"
             app:sizeToFit="true"
+            android:includeFontPadding="false"
+            android:breakStrategy="balanced"
             app:minTextSize="4sp"
             android:autoSizeMinTextSize="4sp"
             android:text="title" />

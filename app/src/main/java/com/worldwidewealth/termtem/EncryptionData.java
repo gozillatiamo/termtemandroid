@@ -173,7 +173,7 @@ public class EncryptionData {
         final ResponseModel responseModel;
         RequestModel requestModel = null;
         Gson gson = new Gson();
-        String msg;
+        String msg = null;
         String dialogTitle;
         String strRespone = null;
         String strRequest = Util.convertToStringRequest(call.request().body());
@@ -183,13 +183,20 @@ public class EncryptionData {
 //            mTrace.start();
         }
         try {
-            strRespone = response.string();
-            responseModel = gson.fromJson(strRespone, ResponseModel.class);
-            Log.e(TAG, "Response: "+ strRespone);
-            if (responseModel == null) return null;
+            if (requestModel.getAction().equals(APIServices.ACTION_SUBMIT_BILL) && response == null){
+                responseModel = new ResponseModel();
+                responseModel.setStatus(-2);
+                responseModel.setMsg("Fail");
 
-            dialogTitle = null;
-            msg = responseModel.getAppdisplay();
+            } else {
+                strRespone = response.string();
+                responseModel = gson.fromJson(strRespone, ResponseModel.class);
+                Log.e(TAG, "Response: " + strRespone);
+                if (responseModel == null) return null;
+
+                dialogTitle = null;
+                msg = responseModel.getAppdisplay();
+            }
 
             switch (requestModel.getAction()){
                 case APIServices.ACTIONSUBMITTOPUP:
@@ -238,6 +245,8 @@ public class EncryptionData {
                         case APIServices.ACTION_SUBMIT_AGENT_CASHIN:
                         case APIServices.ACTION_SUBMIT_VAS:
                         case APIServices.ACTION_SUBMIT_BILL:
+                        case APIServices.ACTION_PREVIEW_VAS:
+                        case APIServices.ACTION_PREVIEW_BILL:
 
 
 /*
@@ -245,6 +254,7 @@ public class EncryptionData {
                                 Global.getInstance().setLastSubmit(null, false);
                             }
 */
+                            if (msg != null && msg.contains("Success")) msg = null;
 
                             if (msg == null || msg.isEmpty()){
                                 msg = MyApplication.getContext().getString(R.string.alert_topup_fail);
@@ -345,6 +355,8 @@ public class EncryptionData {
             Activity currentActivity = MyApplication.LeavingOrEntering.currentActivity;
             if (activity.getLocalClassName().equals(currentActivity.getLocalClassName())) {
                 String msg = responseModel.getAppdisplay();
+                if (msg != null && msg.contains("Success")) msg = null;
+
                 if (msg != null && !msg.isEmpty()) {
                     AlertDialog alertDialog = new AlertDialog.Builder(activity)
                             .setMessage(msg)
@@ -356,7 +368,9 @@ public class EncryptionData {
 
         } catch (ClassCastException e){}
 
-        MyApplication.uploadFail(MyApplication.NOTITOPUP, responseModel.getAppdisplay());
+        if (responseModel.getStatus() != APIServices.SUCCESS) {
+            MyApplication.uploadFail(MyApplication.NOTITOPUP, responseModel.getAppdisplay());
+        }
         return false;
     }
 

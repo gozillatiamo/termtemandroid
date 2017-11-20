@@ -36,6 +36,7 @@ import com.worldwidewealth.termtem.dashboard.report.fragment.GraphReportFragment
 import com.worldwidewealth.termtem.dashboard.report.fragment.TextReportFragment;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.ChartResponseModel;
+import com.worldwidewealth.termtem.model.ReportFundinResponse;
 import com.worldwidewealth.termtem.widgets.BottomSheetTypeReport;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -88,6 +89,7 @@ public class ActivityReport extends MyAppcompatActivity {
     public static final String TOPUP_REPORT = "TOPUP";
     public static final String EPIN_REPORT = "EPIN";
     public static final String CASHIN_REPORT = "CASHIN";
+    public static final String FUNDIN_REPORT = "FUNDIN";
     public static final String VAS_REPORT = "VAS";
     public static final String BILL_REPORT = "BILL";
 
@@ -169,7 +171,8 @@ public class ActivityReport extends MyAppcompatActivity {
                     Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager_type_history_report + ":" + 1);
                     ((GraphReportFragment)page).updateListDataLineChart(null);
 
-                    if (mCurrentType.equals(ActivityReport.CASHIN_REPORT)){
+                    if (mCurrentType.equals(ActivityReport.CASHIN_REPORT) ||
+                            mCurrentType.equals(ActivityReport.FUNDIN_REPORT)){
                         ((GraphReportFragment)page).hidePieChart();
                     } else {
                         ((GraphReportFragment) page).showPieChart();
@@ -361,8 +364,16 @@ public class ActivityReport extends MyAppcompatActivity {
 
             case BILL_REPORT:
                 mHolder.mIconType.setImageResource(R.drawable.ic_report_bill);
-                mHolder.mTextType.setText(R.string.report_bill);
+                mHolder.mTextType.setText(R.string.dashboard_bill_pay);
                 mHolder.mLogoIcon.setImageResource(R.drawable.ic_report_bill);
+                mHolder.mTextTitleTotalAmount.setText(R.string.amount_bill_total);
+                break;
+
+            case FUNDIN_REPORT:
+                mHolder.mIconType.setImageResource(R.drawable.ic_my_cashin_report);
+                mHolder.mTextType.setText(R.string.header_report_cashin);
+                mHolder.mLogoIcon.setImageResource(R.drawable.ic_my_cashin_report);
+
                 break;
 
         }
@@ -403,28 +414,66 @@ public class ActivityReport extends MyAppcompatActivity {
                     loading.hide();
 
                     Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new Util.JsonDateDeserializer()).create();
-                    List<SalerptResponseModel> modelList = gson
-                            .fromJson((String)responseValues,
-                                    new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
+                    List modelList = null;
+
+                    switch (mCurrentType){
+                        case FUNDIN_REPORT:
+                            modelList = gson
+                                    .fromJson((String)responseValues,
+                                            new TypeToken<ArrayList<ReportFundinResponse>>(){}.getType());
+                            break;
+                        default:
+                            modelList = gson
+                                    .fromJson((String)responseValues,
+                                            new TypeToken<ArrayList<SalerptResponseModel>>(){}.getType());
+                            break;
+                    }
+
 
                     double total = 0;
                     double debit = 0;
 
+                    findViewById(R.id.txt_not_found_report).setVisibility(View.GONE);
+
                     if (modelList.size() == 0){
                         findViewById(R.id.txt_not_found_report).setVisibility(View.VISIBLE);
-                    } else {
-                        findViewById(R.id.txt_not_found_report).setVisibility(View.GONE);
+                    } else if (!mCurrentType.equals(FUNDIN_REPORT)){
 
+                        switch (mCurrentType){
+                            case BILL_REPORT:
+                                for (Object model : modelList){
+                                    SalerptResponseModel responseModel = (SalerptResponseModel) model;
+                                    total += (responseModel.getAMOUNT()+responseModel.getCALFEE());
+                                    debit += responseModel.getCHECKTOTAL();
+                                }
 
-                        for (SalerptResponseModel model : modelList){
-                            total += model.getCHECKTOTAL();
-                            debit += model.getAMOUNT();
+                                break;
+                            default:
+                                for (Object model : modelList){
+                                    SalerptResponseModel responseModel = (SalerptResponseModel) model;
+                                    total += responseModel.getCHECKTOTAL();
+                                    debit += responseModel.getAMOUNT();
+                                }
+
+                                break;
                         }
+
+                        mAmoutTopup = total;
+                        mAmountDebit = debit;
+                        setAmountTotal(PagerTypeReportAdapter.TEXT, mAmoutTopup, mAmountDebit);
+
+                    } else {
+                        for (Object model : modelList){
+                            ReportFundinResponse responseModel = (ReportFundinResponse) model;
+                            total += responseModel.getCREDIT();
+                        }
+
+                        mAmoutTopup = total;
+                        mAmountDebit = 0;
+                        setAmountTotal(PagerTypeReportAdapter.TEXT, mAmoutTopup, mAmountDebit);
+
                     }
 
-                    mAmoutTopup = total;
-                    mAmountDebit = debit;
-                    setAmountTotal(PagerTypeReportAdapter.TEXT, mAmoutTopup, mAmountDebit);
                     updateListData(PagerTypeReportAdapter.TEXT, modelList, null, Long.parseLong(timeFrom), Long.parseLong(timeTo));
 
 
@@ -453,39 +502,42 @@ public class ActivityReport extends MyAppcompatActivity {
         DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
+        if (!mCurrentType.equals(FUNDIN_REPORT)) {
+            final View layoutAmountDebit = findViewById(R.id.layout_amount_debit);
+            int heightView = layoutAmountDebit.getMeasuredHeight();
+            switch (typePage) {
+                case PagerTypeReportAdapter.TEXT:
+                    mHolder.mLayoutTotal.animate()
+                            .setDuration(300)
+                            .translationY(0f)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    super.onAnimationStart(animation);
+                                    layoutAmountDebit.setVisibility(View.VISIBLE);
+                                }
+                            }).start();
+                    mHolder.mTextDebitTotal.setText(format.format(amonutDebit));
 
-        final View layoutAmountDebit = findViewById(R.id.layout_amount_debit);
-        int heightView = layoutAmountDebit.getMeasuredHeight();
-        switch (typePage){
-            case PagerTypeReportAdapter.TEXT:
-                mHolder.mLayoutTotal.animate()
-                        .setDuration(300)
-                        .translationY(0f)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                                super.onAnimationStart(animation);
-                                layoutAmountDebit.setVisibility(View.VISIBLE);
-                            }
-                        }).start();
-                break;
-            case PagerTypeReportAdapter.GRAPH:
-                mHolder.mLayoutTotal.animate()
-                        .setDuration(300)
-                        .translationY(heightView)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                layoutAmountDebit.setVisibility(View.INVISIBLE);
-                            }
-                        }).start();
+                    break;
+                case PagerTypeReportAdapter.GRAPH:
+                    mHolder.mLayoutTotal.animate()
+                            .setDuration(300)
+                            .translationY(heightView)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    layoutAmountDebit.setVisibility(View.INVISIBLE);
+                                }
+                            }).start();
 
-                break;
+                    break;
+            }
+
         }
 
         mHolder.mTextReportTotal.setText(format.format(amountTopup));
-        mHolder.mTextDebitTotal.setText(format.format(amountTopup));
 
     }
 
@@ -527,6 +579,8 @@ public class ActivityReport extends MyAppcompatActivity {
                 loading.hide();
             }
         });
+
+        if(mCurrentType.equals(FUNDIN_REPORT)) return;
 
         Call<ResponseBody> callPie = services.salerpt(
                 new RequestModel(APIServices.ACTION_PIE_CHART,
@@ -638,7 +692,7 @@ public class ActivityReport extends MyAppcompatActivity {
     private class ViewHolder{
 //        private RecyclerView mListReport;
         private Toolbar mToolbar;
-        private TextView mTextReportTotal, mTextDebitTotal, mTextType;
+        private TextView mTextReportTotal, mTextDebitTotal, mTextType, mTextTitleTotalAmount;
         private ImageView mIconType;
         private ImageView mLogoIcon;
         private TabLayout mTabTypeReport;
@@ -655,6 +709,7 @@ public class ActivityReport extends MyAppcompatActivity {
             mTabTypeReport = (TabLayout) itemView.findViewById(R.id.tab_type_history_report);
             mPagerTypeReport = (ViewPager) itemView.findViewById(R.id.pager_type_history_report);
             mLayoutTotal = findViewById(R.id.layout_totle);
+            mTextTitleTotalAmount = itemView.findViewById(R.id.text_title_total);
 
         }
     }

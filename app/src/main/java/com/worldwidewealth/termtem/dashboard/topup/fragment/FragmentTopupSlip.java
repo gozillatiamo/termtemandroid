@@ -2,7 +2,9 @@ package com.worldwidewealth.termtem.dashboard.topup.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,7 +45,10 @@ import com.google.gson.Gson;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.MyApplication;
+import com.worldwidewealth.termtem.SplashScreenWWW;
+import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
@@ -54,6 +59,7 @@ import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.LoginResponseModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
+import com.worldwidewealth.termtem.model.SalerptResponseModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
@@ -101,6 +107,8 @@ public class FragmentTopupSlip extends Fragment {
     private int mTypePage;
     private boolean mIsFav;
     private String mActionEslip = APIServices.ACTIONESLIP;
+    private ImageView mImageSlip;
+
 
 
     public static final String TAG = FragmentTopupSlip.class.getSimpleName();
@@ -224,7 +232,9 @@ public class FragmentTopupSlip extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+//        if (!Global.getInstance().hasSubmit() && !mTypeToup.equals(BillPaymentActivity.BILLPAY)){
         if (!Global.getInstance().hasSubmit()){
+
             getActivity().finish();
             return;
         }
@@ -296,7 +306,8 @@ public class FragmentTopupSlip extends Fragment {
                 mActionEslip = APIServices.ACTION_ESLIP_BILL;
                 mIconTypeTopup = ContextCompat.getDrawable(getContext(), R.drawable.ic_bill);
                 mColorType = ContextCompat.getColor(getContext(), R.color.color_bill_pay);
-
+//                mTransID = "f67dffb4-7aa9-4b3e-944c-7a249047b5c7";
+                serviceEslip();
                 break;
         }
 
@@ -488,6 +499,7 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void getBalance(){
+        if (Global.getInstance().getLastSubmit() == null) return;
         Call<ResponseBody> call = services.getbalance(new RequestModel(APIServices.ACTIONGETBALANCE, Global.getInstance().getLastSubmit().getData()));
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -519,8 +531,24 @@ public class FragmentTopupSlip extends Fragment {
 
     private void serviceEslip(){
 //        if (!(MyApplication.LeavingOrEntering.currentActivity instanceof ActivityTopup)) return;
+        if (mImageBitmap != null && !mImageBitmap.isRecycled()){
+            mImageBitmap.recycle();
+            mImageByte = null;
+            mImageSlip.destroyDrawingCache();
+            System.gc();
+        }
 
-        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(mTransID, null)));
+        Call<ResponseBody> call = null;
+        switch (mTypeToup){
+
+            case BillPaymentActivity.BILLPAY:
+                call = services.billService(new RequestModel(APIServices.ACTION_ESLIP_BILL,
+                        new EslipRequestModel(mTransID, null)));
+                break;
+        }
+
+
+//        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, new EslipRequestModel(mTransID, null)));
 
         APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
             @Override
@@ -535,7 +563,8 @@ public class FragmentTopupSlip extends Fragment {
                     mImageByte = Base64.decode(((ResponseModel)responseValues).getFf()
                             , Base64.NO_WRAP);
 
-                    setupSlip();
+                    initEslip();
+//                    setupSlip();
                 }
 
             }
@@ -593,8 +622,32 @@ public class FragmentTopupSlip extends Fragment {
     }
 
     private void initEslip(){
+/*
         mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
         mHolder.mImageSlip.setImageBitmap(mImageBitmap);
+*/
+        mFileName = mTransID + ".jpg";
+
+        mImageBitmap = BitmapFactory.decodeByteArray(mImageByte, 0, mImageByte.length);
+
+        if (getContext() == null) return;
+        mImageSlip = new ImageView(getContext());
+        mImageSlip.setAdjustViewBounds(true);
+
+
+        mImageSlip.setImageBitmap(mImageBitmap);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setView(mImageSlip)
+                .show();
+
+        mImageSlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
         saveImage();
     }
 
@@ -691,11 +744,12 @@ public class FragmentTopupSlip extends Fragment {
         mHolder.mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTypePage == PREVIEW) {
-                    Global.getInstance().setLastSubmit(null, false);
-                }
+                Global.getInstance().setLastSubmit(null, false);
 
-                getActivity().finish();
+                Intent intent = new Intent(getContext().getApplicationContext(), ActivityDashboard.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
 
 /*
                 if (mTypeToup.equals(FragmentTopup.MOBILE) && mCarrier.equals(APIServices.AIS)){

@@ -60,4 +60,32 @@ public class ResponseModel{
     public void setStatus(int status) {
         Status = status;
     }
+
+    public void setMsg(String msg) {
+        Msg = msg;
+    }
+
+    public void setAppdisplay(String appdisplay) {
+        Appdisplay = appdisplay;
+    }
+
+    public void setTXID(String TXID) {
+        this.TXID = TXID;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setShow(int show) {
+        this.show = show;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setIdlelimit(int idlelimit) {
+        this.idlelimit = idlelimit;
+    }
 }

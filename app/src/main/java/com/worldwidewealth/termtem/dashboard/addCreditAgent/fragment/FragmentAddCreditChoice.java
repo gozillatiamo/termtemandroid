@@ -158,18 +158,18 @@ public class FragmentAddCreditChoice extends Fragment {
                 mHolder.mIncludeBottom,
                 BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onActionClick() {
+            public boolean onActionClick() {
                 mBottomAction.setEnable(false);
                 if (Double.parseDouble(mBottomAction.getPrice()) == 0){
                     Toast.makeText(getContext(), R.string.please_choice_topup, Toast.LENGTH_LONG).show();
                     mBottomAction.setEnable(true);
-                    return;
+                    return false;
                 }
 
                 if (Double.parseDouble(mBottomAction.getPrice()) < 1 || Double.parseDouble(mBottomAction.getPrice()) > 49000){
                     Toast.makeText(getContext(), getString(R.string.alert_amount_mpay_over), Toast.LENGTH_LONG).show();
                     mBottomAction.setEnable(true);
-                    return;
+                    return false;
                 }
 
                 if (Global.getInstance().getBALANCE() < Double.parseDouble(mBottomAction.getPrice())){
@@ -179,12 +179,13 @@ public class FragmentAddCreditChoice extends Fragment {
                             .show();
                     mBottomAction.setEnable(true);
 
-                    return;
+                    return false;
                 }
 
 
                 servicePreview();
 
+                return false;
             }
         });
     }
@@ -216,17 +217,18 @@ public class FragmentAddCreditChoice extends Fragment {
 
                     mBottomAction.swichType(BottomAction.SUBMIT, new BottomAction.OnActionClickListener() {
                         @Override
-                        public void onActionClick() {
+                        public boolean onActionClick() {
                             mBottomAction.setEnable(false);
                             if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                                 FragmentTopupPreview fragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
                                 if (!fragmentTopupPreview.canTopup()) {
                                     mBottomAction.setEnable(true);
-                                    return;
+                                    return false;
                                 }
                             }
 
                             serviceTopup();
+                            return false;
                         }
                     });
                 }

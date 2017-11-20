@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class Global {
     private static Global mGlobal;
-    private static final String KEY_GLOBAL = Global.class.getSimpleName();
+    public static final String KEY_GLOBAL = Global.class.getSimpleName();
     private static SharedPreferences mPreferences;
     private static SharedPreferences.Editor mEditor;
     private static List<UserMenuModel> mUserMenuList;

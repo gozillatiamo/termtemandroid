@@ -192,6 +192,13 @@ dependencies {
         exclude module: 'appcompat-v7'
     }
 
+    compile ('com.github.omadahealth:lollipin:2.1.0@aar') {
+        transitive = true
+        exclude group: 'com.android.support'
+    }
+
+    compile 'uk.me.lewisdeane.ldialogs:ldialogs:1.2.0@aar'
+
 /*
     compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
     compile 'com.embarkmobile:zxing-android-integration:2.0.0@aar'
@@ -199,7 +206,7 @@ dependencies {
 */
 
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'me.grantland:autofittextview:+'
+    compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.wang.avi:library:2.1.3'
     compile 'com.google.code.gson:gson:2.8.0'

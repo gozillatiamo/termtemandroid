@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -52,6 +53,8 @@ public class ActivityTopup extends MyAppcompatActivity {
     public static final String KEY_AMT = "amt";
     public static final String KEY_BARCODE = "barcode";
     public static final String KEY_BILLSERVICE = "billservice";
+
+    public static final String TAG = ActivityTopup.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

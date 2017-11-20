@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -28,7 +29,7 @@ import java.io.IOException;
 public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
     private ViewHolder mHolder;
     private Fragment mFragment;
-    private Uri photoURI;
+    private static Uri photoURI;
     public static final String TAG = BottomSheetDialogChoicePhoto.class.getSimpleName();
 
     public BottomSheetDialogChoicePhoto() {
@@ -108,6 +109,7 @@ public class BottomSheetDialogChoicePhoto extends BottomSheetDialogFragment {
             }
         });
     }
+
 
     public Uri getImageUri(){
         return  photoURI;

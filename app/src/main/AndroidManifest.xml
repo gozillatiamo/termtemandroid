@@ -194,6 +194,9 @@
         <activity android:name=".dashboard.billpayment.ScanBillActivity"
             android:screenOrientation="landscape"
             ></activity>
+
+        <activity android:name=".ActivityLockScreen"
+            android:screenOrientation="locked"></activity>
     </application>
 
 </manifest>

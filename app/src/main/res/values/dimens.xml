@@ -20,4 +20,8 @@
     <dimen name="height_item_inbox">96dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="pin_code_elements_margin">20dp</dimen>
+    <dimen name="pin_code_round_top_margin">10dp</dimen>
+
+
 </resources>

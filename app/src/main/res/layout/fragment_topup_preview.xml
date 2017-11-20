@@ -111,7 +111,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/text_title_fee"
                         style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -120,9 +120,14 @@ public class FragmentReportMT extends Fragment {
                 case MyApplication.REQUEST_IMAGE_CAPTURE:
 //                    Bundle extras = data.getExtras();
 //                    uri = Util.getImageUri((Bitmap) extras.get("data"));
-                    uri = sheetDialogFragment.getImageUri();
+                    try {
+                        uri = sheetDialogFragment.getImageUri();
 
-                    imgPath =  Util.getRealPathFromURI(uri);
+                        imgPath =  Util.getRealPathFromURI(uri);
+
+                    } catch (NullPointerException e){
+                        Util.backToSignIn(getActivity());
+                    }
 
 
                     break;
@@ -346,8 +351,12 @@ public class FragmentReportMT extends Fragment {
         mHolder.mBtnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            if (sheetDialogFragment == null) {
                 sheetDialogFragment = new BottomSheetDialogChoicePhoto(FragmentReportMT.this);
-                sheetDialogFragment.show(getActivity().getSupportFragmentManager(), sheetDialogFragment.getTag());
+            }
+
+            sheetDialogFragment.show(getActivity().getSupportFragmentManager(), sheetDialogFragment.getTag());
             }
         });
 

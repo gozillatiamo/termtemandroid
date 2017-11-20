@@ -183,7 +183,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
         String strDate = calendar.get(Calendar.DAY_OF_MONTH)+"-"+
                 calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("TH"))+"-"+
-                (calendar.get(Calendar.YEAR)+543)+" "+mContext.getString(R.string.time)+" "+
+                (calendar.get(Calendar.YEAR)+543)+" "+mContext.getString(R.string.time_cashin)+" "+
                 calendar.get(Calendar.HOUR_OF_DAY)+":"+min;
 
         textDate.setText(strDate);

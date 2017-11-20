@@ -66,19 +66,36 @@
                         android:text="@string/phone_number"
                         android:textColor="?attr/colorPrimary"
                         android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/edit_phone"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_marginBottom="@dimen/activity_vertical_margin"
-                        android:background="@drawable/background_editext_topup"
-                        android:digits="0123456789-"
-                        android:padding="@dimen/activity_vertical_margin"
-                        android:imeOptions="actionDone"
-                        android:inputType="phone"
-                        android:maxLength="12" />
+                        android:layout_weight="0.4"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/edit_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:background="@drawable/background_editext_topup"
+                            android:digits="0123456789-"
+                            android:padding="@dimen/activity_vertical_margin"
+                            android:imeOptions="actionDone"
+                            android:inputType="phone"
+                            android:maxLength="12" />
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/layout_bill_ref"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_small_space"
+                            android:orientation="vertical">
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
 
                 </LinearLayout>

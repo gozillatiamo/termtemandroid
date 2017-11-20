@@ -3,7 +3,9 @@ package com.worldwidewealth.termtem.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by MyNet on 24/11/2559.
@@ -18,7 +20,7 @@ public class SalerptResponseModel  implements Parcelable{
     private Date PAYMENT_DATE;
     private String BILLNAME;
     private String BILLER;
-    private String REF1;
+    private TopupPreviewResponseModel.RefModel[] REF;
     private String TYPE;
     private String PHONENO;
     private double MARKUP_AMT;
@@ -34,7 +36,7 @@ public class SalerptResponseModel  implements Parcelable{
         CALFEE = in.readDouble();
         BILLNAME = in.readString();
         BILLER = in.readString();
-        REF1 = in.readString();
+        REF = (TopupPreviewResponseModel.RefModel[]) in.readParcelableArray(TopupPreviewResponseModel.RefModel.class.getClassLoader());
         TYPE = in.readString();
         PHONENO = in.readString();
         MARKUP_AMT = in.readDouble();
@@ -54,7 +56,7 @@ public class SalerptResponseModel  implements Parcelable{
         dest.writeDouble(CALFEE);
         dest.writeString(BILLNAME);
         dest.writeString(BILLER);
-        dest.writeString(REF1);
+        dest.writeParcelableArray(REF, flags);
         dest.writeString(TYPE);
         dest.writeString(PHONENO);
         dest.writeDouble(MARKUP_AMT);
@@ -147,7 +149,8 @@ public class SalerptResponseModel  implements Parcelable{
         return BILLNAME;
     }
 
-    public String getREF1() {
-        return REF1;
+    public List<TopupPreviewResponseModel.RefModel> getREF() {
+        List<TopupPreviewResponseModel.RefModel> list = Arrays.asList(REF);
+        return list;
     }
 }

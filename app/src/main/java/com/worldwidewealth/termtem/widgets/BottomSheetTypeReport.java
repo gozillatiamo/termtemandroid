@@ -147,6 +147,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
 
     private void bindDataSubmenu(){
+
         if (Global.getInstance().getUserMenuList() == null){
 
             new ErrorNetworkThrowable(null).networkError(getContext(), MyApplication.getContext().getString(R.string.error_msg_data)
@@ -193,6 +194,8 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
             }
 
+            sparseBooleanArray.put(MenuButtonView.TYPE.NOTIPAY.getType(), true);
+
 //            sparseBooleanArray.put(MenuButtonView.TYPE.BILLPAY.getType(), true);
 
         }
@@ -224,16 +227,22 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
             this.mContext = context;
 
             mListData = new ArrayList<>();
+            ContentValues values;
+            values = new ContentValues();
+            values.put(TITLE, getContext().getString(R.string.report_cashin));
+            values.put(TYPE, ActivityReport.FUNDIN_REPORT);
+            values.put(ICON, R.drawable.ic_my_cashin_report);
+            mListData.add(values);
 
             if (sparseBooleanArray.get(MenuButtonView.TYPE.TOPUP.getType())){
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_topup));
                 values.put(TYPE, ActivityReport.TOPUP_REPORT);
                 values.put(ICON, R.drawable.ic_report_topup);
                 mListData.add(values);
             }
             if (sparseBooleanArray.get(MenuButtonView.TYPE.EPIN.getType())){
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_epin));
                 values.put(TYPE, ActivityReport.EPIN_REPORT);
                 values.put(ICON, R.drawable.ic_report_epin);
@@ -241,7 +250,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
             }
 
             if (sparseBooleanArray.get(MenuButtonView.TYPE.VAS.getType())){
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_vas));
                 values.put(TYPE, ActivityReport.VAS_REPORT);
                 values.put(ICON, R.drawable.ic_vas_report);
@@ -249,7 +258,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
             }
 
             if (sparseBooleanArray.get(MenuButtonView.TYPE.BILL.getType())){
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_bill));
                 values.put(TYPE, ActivityReport.BILL_REPORT);
                 values.put(ICON, R.drawable.ic_report_bill);
@@ -258,7 +267,7 @@ public class BottomSheetTypeReport extends BottomSheetDialog {
 
 
             if (sparseBooleanArray.get(MenuButtonView.TYPE.AGENTCASHIN.getType())){
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put(TITLE, getContext().getString(R.string.report_cashin_agent));
                 values.put(TYPE, ActivityReport.CASHIN_REPORT);
                 values.put(ICON, R.drawable.ic_report_cashin);

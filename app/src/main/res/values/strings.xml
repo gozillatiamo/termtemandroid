@@ -101,7 +101,7 @@
     <string name="currency">บาท</string>
     <string name="currency_hint">" "(บาท) :</string>
     <string name="date_transfer">วันที่โอน :</string>
-    <string name="time">เวลาที่โอน :</string>
+    <string name="time_cashin">เวลาที่โอน :</string>
     <string name="evidance">หลักฐาน :</string>
     <string name="bank_start">ธนาคารต้นทาง :</string>
     <string name="bank_end">ธนาคารปลายทาง :</string>
@@ -151,7 +151,8 @@
     <string name="title_mpay">ช่องทางโอนเงิน</string>
     <string name="title_report">Mobile Report</string>
     <string name="amount">ยอดเติม (บาท) :</string>
-    <string name="amount_bill">ยอดขำระ (บาท) :</string>
+    <string name="amount_bill">ยอดชำระ (บาท) :</string>
+    <string name="amount_bill_total">รวมยอดชำระ (บาท) :</string>
     <string name="ref1_bill_title">ข้อมูลชำระ :</string>
     <string name="fee">ค่าบริการ (บาท) :</string>
     <string name="debit">หักบัญชี (บาท) :</string>
@@ -270,6 +271,8 @@
     <string name="report_topup">ประวัติการเติมเงินมือถือ</string>
     <string name="report_epin">ประวัติการขายบัตรเงินสด</string>
     <string name="report_cashin_agent">ประวัติการโอนเงินให้ Agent</string>
+    <string name="report_cashin">ประวัติการแจ้งโอนเงิน</string>
+    <string name="header_report_cashin">การแจ้งโอนเงิน</string>
     <string name="report_vas">ประวัติการขายแพ็กเกจเสริม</string>
     <string name="report_bill">ประวัติการจ่ายบิล</string>
     <string name="select_agent_add_credit">กรุณาเลือก Agent</string>
@@ -303,7 +306,7 @@
     <string name="interested">สนใจ</string>
     <string name="ignore">ไม่สนใจ</string>
     <string name="title_text_price_vas">แพ็กเกจเสริม (บาท):</string>
-    <string name="title_text_price_bill">ยอดชำระ:</string>
+    <string name="title_text_price_bill">ยอดชำระ (บาท):</string>
     <string name="error_msg_data">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
     <string name="error_msg">เกิดข้อผิดพลาด\nกรุณาลองใหม่อีกครั้ง</string>
     <string name="scan_barcode">สแกนบาร์โค้ด</string>
@@ -317,6 +320,23 @@
     <string name="phone_no_customer">เบอร์โทรลูกค้า (เพื่อยืนยันการจ่ายบิล)</string>
     <string name="duedate_title">กรุณาเลือกวันครบกำหนด</string>
     <string name="example">ตัวอย่าง</string>
+
+    //Bill service
+    <string name="fee_bill">ค่าธรรมเนียม (บาท):</string>
+    <string name="mea_ref1">บัญชีแสดงสัญญาเลขที่ : </string>
+    <string name="mea_ref2">เลขที่ใบแจ้งค่าไฟฟ้า : </string>
+    <string name="mwa_ref1">เลขสาขา-ทะเบียนผู้ใช้น้ำ : </string>
+    <string name="pea_ref1">หมายเลขผู้ใช้ไฟฟ้า : </string>
+    
+    //Funin Type
+    <string name="type_bank_transfer">โอนเงินผ่านธนาคาร</string>
+    <string name="type_agent_cashin">รับเงินจาก Agent</string>
+    <string name="type_refund">คืนเงิน</string>
+    <string name="type_mpay">โอนเงินผ่าน เอ็มเปย์</string>
+    <string name="type_bonus">โบนัส</string>
+
+    //Pin Lock Screen
+    <string name="enter_pin_code">กรุณาใส่รหัส pin 4 หลัก</string>
 
 
     //Chat bot

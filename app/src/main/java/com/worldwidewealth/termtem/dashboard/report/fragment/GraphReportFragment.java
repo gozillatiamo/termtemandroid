@@ -295,6 +295,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
             rollCalendar(calendarStart);
 
+
         }
     }
 
@@ -320,7 +321,7 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
 
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
         List<Integer> colors = new ArrayList<>();
-
+        String currentType = ((ActivityReport)getActivity()).getmCurrentType();
         for (ChartResponseModel model : mListPieModel) {
             entries.add(new PieEntry((float) model.getAMOUNT(), model.getCARRIER()));
             int color = -1;
@@ -338,9 +339,11 @@ public class GraphReportFragment extends Fragment implements View.OnClickListene
                     color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
             }
 
-            if (color != -1 && !colors.contains(color)){
-                colors.add(color);
+            if (!currentType.equals(ActivityReport.BILL_REPORT) && colors.contains(color)){
+                continue;
             }
+
+            colors.add(color);
         }
 
         PieDataSet d = new PieDataSet(entries, "");

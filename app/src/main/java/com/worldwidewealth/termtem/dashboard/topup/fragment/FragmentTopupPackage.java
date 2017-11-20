@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,6 +86,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -450,6 +452,24 @@ public class FragmentTopupPackage extends  Fragment{
 */
                 mHolder.mTextTitleCarrier.setVisibility(View.INVISIBLE);
                 mHolder.mTextTitleAccount.setText(mBillService.getBILL_SERVICE_NAME());
+                mHolder.mEditPhone.setVisibility(View.GONE);
+                mHolder.mLayoutBillRef.setVisibility(View.VISIBLE);
+
+/*
+                switch (mBillService.getBILL_SERVICE_CODE()){
+                    case BillPaymentActivity.MEA_CODE:
+                        mHolder.mLayoutRef2.setVisibility(View.VISIBLE);
+                        mHolder.mTextTitleRef1.setText(getString(R.string.mea_ref1));
+                        mHolder.mTextTitleRef2.setText(getString(R.string.mea_ref2));
+                        break;
+                    case BillPaymentActivity.MWA_CODE:
+                        mHolder.mTextTitleRef1.setText(getString(R.string.mwa_ref1));
+                        break;
+                    case BillPaymentActivity.PEA_CODE:
+                        mHolder.mTextTitleRef1.setText(getString(R.string.pea_ref1));
+                        break;
+                }
+*/
 
                 Glide.with(this).load(getString(R.string.server)+mBillService.getLOGOURL())
                         .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
@@ -470,9 +490,10 @@ public class FragmentTopupPackage extends  Fragment{
     private void initBtn(){
         mBottomAction = new BottomAction(getContext(), mHolder.mIncludeBottomAction, BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onActionClick() {
+            public boolean onActionClick() {
                 mBottomAction.setEnable(false);
                 servicePreview();
+                return false;
             }
         });
     }
@@ -518,6 +539,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                             mPreviewModel = new Gson().fromJson(((String)modelValues), TopupPreviewResponseModel.class);
 
+/*
                             if (mPreviewModel.getREF1() != null){
                                 mHolder.mEditPhone.removeTextChangedListener(mTextWatcher);
                                 InputFilter[] fArray = new InputFilter[1];
@@ -530,6 +552,16 @@ public class FragmentTopupPackage extends  Fragment{
                                         TypedValue.COMPLEX_UNIT_SP,
                                         8,
                                         getResources().getDisplayMetrics()));
+                            }
+*/
+
+                            if (mPreviewModel.getREF() != null){
+                                List<TopupPreviewResponseModel.RefModel> refModels = mPreviewModel.getREF();
+                                Collections.sort(refModels);
+
+                                for (TopupPreviewResponseModel.RefModel model : refModels) {
+                                    addBillRef(model);
+                                }
                             }
 
                             FragmentTransaction fragmentManager = FragmentTopupPackage.this
@@ -587,6 +619,16 @@ public class FragmentTopupPackage extends  Fragment{
 
     }
 
+    private void addBillRef(TopupPreviewResponseModel.RefModel model){
+        View itemRef = View.inflate(getContext(), R.layout.item_bill_ref, null);
+        TextView textTitle = itemRef.findViewById(R.id.text_title_ref);
+        TextView textRef = itemRef.findViewById(R.id.text_ref);
+
+        textTitle.setText(model.getREF_NAME()+" :");
+        textRef.setText(model.getREF_VALUE());
+        mHolder.mLayoutBillRef.addView(itemRef);
+    }
+
     private boolean checkData(){
         mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
@@ -634,9 +676,11 @@ public class FragmentTopupPackage extends  Fragment{
 */
             mBottomAction.swichType(BottomAction.NEXT, new BottomAction.OnActionClickListener() {
                 @Override
-                public void onActionClick() {
+                public boolean onActionClick() {
                     mBottomAction.setEnable(false);
                     servicePreview();
+                    return false;
+
                 }
             });
             mHolder.mEditPhone.requestFocus();
@@ -657,17 +701,24 @@ public class FragmentTopupPackage extends  Fragment{
 */
             mBottomAction.swichType(BottomAction.SUBMIT, new BottomAction.OnActionClickListener() {
                 @Override
-                public void onActionClick() {
+                public boolean onActionClick() {
                     mBottomAction.setEnable(false);
                     if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
                         mFragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
                         if (!mFragmentTopupPreview.canTopup()) {
                             mBottomAction.setEnable(true);
-                            return;
+                            return false;
                         }
                     }
 
-                    serviceTopup();
+                    if (mTopup.equals(BillPaymentActivity.BILLPAY)){
+                        transid = mPreviewModel.getTNID();
+                        serviceSubmitToup(null);
+                    } else
+                        serviceTopup();
+
+                    return false;
+
                 }
             });
 
@@ -712,11 +763,12 @@ public class FragmentTopupPackage extends  Fragment{
     @AddTrace(name = "SUBMITSERVICE", enabled = true)
     private void serviceSubmitToup(final String responseStr){
 
-        final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
-        this.transid = model.getTranid();
+        if (responseStr != null) {
+            final TopupResponseModel model = new Gson().fromJson(responseStr, TopupResponseModel.class);
+            this.transid = model.getTranid();
+        }
 
         final RequestModel requestModel = getRequestSubmit();
-
 
         startTimeoutSubmit();
 
@@ -731,15 +783,31 @@ public class FragmentTopupPackage extends  Fragment{
         }
         Global.getInstance().setSubmitStatus(null);
 
+
         callSubmit = MyApplication.getServiceSubmit(requestModel);
 
-                APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
+/*
+        if (mTopup.equals(BillPaymentActivity.BILLPAY)){
+//            newInstanceSlip();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    EncryptionData.getModel(mContext, callSubmit, null, null);
+                }
+            }, 10000);
+            return;
+        }
+*/
+
+
+        APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                         try{
                             getActivity().unregisterReceiver(myReceiver);
-
+                            MyApplication.unregisterReceiver();
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -1169,6 +1237,7 @@ public class FragmentTopupPackage extends  Fragment{
         private RecyclerView mRecyclerVAS;
 //        private View mLayoutBtnTopup;
         private View mIncludeBottomAction;
+        private LinearLayout mLayoutBillRef;
         public ViewHolder(View itemview){
 /*
             mBtnNext = (Button) itemview.findViewById(R.id.btn_next);
@@ -1205,6 +1274,8 @@ public class FragmentTopupPackage extends  Fragment{
             };
 
             mEditPhone.addTextChangedListener(mTextWatcher);
+
+            mLayoutBillRef = itemview.findViewById(R.id.layout_bill_ref);
 
         }
     }

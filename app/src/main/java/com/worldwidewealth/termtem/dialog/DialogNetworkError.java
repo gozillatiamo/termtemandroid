@@ -42,7 +42,12 @@ public class DialogNetworkError {
     public DialogNetworkError(final Context context, String msg, final Call call, final Callback callback , boolean canCancel, DialogInterface.OnDismissListener dismissListener){
         this.mContext = context;
         if (mContext == null) return;
-        strRequest = Util.convertToStringRequest(call.request().body());
+
+        try {
+            strRequest = Util.convertToStringRequest(call.request().body());
+        } catch (NullPointerException e){
+            strRequest = null;
+        }
 
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
@@ -51,18 +56,20 @@ public class DialogNetworkError {
         if (msg == null)
             msg = /*requestModel.getAction()+"\n"+*/mContext.getString(R.string.network_error_message);
 
-        switch (requestModel.getAction()){
-            case APIServices.ACTIONESLIP:
-                msg = /*requestModel.getAction()+"\n"+*/context.getString(R.string.message_get_slip_again);
-                positiveBtn = context.getString(R.string.confirm);
-                styleAlert = R.style.MyAlertDialogWarning;
-                title = mContext.getString(R.string.warning);
-                break;
-            default:
-                positiveBtn = context.getString(R.string.try_again);
-                styleAlert = R.style.MyAlertDialogError;
-                title = mContext.getString(R.string.error);
+        positiveBtn = context.getString(R.string.try_again);
+        styleAlert = R.style.MyAlertDialogError;
+        title = mContext.getString(R.string.error);
 
+        if (requestModel.getAction() != null) {
+
+            switch (requestModel.getAction()) {
+                case APIServices.ACTIONESLIP:
+                    msg = /*requestModel.getAction()+"\n"+*/context.getString(R.string.message_get_slip_again);
+                    positiveBtn = context.getString(R.string.confirm);
+                    styleAlert = R.style.MyAlertDialogWarning;
+                    title = mContext.getString(R.string.warning);
+                    break;
+            }
         }
 
         builder = new AlertDialog.Builder(mContext, styleAlert)

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.worldwidewealth.termtem.ActivityLockScreen;
 import com.worldwidewealth.termtem.BuildConfig;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
@@ -34,6 +35,7 @@ import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SignInRequestModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.widgets.ControllerPinCode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -229,7 +231,14 @@ public class TermTemSignIn {
 
     private void startLogin(){
         Global.getInstance().setTXID(mTXID);
-        Intent intent = new Intent(mContext, MainActivity.class);
+        Intent intent;
+        ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
+        if (controllerPinCode == null) {
+            intent = new Intent(mContext, MainActivity.class);
+        } else {
+            intent = new Intent(mContext, ActivityLockScreen.class);
+        }
+
         ((AppCompatActivity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         mContext.startActivity(intent);
         ((AppCompatActivity)mContext).finish();

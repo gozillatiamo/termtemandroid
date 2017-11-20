@@ -30,7 +30,9 @@ import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.TermTemLoading;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import okhttp3.ResponseBody;
@@ -160,16 +162,29 @@ public class MainBillPayFragment extends Fragment implements View.OnClickListene
 
                     switch (mType){
                         case MAIN_MENU:
-                            mListBillCategory = gson
+                            List<LoadBillCategoryResponse> listCategory = gson
                                     .fromJson((String) objectResponse,
                                             new TypeToken<ArrayList<LoadBillCategoryResponse>>() {
                                             }.getType());
+                            mListBillCategory = new ArrayList<>();
+                            for (LoadBillCategoryResponse category : listCategory){
+                                mListBillCategory.add(category);
+                            }
+
+                            Collections.sort(mListBillCategory);
                             break;
                         case SUB_MENU:
-                            mListBillService = gson
+                            List<LoadBillServiceResponse> listService = gson
                                     .fromJson((String) objectResponse,
                                             new TypeToken<ArrayList<LoadBillServiceResponse>>() {
                                             }.getType());
+
+                            mListBillService = new ArrayList<>();
+                            for (LoadBillServiceResponse service : listService){
+                                mListBillService.add(service);
+                            }
+
+                            Collections.sort(mListBillService);
                             break;
                     }
 

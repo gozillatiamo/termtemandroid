@@ -56,7 +56,7 @@
             android:id="@+id/logo_menu"
             android:layout_width="@dimen/icon_big_size"
             android:layout_height="@dimen/icon_big_size"
-            android:src="@drawable/ic_topup"
+            android:src="@drawable/ic_bill"
             android:visibility="visible"
             android:layout_marginBottom="@dimen/icon_large_size"
             android:layout_marginTop="@dimen/activity_space"

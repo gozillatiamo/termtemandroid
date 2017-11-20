@@ -141,11 +141,11 @@ public class MPayStationActivity extends MyAppcompatActivity {
 */
         mBottomAction = new BottomAction(this, mIncludeBottomAction, BottomAction.NEXT, new BottomAction.OnActionClickListener() {
             @Override
-            public void onActionClick() {
+            public boolean onActionClick() {
                 String AMT = (mBottomAction.getPrice());
                 if (Double.parseDouble(AMT) < 1 || Double.parseDouble(AMT) > 49000){
                     Toast.makeText(MPayStationActivity.this, getString(R.string.alert_amount_mpay_over), Toast.LENGTH_LONG).show();
-                    return;
+                    return false;
                 }
                 mBottomAction.setEnable(false);
                 new DialogCounterAlert.DialogProgress(MPayStationActivity.this).show();
@@ -217,6 +217,8 @@ public class MPayStationActivity extends MyAppcompatActivity {
                         mBottomAction.setEnable(true);
                     }
                 });
+
+                return false;
             }
         });
     }

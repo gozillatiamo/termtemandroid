@@ -186,7 +186,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
         MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
 
-        APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
+        APIHelper.enqueueWithRetry(callSubmit, 0, new Callback<ResponseBody>() {
 
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

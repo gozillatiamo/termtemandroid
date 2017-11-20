@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/layout_ref_1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/text_title_ref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:textSize="@dimen/small_text_size"
+        android:text="@string/ref1_bill_title"
+        android:gravity="right"/>
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/text_ref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_text_size"
+        android:layout_weight="1"
+        app:sizeToFit="true"
+        android:singleLine="true"
+        android:gravity="right"
+        android:text="AIS"/>
+
+</LinearLayout>

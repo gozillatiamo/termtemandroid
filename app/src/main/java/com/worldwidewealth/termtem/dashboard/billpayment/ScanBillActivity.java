@@ -40,6 +40,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 
 public class ScanBillActivity extends MyAppcompatActivity {
 
@@ -104,6 +106,10 @@ public class ScanBillActivity extends MyAppcompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_bill);
+
+        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE)
+            mBarcodeFormat = BarcodeFormat.CODE_128;
+
         bindView();
     }
 
@@ -142,8 +148,7 @@ public class ScanBillActivity extends MyAppcompatActivity {
 
             switch (mCurrentChecked) {
                 case R.id.scan_bill_code:
-                    BARCODE_TYPES = Collections.unmodifiableCollection(Arrays.asList(BarcodeFormat.CODE_128));
-                    mBarcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(BARCODE_TYPES, null, null));
+
                     break;
                 case R.id.scan_bill_qr:
                     BARCODE_TYPES = Collections.unmodifiableCollection(Arrays.asList(BarcodeFormat.QR_CODE));

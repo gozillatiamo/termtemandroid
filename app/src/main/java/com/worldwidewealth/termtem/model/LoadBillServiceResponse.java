@@ -2,12 +2,13 @@ package com.worldwidewealth.termtem.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by user on 17-Jul-17.
  */
 
-public class LoadBillServiceResponse implements Parcelable{
+public class LoadBillServiceResponse implements Parcelable, Comparable<LoadBillServiceResponse>{
     private String BILL_SERVICE_ID;
     private String BILL_SERVICE_NAME;
     private String BILL_SERVICE_CODE;
@@ -108,5 +109,15 @@ public class LoadBillServiceResponse implements Parcelable{
         parcel.writeDouble(FEE);
         parcel.writeString(COMMAND);
         parcel.writeInt(SORTNO);
+    }
+
+    @Override
+    public int compareTo(@NonNull LoadBillServiceResponse billServiceResponse) {
+        if (SORTNO > billServiceResponse.getSORTNO())
+            return 1;
+        if (SORTNO < billServiceResponse.getSORTNO())
+            return -1;
+        else
+            return 0;
     }
 }

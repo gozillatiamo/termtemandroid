@@ -23,15 +23,16 @@ public class BottomAction implements View.OnClickListener{
     private int mCurrentType = 0;
     public static final int NEXT = 0;
     public static final int SUBMIT = 1;
-    private boolean isClick;
+    private static boolean isClick;
     private OnActionClickListener mNextListener, mSubmitListener;
 
     public interface OnActionClickListener{
-        void onActionClick();
+        boolean onActionClick();
     }
 
     public BottomAction(final Context context, View view, int type , OnActionClickListener listener){
         mHolder = new ViewHolder(view);
+        isClick = false;
         this.mContext = context;
         mFormat = NumberFormat.getInstance();
         mFormat.setMaximumFractionDigits(2);
@@ -97,6 +98,8 @@ public class BottomAction implements View.OnClickListener{
         mHolder.mBtnNext.setEnabled(enable);
         mHolder.mBtnSubmit.setEnabled(enable);
         mHolder.mBtnCancel.setEnabled(enable);
+
+        isClick = !enable;
     }
 
     @Override
@@ -114,10 +117,9 @@ public class BottomAction implements View.OnClickListener{
                 break;
             case R.id.btn_cancel:
                 ((Activity)mContext).finish();
+//                isClick = false;
                 break;
         }
-
-        isClick = false;
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder{

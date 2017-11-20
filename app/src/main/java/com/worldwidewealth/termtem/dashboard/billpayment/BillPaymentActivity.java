@@ -21,6 +21,11 @@ public class BillPaymentActivity extends MyAppcompatActivity {
     public static final String BILLPAY = "billpay";
     public static final int SCAN = 0x00;
     public static final int KEYIN = 0x01;
+
+    public static final String MEA_CODE = "3000000000003422";
+    public static final String MWA_CODE = "1100150002473190";
+    public static final String PEA_CODE = "3000000000003581";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

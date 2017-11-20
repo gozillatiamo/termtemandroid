@@ -48,7 +48,7 @@ public class FragmentTopupPreview extends Fragment {
     public class ViewHolder{
 
         private TextView mTextDebit, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
-        mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice;
+        mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice, mTextTitleFee;
         private View mLayoutCommission, mLayoutMarkup;
         public ViewHolder(View itemview){
             mTextDebit = (TextView) itemview.findViewById(R.id.txt_debit);
@@ -61,6 +61,7 @@ public class FragmentTopupPreview extends Fragment {
             mLayoutCommission = (View) itemview.findViewById(R.id.layout_commission);
             mLayoutMarkup = (View) itemview.findViewById(R.id.layout_markup);
             mTextSelectAmout = (TextView) itemview.findViewById(R.id.txt_select_amount);
+            mTextTitleFee = itemview.findViewById(R.id.text_title_fee);
         }
     }
 
@@ -164,13 +165,21 @@ public class FragmentTopupPreview extends Fragment {
                 break;
             case BillPaymentActivity.BILLPAY:
                 mHolder.mTextTitlePrice.setText(R.string.title_text_price_bill);
+                mHolder.mTextTitleFee.setText(getString(R.string.fee_bill));
                 break;
         }
+
+
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
+
+        if (mTopup.equals(BillPaymentActivity.BILLPAY)){
+            mHolder.mTextSelectAmout.setText(format.format(mModel.getAMOUNT()));
+        } else
+            mHolder.mTextSelectAmout.setText(format.format(Double.parseDouble(mSelectAmout)));
+
         double debit = mModel.getNET() == 0 ? mModel.getAMOUNT() : mModel.getNET();
         mHolder.mTextDebit.setText(format.format(debit));
-        mHolder.mTextSelectAmout.setText(format.format(mModel.getAMOUNT()));
         if (mModel.getCOMMISSION_AMOUNT() != 0) {
             mHolder.mTextCommissionRate.setText(mModel.getCOMMISSION_RATE());
             mHolder.mTextCommissionAmout.setText(format.format(mModel.getCOMMISSION_AMOUNT()));
