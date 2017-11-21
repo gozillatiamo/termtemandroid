@@ -139,6 +139,8 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private void setTypePayment(FundinViewHolder holder, ReportFundinResponse response){
         String type = response.getPAYMENT_TYPE();
+        holder.mLayoutStartBank.setVisibility(View.GONE);
+        holder.mLayoutEndBank.setVisibility(View.GONE);
 
         switch (type){
             case ReportFundinResponse.BANK:

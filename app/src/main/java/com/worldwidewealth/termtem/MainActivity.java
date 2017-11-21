@@ -1,5 +1,7 @@
 package com.worldwidewealth.termtem;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.omadahealth.lollipin.lib.PinActivity;
+import com.github.omadahealth.lollipin.lib.PinCompatActivity;
+import com.github.omadahealth.lollipin.lib.managers.AppLock;
+import com.github.omadahealth.lollipin.lib.managers.LockManager;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
@@ -32,19 +38,30 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 
-public class MainActivity extends MyAppcompatActivity implements View.OnClickListener{
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+public class MainActivity extends PinCompatActivity implements View.OnClickListener{
 
     private ViewHolder mHolder;
     private boolean isClicked = true;
     private String TAG = "Main";
     private APIServices services;
     private String mPhone, mPassword;
+
+    private static final int REQUEST_CODE_ENABLE = 11;
+
 /*
     private SharedPreferences mShared;
     private Set<String> mSetHistoryUser;
     public static final String CACHEUSER = "cacheuser";
     public static final String USER = "user";
 */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +77,7 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
 //        initBtn();
 
         Glide.with(this).load(R.raw.app_chatbox_button).asGif().dontTransform().into(mHolder.mTermTemImage);
+
     }
 
     @Override
@@ -168,6 +186,12 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
                     startActivity(intent);
                     break;
                 case R.id.help:
+/*
+                    Intent intentEnable = new Intent(MainActivity.this, ActivityLockScreen.class);
+                    intentEnable.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
+                    startActivityForResult(intentEnable, REQUEST_CODE_ENABLE);
+*/
+
                     new DialogHelp(MainActivity.this).show();
                     break;
                 case R.id.view_chat_bot:
@@ -194,7 +218,7 @@ public class MainActivity extends MyAppcompatActivity implements View.OnClickLis
         private LinearLayout mChatBotView;
         private ImageView mTermTemImage;
 
-        public ViewHolder(AppCompatActivity view){
+        public ViewHolder(Activity view){
 
             mBtnRegister = (TextView) view.findViewById(R.id.btn_register);
             mBtnRegister.setOnClickListener(MainActivity.this);

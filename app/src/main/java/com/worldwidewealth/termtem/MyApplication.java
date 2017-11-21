@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.github.omadahealth.lollipin.lib.managers.LockManager;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.google.gson.Gson;
@@ -129,7 +130,10 @@ public class MyApplication extends Application implements Application.ActivityLi
         Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
-        ControllerPinCode.enable(true);
+        ControllerPinCode.enable(false);
+        LockManager<ActivityLockScreen> manager = LockManager.getInstance();
+        manager.enableAppLock(this, ActivityLockScreen.class);
+        manager.disableAppLock();
 //        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
         mBus = new Bus();
         mPerformance = FirebasePerformance.getInstance();

@@ -232,12 +232,16 @@ public class TermTemSignIn {
     private void startLogin(){
         Global.getInstance().setTXID(mTXID);
         Intent intent;
+/*
         ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
         if (controllerPinCode == null) {
+*/
             intent = new Intent(mContext, MainActivity.class);
+/*
         } else {
             intent = new Intent(mContext, ActivityLockScreen.class);
         }
+*/
 
         ((AppCompatActivity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         mContext.startActivity(intent);

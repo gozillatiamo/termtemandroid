@@ -3,6 +3,8 @@ package com.worldwidewealth.termtem.widgets;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.github.omadahealth.lollipin.lib.managers.LockManager;
+import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.MyApplication;
 
 /**
