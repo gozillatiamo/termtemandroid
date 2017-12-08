@@ -310,6 +310,7 @@
     <string name="error_msg_data">เกิดข้อผิดพลาดในการรับข้อมูล\nกรุณาลองใหม่อีกครั้ง</string>
     <string name="error_msg">เกิดข้อผิดพลาด\nกรุณาลองใหม่อีกครั้ง</string>
     <string name="scan_barcode">สแกนบาร์โค้ด</string>
+    <string name="scan_barcode_bill">สแกน กดที่นี่!!</string>
     <string name="enter_phone_no">กรอกหมายเลข\nโทรศัพท์</string>
     <string name="electricity_water_bill">ค่าน้ำ-ค่าไฟ</string>
     <string name="internet_phone_bill">อินเทอร์เน็ต\nโทรศัพท์</string>
@@ -320,6 +321,7 @@
     <string name="phone_no_customer">เบอร์โทรลูกค้า (เพื่อยืนยันการจ่ายบิล)</string>
     <string name="duedate_title">กรุณาเลือกวันครบกำหนด</string>
     <string name="example">ตัวอย่าง</string>
+    <string name="please_enter_bill_ref">กรุณากรอกหมายเลขอ้างอิงให้ครบถ้วน</string>
 
     //Bill service
     <string name="fee_bill">ค่าธรรมเนียม (บาท):</string>
@@ -327,7 +329,7 @@
     <string name="mea_ref2">เลขที่ใบแจ้งค่าไฟฟ้า : </string>
     <string name="mwa_ref1">เลขสาขา-ทะเบียนผู้ใช้น้ำ : </string>
     <string name="pea_ref1">หมายเลขผู้ใช้ไฟฟ้า : </string>
-    
+
     //Funin Type
     <string name="type_bank_transfer">โอนเงินผ่านธนาคาร</string>
     <string name="type_agent_cashin">รับเงินจาก Agent</string>
@@ -337,6 +339,21 @@
 
     //Pin Lock Screen
     <string name="enter_pin_code">กรุณาใส่รหัส pin 4 หลัก</string>
+    <string name="title_dialog_set_pin">คำแนะนำ</string>
+    <string name="des_dialog_set_pin">หากท่านต้องการเข้าใช้งานเต็มเต็มได้สะดวกขึ้น แนะนำให้ท่านตั้งรหัส PIN 4 หลัก</string>
+    <string name="not_show_again">ไม่ต้องแสดงอีก (สามารถเปลี่ยนแปลงภายหลังที่เมนู \"ตั้งค่า\")</string>
+    <string name="be_later">ไว้ภายหลัง</string>
+    <string name="short_setting">ตั้งค่า</string>
+    <string name="use_other_user">เข้าสู่ระบบด้วย \"รหัสผู้ใช้งาน\" อื่น</string>
+    <string name="title_setup_pin">ตั้งค่ารหัส PIN</string>
+    <string name="title_enter_username_password">กรุณากรอก \"รหัสผู้ใช้งาน\"-\"รหัสผ่าน\" ที่ท่านต้องการจะตั้งรหัส PIN</string>
+    <string name="status_set_pin">กรุณาตั้งรหัส PIN 4 หลัก</string>
+    <string name="status_confirm_pin">กรุณายืนยันรหัส PIN 4 หลัก</string>
+    <string name="status_enter_pin">กรุณาใส่รหัส PIN 4 หลัก</string>
+    <string name="status_confirm_pin_incorrect">รหัสยืนยันไม่ถูกต้อง!! กรุณาลองใหม่</string>
+    <string name="status_pin_incorrect">รหัส PIN ไม่ถูกต้อง!! กรุณาลองใหม่</string>
+    <string name="status_pin_duplicate">รหัส PIN นี้มีการใช้งานไปแล้ว กรุณาลองใหม่</string>
+    <string name="status_complete_setup">รหัส PIN ของท่านได้ถูกตั้งเรียบร้อยแล้ว ท่านจะสามารถใช้ได้ในการเข้าสู่ระบบครั้งถัดไป</string>
 
 
     //Chat bot

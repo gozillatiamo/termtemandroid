@@ -43,8 +43,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 //        consumerProguardFiles 'proguard-android.txt', 'proguard-rules.pro', 'proguard-gvr.txt'
-        versionCode 17
-        versionName "1.5."
+        versionCode 18
+        versionName "1.6."
 //        vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "none APIs key")
 
@@ -91,7 +91,7 @@ android {
     productFlavors {
 
         production {
-            versionNameSuffix "2"
+            versionNameSuffix "0"
             dimension "dimens"
         }
 
@@ -192,12 +192,12 @@ dependencies {
         exclude module: 'appcompat-v7'
     }
 
-    compile ('com.github.omadahealth:lollipin:2.1.0@aar') {
+/*
+    compile('com.github.omadahealth:lollipin:2.1.0@aar') {
         transitive = true
         exclude group: 'com.android.support'
     }
-
-    compile 'uk.me.lewisdeane.ldialogs:ldialogs:1.2.0@aar'
+*/
 
 /*
     compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
@@ -205,6 +205,8 @@ dependencies {
     compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
 */
 
+    compile 'com.andrognito.pinlockview:pinlockview:2.1.0'
+    compile 'uk.me.lewisdeane.ldialogs:ldialogs:1.2.0@aar'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
@@ -221,6 +223,12 @@ dependencies {
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     testCompile 'junit:junit:4.12'
+
+    compile ('android.arch.persistence.room:runtime:1.0.0'){
+        exclude group: "com.android.support"
+    }
+
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

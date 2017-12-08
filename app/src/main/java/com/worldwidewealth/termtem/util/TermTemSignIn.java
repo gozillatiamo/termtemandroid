@@ -14,18 +14,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.worldwidewealth.termtem.ActivityLockScreen;
 import com.worldwidewealth.termtem.BuildConfig;
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.LockScreenActivity;
 import com.worldwidewealth.termtem.MainActivity;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.SplashScreenWWW;
 import com.worldwidewealth.termtem.dashboard.ActivityDashboard;
+import com.worldwidewealth.termtem.database.AppDatabase;
+import com.worldwidewealth.termtem.database.table.UserPin;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.model.DataRequestModel;
@@ -231,17 +233,22 @@ public class TermTemSignIn {
 
     private void startLogin(){
         Global.getInstance().setTXID(mTXID);
-        Intent intent;
-/*
         ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
-        if (controllerPinCode == null) {
-*/
-            intent = new Intent(mContext, MainActivity.class);
-/*
-        } else {
-            intent = new Intent(mContext, ActivityLockScreen.class);
+
+        Intent intent;
+//        List<UserPin> listUserPin = AppDatabase.getAppDatabase(mContext).userPinDao().selectAll();
+        UserPin userPin = null;
+
+        if (Global.getInstance().getLastUserLogin() != null) {
+            String lastUsername = Global.getInstance().getLastUserLogin().replaceAll("-", "");
+            userPin = AppDatabase.getAppDatabase(mContext).userPinDao().getUserPinById(lastUsername);
         }
-*/
+        if (controllerPinCode != null && userPin != null){
+            intent = new Intent(mContext, LockScreenActivity.class);
+            intent.putExtra(LockScreenActivity.KEY_ACTION, LockScreenActivity.LOCK_SCREEN);
+            intent.putExtra(LockScreenActivity.USERPIN, userPin);
+        } else
+            intent = new Intent(mContext, MainActivity.class);
 
         ((AppCompatActivity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         mContext.startActivity(intent);
@@ -313,10 +320,18 @@ public class TermTemSignIn {
         Log.e(TAG, "Username: "+mUsername);
         Log.e(TAG, "Password: "+mPassword);
 
+
         if (mUsername == null || mUsername.isEmpty() || mPassword.isEmpty()){
             DialogCounterAlert.DialogProgress.dismiss();
             Util.backToSignIn((Activity) mContext);
+            return;
         }
+
+
+        checkManagerWifi();
+    }
+
+    private void checkManagerWifi(){
 
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -427,10 +442,13 @@ public class TermTemSignIn {
                     }
                     switch (mType){
                         case NEWLOGIN:
-                            Global.getInstance().setCacheUser(mUsername);
+                            if(mUsername.contains("-")) {
+                                Global.getInstance().setCacheUser(mUsername);
+                            }
                             mUsername = null;
                             Intent intent = null;
 
+/*
                             if(BuildConfig.FLAVOR.equals("demoairtime")) {
                                 try {
                                     intent = new Intent(mContext, Class.forName("com.worldwidewealth.termtem.demoairtime.dashboard.ActivityDashboard"));
@@ -440,6 +458,8 @@ public class TermTemSignIn {
                             } else {
                                 intent = new Intent(mContext, ActivityDashboard.class);
                             }
+*/
+                            intent = new Intent(mContext, ActivityDashboard.class);
 
                             intent.putExtra("frompos", mIsFromPOS);
                             mContext.startActivity(intent);

@@ -114,6 +114,7 @@ public class FragmentTopupPackage extends  Fragment{
     private String mDueDate = "";
     private long mDueDateTimestamp = System.currentTimeMillis();
     private String mBarcode;
+    private String mBillRef;
     private LoadBillServiceResponse mBillService;
     private TopupPreviewResponseModel mPreviewModel;
     private static Context mContext;
@@ -143,7 +144,8 @@ public class FragmentTopupPackage extends  Fragment{
     private String mActionSumitTopup = APIServices.ACTIONSUBMITTOPUP;
 
     private static final String CARRIER = "carrier";
-    private static final String KEY_BARCODE = "barcode";
+    public static final String KEY_BARCODE = "barcode";
+    public static final String KEY_BILLREF = "billref";
     private static final String KEY_BILL_SERVICE = "billcode";
 
     private TextWatcher mTextWatcher;
@@ -201,12 +203,13 @@ public class FragmentTopupPackage extends  Fragment{
         return fragment;
     }
 
-    public static Fragment newInstanceBill(String topup, String barcode,
+    public static Fragment newInstanceBill(String topup, String barcode, String billRef,
                                            LoadBillServiceResponse billservice, String phone_no){
         FragmentTopupPackage fragment = new FragmentTopupPackage();
         Bundle bundle = new Bundle();
         bundle.putString(FragmentTopup.keyTopup, topup);
         bundle.putString(KEY_BARCODE, barcode);
+        bundle.putString(KEY_BILLREF, billRef);
         bundle.putParcelable(KEY_BILL_SERVICE, billservice);
         bundle.putString(ActivityTopup.KEY_PHONENO, phone_no);
 
@@ -224,6 +227,7 @@ public class FragmentTopupPackage extends  Fragment{
             switch (mTopup){
                 case BillPaymentActivity.BILLPAY:
                     mBarcode = getArguments().getString(KEY_BARCODE);
+                    mBillRef = getArguments().getString(KEY_BILLREF);
                     mBillService = getArguments().getParcelable(KEY_BILL_SERVICE);
                     break;
                 default:
@@ -511,7 +515,8 @@ public class FragmentTopupPackage extends  Fragment{
             case BillPaymentActivity.BILLPAY:
                 Log.e(TAG, "BeforePreview: "+mBarcode);
                 call = services.billService(new RequestModel(mActionPreview,
-                        new PreviewBillRequest(mBarcode, mBillService.getBILL_SERVICE_CODE(),
+                        new PreviewBillRequest(mBarcode != null ? mBarcode : mBillRef
+                                , mBillService.getBILL_SERVICE_CODE(),
                                 mBillService.getBILL_SERVICE_ID(), getArguments().getString(ActivityTopup.KEY_PHONENO))));
                 break;
             default:

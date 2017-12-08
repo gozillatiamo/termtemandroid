@@ -51,7 +51,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     public static final String KEY_PHONENO = "phoneno";
     public static final String KEY_CARRIER = "carrier";
     public static final String KEY_AMT = "amt";
-    public static final String KEY_BARCODE = "barcode";
+//    public static final String KEY_BARCODE = "barcode";
     public static final String KEY_BILLSERVICE = "billservice";
 
     public static final String TAG = ActivityTopup.class.getSimpleName();
@@ -202,7 +202,7 @@ public class ActivityTopup extends MyAppcompatActivity {
     }
 
     private void startWithOldPhoneNO(){
-
+        Bundle bundle = getIntent().getExtras();
         switch (mTopup){
             case BillPaymentActivity.BILLPAY:
                 getSupportFragmentManager()
@@ -210,7 +210,8 @@ public class ActivityTopup extends MyAppcompatActivity {
                         .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                         .replace(R.id.container_topup, FragmentTopupPackage.newInstanceBill(
                                 BillPaymentActivity.BILLPAY,
-                                getIntent().getExtras().getString(KEY_BARCODE),
+                                bundle.containsKey(FragmentTopupPackage.KEY_BARCODE) ? bundle.getString(FragmentTopupPackage.KEY_BARCODE) : null,
+                                bundle.containsKey(FragmentTopupPackage.KEY_BILLREF) ? bundle.getString(FragmentTopupPackage.KEY_BILLREF) : null,
                                 (LoadBillServiceResponse) getIntent().getExtras().getParcelable(KEY_BILLSERVICE),
                                 mPhoneNo))
                         .commit();

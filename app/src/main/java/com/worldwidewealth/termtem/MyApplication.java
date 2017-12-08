@@ -12,25 +12,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.omadahealth.lollipin.lib.managers.LockManager;
 import com.google.firebase.perf.FirebasePerformance;
-import com.google.firebase.perf.metrics.Trace;
-import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.worldwidewealth.termtem.broadcast.LocalService;
 import com.worldwidewealth.termtem.broadcast.NetworkStateMonitor;
-import com.worldwidewealth.termtem.broadcast.NotificationBroadCastReceiver;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.ActivityAddCreditAgent;
 import com.worldwidewealth.termtem.dashboard.addCreditAgent.fragment.FragmentAddCreditChoice;
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
@@ -38,29 +31,20 @@ import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.chat.PhotoViewActivity;
-import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.dialog.DialogNetworkError;
-import com.worldwidewealth.termtem.model.DataRequestModel;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.ResponseModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
-import com.worldwidewealth.termtem.model.TopupResponseModel;
 import com.worldwidewealth.termtem.services.APIHelper;
 import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
 import com.worldwidewealth.termtem.util.Util;
 import com.worldwidewealth.termtem.widgets.ControllerPinCode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +52,6 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static com.worldwidewealth.termtem.MyApplication.LeavingOrEntering.currentActivity;
 
 /**
@@ -131,10 +114,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
         ControllerPinCode.enable(false);
-        LockManager<ActivityLockScreen> manager = LockManager.getInstance();
-        manager.enableAppLock(this, ActivityLockScreen.class);
-        manager.disableAppLock();
-//        userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, getString(R.string.app_name));
+
         mBus = new Bus();
         mPerformance = FirebasePerformance.getInstance();
         mPerformance.setPerformanceCollectionEnabled(true);

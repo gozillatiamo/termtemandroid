@@ -75,11 +75,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
         <activity
@@ -158,16 +159,14 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <activity android:name=".dashboard.maps.MapsActivity"
-            android:screenOrientation="locked"
-            />
-
+        <activity
+            android:name=".dashboard.maps.MapsActivity"
+            android:screenOrientation="locked" />
         <activity
             android:name=".chat.ChatBotActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="locked"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".chat.PhotoViewActivity"
             android:screenOrientation="locked"
@@ -184,19 +183,17 @@
         <activity
             android:name=".dashboard.billpayment.BillPaymentActivity"
             android:parentActivityName=".dashboard.ActivityDashboard"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="locked"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.worldwidewealth.termtem.dashboard.ActivityDashboard" />
         </activity>
-        <activity android:name=".dashboard.billpayment.ScanBillActivity"
-            android:screenOrientation="landscape"
-            ></activity>
-
-        <activity android:name=".ActivityLockScreen"
-            android:screenOrientation="locked"></activity>
+        <activity
+            android:name=".dashboard.billpayment.ScanBillActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".LockScreenActivity"></activity>
     </application>
 
 </manifest>

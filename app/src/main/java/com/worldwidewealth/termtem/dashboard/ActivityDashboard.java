@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.LockScreenActivity;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.MyFirebaseMessagingService;
@@ -29,6 +30,8 @@ import com.worldwidewealth.termtem.dashboard.favorite.FavoritesActivity;
 import com.worldwidewealth.termtem.dashboard.inbox.InboxActivity;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.database.AppDatabase;
+import com.worldwidewealth.termtem.database.table.UserPin;
 import com.worldwidewealth.termtem.model.UserMenuModel;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.R;
@@ -36,6 +39,7 @@ import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.util.BadgeDrawable;
 import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.ControllerPinCode;
 import com.worldwidewealth.termtem.widgets.MenuButtonView;
 
 import java.util.List;
@@ -73,7 +77,7 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
         }
         updateBalance();
         initToolbar();
-
+        showDialogAdvice();
     }
 
     @Override
@@ -164,6 +168,24 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDialogAdvice(){
+        final ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
+
+        if (controllerPinCode != null && !controllerPinCode.getIgnorDialog() && !mIsFromPOS){
+            AppDatabase appDatabase = AppDatabase.getAppDatabase(this);
+            String username = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                    Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+
+            UserPin userPin = appDatabase.userPinDao().getUserPinById(username);
+            if (userPin == null){
+                controllerPinCode.showDialogAdvice(this);
+
+                return;
+            }
+        }
+
     }
 
     public void updateBalance(){

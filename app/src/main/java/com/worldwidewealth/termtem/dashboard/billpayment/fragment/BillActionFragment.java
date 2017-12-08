@@ -83,10 +83,11 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
     private EditText mEditPhoneNo;
     private ImageView mLogoService;
     private Button mBtnScan, mBtnKeyIn, mBtnNext;
-    private View mLayoutKeyIn;
+    private View mLayoutKeyIn, mLayoutEnterPhone;
     private RecyclerView mRecyclerRef;
     private APIServices services;
     private String mPhoneNo;
+    private BillRefAdapter mRefAdapter;
 
     public static final String TAG = BillActionFragment.class.getSimpleName();
 
@@ -141,7 +142,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                     Intent intent = new Intent(getContext(), ActivityTopup.class);
                     intent.putExtra(FragmentTopup.keyTopup, BillPaymentActivity.BILLPAY);
                     intent.putExtra(ActivityTopup.KEY_PHONENO, mPhoneNo);
-                    intent.putExtra(ActivityTopup.KEY_BARCODE, result);
+                    intent.putExtra(FragmentTopupPackage.KEY_BARCODE, result);
                     intent.putExtra(ActivityTopup.KEY_BILLSERVICE, response);
 
                     startActivity(intent);
@@ -178,6 +179,10 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
         mLayoutKeyIn = getView().findViewById(R.id.layout_enter_ref);
         mRecyclerRef = getView().findViewById(R.id.recycler_reference);
         mEditPhoneNo = getView().findViewById(R.id.edit_phone_no);
+        mLayoutEnterPhone = getView().findViewById(R.id.layout_enter_phone);
+        if (mResponse.getBILL_SERVICE_CODE().equals(BillPaymentActivity.AIS_PHONE_CODE)){
+            mLayoutEnterPhone.setVisibility(View.GONE);
+        }
 
         mEditPhoneNo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,6 +206,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
 
         mBtnKeyIn.setOnClickListener(this);
         mBtnScan.setOnClickListener(this);
+        mBtnNext.setOnClickListener(this);
     }
 
     private void setupData(){
@@ -214,20 +220,24 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                 .into(mLogoService);
 
         if (mResponse.getSCAN() == 0) mBtnScan.setVisibility(View.GONE);
+        else mBtnScan.setVisibility(View.VISIBLE);
         if (mResponse.getKEYIN() == 0) mBtnKeyIn.setVisibility(View.GONE);
+        else mBtnKeyIn.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onClick(View view) {
-        mPhoneNo = mEditPhoneNo.getText().toString().replaceAll("-", "");
-        if (!CheckSyntaxData.isPhoneValid(mPhoneNo)){
-            Toast.makeText(getContext(), R.string.hint_phone_number, Toast.LENGTH_SHORT).show();
-            return;
+        if (!mResponse.getBILL_SERVICE_CODE().equals(BillPaymentActivity.AIS_PHONE_CODE)) {
+            mPhoneNo = mEditPhoneNo.getText().toString().replaceAll("-", "");
+            if (!CheckSyntaxData.isPhoneValid(mPhoneNo)) {
+                Toast.makeText(getContext(), R.string.hint_phone_number, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         switch (view.getId()){
             case R.id.btn_scan:
 //                MyApplication.LeavingOrEntering.currentActivity = null;
-                if (mResponse.getBILL_SERVICE_CODE().equals("3000000000003581")){
+                if (mResponse.getBILL_SERVICE_CODE().equals(BillPaymentActivity.PEA_CODE)){
                     initExampleDialog();
                 } else {
                     Intent intent = new Intent(getContext(), ScanBillActivity.class);
@@ -244,7 +254,41 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                 mLogoService.animate()
                         .setDuration(500)
                         .alpha(0.2f).start();
+                mBtnScan.setVisibility(View.GONE);
                 setupRecycler();
+                break;
+            case R.id.btn_next:
+
+                String allRef = null;
+                for (int i = 0; i < mRefAdapter.getItemCount(); i++){
+                    BillRefAdapter.ViewHolder viewHolder = (BillRefAdapter.ViewHolder) mRecyclerRef.findViewHolderForAdapterPosition(i);
+                    String ref = viewHolder.mEditRef.getText().toString();
+                    if (ref == null || ref.isEmpty()){
+                        Toast.makeText(getContext(), getString(R.string.please_enter_bill_ref), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    switch (i){
+                        case 0:
+                            allRef = ref;
+                            break;
+                        default: allRef += ":"+ref;
+                    }
+                }
+
+                if (mResponse.getBILL_SERVICE_CODE().equals(BillPaymentActivity.AIS_PHONE_CODE)){
+                    mPhoneNo = allRef;
+                }
+
+                Intent intent = new Intent(getContext(), ActivityTopup.class);
+                intent.putExtra(FragmentTopup.keyTopup, BillPaymentActivity.BILLPAY);
+                intent.putExtra(ActivityTopup.KEY_PHONENO, mPhoneNo);
+                intent.putExtra(FragmentTopupPackage.KEY_BILLREF, allRef);
+                intent.putExtra(ActivityTopup.KEY_BILLSERVICE, mResponse);
+
+                startActivity(intent);
+                getActivity().finish();
+
                 break;
         }
     }
@@ -304,7 +348,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                                     }.getType());
 
                     if (mListBillRef != null && mListBillRef.size() > 0){
-                        BillRefAdapter adapter = new BillRefAdapter(mListBillRef);
+                        mRefAdapter = new BillRefAdapter(mListBillRef);
 
                         switch (MyApplication.getTypeScreenLayout()){
                             case Configuration.SCREENLAYOUT_SIZE_XLARGE:
@@ -314,7 +358,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
                                 mRecyclerRef.setLayoutManager(new LinearLayoutManager(getContext()));
 
                         }
-                        mRecyclerRef.setAdapter(new ScaleInAnimationAdapter(adapter));
+                        mRecyclerRef.setAdapter(new ScaleInAnimationAdapter(mRefAdapter));
                     }
                 }
             }
@@ -354,7 +398,7 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
 
         @Override
         public int getItemCount() {
-            return mListData.size()+1;
+            return mListData.size();
         }
 
         public LoadBillRefResponse getItem(int position){

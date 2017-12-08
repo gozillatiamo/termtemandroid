@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.worldwidewealth.termtem.EncryptionData;
 import com.worldwidewealth.termtem.Global;
+import com.worldwidewealth.termtem.LockScreenActivity;
 import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.OtherMenuFragment;
@@ -241,6 +242,20 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
                 }
             });
+
+            Button btnSetupPin = mDialogSetting.findViewById(R.id.btn_setup_pin);
+            btnSetupPin.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), LockScreenActivity.class);
+                    intent.putExtra(LockScreenActivity.KEY_ACTION, LockScreenActivity.SETUP_PIN);
+                    getContext().startActivity(intent);
+                }
+            });
+
+            if (ControllerPinCode.getInstance() == null){
+                btnSetupPin.setVisibility(GONE);
+            }
 
             btnChangePassword.setOnClickListener(new View.OnClickListener() {
                 @Override

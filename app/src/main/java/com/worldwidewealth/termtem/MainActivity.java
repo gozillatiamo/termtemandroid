@@ -25,11 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.github.omadahealth.lollipin.lib.PinActivity;
-import com.github.omadahealth.lollipin.lib.PinCompatActivity;
-import com.github.omadahealth.lollipin.lib.managers.AppLock;
-import com.github.omadahealth.lollipin.lib.managers.LockManager;
-import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.worldwidewealth.termtem.chat.ChatBotActivity;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
@@ -40,7 +35,7 @@ import com.worldwidewealth.termtem.util.Util;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends PinCompatActivity implements View.OnClickListener{
+public class MainActivity extends MyAppcompatActivity implements View.OnClickListener{
 
     private ViewHolder mHolder;
     private boolean isClicked = true;
@@ -111,9 +106,10 @@ public class MainActivity extends PinCompatActivity implements View.OnClickListe
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO){
+                    Util.hideSoftKeyboard(v);
                     login();
                 }
-                return false;
+                return true;
             }
         });
 
@@ -186,12 +182,6 @@ public class MainActivity extends PinCompatActivity implements View.OnClickListe
                     startActivity(intent);
                     break;
                 case R.id.help:
-/*
-                    Intent intentEnable = new Intent(MainActivity.this, ActivityLockScreen.class);
-                    intentEnable.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
-                    startActivityForResult(intentEnable, REQUEST_CODE_ENABLE);
-*/
-
                     new DialogHelp(MainActivity.this).show();
                     break;
                 case R.id.view_chat_bot:

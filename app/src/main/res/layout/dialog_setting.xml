@@ -46,6 +46,17 @@
         android:drawableTop="@drawable/qr_code"
         />
 
+    <Button
+        android:id="@+id/btn_setup_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="center"
+        style="@style/MyButton"
+        android:text="@string/title_setup_pin"
+        android:drawableTop="@drawable/qr_code"
+        />
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_forgot_password"
         android:layout_width="match_parent"

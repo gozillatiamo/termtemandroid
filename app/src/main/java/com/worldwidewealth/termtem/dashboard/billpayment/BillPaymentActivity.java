@@ -25,6 +25,7 @@ public class BillPaymentActivity extends MyAppcompatActivity {
     public static final String MEA_CODE = "3000000000003422";
     public static final String MWA_CODE = "1100150002473190";
     public static final String PEA_CODE = "3000000000003581";
+    public static final String AIS_PHONE_CODE = "1100150002413259";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

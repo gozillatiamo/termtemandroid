@@ -28,6 +28,7 @@ import com.worldwidewealth.termtem.services.APIServices;
 import com.worldwidewealth.termtem.util.ErrorNetworkThrowable;
 import com.worldwidewealth.termtem.util.GPSTracker;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
+import com.worldwidewealth.termtem.widgets.ControllerPinCode;
 
 import java.util.Locale;
 
