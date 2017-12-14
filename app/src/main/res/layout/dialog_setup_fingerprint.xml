@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="@dimen/activity_vertical_margin"
+    android:background="@android:drawable/dialog_holo_light_frame">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/title_setup_fingerprint"/>
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/icon_fingerprint"
+        android:layout_width="@dimen/icon_big_size"
+        android:layout_height="@dimen/icon_big_size"
+        android:padding="@dimen/activity_space"
+        android:tint="@color/color_normal"
+        android:src="@drawable/ic_fingerprint"/>
+    <TextView
+        android:id="@+id/text_status_fingerprint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/color_normal"
+        android:text="@string/status_fingerprint_normal"/>
+</LinearLayout>

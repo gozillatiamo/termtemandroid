@@ -48,14 +48,47 @@
         app:dotDiameter="@dimen/my_text_size"
         app:keypadTextSize="@dimen/my_text_size" />
 
-    <Button
-        android:id="@+id/btn_other_user"
+    <LinearLayout
+        android:id="@+id/layout_fingerprint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:orientation="vertical"
         android:visibility="gone"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:text="@string/use_other_user"
-        android:textColor="@color/zxing_custom_viewfinder_laser"/>
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:gravity="center">
 
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/icon_fingerprint"
+            android:layout_width="@dimen/icon_big_size"
+            android:layout_height="@dimen/icon_big_size"
+            android:padding="@dimen/activity_space"
+            android:tint="@android:color/white"
+            android:src="@drawable/ic_fingerprint"/>
+        <TextView
+            android:id="@+id/text_status_fingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:text="@string/status_fingerprint_normal"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_other_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:text="@string/use_other_user"
+            android:textColor="@color/zxing_custom_viewfinder_laser"/>
+
+    </RelativeLayout>
 </LinearLayout>

@@ -7,6 +7,7 @@
     <color name="colorBackground">#f5f5f5</color>
     <color name="colorSelector">#E39774</color>
     <color name="colorSuccess">#21987a</color>
+    <color name="colorFail">#a82e2e</color>
     <color name="colorTab">#4c8ba8</color>
     <color name="colorTextTitle">#38686A</color>
     <color name="colorRed">#F44336</color>
@@ -22,6 +23,7 @@
     <color name="color_agent_cashin">#3B6FAE</color>
     <color name="color_bill_pay">#8DB22B</color>
     <color name="color_vas">#AC2431</color>
+    <color name="color_normal">#a7a7a7</color>
 
     //Chat bot
     <color name="grayLight">#e2e2e2</color>

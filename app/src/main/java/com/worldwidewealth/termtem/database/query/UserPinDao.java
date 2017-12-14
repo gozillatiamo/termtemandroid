@@ -29,6 +29,9 @@ public interface UserPinDao {
     @Query("SELECT * FROM user_pin WHERE pin_id = :pinId")
     UserPin getuserPinByPinId(String pinId);
 
+    @Query("SELECT * FROM user_pin WHERE use_fingerprint = 1")
+    UserPin getUserUseFingerprint();
+
     @Update
     void updateUserPin(UserPin userPin);
 }

@@ -354,6 +354,16 @@
     <string name="status_pin_incorrect">รหัส PIN ไม่ถูกต้อง!! กรุณาลองใหม่</string>
     <string name="status_pin_duplicate">รหัส PIN นี้มีการใช้งานไปแล้ว กรุณาลองใหม่</string>
     <string name="status_complete_setup">รหัส PIN ของท่านได้ถูกตั้งเรียบร้อยแล้ว ท่านจะสามารถใช้ได้ในการเข้าสู่ระบบครั้งถัดไป</string>
+    <string name="error_has_fingerprint">เครื่องของท่านเคยลงทะเบียนลายนิ้วมือกับรหัสผู้ใช้งานอื่นแล้ว\nหากท่านต้องการเปลี่ยนแปลงกรุณายกเลิกลายนิ้วมือที่รหัสผู้ใช้งานเก่าก่อน!!</string>
+    <string name="error_invalid_finger_in_device">โทรศัพท์ของท่านยังไม่เคยลงทะเบียนลายนิ้วมือ\nกรุณาลงทะเบียนก่อนได้ที่ ส่วนตั้งค่าของโทรศัพท์ท่าน</string>
+    <string name="error_invalid_lockscreen_secure">กรุณาเปิดระบบป้องกันความปลอดภัยโทรศัพท์ของท่านที่ ส่วนตั้งค่าของโทรศัพท์ท่าน</string>
+    <string name="introduce">คำแนะนำ</string>
+    <string name="msg_introduce_fingerprint">ท่านต้องการใช้ฟังก์ชั่นการแสกนลายนิ้วมือสำหรับรหัสผู้ใช้งานนี้หรือไม่?</string>
+    <string name="using">ใช้งาน</string>
+    <string name="title_setup_fingerprint">กรุณาแสกนนิ้วเพิื่อยืนยัน</string>
+    <string name="status_fingerprint_normal">แสกน</string>
+    <string name="status_fingerprint_success">ยืนยันตนถูกต้อง</string>
+    <string name="status_fingerprint_fail">ยืนยันตนไม่ถูกต้อง</string>
 
 
     //Chat bot

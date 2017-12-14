@@ -1,15 +1,29 @@
 package com.worldwidewealth.termtem;
 
+import android.*;
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
@@ -19,6 +33,7 @@ import com.worldwidewealth.termtem.database.table.UserPin;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
 import com.worldwidewealth.termtem.util.TermTemSignIn;
+import com.worldwidewealth.termtem.widgets.FingerprintController;
 
 
 public class LockScreenActivity extends MyAppcompatActivity implements View.OnClickListener{
@@ -26,13 +41,22 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
     private PinLockView mPinLockView;
     private IndicatorDots mIndicatorDots;
     private TextView mTextStatus;
+    private AppCompatImageView mIconFingerprint;
+    private TextView mTextScanStatus;
+    private View mLayoutFingerprint;
     private Button mBtnChangUser;
     private String mFirstPass;
     private String mAction;
     private String mUsername;
     private String mPassword;
     private Bundle mBundle;
-    private UserPin mUserPin;
+    private UserPin mUserPin, mUserHasFinger;
+    private FingerprintController mFingerprintController;
+
+    //Dialog setup fingerprint
+    private Dialog mDialogFingerprint;
+    private AppCompatImageView mIconFingerprintDialog;
+    private TextView mTextScanStatusDialog;
 
     public static final String KEY_ACTION = "action";
     public static final String SETUP_PIN = "setuppin";
@@ -77,7 +101,13 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
                                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            LockScreenActivity.this.finish();
+                                            mFingerprintController = FingerprintController.getInstance(LockScreenActivity.this);
+
+                                            if (mFingerprintController != null){
+                                                setFingerprint();
+                                            } else {
+                                                LockScreenActivity.this.finish();
+                                            }
                                         }
                                     }).show();
                         } else {
@@ -125,6 +155,10 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
         mIndicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
         mTextStatus = (TextView) findViewById(R.id.text_status);
         mBtnChangUser = (Button) findViewById(R.id.btn_other_user);
+        mIconFingerprint = (AppCompatImageView) findViewById(R.id.icon_fingerprint);
+        mTextScanStatus = (TextView) findViewById(R.id.text_status_fingerprint);
+        mLayoutFingerprint = findViewById(R.id.layout_fingerprint);
+
         mBtnChangUser.setOnClickListener(this);
 
     }
@@ -145,6 +179,7 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
                 mUsername = mUserPin.getUserid();
                 mPassword = mUserPin.getPassword();
                 mBtnChangUser.setVisibility(View.VISIBLE);
+                checkHasFingerScan();
                 break;
             case SETUP_PIN:
                 mTextStatus.setText(R.string.status_set_pin);
@@ -163,24 +198,161 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
         mPassword = EncryptionData.DecryptData(Global.getInstance().getPASSWORD(),
                 Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
-        UserPin userPin = new UserPin();
-        userPin.setUserid(mUsername);
-        userPin.setPassword(mPassword);
-        userPin.setPinId(pin);
+        mUserPin = new UserPin();
+        mUserPin.setUserid(mUsername);
+        mUserPin.setPassword(mPassword);
+        mUserPin.setPinId(pin);
 
-        AppDatabase.getAppDatabase(this).userPinDao().insert(userPin);
+        AppDatabase.getAppDatabase(this).userPinDao().insert(mUserPin);
 
     }
 
-    private void functionSetUp(){
-/*
-        if (!mBundle.containsKey(USERNAME)){
-            showDialogEnterUser();
-        } else {
-            mUsername = mBundle.getString(USERNAME);
-            mPassword = mBundle.getString(PASSWORD);
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkHasFingerScan(){
+        mUserHasFinger = AppDatabase.getAppDatabase(this).userPinDao().getUserUseFingerprint();
+        if (mUserHasFinger != null){
+            mLayoutFingerprint.setVisibility(View.VISIBLE);
+            checkPermission();
+            mFingerprintController = FingerprintController.getInstance(this);
+            if (mFingerprintController != null){
+                mFingerprintController.initController(new FingerprintManager.AuthenticationCallback() {
+                    @Override
+                    public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+                        super.onAuthenticationSucceeded(result);
+                        mIconFingerprint.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.colorAccent));
+                        mTextScanStatus.setText(R.string.status_fingerprint_success);
+                        mTextScanStatus.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.colorAccent));
+                        mUsername = mUserHasFinger.getUserid();
+                        mPassword = mUserHasFinger.getPassword();
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                new TermTemSignIn(LockScreenActivity.this, TermTemSignIn.TYPE.NEWLOGIN,
+                                        new DialogCounterAlert.DialogProgress(LockScreenActivity.this).show())
+                                        .checkWifi(mUsername, mPassword);
+                            }
+                        }, 700);
+
+                    }
+
+                    @Override
+                    public void onAuthenticationFailed() {
+                        super.onAuthenticationFailed();
+                        mIconFingerprint.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.colorFail));
+                        mTextScanStatus.setText(R.string.status_fingerprint_fail);
+                        mTextScanStatus.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.colorFail));
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIconFingerprint.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.white));
+                                mTextScanStatus.setText(R.string.status_fingerprint_normal);
+                                mTextScanStatus.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.white));
+                            }
+                        }, 700);
+
+                    }
+                });
+            }
         }
-*/
+    }
+    private void setFingerprint(){
+
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.introduce)
+                .setMessage(R.string.msg_introduce_fingerprint)
+                .setPositiveButton(R.string.using, new DialogInterface.OnClickListener() {
+
+                    @TargetApi(Build.VERSION_CODES.M)
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UserPin userPin = AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().getUserUseFingerprint();
+                        if (userPin != null) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this, R.style.MyAlertDialogError)
+                                    .setTitle(R.string.error)
+                                    .setMessage(R.string.error_has_fingerprint)
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            LockScreenActivity.this.finish();
+                                        }
+                                    }).show();
+                            return;
+                        }
+
+                        checkPermission();
+                        showDialogSetupFingerprint();
+                        mFingerprintController.initController(new FingerprintManager.AuthenticationCallback() {
+                            @Override
+                            public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+                                super.onAuthenticationSucceeded(result);
+                                mUserPin.setUseFingerprint(true);
+                                AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().updateUserPin(mUserPin);
+                                mIconFingerprintDialog.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.colorSuccess));
+                                mTextScanStatusDialog.setText(R.string.status_fingerprint_success);
+                                mTextScanStatusDialog.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.colorSuccess));
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mDialogFingerprint.dismiss();
+                                        LockScreenActivity.this.finish();
+                                    }
+                                }, 700);
+                            }
+
+                            @Override
+                            public void onAuthenticationFailed() {
+                                super.onAuthenticationFailed();
+                                mIconFingerprintDialog.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.colorFail));
+                                mTextScanStatusDialog.setText(R.string.status_fingerprint_fail);
+                                mTextScanStatusDialog.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.colorFail));
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mIconFingerprintDialog.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.color_normal));
+                                        mTextScanStatusDialog.setText(R.string.status_fingerprint_normal);
+                                        mTextScanStatusDialog.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.color_normal));
+                                    }
+                                }, 700);
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.ignore, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        LockScreenActivity.this.finish();
+                    }
+                }).show();
+
+        alertDialog.setOnShowListener(new MyShowListener());
+
+    }
+
+    private void showDialogSetupFingerprint(){
+        mDialogFingerprint = new Dialog(this);
+        mDialogFingerprint.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialogFingerprint.setContentView(R.layout.dialog_setup_fingerprint);
+        mDialogFingerprint.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mDialogFingerprint.setCancelable(false);
+        mDialogFingerprint.show();
+
+        mIconFingerprintDialog = mDialogFingerprint.findViewById(R.id.icon_fingerprint);
+        mTextScanStatusDialog = mDialogFingerprint.findViewById(R.id.text_status_fingerprint);
+    }
+
+    private void checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) !=
+                PackageManager.PERMISSION_GRANTED){
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.USE_FINGERPRINT)){
+                 Toast.makeText(this, "shouldShowRequest", Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.USE_FINGERPRINT}, 0);
+            }
+        }
     }
 
     @Override

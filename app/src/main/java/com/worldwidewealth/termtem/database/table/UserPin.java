@@ -25,6 +25,9 @@ public class UserPin implements Parcelable {
     @ColumnInfo(name = "pin_id")
     private String pinId;
 
+    @ColumnInfo(name = "use_fingerprint")
+    private boolean useFingerprint;
+
     public UserPin(){
 
     }
@@ -33,6 +36,7 @@ public class UserPin implements Parcelable {
         userid = in.readString();
         password = in.readString();
         pinId = in.readString();
+        useFingerprint = in.readByte() != 0;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class UserPin implements Parcelable {
         dest.writeString(userid);
         dest.writeString(password);
         dest.writeString(pinId);
+        dest.writeByte((byte) (useFingerprint ? 1 : 0));
     }
 
     @Override
@@ -83,7 +88,11 @@ public class UserPin implements Parcelable {
         this.password = password;
     }
 
+    public boolean isUseFingerprint() {
+        return useFingerprint;
+    }
 
-
-
+    public void setUseFingerprint(boolean useFingerprint) {
+        this.useFingerprint = useFingerprint;
+    }
 }
