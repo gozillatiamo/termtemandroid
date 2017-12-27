@@ -322,6 +322,7 @@
     <string name="duedate_title">กรุณาเลือกวันครบกำหนด</string>
     <string name="example">ตัวอย่าง</string>
     <string name="please_enter_bill_ref">กรุณากรอกหมายเลขอ้างอิงให้ครบถ้วน</string>
+    <string name="edit_amount">แก้ไขยอดชำระ</string>
 
     //Bill service
     <string name="fee_bill">ค่าธรรมเนียม (บาท):</string>

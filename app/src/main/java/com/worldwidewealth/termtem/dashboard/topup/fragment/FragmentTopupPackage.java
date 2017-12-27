@@ -120,7 +120,9 @@ public class FragmentTopupPackage extends  Fragment{
     private static Context mContext;
 
     private double mFavAmt = 0;
+
     private boolean mIsFAV = false;
+    private double mChangeAmount;
     private APIServices services;
     private double mAmt = 0.00;
     private String mButtonID = null;
@@ -503,6 +505,7 @@ public class FragmentTopupPackage extends  Fragment{
     }
 
     private void servicePreview(){
+        mChangeAmount = 0;
         mPhone = mHolder.mEditPhone.getText().toString().replaceAll("-", "");
 
         if (mTopup != BillPaymentActivity.BILLPAY && !checkData()) return;
@@ -949,7 +952,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                 submitTopupRequestModel = SubmitTopupRequestModel.SubmitBillRequestModel(mPreviewModel.getTNID(),
                         mBillService.getBILL_SERVICE_ID(), mBillService.getBILL_SERVICE_CODE(),
-                        useBarcode, mDueDate, mPhone, transid);
+                        useBarcode, mDueDate, mPhone, transid, mChangeAmount);
 
                 break;
         }
@@ -957,6 +960,8 @@ public class FragmentTopupPackage extends  Fragment{
         return new RequestModel(mActionSumitTopup, submitTopupRequestModel);
 
     }
+
+
 
     private void initDueDateDialog(){
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1231,6 +1236,15 @@ public class FragmentTopupPackage extends  Fragment{
 
         dialogEditPhone.show();
 
+    }
+
+    public double getmChangeAmount() {
+        return mChangeAmount;
+    }
+
+    public void setmChangeAmount(double mChangeAmount) {
+        this.mChangeAmount = mChangeAmount;
+        Log.e(TAG, ""+mChangeAmount);
     }
 
     public class ViewHolder{

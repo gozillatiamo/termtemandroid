@@ -24,6 +24,7 @@ public class TopupPreviewResponseModel implements Parcelable{
     private double NET;
     private RefModel[] REF;
     private String NEEDDUEDATE;
+    private boolean CANCHANGE;
 
     protected TopupPreviewResponseModel(Parcel in) {
         AMOUNT = in.readDouble();
@@ -35,8 +36,9 @@ public class TopupPreviewResponseModel implements Parcelable{
         TNID = in.readString();
         FEE = in.readDouble();
         NET = in.readDouble();
-        REF = (RefModel[]) in.readParcelableArray(RefModel.class.getClassLoader());
+        REF = in.createTypedArray(RefModel.CREATOR);
         NEEDDUEDATE = in.readString();
+        CANCHANGE = in.readByte() != 0;
     }
 
     @Override
@@ -50,8 +52,9 @@ public class TopupPreviewResponseModel implements Parcelable{
         dest.writeString(TNID);
         dest.writeDouble(FEE);
         dest.writeDouble(NET);
-        dest.writeParcelableArray(REF, flags);
+        dest.writeTypedArray(REF, flags);
         dest.writeString(NEEDDUEDATE);
+        dest.writeByte((byte) (CANCHANGE ? 1 : 0));
     }
 
     @Override
@@ -111,6 +114,59 @@ public class TopupPreviewResponseModel implements Parcelable{
         return NEEDDUEDATE;
     }
 
+    public boolean isCANCHANGE() {
+        return CANCHANGE;
+    }
+
+
+    public void setAMOUNT(double AMOUNT) {
+        this.AMOUNT = AMOUNT;
+    }
+
+    public void setCOMMISSION_RATE(String COMMISSION_RATE) {
+        this.COMMISSION_RATE = COMMISSION_RATE;
+    }
+
+    public void setCOMMISSION_AMOUNT(double COMMISSION_AMOUNT) {
+        this.COMMISSION_AMOUNT = COMMISSION_AMOUNT;
+    }
+
+    public void setBALANCE(double BALANCE) {
+        this.BALANCE = BALANCE;
+    }
+
+    public void setTOTAL(double TOTAL) {
+        this.TOTAL = TOTAL;
+    }
+
+    public void setMARKUP(double MARKUP) {
+        this.MARKUP = MARKUP;
+    }
+
+    public void setTNID(String TNID) {
+        this.TNID = TNID;
+    }
+
+    public void setFEE(double FEE) {
+        this.FEE = FEE;
+    }
+
+    public void setNET(double NET) {
+        this.NET = NET;
+    }
+
+    public void setREF(RefModel[] REF) {
+        this.REF = REF;
+    }
+
+    public void setNEEDDUEDATE(String NEEDDUEDATE) {
+        this.NEEDDUEDATE = NEEDDUEDATE;
+    }
+
+    public void setCANCHANGE(boolean CANCHANGE) {
+        this.CANCHANGE = CANCHANGE;
+    }
+
     public List<RefModel> getREF() {
         if (REF == null) return null;
 
@@ -164,6 +220,8 @@ public class TopupPreviewResponseModel implements Parcelable{
         public void setREF_VALUE(String REF_VALUE) {
             this.REF_VALUE = REF_VALUE;
         }
+
+
 
         @Override
         public int describeContents() {

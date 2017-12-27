@@ -1,19 +1,31 @@
 package com.worldwidewealth.termtem;
 
+import android.annotation.SuppressLint;
+import android.app.Service;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.InputFilter;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.model.TopupPreviewResponseModel;
 import com.worldwidewealth.termtem.services.APIServices;
+import com.worldwidewealth.termtem.util.Util;
+import com.worldwidewealth.termtem.widgets.MoneyValueFilter;
 
 import java.text.NumberFormat;
 
@@ -22,6 +34,8 @@ import java.text.NumberFormat;
  */
 
 public class FragmentTopupPreview extends Fragment {
+
+    private static final String TAG = FragmentTopupPreview.class.getSimpleName();
     private View rootView;
     private ViewHolder mHolder;
     private APIServices service;
@@ -49,7 +63,9 @@ public class FragmentTopupPreview extends Fragment {
 
         private TextView mTextDebit, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
         mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice, mTextTitleFee;
-        private View mLayoutCommission, mLayoutMarkup;
+        private View mLayoutCommission, mLayoutMarkup, mLayoutAmount, mLayoutEditAmount;
+        private Button mBtnEditAmount;
+        private EditText mEditAmount;
         public ViewHolder(View itemview){
             mTextDebit = (TextView) itemview.findViewById(R.id.txt_debit);
             mTextTitlePrice = (TextView) itemview.findViewById(R.id.text_title_price);
@@ -62,6 +78,26 @@ public class FragmentTopupPreview extends Fragment {
             mLayoutMarkup = (View) itemview.findViewById(R.id.layout_markup);
             mTextSelectAmout = (TextView) itemview.findViewById(R.id.txt_select_amount);
             mTextTitleFee = itemview.findViewById(R.id.text_title_fee);
+
+            mLayoutAmount = itemview.findViewById(R.id.layout_amount);
+            mLayoutEditAmount = itemview.findViewById(R.id.layout_edit_amount);
+            mBtnEditAmount = itemview.findViewById(R.id.btn_edit_amount);
+            mEditAmount = itemview.findViewById(R.id.edit_amount);
+
+            mEditAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                        if (mHolder.mEditAmount.getText().toString().isEmpty())  return false;
+                        double newAmount = Double.parseDouble(mHolder.mEditAmount.getText().toString());
+                        if (newAmount != mModel.getAMOUNT() && newAmount > 0){
+                            calculateNewAmount(newAmount);
+                        }
+
+                    }
+                    return false;
+                }
+            });
+
         }
     }
 
@@ -159,6 +195,11 @@ public class FragmentTopupPreview extends Fragment {
 */
 
     private void setData(){
+
+        if (mModel.isCANCHANGE()){
+            setupEditAmount();
+        }
+
         switch (mTopup){
             case FragmentTopup.VAS:
                 mHolder.mTextTitlePrice.setText(R.string.title_text_price_vas);
@@ -197,6 +238,54 @@ public class FragmentTopupPreview extends Fragment {
 
         mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
         mHolder.mTextTotal.setText(format.format(mModel.getTOTAL()));
+    }
+
+    private void setupEditAmount(){
+        mHolder.mBtnEditAmount.setVisibility(View.VISIBLE);
+
+        mHolder.mBtnEditAmount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHolder.mLayoutAmount.setVisibility(View.GONE);
+                mHolder.mEditAmount.setText(mHolder.mTextSelectAmout.getText());
+                MoneyValueFilter moneyValueFilter = new MoneyValueFilter();
+                mHolder.mEditAmount.setFilters(new InputFilter[]{ moneyValueFilter });
+                mHolder.mLayoutEditAmount.setVisibility(View.VISIBLE);
+
+                mHolder.mBtnEditAmount.setText(R.string.confirm);
+                mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
+                mHolder.mBtnEditAmount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mHolder.mEditAmount.getText().toString().isEmpty()) return;
+                        double newAmount = Double.parseDouble(mHolder.mEditAmount.getText().toString());
+                        if (newAmount != mModel.getAMOUNT() && newAmount > 0){
+                            calculateNewAmount(newAmount);
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void calculateNewAmount(double amount){
+        mModel.setAMOUNT(amount);
+        double commissionRate = Double.parseDouble(mModel.getCOMMISSION_RATE().replace("%", ""));
+        double commission = (commissionRate * amount) / 100;
+        mModel.setCOMMISSION_AMOUNT(commission);
+        mModel.setNET(amount + mModel.getFEE());
+        ((FragmentTopupPackage)getParentFragment()).setmChangeAmount(amount);
+
+        mHolder.mBtnEditAmount.setText(R.string.edit_amount);
+        mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_orange_dark));
+        mHolder.mLayoutEditAmount.setVisibility(View.GONE);
+        mHolder.mLayoutAmount.setVisibility(View.VISIBLE);
+
+        Util.hideSoftKeyboard(getView());
+
+        setData();
+
     }
 
     public boolean canTopup(){

@@ -29,6 +29,8 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     private String USEBARCODE;
     private String DUEDATE;
 
+    private Double AMOUNT;
+
 
     protected SubmitTopupRequestModel(Parcel in) {
         super(in);
@@ -45,6 +47,11 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         BILL_SERVICE_CODE = in.readString();
         USEBARCODE = in.readString();
         DUEDATE = in.readString();
+        if (in.readByte() == 0) {
+            AMOUNT = null;
+        } else {
+            AMOUNT = in.readDouble();
+        }
     }
 
     @Override
@@ -63,6 +70,12 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         dest.writeString(BILL_SERVICE_CODE);
         dest.writeString(USEBARCODE);
         dest.writeString(DUEDATE);
+        if (AMOUNT == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(AMOUNT);
+        }
     }
 
     @Override
@@ -95,9 +108,14 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     public static SubmitTopupRequestModel SubmitBillRequestModel(String tnid, String bill_service_id, String bill_service_code,
-                                                                 String userbarcode, String duedate, String phoneno, String tranid){
-        return new SubmitTopupRequestModel(tnid, bill_service_id, bill_service_code, userbarcode,
+                                                                 String userbarcode, String duedate, String phoneno, String tranid, Double amount){
+
+        SubmitTopupRequestModel submitTopupRequestModel = new SubmitTopupRequestModel(tnid, bill_service_id, bill_service_code, userbarcode,
                 duedate, phoneno, tranid);
+        if (amount > 0)
+            submitTopupRequestModel.setAMOUNT(amount);
+
+        return submitTopupRequestModel;
     }
 
     public SubmitTopupRequestModel(String amt, String carrier, String phone_no, String tran_id,
@@ -121,6 +139,7 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         this.DUEDATE = duedate;
         this.PHONENO = phoneno;
         this.TRANID = tranid;
+
 
     }
 
@@ -196,5 +215,61 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
 
     public void setAMT(String AMT) {
         this.AMT = AMT;
+    }
+
+    public void setCARRIER(String CARRIER) {
+        this.CARRIER = CARRIER;
+    }
+
+    public void setPHONENO(String PHONENO) {
+        this.PHONENO = PHONENO;
+    }
+
+    public void setTRANID(String TRANID) {
+        this.TRANID = TRANID;
+    }
+
+    public void setAGENTIDCASHIN(String AGENTIDCASHIN) {
+        this.AGENTIDCASHIN = AGENTIDCASHIN;
+    }
+
+    public void setPGID(String PGID) {
+        this.PGID = PGID;
+    }
+
+    public void setPGNAME(String PGNAME) {
+        this.PGNAME = PGNAME;
+    }
+
+    public void setBUTTONID(String BUTTONID) {
+        this.BUTTONID = BUTTONID;
+    }
+
+    public void setTNID(String TNID) {
+        this.TNID = TNID;
+    }
+
+    public void setBILL_SERVICE_ID(String BILL_SERVICE_ID) {
+        this.BILL_SERVICE_ID = BILL_SERVICE_ID;
+    }
+
+    public void setBILL_SERVICE_CODE(String BILL_SERVICE_CODE) {
+        this.BILL_SERVICE_CODE = BILL_SERVICE_CODE;
+    }
+
+    public void setUSEBARCODE(String USEBARCODE) {
+        this.USEBARCODE = USEBARCODE;
+    }
+
+    public void setDUEDATE(String DUEDATE) {
+        this.DUEDATE = DUEDATE;
+    }
+
+    public Double getAMOUNT() {
+        return AMOUNT;
+    }
+
+    public void setAMOUNT(Double AMOUNT) {
+        this.AMOUNT = AMOUNT;
     }
 }

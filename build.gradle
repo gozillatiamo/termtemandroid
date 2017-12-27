@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath('com.google.firebase:firebase-plugins:1.1.0') {
             // TODO This shouldn't be necessary with the next update
             exclude group: 'com.google.guava', module: 'guava-jdk5'
@@ -36,10 +36,10 @@ ext {
     minSdkVersion = 15
     targetSdkVersion = 22
     compileSdkVersion = 26
-    buildToolsVersion = '26.0.0'
+    buildToolsVersion = '27.0.2'
 
     // dependencies versions
-    supportLibraryVersion = '26.0.0-alpha1'
+    supportLibraryVersion = '27.0.2'
     playServicesVersion = '11.0.2'
 }
 
