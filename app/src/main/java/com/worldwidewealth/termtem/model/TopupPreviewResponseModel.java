@@ -24,7 +24,8 @@ public class TopupPreviewResponseModel implements Parcelable{
     private double NET;
     private RefModel[] REF;
     private String NEEDDUEDATE;
-    private boolean CANCHANGE;
+    private int CANCHANGE;
+    private double txfee;
 
     protected TopupPreviewResponseModel(Parcel in) {
         AMOUNT = in.readDouble();
@@ -38,7 +39,8 @@ public class TopupPreviewResponseModel implements Parcelable{
         NET = in.readDouble();
         REF = in.createTypedArray(RefModel.CREATOR);
         NEEDDUEDATE = in.readString();
-        CANCHANGE = in.readByte() != 0;
+        CANCHANGE = in.readInt();
+        txfee = in.readDouble();
     }
 
     @Override
@@ -54,7 +56,8 @@ public class TopupPreviewResponseModel implements Parcelable{
         dest.writeDouble(NET);
         dest.writeTypedArray(REF, flags);
         dest.writeString(NEEDDUEDATE);
-        dest.writeByte((byte) (CANCHANGE ? 1 : 0));
+        dest.writeInt(CANCHANGE);
+        dest.writeDouble(txfee);
     }
 
     @Override
@@ -115,7 +118,8 @@ public class TopupPreviewResponseModel implements Parcelable{
     }
 
     public boolean isCANCHANGE() {
-        return CANCHANGE;
+
+        return CANCHANGE == 1 ? true:false;
     }
 
 
@@ -164,7 +168,16 @@ public class TopupPreviewResponseModel implements Parcelable{
     }
 
     public void setCANCHANGE(boolean CANCHANGE) {
-        this.CANCHANGE = CANCHANGE;
+
+        this.CANCHANGE = CANCHANGE ? 1:0;
+    }
+
+    public double getTxfee() {
+        return txfee;
+    }
+
+    public void setTxfee(double txfee) {
+        this.txfee = txfee;
     }
 
     public List<RefModel> getREF() {

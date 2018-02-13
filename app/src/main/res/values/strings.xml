@@ -3,7 +3,8 @@
     <string name="app_name">TermTem</string>
     <string name="platform">android</string>
     <string name="server">https://dev.wwwealth.co/wealthservice/</string>
-    <string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>
+    <!--<string name="contact_phone_no">02-331-4788\n\n095-162-8477\n\n095-162-0577 </string>-->
+    <string name="contact_phone_no">098-247-4555</string>
     <string name="kbank_branch">สุขุมวิท 101</string>
     <string name="bbl_branch">ม.เทคโนโลยีราชมงคลกรุงเทพ</string>
     <string name="bank_account_type">ออมทรัพย์</string>
@@ -257,7 +258,7 @@
     <string name="mpay_bank">เอทีเอ็ม</string>
     <string name="has_upload">ท่านมีรายการทำอัพโหลดอยู่ กรุณาทำรายการภายหลัง</string>
     <string name="data_outofmemory">ข้อมูลของท่านมีขนาดที่ใหญ่เกินไป กรุณาลองใหม่อีกครั้ง</string>
-    <string name="alert_topup_fail">เติมเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
+    <string name="alert_topup_fail">ทำรายการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</string>
     <string name="message_get_slip_again">รายการของท่าน ดำเนินการเสร็จสิ้น\nกด "ยืนยัน" เพื่อรับหลักฐานการชำระ</string>
     <string name="search_hint">ค้นหา...</string>
     <string name="update">อัพเดท</string>
@@ -323,6 +324,7 @@
     <string name="example">ตัวอย่าง</string>
     <string name="please_enter_bill_ref">กรุณากรอกหมายเลขอ้างอิงให้ครบถ้วน</string>
     <string name="edit_amount">แก้ไขยอดชำระ</string>
+    <string name="comfirm_amount_please">กรุณายืนยันยอดชำระของท่านก่อนทำรายการ</string>
 
     //Bill service
     <string name="fee_bill">ค่าธรรมเนียม (บาท):</string>
@@ -347,15 +349,19 @@
     <string name="short_setting">ตั้งค่า</string>
     <string name="use_other_user">เข้าสู่ระบบด้วย \"รหัสผู้ใช้งาน\" อื่น</string>
     <string name="title_setup_pin">ตั้งค่ารหัส PIN</string>
+    <string name="menu_setup_fingerprint">ตั้งค่ารหัสลายนิ้วมือ</string>
     <string name="title_enter_username_password">กรุณากรอก \"รหัสผู้ใช้งาน\"-\"รหัสผ่าน\" ที่ท่านต้องการจะตั้งรหัส PIN</string>
     <string name="status_set_pin">กรุณาตั้งรหัส PIN 4 หลัก</string>
     <string name="status_confirm_pin">กรุณายืนยันรหัส PIN 4 หลัก</string>
+    <string name="status_confirm_old_pin">กรุณายืนยันรหัส PIN เก่าของท่าน 4 หลัก</string>
     <string name="status_enter_pin">กรุณาใส่รหัส PIN 4 หลัก</string>
     <string name="status_confirm_pin_incorrect">รหัสยืนยันไม่ถูกต้อง!! กรุณาลองใหม่</string>
     <string name="status_pin_incorrect">รหัส PIN ไม่ถูกต้อง!! กรุณาลองใหม่</string>
     <string name="status_pin_duplicate">รหัส PIN นี้มีการใช้งานไปแล้ว กรุณาลองใหม่</string>
     <string name="status_complete_setup">รหัส PIN ของท่านได้ถูกตั้งเรียบร้อยแล้ว ท่านจะสามารถใช้ได้ในการเข้าสู่ระบบครั้งถัดไป</string>
     <string name="error_has_fingerprint">เครื่องของท่านเคยลงทะเบียนลายนิ้วมือกับรหัสผู้ใช้งานอื่นแล้ว\nหากท่านต้องการเปลี่ยนแปลงกรุณายกเลิกลายนิ้วมือที่รหัสผู้ใช้งานเก่าก่อน!!</string>
+    <string name="current_has_fingerprint">รหัสผู้ใช้งานของท่านเคยลงทะเบียนลายนิ้วมือเรียบร้อยแล้ว\nหากท่านต้องการยกเลิกการใช้งานลายนิ้วมือกรุณากด "ยกเลิกการใช้งาน"</string>
+    <string name="cancel_fingerprint">ยกเลิกการใช้งาน</string>
     <string name="error_invalid_finger_in_device">โทรศัพท์ของท่านยังไม่เคยลงทะเบียนลายนิ้วมือ\nกรุณาลงทะเบียนก่อนได้ที่ ส่วนตั้งค่าของโทรศัพท์ท่าน</string>
     <string name="error_invalid_lockscreen_secure">กรุณาเปิดระบบป้องกันความปลอดภัยโทรศัพท์ของท่านที่ ส่วนตั้งค่าของโทรศัพท์ท่าน</string>
     <string name="introduce">คำแนะนำ</string>
@@ -365,6 +371,7 @@
     <string name="status_fingerprint_normal">แสกน</string>
     <string name="status_fingerprint_success">ยืนยันตนถูกต้อง</string>
     <string name="status_fingerprint_fail">ยืนยันตนไม่ถูกต้อง</string>
+    <string name="status_remove_fingerprint_success">ยกเลิกการใช้งานลายนิ้วมือเรียบร้อยแล้ว</string>
 
 
     //Chat bot

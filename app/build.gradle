@@ -114,8 +114,8 @@ android {
 
         }
 
-        demoairtime {
-            versionNameSuffix "0-demoairtime"
+        newApi {
+            versionNameSuffix "0-newApi"
             applicationId = "com.worldwidewealth.termtem.demoairtime"
             dimension "dimens"
 

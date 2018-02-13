@@ -5,7 +5,7 @@
     <dimen name="activity_space">8dp</dimen>
     <dimen name="activity_small_space">4dp</dimen>
     <dimen name="padding_icon_dashboard">20dp</dimen>
-    <dimen name="text_menu_size_dashboard">16sp</dimen>
+    <dimen name="text_menu_size_dashboard">14sp</dimen>
     <dimen name="my_text_size">14sp</dimen>
     <dimen name="small_text_size">12sp</dimen>
     <dimen name="contact_text_size">10sp</dimen>

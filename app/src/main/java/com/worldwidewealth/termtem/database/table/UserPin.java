@@ -8,6 +8,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.worldwidewealth.termtem.EncryptionData;
+import com.worldwidewealth.termtem.Global;
+
 /**
  * Created by gozillatiamo on 11/23/17.
  */
@@ -65,11 +68,13 @@ public class UserPin implements Parcelable {
     };
 
     public String getUserid() {
-        return userid;
+        String userDecoded = EncryptionData.DecryptData(userid, Global.getInstance().getDEVICEID());
+        return userDecoded;
     }
 
     public void setUserid(String userid) {
-        this.userid = userid;
+        String userEncoded = EncryptionData.EncryptData(userid, Global.getInstance().getDEVICEID());
+        this.userid = userEncoded;
     }
 
     public String getPinId() {
@@ -81,11 +86,13 @@ public class UserPin implements Parcelable {
     }
 
     public String getPassword() {
-        return password;
+        String passwordDecoded = EncryptionData.DecryptData(password, Global.getInstance().getDEVICEID());
+        return passwordDecoded;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        String passwordEncoded = EncryptionData.EncryptData(password, Global.getInstance().getDEVICEID());
+        this.password = passwordEncoded;
     }
 
     public boolean isUseFingerprint() {

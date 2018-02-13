@@ -46,16 +46,38 @@
         android:drawableTop="@drawable/qr_code"
         />
 
-    <Button
-        android:id="@+id/btn_setup_pin"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:gravity="center"
-        style="@style/MyButton"
-        android:text="@string/title_setup_pin"
-        android:drawableTop="@drawable/qr_code"
-        />
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_setup_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/MyButton"
+            android:text="@string/title_setup_pin"
+            android:drawableTint="@android:color/white"
+            android:drawableTop="@drawable/ic_lock_outline"
+            />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_setup_fingerprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/MyButton"
+            android:text="@string/menu_setup_fingerprint"
+            android:drawableTint="@android:color/white"
+            android:drawableTop="@drawable/ic_fingerprint"
+            />
+
+    </LinearLayout>
 
 
     <android.support.v7.widget.AppCompatButton

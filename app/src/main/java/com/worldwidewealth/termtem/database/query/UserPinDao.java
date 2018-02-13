@@ -23,8 +23,8 @@ public interface UserPinDao {
     @Query("SELECT * FROM user_pin")
     List<UserPin> selectAll();
 
-    @Query("SELECT * FROM user_pin WHERE user_id = :userId")
-    UserPin getUserPinById(String userId);
+    @Query("SELECT * FROM user_pin WHERE user_id LIKE :userid")
+    UserPin getUserPinById(String userid);
 
     @Query("SELECT * FROM user_pin WHERE pin_id = :pinId")
     UserPin getuserPinByPinId(String pinId);

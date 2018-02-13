@@ -45,7 +45,8 @@ public class BillPayCategoryAdapter extends RecyclerView.Adapter<BillPayCategory
         Glide.with(mFragment).load(mFragment.getString(R.string.server)+response.getLOGOURL())
                 .placeholder(new ColorDrawable(Color.parseColor("#FFFFFF")))
                 .thumbnail(0.6f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .crossFade()
                 .into(menuButtonView.getImageView());
 /*

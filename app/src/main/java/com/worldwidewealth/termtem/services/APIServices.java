@@ -202,11 +202,14 @@ public interface APIServices {
                     CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384)
             .build();
 
+
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.MINUTES)
             .readTimeout(10, TimeUnit.MINUTES)
             .writeTimeout(10, TimeUnit.MINUTES)
             .connectionSpecs(Collections.singletonList(spec))
+            .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS,
+                    ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT))
             .addInterceptor(interceptor)
             .addInterceptor(new Interceptor() {
                 @Override

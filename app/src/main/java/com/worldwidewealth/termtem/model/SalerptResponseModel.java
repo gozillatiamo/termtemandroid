@@ -27,6 +27,7 @@ public class SalerptResponseModel  implements Parcelable{
     private String AGENTNAME;
     private String AGENTCASHINID;
     private String TransactionId;
+    private double txfee;
 
     protected SalerptResponseModel(Parcel in) {
         PAYCODE = in.readString();
@@ -44,6 +45,7 @@ public class SalerptResponseModel  implements Parcelable{
         AGENTCASHINID = in.readString();
         TransactionId = in.readString();
         PAYMENT_DATE = new Date(in.readLong());
+        txfee = in.readDouble();
 
     }
 
@@ -64,6 +66,7 @@ public class SalerptResponseModel  implements Parcelable{
         dest.writeString(AGENTCASHINID);
         dest.writeString(TransactionId);
         dest.writeLong(PAYMENT_DATE.getTime());
+        dest.writeDouble(txfee);
     }
 
     @Override
@@ -147,6 +150,14 @@ public class SalerptResponseModel  implements Parcelable{
 
     public String getBILLNAME() {
         return BILLNAME;
+    }
+
+    public double getTxfee() {
+        return txfee;
+    }
+
+    public void setTxfee(double txfee) {
+        this.txfee = txfee;
     }
 
     public List<TopupPreviewResponseModel.RefModel> getREF() {

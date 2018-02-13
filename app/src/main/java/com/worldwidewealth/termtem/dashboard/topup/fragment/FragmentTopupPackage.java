@@ -631,8 +631,8 @@ public class FragmentTopupPackage extends  Fragment{
         View itemRef = View.inflate(getContext(), R.layout.item_bill_ref, null);
         TextView textTitle = itemRef.findViewById(R.id.text_title_ref);
         TextView textRef = itemRef.findViewById(R.id.text_ref);
-
-        textTitle.setText(model.getREF_NAME()+" :");
+        String refName = model.getREF_NAME().replaceFirst(" ", "\n");
+        textTitle.setText(refName+" :");
         textRef.setText(model.getREF_VALUE());
         mHolder.mLayoutBillRef.addView(itemRef);
     }
@@ -711,8 +711,16 @@ public class FragmentTopupPackage extends  Fragment{
                 @Override
                 public boolean onActionClick() {
                     mBottomAction.setEnable(false);
-                    if(getFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
-                        mFragmentTopupPreview = (FragmentTopupPreview) getFragmentManager().findFragmentById(R.id.container_topup_package);
+                    if(getChildFragmentManager().findFragmentById(R.id.container_topup_package) instanceof FragmentTopupPreview){
+                        mFragmentTopupPreview = (FragmentTopupPreview) getChildFragmentManager().findFragmentById(R.id.container_topup_package);
+
+                        if (mFragmentTopupPreview.isLayoutEditIsShow() || (mPreviewModel.getAMOUNT() <= 0 && mChangeAmount <= 0)){
+                            Toast.makeText(getContext(), R.string.comfirm_amount_please, Toast.LENGTH_LONG).show();
+                            mBottomAction.setEnable(true);
+
+                            return false;
+                        }
+
                         if (!mFragmentTopupPreview.canTopup()) {
                             mBottomAction.setEnable(true);
                             return false;
@@ -807,7 +815,6 @@ public class FragmentTopupPackage extends  Fragment{
         }
 */
 
-
         APIHelper.enqueueWithRetry(callSubmit, new Callback<ResponseBody>() {
 
                     @Override
@@ -838,6 +845,7 @@ public class FragmentTopupPackage extends  Fragment{
 
                         String title;
                         if (mTopup.equals(FragmentTopup.MOBILE)) {
+
                             title = MyApplication.getContext().getString(R.string.title_topup);
                         } else {
                             title = MyApplication.getContext().getString(R.string.dashboard_pin);

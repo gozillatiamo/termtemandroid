@@ -76,6 +76,7 @@
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:layout_gravity="center"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/logo_pea"/>
                     <LinearLayout
                         android:layout_width="match_parent"

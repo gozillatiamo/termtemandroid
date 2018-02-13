@@ -13,14 +13,17 @@
         android:text="@string/ref1_bill_title"
         android:textSize="@dimen/small_text_size"
         android:gravity="right"
-        android:singleLine="true"
         app:sizeToFit="true"
         android:layout_weight="1"
         />
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:id="@+id/text_ref"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        app:sizeToFit="true"
+        android:text="12355"
+        android:layout_gravity="bottom"
         android:layout_weight="0.8"
         android:layout_marginLeft="@dimen/activity_space"/>
 </LinearLayout>

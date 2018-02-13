@@ -2,6 +2,7 @@ package com.worldwidewealth.termtem;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.worldwidewealth.termtem.dashboard.billpayment.BillPaymentActivity;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
@@ -87,14 +89,11 @@ public class FragmentTopupPreview extends Fragment {
             mEditAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                        if (mHolder.mEditAmount.getText().toString().isEmpty())  return false;
+                        if (mHolder.mEditAmount.getText().toString().isEmpty())  return true;
                         double newAmount = Double.parseDouble(mHolder.mEditAmount.getText().toString());
-                        if (newAmount != mModel.getAMOUNT() && newAmount > 0){
-                            calculateNewAmount(newAmount);
-                        }
-
+                        calculateNewAmount(newAmount);
                     }
-                    return false;
+                    return true;
                 }
             });
 
@@ -196,6 +195,13 @@ public class FragmentTopupPreview extends Fragment {
 
     private void setData(){
 
+        mHolder.mBtnEditAmount.setText(R.string.edit_amount);
+        mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_orange_dark));
+        mHolder.mLayoutEditAmount.setVisibility(View.GONE);
+        mHolder.mLayoutAmount.setVisibility(View.VISIBLE);
+
+//        setupEditAmount();
+
         if (mModel.isCANCHANGE()){
             setupEditAmount();
         }
@@ -250,8 +256,8 @@ public class FragmentTopupPreview extends Fragment {
                 mHolder.mEditAmount.setText(mHolder.mTextSelectAmout.getText());
                 MoneyValueFilter moneyValueFilter = new MoneyValueFilter();
                 mHolder.mEditAmount.setFilters(new InputFilter[]{ moneyValueFilter });
+                Util.showSoftKeyboard(getContext(), mHolder.mEditAmount);
                 mHolder.mLayoutEditAmount.setVisibility(View.VISIBLE);
-
                 mHolder.mBtnEditAmount.setText(R.string.confirm);
                 mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
                 mHolder.mBtnEditAmount.setOnClickListener(new View.OnClickListener() {
@@ -259,9 +265,7 @@ public class FragmentTopupPreview extends Fragment {
                     public void onClick(View view) {
                         if (mHolder.mEditAmount.getText().toString().isEmpty()) return;
                         double newAmount = Double.parseDouble(mHolder.mEditAmount.getText().toString());
-                        if (newAmount != mModel.getAMOUNT() && newAmount > 0){
-                            calculateNewAmount(newAmount);
-                        }
+                        calculateNewAmount(newAmount);
                     }
                 });
             }
@@ -269,22 +273,31 @@ public class FragmentTopupPreview extends Fragment {
 
     }
 
-    private void calculateNewAmount(double amount){
-        mModel.setAMOUNT(amount);
-        double commissionRate = Double.parseDouble(mModel.getCOMMISSION_RATE().replace("%", ""));
-        double commission = (commissionRate * amount) / 100;
-        mModel.setCOMMISSION_AMOUNT(commission);
-        mModel.setNET(amount + mModel.getFEE());
-        ((FragmentTopupPackage)getParentFragment()).setmChangeAmount(amount);
 
-        mHolder.mBtnEditAmount.setText(R.string.edit_amount);
-        mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_orange_dark));
-        mHolder.mLayoutEditAmount.setVisibility(View.GONE);
-        mHolder.mLayoutAmount.setVisibility(View.VISIBLE);
+    private void calculateNewAmount(double amount){
+
+        if (amount != mModel.getAMOUNT() && amount > 0) {
+            double balance = mModel.getBALANCE() + mModel.getNET();
+            mModel.setAMOUNT(amount);
+            double commissionRate = Double.parseDouble(mModel.getCOMMISSION_RATE().replace("%", ""));
+            double commission = (commissionRate * amount) / 100;
+            mModel.setCOMMISSION_AMOUNT(commission);
+            mModel.setNET(amount + mModel.getFEE());
+            mModel.setBALANCE(balance - mModel.getNET());
+            ((FragmentTopupPackage) getParentFragment()).setmChangeAmount(amount);
+
+            mHolder.mBtnEditAmount.setText(R.string.edit_amount);
+            mHolder.mBtnEditAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_orange_dark));
+            mHolder.mLayoutEditAmount.setVisibility(View.GONE);
+            mHolder.mLayoutAmount.setVisibility(View.VISIBLE);
+
+        }
+
+        if (amount == 0) return;
 
         Util.hideSoftKeyboard(getView());
-
         setData();
+
 
     }
 
@@ -292,6 +305,10 @@ public class FragmentTopupPreview extends Fragment {
         if (mModel.getBALANCE() < 0) return false;
 
         return true;
+    }
+
+    public boolean isLayoutEditIsShow(){
+        return mHolder.mLayoutEditAmount.isShown();
     }
 
     public String getTNID(){

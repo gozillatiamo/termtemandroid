@@ -177,8 +177,15 @@ public class ActivityDashboard extends MyAppcompatActivity implements View.OnCli
             AppDatabase appDatabase = AppDatabase.getAppDatabase(this);
             String username = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
                     Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+            UserPin userPin = null;
+            List<UserPin> list = appDatabase.userPinDao().selectAll();
+            for (UserPin userpin: list) {
+                if (userpin.getUserid().equals(username)) {
+                    userPin = userpin;
+                    break;
+                }
+            }
 
-            UserPin userPin = appDatabase.userPinDao().getUserPinById(username);
             if (userPin == null){
                 controllerPinCode.showDialogAdvice(this);
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -48,8 +49,10 @@ public class ControllerPinCode {
 
     public void showDialogAdvice(final Context context){
             mDialogAdvice = new Dialog(context);
+            mDialogAdvice.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialogAdvice.setContentView(R.layout.dialog_setting_pin_code);
             mDialogAdvice.setCancelable(false);
+
             mDialogAdvice.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             final DialogAdviceViewHolder holder = new DialogAdviceViewHolder(mDialogAdvice);

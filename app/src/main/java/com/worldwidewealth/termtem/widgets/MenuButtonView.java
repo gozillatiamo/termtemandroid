@@ -46,6 +46,8 @@ import com.worldwidewealth.termtem.dashboard.reportmoneytransfer.ActivityReportM
 import com.worldwidewealth.termtem.dashboard.scan.ActivityScan;
 import com.worldwidewealth.termtem.dashboard.topup.ActivityTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
+import com.worldwidewealth.termtem.database.AppDatabase;
+import com.worldwidewealth.termtem.database.table.UserPin;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
 import com.worldwidewealth.termtem.dialog.DialogHelp;
 import com.worldwidewealth.termtem.dialog.MyShowListener;
@@ -252,6 +254,39 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
                     getContext().startActivity(intent);
                 }
             });
+
+            Button btnSetupFingerprint = mDialogSetting.findViewById(R.id.btn_setup_fingerprint);
+            FingerprintController fingerprintController = null;
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                fingerprintController = FingerprintController.getInstance(getContext());
+            }
+
+            String currentUsername = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                    Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+
+            UserPin userPin = AppDatabase.getAppDatabase(getContext()).userPinDao()
+                    .getUserPinById(EncryptionData.EncryptData(currentUsername,
+                            Global.getInstance().getDEVICEID()));
+
+            if (fingerprintController == null && userPin == null)
+                btnSetupFingerprint.setVisibility(GONE);
+            else {
+                btnSetupFingerprint.setVisibility(VISIBLE);
+                btnSetupFingerprint.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(getContext(), LockScreenActivity.class);
+                        intent.putExtra(LockScreenActivity.KEY_ACTION, LockScreenActivity.SETUP_FINGER);
+//                        intent.putExtra(LockScreenActivity.USERPIN,
+//                                AppDatabase.getAppDatabase(getContext()).userPinDao()
+//                                        .getUserPinById(lastUsername));
+
+                        getContext().startActivity(intent);
+                    }
+                });
+            }
 
             if (ControllerPinCode.getInstance() == null){
                 btnSetupPin.setVisibility(GONE);

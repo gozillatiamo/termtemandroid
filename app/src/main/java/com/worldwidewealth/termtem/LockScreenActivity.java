@@ -52,6 +52,7 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
     private Bundle mBundle;
     private UserPin mUserPin, mUserHasFinger;
     private FingerprintController mFingerprintController;
+//    private boolean alreadyCheck = false;
 
     //Dialog setup fingerprint
     private Dialog mDialogFingerprint;
@@ -60,8 +61,9 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
 
     public static final String KEY_ACTION = "action";
     public static final String SETUP_PIN = "setuppin";
+    public static final String SETUP_FINGER = "setupfinger";
     public static final String LOCK_SCREEN = "lockscreen";
-    public static final String USERPIN = "userpin";
+//    public static final String USERPIN = "userpin";
 //    public static final String USERNAME = "username";
 //    public static final String PASSWORD = "password";
 //    public static int LOCKSCREEN = 0x0111;
@@ -73,49 +75,88 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
         public void onComplete(String pin) {
             switch (mAction){
                 case  LOCK_SCREEN:
-                    if (pin.equals(mUserPin.getPinId())){
+                    UserPin userPin = AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().getuserPinByPinId(pin);
+                    if (userPin != null && pin.equals(userPin.getPinId())){
                         new TermTemSignIn(LockScreenActivity.this, TermTemSignIn.TYPE.NEWLOGIN,
                                 new DialogCounterAlert.DialogProgress(LockScreenActivity.this).show())
-                                .checkWifi(mUsername, mPassword);
+                                .checkWifi(userPin.getUserid(), userPin.getPassword());
+                    } else {
+
+                        mTextStatus.setText(R.string.status_pin_incorrect);
+                    }
+
+                    mPinLockView.resetPinLockView();
+                    break;
+                case SETUP_PIN:
+
+                    if (mUserPin != null) {
+                        if (pin.equals(mUserPin.getPinId())) {
+                            mUserPin = null;
+                            mTextStatus.setText(R.string.status_set_pin);
+                        } else {
+                            mPinLockView.resetPinLockView();
+                            mTextStatus.setText(R.string.status_pin_incorrect);
+                        }
+
+                        mPinLockView.resetPinLockView();
+
+                    } else {
+
+                        if (mFirstPass == null) {
+                            mFirstPass = pin;
+                            mPinLockView.resetPinLockView();
+                            mTextStatus.setText(R.string.status_confirm_pin);
+                        } else if (!mFirstPass.equals(pin)) {
+                            mPinLockView.resetPinLockView();
+                            mTextStatus.setText(R.string.status_confirm_pin_incorrect);
+                        } else {
+                            if (checkPinCode(pin)) {
+                                savePinDb(pin);
+                                AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this)
+                                        .setTitle(R.string.success)
+                                        .setMessage(R.string.status_complete_setup)
+                                        .setCancelable(false)
+                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    mFingerprintController = FingerprintController.getInstance(LockScreenActivity.this);
+                                                }
+
+                                                if (mFingerprintController != null && !mUserPin.isUseFingerprint()) {
+                                                    setFingerprint();
+                                                } else {
+                                                    LockScreenActivity.this.finish();
+                                                }
+
+                                            }
+                                        }).show();
+                            } else {
+                                mTextStatus.setText(R.string.status_pin_duplicate);
+                                mPinLockView.resetPinLockView();
+                                mFirstPass = null;
+                            }
+                        }
+                    }
+
+                    break;
+                case SETUP_FINGER:
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        mFingerprintController = FingerprintController.getInstance(LockScreenActivity.this);
+                    }
+
+                    String currentUsername = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                            Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+                    mUserPin = AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().getuserPinByPinId(pin);
+                    if (mUserPin != null && currentUsername.equals(mUserPin.getUserid()) && pin.equals(mUserPin.getPinId())){
+                        setFingerprint();
                     } else {
                         mPinLockView.resetPinLockView();
                         mTextStatus.setText(R.string.status_pin_incorrect);
                     }
 
-                    break;
-                case SETUP_PIN:
-                    if (mFirstPass == null){
-                        mFirstPass = pin;
-                        mPinLockView.resetPinLockView();
-                        mTextStatus.setText(R.string.status_confirm_pin);
-                    } else if (!mFirstPass.equals(pin)){
-                        mPinLockView.resetPinLockView();
-                        mTextStatus.setText(R.string.status_confirm_pin_incorrect);
-                    } else {
-
-                        if (checkPinCode(pin)) {
-                            savePinDb(pin);
-                            AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this)
-                                    .setTitle(R.string.success)
-                                    .setMessage(R.string.status_complete_setup)
-                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            mFingerprintController = FingerprintController.getInstance(LockScreenActivity.this);
-
-                                            if (mFingerprintController != null){
-                                                setFingerprint();
-                                            } else {
-                                                LockScreenActivity.this.finish();
-                                            }
-                                        }
-                                    }).show();
-                        } else {
-                            mTextStatus.setText(R.string.status_pin_duplicate);
-                            mPinLockView.resetPinLockView();
-                            mFirstPass = null;
-                        }
-                    }
                     break;
 
             }
@@ -173,16 +214,22 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
     }
 
     private void checkAction(){
+
+        mUsername = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
+                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
+
         switch (mAction){
             case LOCK_SCREEN:
-                mUserPin = mBundle.getParcelable(USERPIN);
-                mUsername = mUserPin.getUserid();
-                mPassword = mUserPin.getPassword();
                 mBtnChangUser.setVisibility(View.VISIBLE);
                 checkHasFingerScan();
                 break;
             case SETUP_PIN:
-                mTextStatus.setText(R.string.status_set_pin);
+                mUserPin  = AppDatabase.getAppDatabase(this).userPinDao().getUserPinById(EncryptionData.EncryptData(mUsername, Global.getInstance().getDEVICEID()));
+                if (mUserPin != null){
+                    mTextStatus.setText(R.string.status_confirm_old_pin);
+                } else {
+                    mTextStatus.setText(R.string.status_set_pin);
+                }
                 break;
         }
     }
@@ -193,12 +240,11 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
     }
 
     private void savePinDb(String pin){
-        mUsername = EncryptionData.DecryptData(Global.getInstance().getUSERNAME(),
-                Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
         mPassword = EncryptionData.DecryptData(Global.getInstance().getPASSWORD(),
                 Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
 
         mUserPin = new UserPin();
+
         mUserPin.setUserid(mUsername);
         mUserPin.setPassword(mPassword);
         mUserPin.setPinId(pin);
@@ -259,9 +305,10 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
     private void setFingerprint(){
 
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(R.string.introduce)
                 .setMessage(R.string.msg_introduce_fingerprint)
+                .setCancelable(false)
                 .setPositiveButton(R.string.using, new DialogInterface.OnClickListener() {
 
                     @TargetApi(Build.VERSION_CODES.M)
@@ -269,16 +316,51 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
                     public void onClick(DialogInterface dialogInterface, int i) {
                         UserPin userPin = AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().getUserUseFingerprint();
                         if (userPin != null) {
-                            AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this, R.style.MyAlertDialogError)
-                                    .setTitle(R.string.error)
-                                    .setMessage(R.string.error_has_fingerprint)
-                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            LockScreenActivity.this.finish();
-                                        }
-                                    }).show();
-                            return;
+                            if (userPin.getUserid().equals(mUserPin.getUserid())) {
+                                AlertDialog.Builder hasFingerBuilder = new AlertDialog.Builder(LockScreenActivity.this, R.style.MyAlertDialogError)
+                                        .setTitle(R.string.warning)
+                                        .setMessage(R.string.current_has_fingerprint)
+                                        .setCancelable(false)
+                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                LockScreenActivity.this.finish();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel_fingerprint, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                mUserPin.setUseFingerprint(false);
+                                                AppDatabase.getAppDatabase(LockScreenActivity.this).userPinDao().updateUserPin(mUserPin);
+                                                AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this, R.style.MyAlertDialogWarning)
+                                                        .setTitle(R.string.success)
+                                                        .setMessage(R.string.status_remove_fingerprint_success)
+                                                        .setCancelable(false)
+                                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                                LockScreenActivity.this.finish();
+                                                            }
+                                                        }).show();
+                                            }
+                                        });
+                                AlertDialog alertHasFinger = hasFingerBuilder.create();
+                                alertHasFinger.setOnShowListener(new MyShowListener());
+                                alertHasFinger.show();
+                                return;
+                            } else {
+                                AlertDialog alertDialog = new AlertDialog.Builder(LockScreenActivity.this, R.style.MyAlertDialogError)
+                                        .setTitle(R.string.error)
+                                        .setMessage(R.string.error_has_fingerprint)
+                                        .setCancelable(false)
+                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                LockScreenActivity.this.finish();
+                                            }
+                                        }).show();
+                                return;
+                            }
                         }
 
                         checkPermission();
@@ -292,6 +374,7 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
                                 mIconFingerprintDialog.setColorFilter(ContextCompat.getColor(LockScreenActivity.this, R.color.colorSuccess));
                                 mTextScanStatusDialog.setText(R.string.status_fingerprint_success);
                                 mTextScanStatusDialog.setTextColor(ContextCompat.getColor(LockScreenActivity.this, R.color.colorSuccess));
+
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -325,10 +408,13 @@ public class LockScreenActivity extends MyAppcompatActivity implements View.OnCl
                     public void onClick(DialogInterface dialogInterface, int i) {
                         LockScreenActivity.this.finish();
                     }
-                }).show();
+                });
+
+        AlertDialog alertDialog = builder.create();
 
         alertDialog.setOnShowListener(new MyShowListener());
 
+        alertDialog.show();
     }
 
     private void showDialogSetupFingerprint(){

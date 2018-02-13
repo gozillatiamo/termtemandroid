@@ -213,9 +213,10 @@ public class BillActionFragment extends Fragment implements View.OnClickListener
         mTextTitleService.setText(mResponse.getBILL_SERVICE_NAME());
         System.gc();
         Glide.with(this).load(getString(R.string.server)+mResponse.getLOGOURL())
-                .placeholder(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.colorPrimary)))
+                .placeholder(new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.white )))
                 .thumbnail(0.3f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .crossFade()
                 .into(mLogoService);
 

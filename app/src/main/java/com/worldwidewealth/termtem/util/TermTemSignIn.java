@@ -236,17 +236,17 @@ public class TermTemSignIn {
         ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
 
         Intent intent;
-//        List<UserPin> listUserPin = AppDatabase.getAppDatabase(mContext).userPinDao().selectAll();
-        UserPin userPin = null;
+        List<UserPin> listUserPin = AppDatabase.getAppDatabase(mContext).userPinDao().selectAll();
+//        UserPin userPin = null;
 
-        if (Global.getInstance().getLastUserLogin() != null) {
+      /*  if (Global.getInstance().getLastUserLogin() != null) {
             String lastUsername = Global.getInstance().getLastUserLogin().replaceAll("-", "");
             userPin = AppDatabase.getAppDatabase(mContext).userPinDao().getUserPinById(lastUsername);
-        }
-        if (controllerPinCode != null && userPin != null){
+        }*/
+        if (controllerPinCode != null && listUserPin != null && !listUserPin.isEmpty()){
             intent = new Intent(mContext, LockScreenActivity.class);
             intent.putExtra(LockScreenActivity.KEY_ACTION, LockScreenActivity.LOCK_SCREEN);
-            intent.putExtra(LockScreenActivity.USERPIN, userPin);
+//            intent.putExtra(LockScreenActivity.USERPIN, userPin);
         } else
             intent = new Intent(mContext, MainActivity.class);
 

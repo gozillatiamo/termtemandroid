@@ -352,6 +352,7 @@ public class MyApplication extends Application implements Application.ActivityLi
        boolean can = !(activity instanceof SplashScreenWWW |
 //               activity instanceof ActivityShowNotify |
                activity instanceof MainActivity |
+               activity instanceof LockScreenActivity |
                activity instanceof ActivityRegister |
                activity instanceof ChatBotActivity |
                activity instanceof PhotoViewActivity);

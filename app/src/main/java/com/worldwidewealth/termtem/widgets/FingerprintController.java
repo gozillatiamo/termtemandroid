@@ -47,9 +47,9 @@ public class FingerprintController {
     private static FingerprintManager fingerprintManager;
     private static Context mContext;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static FingerprintController getInstance(Context context){
         mContext = context;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
 
             if (!fingerprintManager.isHardwareDetected()){
@@ -57,9 +57,6 @@ public class FingerprintController {
             }
 
             return new FingerprintController();
-
-        } else return null;
-
     }
 
 
@@ -71,6 +68,7 @@ public class FingerprintController {
             AlertDialog alertDialog = new AlertDialog.Builder(mContext, R.style.MyAlertDialogError)
                     .setTitle(R.string.error)
                     .setMessage(R.string.error_invalid_finger_in_device)
+                    .setCancelable(false)
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -84,6 +82,7 @@ public class FingerprintController {
             AlertDialog alertDialog = new AlertDialog.Builder(mContext, R.style.MyAlertDialogError)
                     .setTitle(R.string.error)
                     .setMessage(R.string.error_invalid_lockscreen_secure)
+                    .setCancelable(false)
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
