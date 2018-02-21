@@ -185,6 +185,8 @@ public class SplashScreenWWW extends MyAppcompatActivity{
             Global.getInstance().clearLastSubmit();
             return;
         }
+
+        //ดึง submit ล่าสุด
         Call<ResponseBody> callSubmit = MyApplication.getServiceSubmit(requestModel);
 
         MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);

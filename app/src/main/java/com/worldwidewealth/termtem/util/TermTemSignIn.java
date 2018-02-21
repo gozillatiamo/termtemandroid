@@ -50,7 +50,7 @@ import retrofit2.Response;
 /**
  * Created by user on 08-Mar-17.
  */
-
+// Class สำหรับ การ Login
 public class TermTemSignIn {
 
     private Context mContext;
@@ -66,6 +66,7 @@ public class TermTemSignIn {
 
     public static final String TAG = TermTemSignIn.class.getSimpleName();
 
+    //ประเภท type การ login
     public enum TYPE{
         NEWLOGIN(0),
         RELOGIN(1);
@@ -100,11 +101,13 @@ public class TermTemSignIn {
         this.mPassword = password;
     }
 
+    // ขอ TXID จาก Server หน้า SplashScreen
     public void getTXIDfromServer(){
         if (isExecuting) return;
 
         isExecuting = true;
 
+        // ดึง GPS
         GPSTracker gpsTracker = new GPSTracker(mContext);
         if (gpsTracker.canGetLocation()){
             double mLat = gpsTracker.getLatitude();
@@ -118,6 +121,7 @@ public class TermTemSignIn {
                     mContext.getString(R.string.platform)
             ));
 
+            //กรณี ReLogin ต้อง logout ก่อน
             if (Global.getInstance().getUSERNAME() != null && mType.equals(TYPE.RELOGIN)){
                 Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT,
                         new DataRequestModel()));
@@ -128,7 +132,6 @@ public class TermTemSignIn {
 
                         if (responseValues instanceof ResponseModel &&
                                 ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
-//                            Global.getInstance().clearUserData();
                             SendDataService(mPreRequestModel);
                         } else {
                             if (Global.getInstance().getTXID() != null) {
@@ -158,6 +161,7 @@ public class TermTemSignIn {
     }
 
     private void SendDataService(PreRequestModel model){
+        // Request API  PRE
         if (model != null) {
             Call<ResponseBody> call = services.PRE(model);
             APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
@@ -173,6 +177,7 @@ public class TermTemSignIn {
                             Log.e(TAG, "TXID from PRE: "+responseModel.getTXID());
                             mTXID = responseModel.getTXID();
 
+                            //แยกทำงาน newLogin, reLogin
                             switch (mType){
                                 case NEWLOGIN:
                                     if (checkVersionApp(responseModel.getVersion())) {
@@ -186,6 +191,7 @@ public class TermTemSignIn {
                                     }
                                     break;
                                 case RELOGIN:
+                                    //Encrypt ใหม่ ใช้ deviceId, txid เป็น key
                                     Log.e(TAG, "Username before encode: "+Global.getInstance().getUSERNAME());
                                     Log.e(TAG, "Password before encode: "+Global.getInstance().getPASSWORD());
                                     Log.e(TAG, "TXID before encode: "+Global.getInstance().getTXID());
@@ -231,6 +237,7 @@ public class TermTemSignIn {
 
     }
 
+    //เปิดหน้า Login เซ็คว่า ได้ตั้ง pin code ไหม
     private void startLogin(){
         Global.getInstance().setTXID(mTXID);
         ControllerPinCode controllerPinCode = ControllerPinCode.getInstance();
@@ -255,6 +262,7 @@ public class TermTemSignIn {
         ((AppCompatActivity)mContext).finish();
     }
 
+    // check version app
     private boolean checkVersionApp(String version){
         if (checkAdvoidDevice()) return true;
 
@@ -393,7 +401,7 @@ public class TermTemSignIn {
         });
     }
 
-
+    // Login request API
     private void Login(){
 
         final String usernameEncode = EncryptionData.EncryptData(mUsername.replaceAll("-", ""), Global.getInstance().getDEVICEID()+Global.getInstance().getTXID());
@@ -414,8 +422,10 @@ public class TermTemSignIn {
 
                 Object responseValues = EncryptionData.getModel(mContext, call, response.body(), this);
 
+                //ถ้า เป็น Response Model
                 if (responseValues instanceof ResponseModel){
                     ResponseModel responseModel = (ResponseModel) responseValues;
+                    // check Register Device ข้อมูลจะถูกขั้นด้วย ":"
                     String[] strRegisDevice = responseModel.getMsg().toString().split(":");
                     if (strRegisDevice != null) {
                         if (strRegisDevice.length == 4) {
@@ -431,6 +441,7 @@ public class TermTemSignIn {
                     }
 
                 } else {
+                    //ได้ข้อมูล user นำไปแกะ แล้วเก็บไว้ที่ เครื่อง
                     ContentValues values = new ContentValues();
                     values.put(Global.getKeyUSERNAME(), usernameEncode);
                     values.put(Global.getKeyPASSWORD(), mPassword);
@@ -471,6 +482,7 @@ public class TermTemSignIn {
 
     }
 
+    //ลงทะเบียน Device
     private void registerDevice(String msg, final String agantId, final String userId){
         AlertDialog alertDialog = new AlertDialog.Builder(mContext)
                 .setTitle(msg)

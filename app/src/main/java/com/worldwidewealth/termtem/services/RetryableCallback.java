@@ -35,7 +35,6 @@ public abstract class RetryableCallback<T> implements Callback<T> {
         if (strRequest != null) {
             RequestModel requestModel = new Gson().fromJson(strRequest, RequestModel.class);
             mTrace = MyApplication.mPerformance.startTrace(requestModel.getAction());
-//            mTrace.start();
             mTrace.incrementCounter("REQUEST");
         }
 

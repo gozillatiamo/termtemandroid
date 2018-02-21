@@ -59,13 +59,16 @@ public class EncryptionData {
 
     private static final Charset characterSet = Charset.forName("ASCII");
 
+    //EncyptData
     static public String EncryptData(String strData, String key) {
 
         if (strData == null || strData.equals("")) return "";
 
+        //เอา value มาต่อ ด้วย ;
         String strResult = strData + ";" ;
 
 
+        //แปลงเป็น Byte
         byte[] rbData = strResult.getBytes(characterSet);
 
         return EncryptWithBytes(rbData, key);
@@ -176,8 +179,10 @@ public class EncryptionData {
         String msg = null;
         String dialogTitle;
         String strRespone = null;
+        //ดึง Model Request เพื่อเซ็คการแสดงผล
         String strRequest = Util.convertToStringRequest(call.request().body());
 
+        //แปลง string json เป็น model gson request
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
             mTrace = MyApplication.mPerformance.startTrace(requestModel.getAction());
@@ -191,6 +196,7 @@ public class EncryptionData {
                 responseModel.setMsg("Fail");
 
             } else {
+                // แปลง response เป็น model response
                 strRespone = response.string();
                 responseModel = gson.fromJson(strRespone, ResponseModel.class);
                 Log.e(TAG, "Response: " + strRespone);
@@ -200,6 +206,7 @@ public class EncryptionData {
                 msg = responseModel.getAppdisplay();
             }
 
+            // check  pending สำหรับ recall submit
             switch (requestModel.getAction()){
                 case APIServices.ACTIONSUBMITTOPUP:
                 case APIServices.ACTION_GET_OTP_EPIN:
@@ -227,7 +234,7 @@ public class EncryptionData {
             }
 
 
-
+            // response Fail
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 if (mTrace != null){
                     mTrace.incrementCounter("FAIL");
@@ -312,6 +319,7 @@ public class EncryptionData {
                             }
 
                             if (msg.substring(0, 3).equals(APIServices.MSG_FAIL)) msg = "Fail";
+                            // show Dialog Error
                             new ErrorNetworkThrowable(null).networkError(context, msg
                                     , call, callback, true);
                     }
@@ -322,6 +330,7 @@ public class EncryptionData {
                     return null;
                 }
             } else{
+                // Response Success
                 if (mTrace != null){
                     mTrace.incrementCounter("SUCCESS");
 //                    mTrace.stop();
@@ -331,6 +340,7 @@ public class EncryptionData {
             }
 
         } catch (JsonSyntaxException e){
+            // Catch จาก การแปลง json เป็น model จะได้เป็น String encoded แทน
             String responDecode = Util.decode(strRespone);
             Log.e(TAG, "ResponDecode: "+ responDecode);
             if (mTrace != null){
@@ -346,6 +356,8 @@ public class EncryptionData {
         return null;
     }
 
+
+    // แสดง Error กรณีบังคับแสดง
     public static boolean showErrorMSG(Context context, ResponseModel responseModel, DialogInterface.OnClickListener listener) {
         Activity activity = null;
         try {

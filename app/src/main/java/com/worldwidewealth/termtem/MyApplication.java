@@ -74,6 +74,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static FirebasePerformance mPerformance;
 
 
+    // ฺฺBroadcastReceiver สำหรับ ดักจับ notification
     private static BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -182,6 +183,8 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
+    //เรียก เปิดหน้าสรุป
+
     public static boolean startSlip(Activity activity, String msg){
 
         if (!canUseLeaving(activity) || activity instanceof ActivityShowNotify) return false;
@@ -237,6 +240,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
 
+    //หยุด service สำหรับ นับถอยหลัง logout
     public static void stopService(Activity activity){
         if (MyApplication.intentLocalService != null){
             MyApplication.getContext().stopService(MyApplication.intentLocalService);
@@ -262,6 +266,7 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
+    // start service นับถอยหลัง logout
     public static void startService(){
         if (MyApplication.intentLocalService != null) {
             MyApplication.getContext().stopService(MyApplication.intentLocalService);

@@ -222,11 +222,9 @@ public interface APIServices {
 
 
                         builder = originalRequest.newBuilder()
-//                                .addHeader("connection", "close")
                                 .method(originalRequest.method(), Util.encode(originalRequest.body()));
                     }
 
-//                    Response response = client.newCall(builder.build()).execute();
                      return  chain.proceed(builder.build());
                 }
             })
@@ -242,6 +240,3 @@ public interface APIServices {
         .build();
 
 }
-
-//http://180.128.21.31/apifcm/
-//http://180.128.21.31/wealthservice/syncout.ashx
