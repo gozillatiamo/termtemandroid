@@ -2,19 +2,15 @@ package com.worldwidewealth.termtem.dashboard.topup;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.annotations.Until;
 import com.worldwidewealth.termtem.Global;
 import com.worldwidewealth.termtem.MyAppcompatActivity;
 import com.worldwidewealth.termtem.MyApplication;
@@ -24,17 +20,9 @@ import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopup;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupPackage;
 import com.worldwidewealth.termtem.dashboard.topup.fragment.FragmentTopupSlip;
 import com.worldwidewealth.termtem.dialog.DialogCounterAlert;
-import com.worldwidewealth.termtem.model.EslipRequestModel;
 import com.worldwidewealth.termtem.model.LoadBillServiceResponse;
 import com.worldwidewealth.termtem.model.RequestModel;
 import com.worldwidewealth.termtem.model.SubmitTopupRequestModel;
-import com.worldwidewealth.termtem.services.APIServices;
-import com.worldwidewealth.termtem.util.Util;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityTopup extends MyAppcompatActivity {
 

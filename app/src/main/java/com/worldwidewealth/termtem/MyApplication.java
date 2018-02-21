@@ -73,7 +73,6 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Intent intentLocalService = null;
     public static FirebasePerformance mPerformance;
 
-//    protected String userAgent;
 
     private static BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
@@ -120,13 +119,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         mPerformance.setPerformanceCollectionEnabled(true);
         mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
-//        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
-
-/*
-        Intent intent = new Intent(MyFirebaseMessagingService.INTENT_FILTER);
-        sendBroadcast(intent);
-*/
-
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Mitr-Regular.ttf")
@@ -144,8 +136,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                     Util.logoutAPI(mContext, true);
                 }
 
-//                Util.deleteCache(this);
-//                Global.getInstance().clearAll();
                 Global.getInstance().setVERSIONCODE(versionCode);
             }
 
@@ -219,14 +209,10 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityPaused(Activity activity) {
-//        DialogCounterAlert.DialogProgress.dismiss();
-//        DialogNetworkError.dismiss();
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-//        stopService(activity);
-
 
             LeavingOrEntering.activityStopped(activity);
 
@@ -250,35 +236,11 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     }
 
-/*
-    public boolean useExtensionRenderers() {
-        return BuildConfig.FLAVOR.equals("withExtensions");
-    }
-
-    public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(this, bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
-    }
-*/
 
     public static void stopService(Activity activity){
         if (MyApplication.intentLocalService != null){
             MyApplication.getContext().stopService(MyApplication.intentLocalService);
             intentLocalService = null;
-/*
-
-            Context context = LeavingOrEntering.currentActivity;
-
-            if (context == null) context = getContext();
-
-
-            if (MyApplication
-
-*/
 
             if (activity == null || !(canUseLeaving(activity))) return;
 
@@ -286,9 +248,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                 Util.backToSignIn(activity);
                 return;
             }
-
-
-//            new DialogCounterAlert.DialogProgress(activity).show();
 
             final boolean isisAlreadyShowProgress = DialogCounterAlert.DialogProgress.isShow();
             if (!isisAlreadyShowProgress){
@@ -299,23 +258,11 @@ public class MyApplication extends Application implements Application.ActivityLi
                     TermTemSignIn.TYPE.RELOGIN,
                     isisAlreadyShowProgress).getTXIDfromServer();
 
-
-//            Util.logoutAPI(activity, false);
-
-/*
-            if (Global.getInstance().getAGENTID() == null){
-                new TermTemSignIn(MyApplication.getContext(), TermTemSignIn.TYPE.RELOGIN,
-                        new DialogCounterAlert.DialogProgress(activity).show()).getTXIDfromServer();
-            } else {
-            }
-*/
-
         }
 
     }
 
     public static void startService(){
-//        if (Global.getInstance().getAGENTID() == null) return;
         if (MyApplication.intentLocalService != null) {
             MyApplication.getContext().stopService(MyApplication.intentLocalService);
             intentLocalService = null;
@@ -350,7 +297,6 @@ public class MyApplication extends Application implements Application.ActivityLi
     public static boolean canUseLeaving(Activity activity){
 
        boolean can = !(activity instanceof SplashScreenWWW |
-//               activity instanceof ActivityShowNotify |
                activity instanceof MainActivity |
                activity instanceof LockScreenActivity |
                activity instanceof ActivityRegister |
@@ -370,12 +316,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     public static void showNotifyUpload(int id){
 
-/*
-        if (id != NOTIUPLOAD){
-//            mLastRequest = Global.getInstance().getLastSubmit();
-        }
-
-*/
         String title = null, message = null;
         int smallicon = android.R.drawable.stat_sys_upload;
 
@@ -502,20 +442,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                 inboxStyle.addLine(events.get(i));
             }
 
-/*
-            PendingIntent pendingIntent = null;
-            try {
-
-                Intent intent = new Intent(mContext, ActivityTopup.class);
-                intent.putExtra(FragmentTopup.keyTopup, getTypeToup(Global.getInstance().getLastSubmit().getAction()));
-                intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
-                pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            } catch (NullPointerException e){
-                e.printStackTrace();
-                pendingIntent = null;
-            }
-*/
-
             if (mBuilder == null) return;
 //            mBuilder.setContentIntent(pendingIntent);
             mBuilder.setContentTitle(title);
@@ -591,11 +517,6 @@ public class MyApplication extends Application implements Application.ActivityLi
                     mBuilder.setOngoing(false);
                     isUpload = false;
                     Global.getInstance().setLastSubmit(null, false);
-/*
-                    if (id == NOTITOPUP) {
-                        Global.getInstance().setLastSubmit(null, false);
-                    }
-*/
                     mBuilder.setAutoCancel(true);
                 }
 
@@ -702,18 +623,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("Here", "I am here");
-/*
-            Call call =  intent.getExtras().getParcelable("CALL");
-            Callback callback = intent.getExtras().getParcelable("CALLBACK");
-            APIHelper.enqueueWithRetry(call.clone(), callback);
-*/
-
-
-//            RequestModel requestModel = intent.getExtras().getby("REQUEST");
-//            final RequestModel requestModel = Util.ParcelableUtil.toParcelable(intent.getExtras().getByteArray("REQUEST"), RequestModel.CREATOR);
-
-//                    if (requestModel.getAction().contains("SUBMIT"))
-                        topupService(Global.getInstance().getLastSubmit());
+            topupService(Global.getInstance().getLastSubmit());
 
 
         }
@@ -724,17 +634,6 @@ public class MyApplication extends Application implements Application.ActivityLi
             String title = null;
             String mTopup = null;
             SubmitTopupRequestModel submitModel = null;
-
-/*
-            switch (requestModel.getAction()){
-                case APIServices.ACTIONSUBMITTOPUP:
-                    title = MyApplication.getContext().getString(R.string.title_topup);
-                    break;
-                case APIServices.ACTION_SUBMIT_TOPUP_EPIN:
-                    title = MyApplication.getContext().getString(R.string.dashboard_pin);
-                    break;
-            }
-*/
 
             title = getTitleTypeToup(requestModel.getAction());
             mTopup = getTypeToup(requestModel.getAction());
@@ -768,8 +667,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
                                 if (responseValues == null) {
                                     Global.getInstance().setLastSubmit(null, false);
-//                                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
-
                                     return;
                                 }
 

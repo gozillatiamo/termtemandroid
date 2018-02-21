@@ -177,11 +177,13 @@ public class EncryptionData {
         String dialogTitle;
         String strRespone = null;
         String strRequest = Util.convertToStringRequest(call.request().body());
+
         if (strRequest != null){
             requestModel = new Gson().fromJson(strRequest, RequestModel.class);
             mTrace = MyApplication.mPerformance.startTrace(requestModel.getAction());
 //            mTrace.start();
         }
+
         try {
             if (requestModel.getAction().equals(APIServices.ACTION_SUBMIT_BILL) && response == null){
                 responseModel = new ResponseModel();
@@ -224,10 +226,7 @@ public class EncryptionData {
                     break;
             }
 
-/*
-            if (requestModel.getAction().equals(APIServices.ACTION_SUBMIT_VAS))
-                responseModel.setStatus(-2);
-*/
+
 
             if (responseModel.getStatus() != APIServices.SUCCESS) {
                 if (mTrace != null){
@@ -332,7 +331,6 @@ public class EncryptionData {
             }
 
         } catch (JsonSyntaxException e){
-//            String converted = Util.ConvertJsonEncode(strRespone);
             String responDecode = Util.decode(strRespone);
             Log.e(TAG, "ResponDecode: "+ responDecode);
             if (mTrace != null){

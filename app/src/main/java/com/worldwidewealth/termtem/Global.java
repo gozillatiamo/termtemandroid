@@ -55,13 +55,6 @@ public class Global {
     private static final String SUBMIT_STATUS = "submitstatus";
     private static final String SUBMIT_IS_FAV = "submitisfav";
 
-/*
-    private static final String SUBMIT_TNID = "submittnid";
-    private static final String SUBMIT_BILL_SERVICE_ID = "submitbillsereviceid";
-    private static final String SUBMIT_BILL_SERVICE_CODE = "submitbillservicecode";
-    private static final String SUBMIT_USEBARCODE = "submitusebarcode";
-    private static final String SUBMIT_DUEDATE = "submitduedate";
-*/
     private static final String AGENTIDCASHIN = "agentidcashid";
     private static final String BUTTONID = "buttonid";
     private static final String SUBMIT_PG_ID = "submitpgid";
@@ -137,25 +130,10 @@ public class Global {
         return mPreferences.getString(USERID, null);
     }
 
-/*
-    public void setUSERID(String userid) {
-        if ("".equals(userid)) userid = null;
-        mEditor.putString(USERID, userid);
-        mEditor.commit();
-    }
-*/
 
     public String getAGENTID() {
         return mPreferences.getString(AGENTID, null);
     }
-
-/*
-    public void setAGENTID(String agentid) {
-        if ("".equals(agentid)) agentid = null;
-        mEditor.putString(AGENTID, agentid);
-        mEditor.commit();
-    }
-*/
 
     public String getTXID() {
         return mPreferences.getString(TXID, null);
@@ -172,7 +150,6 @@ public class Global {
     }
 
     public void setDEVICEID(String deviceid) {
-//        if ("".equals(getUSERID())) deviceid = null;
         mEditor.putString(DEVICEID, deviceid);
         mEditor.commit();
     }
@@ -236,41 +213,9 @@ public class Global {
     public void clearUserName(){
         mEditor.putString(USERNAME, null);
         mEditor.putString(PASSWORD, null);
-//        mEditor.putString(TXID, null);
-
-//        mEditor.putString(SERVICE_TRAN_ID, null);
         mEditor.commit();
     }
 
-/*
-    public void clearUserData(){
-
-*/
-/*
-        if (clearall) {
-            clearUserName();
-            mEditor.putString(TXID, null);
-
-        }
-*//*
-
-
-//        clearUserName();
-
-        mEditor.putString(USERID, null);
-        mEditor.putString(AGENTID, null);
-        mEditor.putString(AGENTCODE, null);
-        mEditor.putString(FIRSTNAME, null);
-        mEditor.putString(LASTNAME, null);
-        mEditor.putString(PHONENO, null);
-        mEditor.putFloat(BALANCE, 0);
-        mEditor.putString(MSGREAD, null);
-        mUserMenuList = null;
-
-        mEditor.commit();
-
-    }
-*/
 
     public List<UserMenuModel> getUserMenuList() {
         return mUserMenuList;
@@ -320,26 +265,6 @@ public class Global {
         mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
         mEditor.commit();
 
-/*
-        RequestModel requestModel = getLastSubmit();
-        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel)model.getData();
-
-        mEditor.putString(SUBMIT_ACTION, model.getAction());
-        mEditor.putString(SUBMIT_AGENTID, submitTopupRequestModel.getAGENTID());
-        mEditor.putString(SUBMIT_DEVICEID, submitTopupRequestModel.getDEVICEID());
-        mEditor.putString(SUBMIT_TXID, submitTopupRequestModel.getTXID());
-        mEditor.putString(SUBMIT_USERID, submitTopupRequestModel.getUSERID());
-        mEditor.putString(BUTTONID, submitTopupRequestModel.getBUTTONID());
-        mEditor.putString(AGENTIDCASHIN, submitTopupRequestModel.getAGENTIDCASHIN());
-        mEditor.putString(TRANID, submitTopupRequestModel.getTRANID());
-        mEditor.putString(SUBMIT_PHONENO, submitTopupRequestModel.getPHONENO());
-        mEditor.putString(AMT, submitTopupRequestModel.getAMT());
-        mEditor.putString(CARRIER, submitTopupRequestModel.getCARRIER());
-        mEditor.putString(SUBMIT_PG_ID, submitTopupRequestModel.getPGID());
-        mEditor.putString(SUBMIT_PG_NAME, submitTopupRequestModel.getPGNAME());
-        mEditor.putBoolean(SUBMIT_IS_FAV, isFav);
-        mEditor.commit();
-*/
     }
 
     public void setLastBillService(LoadBillServiceResponse billService){
@@ -430,61 +355,12 @@ public class Global {
         byte[] bytesLastSubmit = EncryptionData.DecrptWithByte(mPreferences.getString(LAST_SUBMIT, null), getDEVICEID());
         RequestModel requestModel = ParcelableUtil.unmarshall(bytesLastSubmit, RequestModel.CREATOR);
 
-/*
-        SubmitTopupRequestModel submitTopupRequestModel = new SubmitTopupRequestModel(
-                mPreferences.getString(AMT, null),
-                mPreferences.getString(CARRIER, null),
-                mPreferences.getString(SUBMIT_PHONENO, null),
-                mPreferences.getString(TRANID, null),
-                mPreferences.getString(BUTTONID, null),
-                mPreferences.getString(AGENTIDCASHIN, null),
-                mPreferences.getString(SUBMIT_PG_ID, null),
-                mPreferences.getString(SUBMIT_PG_NAME, null)
-        );
-        submitTopupRequestModel.setAGENTID(mPreferences.getString(SUBMIT_AGENTID, null));
-        submitTopupRequestModel.setDEVICEID(mPreferences.getString(SUBMIT_DEVICEID, null));
-        submitTopupRequestModel.setTXID(mPreferences.getString(SUBMIT_TXID, null));
-        submitTopupRequestModel.setUSERID(mPreferences.getString(SUBMIT_USERID, null));
-
-        return new RequestModel(mPreferences.getString(SUBMIT_ACTION, null), submitTopupRequestModel);
-*/
         return requestModel;
     }
 
     public String getLastTranId(){
         return mPreferences.getString(TRANID, null);
     }
-
-/*
-    public String getLastSubmitAction(){
-        return mPreferences.getString(SUBMIT_ACTION, null);
-    }
-*/
-
-/*
-    public String getLastSubmitPhoneNo(){
-        return mPreferences.getString(SUBMIT_PHONENO, null);
-    }
-
-    public String getLastSubmitCarrier(){
-        return mPreferences.getString(CARRIER, null);
-    }
-
-    public String getLastSubmitAmt(){
-        return mPreferences.getString(AMT, null);
-    }
-
-*/
-
-/*
-    public String getProcessSubmit(){
-        return mPreferences.getString(SERVICE_TRAN_ID, null);
-    }
-
-    public String getProcessType(){
-        return mPreferences.getString(SERVICE_TOPUP_TYPE, null);
-    }
-*/
 
 
 }

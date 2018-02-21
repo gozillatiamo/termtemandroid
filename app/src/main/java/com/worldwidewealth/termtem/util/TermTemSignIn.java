@@ -448,17 +448,6 @@ public class TermTemSignIn {
                             mUsername = null;
                             Intent intent = null;
 
-/*
-                            if(BuildConfig.FLAVOR.equals("demoairtime")) {
-                                try {
-                                    intent = new Intent(mContext, Class.forName("com.worldwidewealth.termtem.demoairtime.dashboard.ActivityDashboard"));
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                intent = new Intent(mContext, ActivityDashboard.class);
-                            }
-*/
                             intent = new Intent(mContext, ActivityDashboard.class);
 
                             intent.putExtra("frompos", mIsFromPOS);
@@ -471,7 +460,6 @@ public class TermTemSignIn {
                 }
 
                 isExecuting = false;
-//                DialogCounterAlert.DialogProgress.dismiss();
             }
 
             @Override

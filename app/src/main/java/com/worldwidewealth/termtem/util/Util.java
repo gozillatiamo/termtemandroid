@@ -109,7 +109,6 @@ public class Util {
                     String encoded = Base64.encodeToString(buffer.readByteArray(), Base64.NO_WRAP);
                     Log.e(TAG, new StringBuilder(encoded).reverse().toString());
                     byte[] converted = new StringBuilder(encoded).reverse().toString().getBytes();
-//                    String decoded = Util.decode(new StringBuilder(encoded).reverse().toString());
 
                     System.gc();
                     sink.write(converted);
@@ -129,23 +128,10 @@ public class Util {
         byte[] decode = Base64.decode(jsonconvert, Base64.DEFAULT);
         strDecode = new String(decode);
         return strDecode;
-
-/*
-        do {
-            try {
-            } catch (OutOfMemoryError e){
-                jsonconvert = null;
-                strDecode = null;
-            }
-            System.gc();
-        } while (strDecode == null || jsonconvert == null);*/
-
     }
 
 
     public static void setBalanceWallet(View myWallet){
-
-//        if (Global.getInstance().getTXID() == null) return;
 
         TextView balanceDecimal = (TextView) myWallet.findViewById(R.id.txt_balance_decimal);
         TextView balanceInteger = (TextView) myWallet.findViewById(R.id.txt_balance_integer);
@@ -178,9 +164,6 @@ public class Util {
                         BadgeDrawable.setBadgeCount(context, iconNoti, loginResponseModel.getMSGREAD());
                     }
                 }
-
-//                DialogCounterAlert.DialogProgress.dismiss();
-
             }
 
             @Override
@@ -209,11 +192,6 @@ public class Util {
         });
 
     }
-
-    public static void updateMyBalanceWallet(final Context context, final View includeMywallet){
-        updateMyBalanceWallet(context, includeMywallet, null);
-    }
-
 
     public static class JsonDateDeserializer implements JsonDeserializer<Date> {
 
@@ -270,23 +248,7 @@ public class Util {
                 if (values instanceof ResponseModel &&
                         (((ResponseModel)values).getMsg().equals(APIServices.MSG_SUCCESS))) {
                     Global.getInstance().clearUserName();
-//                    Global.getInstance().clearUserData();
                 }
-
-/*
-                if (!clearData) {
-                    new TermTemSignIn(context,
-                            TermTemSignIn.TYPE.RELOGIN,
-                            isisAlreadyShowProgress).getTXIDfromServer();
-                } else {
-                    if (values instanceof ResponseModel &&
-                            (((ResponseModel)values).getMsg().equals(APIServices.MSG_SUCCESS))) {
-                        Global.getInstance().clearUserName();
-                        Global.getInstance().clearUserData();
-                    }
-                }
-*/
-
             }
 
             @Override
@@ -299,7 +261,6 @@ public class Util {
 
 
     public static void backToSignIn(Activity activity){
-//        MyApplication.LeavingOrEntering.currentActivity = null;
         Intent intent = new Intent(activity.getApplicationContext(), SplashScreenWWW.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
                 Intent.FLAG_ACTIVITY_CLEAR_TASK|
@@ -310,7 +271,6 @@ public class Util {
 
 
     public static File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = MyApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -539,106 +499,5 @@ public class Util {
             return null;
         }
     }
-
-    public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e) {}
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
-    }
-
-
-/*
-    public static void getPreviousEslip(final Context context, String topupType, final int rootview){
-        String mActionEslip = null;
-
-        switch (topupType){
-            case FragmentTopup.MOBILE:
-                mActionEslip = APIServices.ACTIONESLIP;
-                break;
-            case FragmentTopup.PIN:
-                mActionEslip = APIServices.ACTION_ESLIP_EPIN;
-                break;
-            case FragmentTopup.VAS:
-                mActionEslip = APIServices.ACTION_ESLIP_VAS;
-                break;
-            case FragmentAddCreditChoice.AGENT_CASHIN:
-                mActionEslip = APIServices.ACTION_ESLIP_AGENT_CASHIN;
-                break;
-        }
-
-
-        APIServices services = APIServices.retrofit.create(APIServices.class);
-        DataRequestModel dataRequestModel = Global.getInstance().getLastSubmit().getData();
-        SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) dataRequestModel;
-        EslipRequestModel eslipRequestModel = new EslipRequestModel(Global.getInstance().getLastTranId(), submitTopupRequestModel.getPHONENO());
-        eslipRequestModel.setUSERID(dataRequestModel.getUSERID());
-        eslipRequestModel.setTXID(dataRequestModel.getTXID());
-        eslipRequestModel.setDEVICEID(dataRequestModel.getDEVICEID());
-        eslipRequestModel.setAGENTID(dataRequestModel.getAGENTID());
-
-        Call<ResponseBody> call = services.eslip(new RequestModel(mActionEslip, eslipRequestModel));
-
-        APIHelper.enqueueWithRetry(call, new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Object responseValues = EncryptionData.getModel(MyApplication.getContext(), call, response.body(), this);
-
-                if (responseValues == null) ((Activity)context).finish();
-
-*/
-/*
-                if (responseValues == null) {
-                    mBottomAction.setEnable(true);
-                    return;
-                }
-*//*
-
-
-                if (responseValues instanceof ResponseModel) {
-                    byte[] imageByte = Base64.decode(((ResponseModel) responseValues).getFf()
-                            , Base64.NO_WRAP);
-                    AppCompatActivity activity = (AppCompatActivity) context;
-//                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    try {
-                        if (activity == null) {
-                            DialogCounterAlert.DialogProgress.dismiss();
-                            return;
-                        }
-
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                new ErrorNetworkThrowable(t).networkError(context, null, call, this, false);
-            }
-
-        });
-    }
-*/
-
-
 
 }

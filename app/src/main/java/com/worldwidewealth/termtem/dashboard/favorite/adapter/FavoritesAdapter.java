@@ -1,16 +1,13 @@
 package com.worldwidewealth.termtem.dashboard.favorite.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,8 +15,6 @@ import com.worldwidewealth.termtem.MyApplication;
 import com.worldwidewealth.termtem.R;
 import com.worldwidewealth.termtem.dashboard.report.ActivityReport;
 import com.worldwidewealth.termtem.model.LoadFavResponseModel;
-
-import org.w3c.dom.Text;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -123,6 +118,9 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
                 break;
             case ActivityReport.VAS_REPORT:
+                if(model.getVaslist() == null || model.getVaslist().size() == 0)
+                    break;
+
                 LoadFavResponseModel.VasListModel vasModel = model.getVaslist().get(0);
                 editText.setText(vasModel.getPhoneNo());
                 PhoneNumberUtils.formatNumber(editText.getText(), PhoneNumberUtils.FORMAT_NANP);

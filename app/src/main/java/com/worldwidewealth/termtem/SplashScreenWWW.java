@@ -48,7 +48,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected String mAction;
     protected double mLat, mLong;
     private APIServices services;
-    private Runnable runnable;
+    private Runnable runnable, runableGetData;
     private Handler handler;
     private int mRetryToken = 0;
     private String mUserName, mPassword;
@@ -65,8 +65,10 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_www);
+
         services = APIServices.retrofit.create(APIServices.class);
 
+        //Check DeviceId start
         String deviceId = Global.getInstance().getDEVICEID();
 
         if (deviceId == null) {
@@ -79,8 +81,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         }
 
         Global.getInstance().setDEVICEID(deviceId);
+        //Check DeviceId end
 
-
+        //Check last submit transection start
         if (Global.getInstance().hasSubmit()){
 
             if ((FragmentTopupPackage.callSubmit == null || FragmentTopupPackage.callSubmit.isCanceled())
@@ -88,6 +91,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 showLastSubmit();
             }
         }
+        //Check last submit transection end
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -97,6 +101,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 termTemSignIn = new TermTemSignIn(SplashScreenWWW.this, TermTemSignIn.TYPE.NEWLOGIN, true);
                 checkDataIntent();
 
+                // Check logout ค้าง Start
                 if (Global.getInstance().getAGENTID() != null) {
 
                     Call<ResponseBody> call = services.logout(new RequestModel(APIServices.ACTIONLOGOUT, new DataRequestModel()));
@@ -108,18 +113,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                             if (responseValues instanceof ResponseModel &&
                                     ((ResponseModel)responseValues).getMsg().equals(APIServices.MSG_SUCCESS)){
                                 Global.getInstance().clearUserName();
-//                                Global.getInstance().clearUserData();
                                 getDataDevice();
                             } else {
                                 getDataDevice();
-
-/*
-                                if (Global.getInstance().getTXID() != null) {
-                                    APIHelper.enqueueWithRetry(call.clone(), this);
-                                } else {
-                                    getDataDevice();
-                                }
-*/
                             }
                         }
 
@@ -131,6 +127,9 @@ public class SplashScreenWWW extends MyAppcompatActivity{
                 } else {
                     getDataDevice();
                 }
+
+                // Check logout ค้าง End
+
             }
         };
 
@@ -153,6 +152,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+        handler.removeCallbacks(runableGetData);
         GPSTracker.dismiss();
     }
 
@@ -160,6 +160,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     protected void onStop() {
         super.onStop();
         handler.removeCallbacks(runnable);
+        handler.removeCallbacks(runableGetData);
     }
 
     private void checkDataIntent(){
@@ -176,6 +177,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
         }
     }
 
+    //Check การทำรายการล่าสุด
     private void showLastSubmit(){
         RequestModel requestModel = Global.getInstance().getLastSubmit();
         SubmitTopupRequestModel submitTopupRequestModel = (SubmitTopupRequestModel) requestModel.getData();
@@ -194,14 +196,10 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
                 Object responseValues = EncryptionData.getModel(getContext(), call, response.body(), this);
                 if (responseValues == null) {
-
-//                    MyApplication.uploadFail(MyApplication.NOTITOPUP, null);
-
                     return;
                 }
 
                 if (responseValues instanceof ResponseModel) {
-
                     MyApplication.uploadSuccess(MyApplication.NOTITOPUP, ((ResponseModel)responseValues).getAppdisplay());
                 }
             }
@@ -219,9 +217,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
     protected void getDataDevice(){
         mAction = "PRE";
-
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable(){
+        runableGetData = new Runnable(){
 
             @Override
             public void run() {
@@ -266,7 +262,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
             }
         };
 
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runableGetData, 1000);
     }
 
 }
