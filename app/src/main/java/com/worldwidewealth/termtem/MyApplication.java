@@ -113,7 +113,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         Fabric.with(this, new Crashlytics());
         registerActivityLifecycleCallbacks(this);
         mContext = getApplicationContext();
-        ControllerPinCode.enable(true);
+        ControllerPinCode.enable(false);
 
         mBus = new Bus();
         mPerformance = FirebasePerformance.getInstance();

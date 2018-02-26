@@ -221,6 +221,7 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         setDatePayment(holder.mTextDatePayment, position);
         setServicePrice(holder.mLayoutCommisstion, holder.mTextComAmount, model.getCOMM_AMT());
         setAmount(holder.mTextAmount, position);
+        setFee(holder.mTextFee, holder.mLayoutFee, position);
         setPhoneNo(holder.mTextPhoneNum, position);
 
         switch (model.getTYPE()) {
@@ -322,6 +323,17 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         textView.setText(format.format(model.getAMOUNT()));
     }
 
+    private void setFee(TextView textView, View layout, int position) {
+        SalerptResponseModel model = (SalerptResponseModel) getItem(position);
+
+        if (model.getTxfee() != 0) {
+            textView.setText(format.format(model.getTxfee()));
+            layout.setVisibility(View.VISIBLE);
+        } else {
+            layout.setVisibility(View.GONE);
+        }
+    }
+
     private void setPhoneNo(TextView textView, int position){
         SalerptResponseModel model = (SalerptResponseModel) getItem(position);
 
@@ -344,8 +356,8 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public class DefaultViewHolder extends RecyclerView.ViewHolder{
         private TextView mTextCheckTotal, mTextPayCode, mTextBiller, mTextPhoneNum, mTextAmount
-                , mTextComAmount, mTextDatePayment, mTextTiltle, mTextAgentName, mTextTitleAmonut;
-        private View mLayoutCommisstion, mLayoutBiller, mLayoutAgentName;
+                , mTextComAmount, mTextDatePayment, mTextTiltle, mTextAgentName, mTextTitleAmonut, mTextFee;
+        private View mLayoutCommisstion, mLayoutBiller, mLayoutAgentName, mLayoutFee;
         public DefaultViewHolder(View itemView) {
             super(itemView);
             mTextAmount = (TextView) itemView.findViewById(R.id.txt_amount);
@@ -361,6 +373,9 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mLayoutBiller = (View) itemView.findViewById(R.id.layout_biller);
             mLayoutAgentName = (View) itemView.findViewById(R.id.layout_agent_name);
             mTextTitleAmonut = (TextView) itemView.findViewById(R.id.title_amount_report);
+
+            mTextFee = itemView.findViewById(R.id.txt_fee);
+            mLayoutFee = itemView.findViewById(R.id.layout_fee);
         }
     }
 

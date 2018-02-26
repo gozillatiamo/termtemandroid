@@ -793,6 +793,8 @@ public class FragmentTopupPackage extends  Fragment{
             ((SubmitTopupRequestModel)requestModel.getData()).setAMT(String.valueOf(mPreviewModel.getNET()));
         }
 
+        ((SubmitTopupRequestModel)requestModel.getData()).setTxfee(mPreviewModel.getTxfee());
+
         Global.getInstance().setLastSubmit(requestModel, mIsFAV);
         if (mBillService != null){
             Global.getInstance().setLastBillService(mBillService);

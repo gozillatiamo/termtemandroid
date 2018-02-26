@@ -290,6 +290,7 @@ public class MenuButtonView extends FrameLayout implements View.OnClickListener{
 
             if (ControllerPinCode.getInstance() == null){
                 btnSetupPin.setVisibility(GONE);
+                btnSetupFingerprint.setVisibility(GONE);
             }
 
             btnChangePassword.setOnClickListener(new View.OnClickListener() {

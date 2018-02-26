@@ -192,6 +192,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/layout_commission"
             android:layout_width="match_parent"
@@ -227,6 +228,44 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_fee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:textSize="@dimen/small_text_size"
+                android:text="@string/fee"
+                android:gravity="right"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/small_text_size"
+                    android:visibility="gone"
+                    android:text="@string/currency"/>
+                <TextView
+                    android:id="@+id/txt_fee"
+                    android:layout_marginLeft="@dimen/activity_small_space"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/small_text_size"
+                    android:layout_height="wrap_content"
+                    android:text="0.18"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/layout_debit"
             android:layout_width="match_parent"

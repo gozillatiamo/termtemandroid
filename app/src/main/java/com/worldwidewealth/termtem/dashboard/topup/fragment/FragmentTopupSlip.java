@@ -92,6 +92,7 @@ public class FragmentTopupSlip extends Fragment {
     private String mErrorMsg;
     private int mColorType;
     private Double mAmount;
+    private Double mFee;
     private String mTypeToup;
     private Drawable mIconCarrier;
     private Drawable mIconTypeTopup;
@@ -150,9 +151,9 @@ public class FragmentTopupSlip extends Fragment {
 
     public class ViewHolder{
         private Button mBtnBack, mBtnGame, mBtnSavePic;
-        private TextView mTextPhone, mTextAmount, mTextSuccess, mTextTitleAmount;
+        private TextView mTextPhone, mTextAmount, mTextSuccess, mTextTitleAmount, mTextFee;
         private ImageView mImageSlip, mIconService, mIconCarrier, mIconSuccess;
-        private View mIncludeMyWallet, mLayoutInclude, mLayoutBorder, mLayoutBtnFav;
+        private View mIncludeMyWallet, mLayoutInclude, mLayoutBorder, mLayoutBtnFav, mLayoutFee;
         private ShineButton mBtnAddFavorite;
         public ViewHolder(View itemview){
             mBtnBack = (Button) itemview.findViewById(R.id.btn_back_to_dashboard);
@@ -171,6 +172,9 @@ public class FragmentTopupSlip extends Fragment {
             mLayoutBorder = itemview.findViewById(R.id.layout_border);
             mLayoutBtnFav = itemview.findViewById(R.id.layout_btn_fav);
             mTextTitleAmount = itemview.findViewById(R.id.text_title_amount);
+
+            mTextFee = itemview.findViewById(R.id.text_fee);
+            mLayoutFee = itemview.findViewById(R.id.layout_fee);
 
         }
     }
@@ -319,6 +323,7 @@ public class FragmentTopupSlip extends Fragment {
 //        mPhoneNo = Global.getInstance().getLastSubmitPhoneNo();
         SubmitTopupRequestModel requestModel = (SubmitTopupRequestModel) Global.getInstance().getLastSubmit().getData();
         mAmount = Double.valueOf(requestModel.getAMT());
+        mFee = requestModel.getTxfee();
 //        mCarrier = Global.getInstance().getLastSubmitCarrier();
         mPhoneNo = requestModel.getPHONENO();
         mCarrier = requestModel.getCARRIER();
@@ -384,6 +389,11 @@ public class FragmentTopupSlip extends Fragment {
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         mHolder.mTextAmount.setText(format.format(mAmount));
+
+        if (mFee != 0) {
+            mHolder.mTextFee.setText(format.format(mFee));
+            mHolder.mLayoutFee.setVisibility(View.VISIBLE);
+        } else mHolder.mLayoutFee.setVisibility(View.GONE);
 
         DialogCounterAlert.DialogProgress.dismiss();
 

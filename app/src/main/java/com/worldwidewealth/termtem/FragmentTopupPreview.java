@@ -64,8 +64,8 @@ public class FragmentTopupPreview extends Fragment {
     public class ViewHolder{
 
         private TextView mTextDebit, mTextCommissionRate, mTextCommissionAmout, mTextBalance,
-        mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice, mTextTitleFee;
-        private View mLayoutCommission, mLayoutMarkup, mLayoutAmount, mLayoutEditAmount;
+        mTextMarkup, mTextTotal, mTextSelectAmout, mTextTitlePrice, mTextTitleFee, mTextFee;
+        private View mLayoutCommission, mLayoutMarkup, mLayoutAmount, mLayoutEditAmount, mLayoutFee;
         private Button mBtnEditAmount;
         private EditText mEditAmount;
         public ViewHolder(View itemview){
@@ -96,6 +96,9 @@ public class FragmentTopupPreview extends Fragment {
                     return true;
                 }
             });
+
+            mLayoutFee = itemview.findViewById(R.id.layout_fee);
+            mTextFee = itemview.findViewById(R.id.txt_fee);
 
         }
     }
@@ -240,6 +243,13 @@ public class FragmentTopupPreview extends Fragment {
         else {
             double markup = mModel.getMARKUP() > mModel.getFEE() ? mModel.getMARKUP() : mModel.getFEE();
             mHolder.mTextMarkup.setText(format.format(markup));
+        }
+
+        if (mModel.getTxfee() != 0) {
+            mHolder.mTextFee.setText(format.format(mModel.getTxfee()));
+            mHolder.mLayoutFee.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.mLayoutFee.setVisibility(View.GONE);
         }
 
         mHolder.mTextBalance.setText(format.format(mModel.getBALANCE()));
