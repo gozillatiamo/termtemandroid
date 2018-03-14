@@ -19,7 +19,7 @@ import static com.worldwidewealth.termtem.MyFirebaseMessagingService.TEXT;
 /**
  * Created by gozillatiamo on 6/10/17.
  */
-
+// BroadCastReceiver สำหรับ ดักจับ notification
 public class NotificationBroadCastReceiver extends WakefulBroadcastReceiver {
 
     public static final String TAG = NotificationBroadCastReceiver.class.getSimpleName();

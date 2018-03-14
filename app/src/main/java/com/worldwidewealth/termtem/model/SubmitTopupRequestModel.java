@@ -30,7 +30,7 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     private String DUEDATE;
 
     private Double AMOUNT;
-    private double txfee;
+    private double txFee;
 
 
     protected SubmitTopupRequestModel(Parcel in) {
@@ -53,7 +53,7 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
         } else {
             AMOUNT = in.readDouble();
         }
-        txfee = in.readDouble();
+        txFee = in.readDouble();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
             dest.writeByte((byte) 1);
             dest.writeDouble(AMOUNT);
         }
-        dest.writeDouble(txfee);
+        dest.writeDouble(txFee);
     }
 
     @Override
@@ -277,10 +277,10 @@ public class SubmitTopupRequestModel extends DataRequestModel implements Parcela
     }
 
     public double getTxfee() {
-        return txfee;
+        return txFee;
     }
 
     public void setTxfee(double txfee) {
-        this.txfee = txfee;
+        this.txFee = txfee;
     }
 }

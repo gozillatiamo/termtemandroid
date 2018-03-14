@@ -58,6 +58,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //แก้ปัญหา clear หน้า Activity ไม่หมด
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
@@ -85,9 +86,10 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
         //Check last submit transection start
         if (Global.getInstance().hasSubmit()){
-
+            //check service submit and status
             if ((FragmentTopupPackage.callSubmit == null || FragmentTopupPackage.callSubmit.isCanceled())
                     && !Global.getInstance().getSubmitStatus()){
+                //แสดง notification status progress
                 showLastSubmit();
             }
         }
@@ -138,6 +140,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        // set ภาษาเครื่องเป็น ไทย
         Locale locale = new Locale("TH");
         Locale.setDefault(locale);
         Configuration config = getBaseContext().getResources().getConfiguration();
@@ -151,6 +154,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
+        //หยุดการทำงาน runable
         handler.removeCallbacks(runnable);
         handler.removeCallbacks(runableGetData);
         GPSTracker.dismiss();
@@ -188,7 +192,7 @@ public class SplashScreenWWW extends MyAppcompatActivity{
 
         //ดึง submit ล่าสุด
         Call<ResponseBody> callSubmit = MyApplication.getServiceSubmit(requestModel);
-
+        // แสดง progress
         MyApplication.showNotifyUpload(MyApplication.NOTITOPUP);
 
         APIHelper.enqueueWithRetry(callSubmit, 0, new Callback<ResponseBody>() {

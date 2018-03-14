@@ -39,6 +39,7 @@ import retrofit2.Response;
  * Created by gozillatiamo on 6/7/17.
  */
 
+//sevice สำหรับ ทำ delay logout
 public class LocalService extends Service {
     private NotificationManager mNM;
     private static Timer T;
@@ -73,6 +74,7 @@ public class LocalService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
+        //เช็ค agentid กับ activity ที่มีสิทธิในการเรียก logout
         if (Global.getInstance().getAGENTID() != null
                 && !(MyApplication.LeavingOrEntering.currentActivity instanceof SplashScreenWWW)) {
             serviceLeave(getApplicationContext(), startId);
@@ -87,6 +89,7 @@ public class LocalService extends Service {
         }
 
         countRetry = 0;
+        //เรียก api leave บอก server ว่ามีการออกจาก app
         callLeave = services.service(new RequestModel(APIServices.ACTIONLEAVE, new DataRequestModel()));
         APIHelper.enqueueWithRetry(callLeave, new Callback<ResponseBody>() {
             @Override
@@ -94,8 +97,8 @@ public class LocalService extends Service {
                 Object values = EncryptionData.getModel(context, call, response.body(), this);
                 if (values instanceof ResponseModel){
                     ResponseModel model = (ResponseModel) values;
+                    //จำนวน เวลาที่หน่วง
                     count = model.getIdlelimit();
-//                                    mHandler.postDelayed(mRunable, model.getIdlelimit()*1000);
                 } else if (countRetry < 3){
                     countRetry++;
                     retryService(callLeave, this);
@@ -117,6 +120,7 @@ public class LocalService extends Service {
 
     }
 
+    //เรียกซ้ำ เมื่อ เกิดข้อผิดพลาด
     private void retryService(final Call call, final Callback callback){
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -142,6 +146,7 @@ public class LocalService extends Service {
             T.purge();
         }
 
+        // method สำหรับนับถอยหลัง
         T = new Timer();
         T.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -149,6 +154,7 @@ public class LocalService extends Service {
 
                         Log.e(TAG, ""+count);
                         count--;
+                        // logout
                         if (count == 0){
                             Global.getInstance().clearUserName();
                             serviceLogout();
@@ -160,6 +166,7 @@ public class LocalService extends Service {
                             this.cancel();
                         }
 
+                        //ดักกรณี เวลา เกิน
                         if ((count < 0 && T != null) ||
                                 (!MyApplication.canUseLeaving(MyApplication.LeavingOrEntering.currentActivity))){
                             if (T != null) {
@@ -180,6 +187,7 @@ public class LocalService extends Service {
 
     }
 
+    //service logout
     private void serviceLogout(){
         if (Global.getInstance().getTXID() == null) return;
         countRetry = 0;
@@ -192,36 +200,15 @@ public class LocalService extends Service {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object values = EncryptionData.getModel(null, call, response.body(), this);
-                /*if (values == null){
-                    if (countRetry < 3){
-                        countRetry++;
-                        retryService(call, this);
-                    }
-                }*/
+
                 if (values instanceof ResponseModel){
                     ResponseModel responseModel = (ResponseModel) values;
                     if (responseModel.getMsg().equals(APIServices.MSG_SUCCESS)){
 //                        Global.getInstance().clearUserData();
                     }
 
-/*
-                    if (MyApplication.LeavingOrEntering.currentActivity != null){
-                        MyApplication.LeavingOrEntering.currentActivity.finish();
-                    }
 
-                    MyApplication.LeavingOrEntering.currentActivity = null;
-                    stopSelf(statId);
-*/
-                } /*else {
-                    if (countRetry < 3){
-                        countRetry++;
-                        retryService(call, this);
-                    }
-
-                }*/
-                    /*else {
-                    stopSelf(statId);
-                }*/
+                }
                 stopSelf();
 
             }
@@ -231,12 +218,7 @@ public class LocalService extends Service {
                 t.printStackTrace();
                 stopSelf();
 
-/*
-                if (countRetry < 3){
-                    countRetry++;
-                    retryService(call, this);
-                }
-*/
+
             }
         });
 
@@ -245,7 +227,6 @@ public class LocalService extends Service {
 
     @Override
     public void onDestroy() {
-        // Cancel the persistent notification.
         Log.e("LocalService", "onDestroy");
         if (callLeave != null && callLeave.isExecuted()){
             callLeave.cancel();
@@ -263,14 +244,6 @@ public class LocalService extends Service {
 
         super.onDestroy();
 
-/*
-        if (Global.getInstance().getProcessSubmit() != null) {
-            mNM.cancel(Global.getInstance().getProcessSubmit(), MyApplication.NOTITOPUP);
-        }
-*/
-
-        // Tell the user we stopped.
-//        Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -285,16 +258,6 @@ public class LocalService extends Service {
 
         startService(new Intent(getBaseContext(), LogoutService.class));
 
-/*
-        if (Global.getInstance().getProcessSubmit() != null) {
-            mNM.cancel(Global.getInstance().getProcessSubmit(), MyApplication.NOTITOPUP);
-            Global.getInstance().setProcessSubmit(null, null);
-        }
-*/
-
-//        Util.logoutAPI(null, true);
-
-//        super.onTaskRemoved(rootIntent);
     }
 
     @Override

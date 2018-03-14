@@ -63,7 +63,6 @@ public class MyApplication extends Application implements Application.ActivityLi
     private static Bus mBus;
     private static NotificationManager mNotifyManager;
     private static NotificationCompat.Builder mBuilder;
-    private NetworkStateMonitor mNetworkStateMonitor;
     public static boolean clickable = true;
     public static final int NOTIUPLOAD = 1;
     public static final int NOTITOPUP = 2;
@@ -118,7 +117,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         mBus = new Bus();
         mPerformance = FirebasePerformance.getInstance();
         mPerformance.setPerformanceCollectionEnabled(true);
-        mNetworkStateMonitor = new NetworkStateMonitor(mContext);
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()

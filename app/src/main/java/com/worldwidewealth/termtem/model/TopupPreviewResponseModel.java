@@ -25,7 +25,7 @@ public class TopupPreviewResponseModel implements Parcelable{
     private RefModel[] REF;
     private String NEEDDUEDATE;
     private int CANCHANGE;
-    private double txfee;
+    private double txFee;
 
     protected TopupPreviewResponseModel(Parcel in) {
         AMOUNT = in.readDouble();
@@ -40,7 +40,7 @@ public class TopupPreviewResponseModel implements Parcelable{
         REF = in.createTypedArray(RefModel.CREATOR);
         NEEDDUEDATE = in.readString();
         CANCHANGE = in.readInt();
-        txfee = in.readDouble();
+        txFee = in.readDouble();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TopupPreviewResponseModel implements Parcelable{
         dest.writeTypedArray(REF, flags);
         dest.writeString(NEEDDUEDATE);
         dest.writeInt(CANCHANGE);
-        dest.writeDouble(txfee);
+        dest.writeDouble(txFee);
     }
 
     @Override
@@ -173,11 +173,11 @@ public class TopupPreviewResponseModel implements Parcelable{
     }
 
     public double getTxfee() {
-        return txfee;
+        return txFee;
     }
 
     public void setTxfee(double txfee) {
-        this.txfee = txfee;
+        this.txFee = txfee;
     }
 
     public List<RefModel> getREF() {
